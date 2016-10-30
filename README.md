@@ -25,7 +25,7 @@ After cloning the project, cd into the safe-rides directory and run the followin
 
 ## Build & development
 
-Run `grunt` for building and `grunt serve` for preview.
+Run `grunt serve` for preview. This will start a server on port 9000 and open up your default browser. When you make changes to the code and save, the browser will automatically refresh.
 
 ## Testing
 
