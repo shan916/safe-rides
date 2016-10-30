@@ -9,7 +9,7 @@ version 0.15.1.
 
 2. Install [Git](https://git-scm.com/downloads).
 
-  - After cloning the project, cd into the safe-rides directory and run the following commands one by one:
+After cloning the project, cd into the safe-rides directory and run the following commands one by one:
 
   - NOTE: If you're on Windows, the commands must be run from the NodeJS Command Prompt and not the Windows Command Prompt.
 
