@@ -55,6 +55,11 @@ angular
         controller: 'CoordinatordashboardCtrl',
         controllerAs: 'coordinatordashboard'
       })
+      .when('/coordinatorreport', {
+        templateUrl: 'views/coordinatorreport.html',
+        controller: 'CoordinatorreportCtrl',
+        controllerAs: 'coordinatorreport'
+      })
       .otherwise({
         redirectTo: '/'
       });
