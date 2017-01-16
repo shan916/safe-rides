@@ -65,6 +65,11 @@ angular
         controller: 'RegisterdriverCtrl',
         controllerAs: 'registerdriver'
       })
+      .when('/driverdashboard', {
+        templateUrl: 'views/driverdashboard.html',
+        controller: 'DriverdashboardCtrl',
+        controllerAs: 'driverdashboard'
+      })
       .otherwise({
         redirectTo: '/'
       });
