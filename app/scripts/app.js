@@ -15,7 +15,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ngMap'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -48,6 +49,11 @@ angular
         templateUrl: 'views/resetpassword.html',
         controller: 'ResetpasswordCtrl',
         controllerAs: 'resetPassword'
+      })
+      .when('/coordinatordashboard', {
+        templateUrl: 'views/coordinatordashboard.html',
+        controller: 'CoordinatordashboardCtrl',
+        controllerAs: 'coordinatordashboard'
       })
       .otherwise({
         redirectTo: '/'
