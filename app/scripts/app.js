@@ -70,6 +70,11 @@ angular
         controller: 'DriverdashboardCtrl',
         controllerAs: 'driverdashboard'
       })
+      .when('/riderdashboard', {
+        templateUrl: 'views/riderdashboard.html',
+        controller: 'RiderdashboardCtrl',
+        controllerAs: 'riderdashboard'
+      })
       .otherwise({
         redirectTo: '/'
       });
