@@ -82,6 +82,20 @@ body {
   }
 }
 
+/* Responsive: desktops and up */
+@media screen and (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Responsive: desktops and up */
+@media screen and (min-width: 1600px) {
+  .container {
+    max-width: 1520px;
+  }
+}
+
 .margin-top-15{
     margin-top:15px;
 }
