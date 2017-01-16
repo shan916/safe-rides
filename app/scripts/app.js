@@ -39,6 +39,11 @@ angular
         controller: 'RegisterCtrl',
         controllerAs: 'register'
       })
+      .when('/resetpasswordrequest', {
+        templateUrl: 'views/resetpasswordrequest.html',
+        controller: 'ResetpasswordrequestCtrl',
+        controllerAs: 'resetPasswordRequest'
+      })
       .otherwise({
         redirectTo: '/'
       });
