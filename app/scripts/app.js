@@ -60,6 +60,11 @@ angular
         controller: 'CoordinatorreportCtrl',
         controllerAs: 'coordinatorreport'
       })
+      .when('/registerdriver', {
+        templateUrl: 'views/registerdriver.html',
+        controller: 'RegisterdriverCtrl',
+        controllerAs: 'registerdriver'
+      })
       .otherwise({
         redirectTo: '/'
       });
