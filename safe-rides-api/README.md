@@ -8,6 +8,11 @@
 3. Browse to the location of the project and click `Next` to import the project
 4. Right click on the `SafeRidesApiApplication` class and choose `Run As` -> Java Application
 
+##### IntelliJ
+1. Go to `File -> New -> Project from Existing Sources...`
+2. Browse to the location of the project (select the pom.xml) and click OK. Defaults are okay (confirming stuff in the maven config) - click through the dialogues  
+3. Click Play icon
+
 You should see some output that looks like:
 ```
  .   ____          _            __ _ _
