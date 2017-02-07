@@ -77,3 +77,5 @@ An embedded Tomcat server is automatically started on port 8080.
 	  }
 	]
 ```
+
+See the [DriverController](https://github.com/shan916/safe-rides/blob/dev/safe-rides-api/src/main/java/edu/csus/asi/saferides/service/DriverController.java) class for the rest of the HTTP methods.
