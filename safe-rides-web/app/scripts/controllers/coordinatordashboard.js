@@ -15,7 +15,7 @@ angular.module('safeRidesWebApp')
             'Karma',
         ];
         // TODO: Move this to an environment file
-        $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE";
+        $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E";
         var vm = this;
         vm.positions = [
             [38.55, -121.45], [38.54, -121.44], [38.53, -121.43], [38.52, -121.42]
