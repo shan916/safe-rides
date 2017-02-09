@@ -1,0 +1,151 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Ride Requests</h3>
+            </div>
+
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Riders</th>
+                        <th>Time Requested</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Ryan</td>
+                        <td>Assigned</td>
+                        <td>2</td>
+                        <td>10:45 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Edward</td>
+                        <td>Assigned</td>
+                        <td>4</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Bryce</td>
+                        <td>Assigned</td>
+                        <td>1</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>Justin</td>
+                        <td>Waiting</td>
+                        <td>20</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Zeeshan</td>
+                        <td>Waiting</td>
+                        <td>4</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>Nik</td>
+                        <td>Waiting</td>
+                        <td>2</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+                        <td>Bill</td>
+                        <td>Waiting</td>
+                        <td>1</td>
+                        <td>10:50 PM</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary btn-block">Add New Ride Request</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Drivers</h3>
+            </div>
+
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Seats Available</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Driving</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Driving</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>Driving</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Penny</td>
+                        <td>Available</td>
+                        <td>3</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <button type="submit" class="btn btn-primary btn-block">Add New Driver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12" ng-controller="CoordinatordashboardCtrl as vm">
+        <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
+            <ng-map center="38.56,-121.41" zoom="12" style="height:650px;">
+                <shape name="circle"
+                       stroke-color="#FFFF00"
+                       stroke-opacity="0.8"
+                       stroke-weight="2"
+                       fill-color="#FFFF00"
+                       fill-opacity="0.35"
+                       center="38.559146,-121.4234905"
+                       radius="8046.72">
+                </shape>
+                <marker ng-repeat="p in vm.positions" position="{{p}}"></marker>
+            </ng-map>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-top-15 margin-bottom-15">
+    <div class="col-sm-12">
+        <div class="pull-right">
+            <button class="btn btn-default">Create Reports</button>
+        </div>
+    </div>
+</div>
