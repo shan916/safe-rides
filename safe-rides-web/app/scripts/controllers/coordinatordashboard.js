@@ -29,4 +29,64 @@ angular.module('safeRidesWebApp')
                 vm.positions.push([lat, lng]);
             }
         }, 2000);
+		
+		$scope.STATUS = Object.freeze({
+			WAITING : {value: 0, name: "Waiting"}, 
+			ASSIGNED: {value: 1, name: "Assigned"}, 
+			COMPLETE : {value: 2, name: "Complete"},
+			CANCELED : {value: 3, name: "Canceled"}
+		});
+		
+		// Waiting time until the row turns red. 
+		// Variable set by admin?
+		$scope.DANGER_ZONE = Object.freeze(30);
+		
+		$scope.rideRequests = [
+			{ 	
+				'name': 	'Bill',
+				'status':	$scope.STATUS.COMPLETE,
+				'riders': 	1,
+				'time':		moment().subtract(60, 'm').valueOf()
+			},
+			{ 	
+				'name': 	'Bryce',
+				'status':	$scope.STATUS.ASSIGNED,
+				'riders': 	1,
+				'time':		moment().subtract(20, 'm').valueOf()
+			},
+			{ 	
+				'name': 	'Edward',
+				'status':	$scope.STATUS.ASSIGNED,
+				'riders': 	4,
+				'time':		moment().subtract(21, 'm').valueOf()
+			},
+			{	
+				'name': 	'Justin',
+				'status':	$scope.STATUS.WAITING,
+				'riders': 	20,
+				'time':		moment().subtract(28, 'm').valueOf()
+			},
+			{ 	
+				'name': 	'Nik',
+				'status':	$scope.STATUS.WAITING,
+				'riders': 	2,
+				'time':		moment().subtract(29, 'm').valueOf()
+			},
+			{ 	
+				'name': 	'Ryan',
+				'status':	$scope.STATUS.ASSIGNED,
+				'riders': 	2,
+				'time':		moment().subtract(22, 'm').valueOf()
+			},
+			{ 	
+				'name': 	'Zeeshan',
+				'status':	$scope.STATUS.WAITING,
+				'riders': 	4,
+				'time':		moment().subtract(40, 'm').valueOf()
+			}
+		];
+		
+		$scope.requestAgeInMinutes = function(start){
+			return moment.duration(moment().diff(moment(start))).asMinutes() 
+		}
     });

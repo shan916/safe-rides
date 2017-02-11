@@ -30,7 +30,6 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Name</th>
                                 <th>Status</th>
                                 <th>Riders</th>
@@ -39,77 +38,20 @@
                             </tr>
                             </thead>
                             <tbody>
-							<tr class="danger">
-                                <th scope="row">1</th>
-                                <td>Zeeshan</td>
-                                <td>Waiting</td>
-                                <td>4</td>
-                                <td>10:30 PM</td>
-								<td>
-									<button class="btn btn-primary">Assign</button>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-                            <tr class="warning">
-                                <th scope="row">2</th>
-                                <td>Justin</td>
-                                <td>Waiting</td>
-                                <td>20</td>
-                                <td>10:50 PM</td>
-								<td>
-									<button class="btn btn-primary">Assign</button>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-                            <tr class="warning">
-                                <th scope="row">3</th>
-                                <td>Nik</td>
-                                <td>Waiting</td>
-                                <td>2</td>
-                                <td>10:50 PM</td>
-								<td>
-									<button class="btn btn-primary">Assign</button>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-							<tr class="info">
-                                <th scope="row">4</th>
-                                <td>Ryan</td>
-                                <td>Assigned</td>
-                                <td>2</td>
-                                <td>10:45 PM</td>
-								<td>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-                            <tr class="info">
-                                <th scope="row">5</th>
-                                <td>Edward</td>
-                                <td>Assigned</td>
-                                <td>4</td>
-                                <td>10:50 PM</td>
-								<td>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-                            <tr class="info">
-                                <th scope="row">6</th>
-                                <td>Bryce</td>
-                                <td>Assigned</td>
-                                <td>1</td>
-                                <td>10:50 PM</td>
-								<td>
-									<button class="btn btn-default">Cancel</button>
-								</td>
-                            </tr>
-                            <tr class="success">
-                                <th scope="row">7</th>
-                                <td>Bill</td>
-                                <td>Complete</td>
-                                <td>1</td>
-                                <td>10:50 PM</td>
-								<td></td>
-                            </tr>
+								<tr ng-repeat="req in rideRequests | orderBy:['status.value','time']" 
+									ng-class="{	danger: req.status === STATUS.WAITING && requestAgeInMinutes(req.time) > DANGER_ZONE, 
+												warning: req.status === STATUS.WAITING, 
+												info: req.status === STATUS.ASSIGNED, 
+												success: req.status === STATUS.COMPLETE}">
+									<td>{{req.name}}</td>
+									<td>{{req.status.name}}</td>
+									<td>{{req.riders}}</td>
+									<td>{{req.time | date:'h:mma'}}</td>
+									<td>
+										<button ng-if="req.status === STATUS.WAITING" class="btn btn-primary">Assign</button>
+										<button ng-if="req.status === STATUS.WAITING || req.status === STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+									</td>
+								</tr>
                             </tbody>
                         </table>
                         <button type="submit" class="btn btn-primary btn-block">Add New Ride Request</button>
