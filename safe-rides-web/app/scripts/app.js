@@ -16,7 +16,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ngMap'
+    'ngMap',
+	'ui.bootstrap'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -53,7 +54,7 @@ angular
       .when('/coordinatordashboard', {
         templateUrl: 'views/coordinatordashboard.html',
         controller: 'CoordinatordashboardCtrl',
-        controllerAs: 'coordinatordashboard'
+        controllerAs: 'cd'
       })
       .when('/coordinatorreport', {
         templateUrl: 'views/coordinatorreport.html',
