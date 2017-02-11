@@ -32,7 +32,7 @@ angular.module('safeRidesWebApp')
             }
         }, 2000);
         */
-
+        
 /****** Modal *******/
 /* form validation plugin */
 $.fn.goValidate = function() {
@@ -41,22 +41,19 @@ $.fn.goValidate = function() {
 
     var validators = {
         name: {
-            regex: /^[A-Za-z]{3,}$/
-        },
-        pass: {
-            regex: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
-        },
-        email: {
-            regex: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/
+            regex: /^[A-Za-z]{2,}$/
+            /*must be at least 3 chars long */
         },
         phone: {
             regex: /^[2-9]\d{2}-\d{3}-\d{4}$/,
+            /*999-999-999*/
         }
     };
     var validate = function(klass, value) {
         var isValid = true,
             error = '';
 
+            /* If there is no input & it's required*/
         if (!value && /required/.test(klass)) {
             error = 'This field is required';
             isValid = false;
@@ -77,7 +74,7 @@ $.fn.goValidate = function() {
         }
     };
     var showError = function($input) {
-        var klass = $input.attr('class'),
+        var klass = $input.attr('class'),/* class form-control required */
             value = $input.val(),
             test = validate(klass, value);
 
