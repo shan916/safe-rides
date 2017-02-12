@@ -1,36 +1,40 @@
 <div class="modal-header">
-  <h3 class="modal-title" id="modal-title">Assign Driver to a Request</h3>
+  <h3 class="modal-title" id="modal-title">Assign driver to {{adModal.request.name}}'s request</h3>
 </div>
 <div class="modal-body" id="modal-body">
   <div class="row">
     <div class="col-md-6">
       <dl class="dl-horizontal">
         <dt>Name:</dt>
-        <dd>{{adModal.driver.name}}</dd>
-        <dt>Seats:</dt>
-        <dd>{{adModal.driver.vehicle.seats}}</dd>
-        <dt>Vehicle:</dt>
-        <dd>{{adModal.driver.vehicle.year + ' - ' + adModal.driver.vehicle.make + ', ' + adModal.driver.vehicle.model}}</dd>
+        <dd>{{adModal.request.name}}</dd>
+        <dt>Riders:</dt>
+        <dd>{{adModal.request.riders}}</dd>
+        <dt>Pickup Location:</dt>
+        <dd>{{adModal.request.pickupLocation}}</dd>
+        <dt>Destination:</dt>
+        <dd>{{adModal.request.destination}}</dd>
+        <dt>Request Time:</dt>
+        <dd>{{adModal.request.time | date:'MMM dd, yyyy h:mma'}}</dd>
+        <dt>Status:</dt>
+        <dd>{{adModal.request.status.name}}</dd>
       </dl>
     </div>
     <div class="col-md-6">
       <div class="form-group">
-        <label for="selectRequest">Assign request</label>
-        <select name="selectRequest" id="selectRequest" class="form-control" ng-model="adModal.selectedRequestID" ng-change="adModal.changed()">
-          <option ng-if="request.status === adModal.REQUEST_STATUS.WAITING" ng-repeat="request in adModal.requests" value="{{request.id}}">{{'Riders: ' + request.riders + ' - ' + request.name}}</option>
+        <label for="selectDriver">Assign driver</label>
+        <select name="selectDriver" id="selectDriver" class="form-control" ng-model="adModal.selectedDriverID" ng-change="adModal.changed()">
+          <option ng-if="driver.status === adModal.DRIVER_STATUS.AVAILABLE" ng-repeat="driver in adModal.drivers" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
         </select>
       </div>
-      <div ng-hide="adModal.selectedRequest == null">
-        <h4>Selected Request's Details</h4>
+      <div ng-hide="adModal.selectedDriver == null">
+        <h4>Selected Driver's Details</h4>
         <dl class="dl-horizontal">
           <dt>Name:</dt>
-          <dd>{{adModal.selectedRequest.name}}</dd>
-          <dt>Riders:</dt>
-          <dd>{{adModal.selectedRequest.riders}}</dd>
-          <dt>Pickup Location:</dt>
-          <dd>{{adModal.selectedRequest.pickupLocation}}</dd>
-          <dt>Destination:</dt>
-          <dd>{{adModal.selectedRequest.destination}}</dd>
+          <dd>{{adModal.selectedDriver.name}}</dd>
+          <dt>Seats:</dt>
+          <dd>{{adModal.selectedDriver.vehicle.seats}}</dd>
+          <dt>Vehicle:</dt>
+          <dd>{{adModal.selectedDriver.vehicle.year + ' - ' + adModal.selectedDriver.vehicle.make + ', ' + adModal.selectedDriver.vehicle.model}}</dd>
         </dl>
       </div>
     </div>

@@ -218,11 +218,11 @@ angular.module('safeRidesWebApp')
       });
     };
 
-		vm.showRequestAssignment = function(req) {
+		vm.showAssignDriver= function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/coordinator/assignrequest.html',
-        controller: 'RequestAssignemntModalCtrl',
-        controllerAs: 'arModal',
+        templateUrl: 'views/partials/coordinator/assigndriver.html',
+        controller: 'AssignDriverModalCtrl',
+        controllerAs: 'adModal',
         resolve: {
           request: function() {
             return req;
@@ -241,11 +241,11 @@ angular.module('safeRidesWebApp')
       });
     };
 
-		vm.showAssignDriver = function(driver) {
+		vm.showAssignRequest = function(driver) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/coordinator/assigndriver.html',
-        controller: 'AssignDriverModalCtrl',
-        controllerAs: 'adModal',
+        templateUrl: 'views/partials/coordinator/assignrequest.html',
+        controller: 'AssignRequestModalCtrl',
+        controllerAs: 'arModal',
         resolve: {
 					driver: function() {
             return driver;
@@ -281,7 +281,7 @@ angular.module('safeRidesWebApp')
   });
 
 	angular.module('safeRidesWebApp')
-	  .controller('RequestAssignemntModalCtrl', function($uibModalInstance, request, drivers) {
+	  .controller('AssignDriverModalCtrl', function($uibModalInstance, request, drivers) {
 	    var vm = this;
 	    vm.request = request;
 			vm.drivers = drivers;
@@ -306,7 +306,7 @@ angular.module('safeRidesWebApp')
 	  });
 
 		angular.module('safeRidesWebApp')
-		  .controller('AssignDriverModalCtrl', function($uibModalInstance, driver, requests) {
+		  .controller('AssignRequestModalCtrl', function($uibModalInstance, driver, requests) {
 		    var vm = this;
 				vm.driver = driver;
 				vm.requests = requests;
