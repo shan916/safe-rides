@@ -2,8 +2,20 @@
   <h3 class="modal-title" id="modal-title">Ride Request Details</h3>
 </div>
 <div class="modal-body" id="modal-body">
-
-  <pre>{{rdModal.request | json}}</pre>
+  <dl class="dl-horizontal">
+    <dt>Name:</dt>
+    <dd>{{rdModal.request.name}}</dd>
+    <dt>Riders:</dt>
+    <dd>{{rdModal.request.riders}}</dd>
+    <dt>Pickup Location:</dt>
+    <dd>{{rdModal.request.pickupLocation}}</dd>
+    <dt>Destination:</dt>
+    <dd>{{rdModal.request.destination}}</dd>
+		<dt>Request Time:</dt>
+    <dd>{{rdModal.request.time | date:'MMM dd, yyyy h:mma'}}</dd>
+		<dt>Status:</dt>
+    <dd>{{rdModal.request.status.name}}</dd>
+  </dl>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" ng-click="rdModal.ok()">Ok</button>
