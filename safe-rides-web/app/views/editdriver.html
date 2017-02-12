@@ -12,21 +12,12 @@
                         placeholder="Enter the driver's CSUS ID" ng-model="ctrl.driver.csusId">
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="firstname">First Name</label>
-                        <input id="firstname" name="firstname" type="text" class="form-control" required
-                        placeholder="Enter the driver's first name" ng-model="ctrl.driver.firstName">
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="lastname">Last Name</label>
-                        <input id="lastname" name="lastname" type="text" class="form-control" required
-                        placeholder="Enter the driver's last name" ng-model="ctrl.driver.lastName">
+                        <label for="name">Full Name</label>
+                        <input id="name" name="name" type="text" class="form-control" required
+                        placeholder="Enter the driver's full name" ng-model="ctrl.driver.name">
                     </div>
                 </div>
             </div>
@@ -43,7 +34,7 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label for="state">State</label>
-                        <select name="state" id="state" class="form-control" ng-model="ctrl.driver.state">
+                        <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState">
                             <option ng-repeat="state in ctrl.stateChoices" value={{state}}>{{state}}</option>
                         </select>
                     </div>
@@ -70,75 +61,71 @@
 
     <div class="panel-body">
         <form name="vehicleForm" novalidate>
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="form-group">
-                    <label for="make">Make</label>
-                    <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make"
-                    required ng-model="ctrl.vehicle.make">
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="make">Make</label>
+                        <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make"
+                        required ng-model="ctrl.driver.vehicle.make">
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <input id="model" name="model" type="text" class="form-control" placeholder="Enter the model"
+                        required ng-model="ctrl.driver.vehicle.model">
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <select name="year" id="year" class="form-control" ng-model="ctrl.driver.vehicle.year">
+                            <option ng-repeat="year in ctrl.yearChoices" value={{year}}>{{year}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-sm-5">
-                <div class="form-group">
-                    <label for="model">Model</label>
-                    <input id="model" name="model" type="text" class="form-control" placeholder="Enter the model"
-                    required ng-model="ctrl.vehicle.model">
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="licenseplate">License Plate</label>
+                        <input id="licenseplate" name="licenseplate" type="text" class="form-control"
+                        placeholder="Enter the license plate number" required ng-model="ctrl.driver.vehicle.licensePlate">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label for="year">Year</label>
-                    <select name="year" id="year" class="form-control" ng-model="ctrl.vehicle.year">
-                        <option ng-repeat="year in ctrl.yearChoices" value={{year}}>{{year}}</option>
-                    </select>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="color">Color</label>
+                        <input id="color" name="color" type="text" class="form-control" placeholder="Enter the color"
+                        required ng-model="ctrl.driver.vehicle.color">
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="form-group">
-                    <label for="licenseplate">License Plate</label>
-                    <input id="licenseplate" name="licenseplate" type="text" class="form-control"
-                    placeholder="Enter the license plate number" required ng-model="ctrl.vehicle.licensePlate">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="seats">Seats</label>
+                        <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats"
+                        required ng-min="2" ng-model="ctrl.driver.vehicle.seats">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-sm-5">
-                <div class="form-group">
-                    <label for="color">Color</label>
-                    <input id="color" name="color" type="text" class="form-control" placeholder="Enter the color"
-                    required ng-model="ctrl.vehicle.color">
-                </div>
             </div>
-
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label for="seats">Seats</label>
-                    <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats"
-                    required ng-model="ctrl.vehicle.seats">
-                </div>
-            </div>
-
-        </div>
-    </form>
+        </form>
     </div>
 </div>
-
-<pre>
-    {{ctrl.driver | json}}
-</pre>
-<pre>
-    {{ctrl.vehicle | json}}
-</pre>
 
 <div class="row margin-top-15 margin-bottom-15">
     <div class="col-sm-12">
         <div class="pull-right">
-            <button class="btn btn-default">Cancel</button>
-            <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid">Save</button>
+            <a ng-href="#!/managedrivers" class="btn btn-default">Cancel</a>
+            <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)"
+            ng-click="ctrl.saveDriver()">
+                Save
+            </button>
         </div>
     </div>
 </div>

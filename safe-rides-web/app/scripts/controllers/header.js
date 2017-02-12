@@ -16,7 +16,8 @@ angular.module('safeRidesWebApp')
     { text: 'Login', path: '#!/login '},
     { text: 'Coordinator Dashboard', path: '#!/coordinatordashboard' },
     { text: 'Driver Dashboard', path: '#!/driverdashboard' },
-    { text: 'Rider Dashboard', path: '#!/riderdashboard' }
+    { text: 'Rider Dashboard', path: '#!/riderdashboard' },
+    { text: 'Manage Drivers', path: '#!/managedrivers' }
   ];
 
   vm.activeRoute = vm.routes[0];

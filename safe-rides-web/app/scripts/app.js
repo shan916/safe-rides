@@ -17,6 +17,7 @@ angular
     'ngSanitize',
     'ngTouch',
     'ngMap',
+    'ui.bootstrap',
     'ui.select'
   ])
   .config(function ($routeProvider) {
@@ -61,7 +62,7 @@ angular
         controller: 'CoordinatorreportCtrl',
         controllerAs: 'ctrl'
       })
-      .when('/editdriver', {
+      .when('/editdriver/:driverId?', {
         templateUrl: 'views/editdriver.html',
         controller: 'EditdriverCtrl',
         controllerAs: 'ctrl'
@@ -75,6 +76,11 @@ angular
         templateUrl: 'views/riderdashboard.html',
         controller: 'RiderdashboardCtrl',
         controllerAs: 'ctrl'
+      })
+      .when('/managedrivers', {
+          templateUrl: 'views/managedrivers.html',
+          controller: 'ManagedriversCtrl',
+          controllerAs: 'ctrl'
       })
       .otherwise({
         redirectTo: '/'

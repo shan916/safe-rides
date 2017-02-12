@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('EditdriverCtrl', function () {
+.controller('EditdriverCtrl', function ($routeParams, DriverService, $location) {
     var vm = this;
 
     vm.yearChoices = [];
@@ -23,25 +23,35 @@ angular.module('safeRidesWebApp')
 
     vm.driver = {
         csusId: undefined,
-        firstName: undefined,
-        lastName: undefined,
+        name: undefined,
         dlNumber: undefined,
-        state: undefined,
-        sex: undefined
+        dlState: undefined,
+        sex: undefined,
+        active: true,
+        vehicle: {
+            make: undefined,
+            model: undefined,
+            year: undefined,
+            licensePlate: undefined,
+            bodyType: undefined,
+            color: undefined,
+            seats: undefined
+        }
     };
 
-    vm.vehicle = {
-        make: undefined,
-        model: undefined,
-        year: undefined,
-        licensePlate: undefined,
-        bodyType: undefined,
-        color: undefined,
-        seats: undefined
-    };
+    if ($routeParams.driverId) {
+        vm.driver = DriverService.getDriver($routeParams.driverId);
+    }
 
     for (var year = new Date().getFullYear() + 1; year >= 1980; year--) {
         vm.yearChoices.push(year);
     }
+
+    vm.saveDriver = function() {
+        if (!$routeParams.driverId) {
+            DriverService.saveDriver(vm.driver);
+        }
+        $location.path('/managedrivers');
+    };
 
 });
