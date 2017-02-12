@@ -1,104 +1,104 @@
 <div class="row">
-    <div class="col-sm-7">
-        <div class="col-sm-12">
-            <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
-                <ng-map center="38.56,-121.41" zoom="11" style="height:650px;">
-                    <shape name="circle"
-                           stroke-color="#FFFF00"
-                           stroke-opacity="0.8"
-                           stroke-weight="2"
-                           fill-color="#FFFF00"
-                           fill-opacity="0.35"
-                           center="38.559146,-121.4234905"
-                           radius="16093.44">
-                    </shape>
-                    <marker ng-repeat="p in ctrl.positions" position="{{p}}"></marker>
-                </ng-map>
-            </div>
-        </div>
+  <div class="col-sm-7">
+    <div class="col-sm-12">
+      <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
+        <ng-map center="38.56,-121.41" zoom="11" style="height:650px;">
+          <shape name="circle"
+          stroke-color="#FFFF00"
+          stroke-opacity="0.8"
+          stroke-weight="2"
+          fill-color="#FFFF00"
+          fill-opacity="0.35"
+          center="38.559146,-121.4234905"
+          radius="16093.44">
+        </shape>
+        <marker ng-repeat="p in ctrl.positions" position="{{p}}"></marker>
+      </ng-map>
     </div>
+  </div>
+</div>
 
-    <div class="col-sm-5">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Ride Requests</h3>
-                    </div>
-
-                    <div class="panel-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Riders</th>
-                                <th>Time Requested</th>
-								<th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-								<tr ng-click="ctrl.showRequestDetails(req)"
-									ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']"
-									ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
-												warning: req.status === ctrl.REQUEST_STATUS.WAITING,
-												info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
-												success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
-									<td>{{req.name}}</td>
-									<td>{{req.status.name}}</td>
-									<td>{{req.riders}}</td>
-									<td>{{req.time | date:'h:mma'}}</td>
-									<td>
-										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
-										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
-									</td>
-								</tr>
-                            </tbody>
-                        </table>
-                        <button type="submit" class="btn btn-primary btn-block">Add New Ride Request</button>
-                    </div>
-                </div>
-            </div>
+<div class="col-sm-5">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Ride Requests</h3>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Drivers</h3>
-                    </div>
-
-                    <div class="panel-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Seats Available</th>
-                            </tr>
-                            </thea
-                            <tbody>
-							<tr ng-click="ctrl.showRequestDetails(driver)"
-									ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']"
-									ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
-												info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
-												warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
-												}">
-									<td>{{driver.name}}</td>
-									<td>{{driver.status.name}}</td>
-									<td>{{driver.vehicle.seats}}</td>
-									<td>
-										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
-										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
-									</td>
-								</tr>
-                            </tbody>
-                        </table>
-
-                        <button type="submit" class="btn btn-primary btn-block">Add New Driver</button>
-                    </div>
-                </div>
-            </div>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Riders</th>
+                <th>Time Requested</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-click="ctrl.showRequestDetails(req)"
+              ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']"
+              ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                warning: req.status === ctrl.REQUEST_STATUS.WAITING,
+                info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
+                success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
+                <td>{{req.name}}</td>
+                <td>{{req.status.name}}</td>
+                <td>{{req.riders}}</td>
+                <td>{{req.time | date:'h:mma'}}</td>
+                <td>
+                  <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
+                  <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="submit" class="btn btn-primary btn-block">Add New Ride Request</button>
         </div>
+      </div>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Drivers</h3>
+        </div>
+
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Seats Available</th>
+              </tr>
+              </thea
+              <tbody>
+                <tr ng-click="ctrl.showRequestDetails(driver)"
+                ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']"
+                ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
+                  info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
+                  warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
+                }">
+                <td>{{driver.name}}</td>
+                <td>{{driver.status.name}}</td>
+                <td>{{driver.vehicle.seats}}</td>
+                <td>
+                  <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
+                  <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn btn-primary btn-block">Add New Driver</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
