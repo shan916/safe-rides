@@ -16,14 +16,16 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ngMap'
+    'ngMap',
+    'ui.bootstrap',
+    'ui.select'
   ])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
-        controllerAs: 'main'
+        controllerAs: 'ctrl'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -33,47 +35,52 @@ angular
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
-        controllerAs: 'login'
+        controllerAs: 'ctrl'
       })
       .when('/register', {
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl',
-        controllerAs: 'register'
+        controllerAs: 'ctrl'
       })
       .when('/resetpasswordrequest', {
         templateUrl: 'views/resetpasswordrequest.html',
         controller: 'ResetpasswordrequestCtrl',
-        controllerAs: 'resetPasswordRequest'
+        controllerAs: 'ctrl'
       })
       .when('/resetpassword', {
         templateUrl: 'views/resetpassword.html',
         controller: 'ResetpasswordCtrl',
-        controllerAs: 'resetPassword'
+        controllerAs: 'ctrl'
       })
       .when('/coordinatordashboard', {
         templateUrl: 'views/coordinatordashboard.html',
         controller: 'CoordinatordashboardCtrl',
-        controllerAs: 'coordinatordashboard'
+        controllerAs: 'ctrl'
       })
       .when('/coordinatorreport', {
         templateUrl: 'views/coordinatorreport.html',
         controller: 'CoordinatorreportCtrl',
-        controllerAs: 'coordinatorreport'
+        controllerAs: 'ctrl'
       })
-      .when('/registerdriver', {
-        templateUrl: 'views/registerdriver.html',
-        controller: 'RegisterdriverCtrl',
-        controllerAs: 'registerdriver'
+      .when('/editdriver/:driverId?', {
+        templateUrl: 'views/editdriver.html',
+        controller: 'EditdriverCtrl',
+        controllerAs: 'ctrl'
       })
       .when('/driverdashboard', {
         templateUrl: 'views/driverdashboard.html',
         controller: 'DriverdashboardCtrl',
-        controllerAs: 'driverdashboard'
+        controllerAs: 'ctrl'
       })
       .when('/riderdashboard', {
         templateUrl: 'views/riderdashboard.html',
         controller: 'RiderdashboardCtrl',
-        controllerAs: 'riderdashboard'
+        controllerAs: 'ctrl'
+      })
+      .when('/managedrivers', {
+          templateUrl: 'views/managedrivers.html',
+          controller: 'ManagedriversCtrl',
+          controllerAs: 'ctrl'
       })
       .otherwise({
         redirectTo: '/'
