@@ -12,7 +12,7 @@ angular.module('safeRidesWebApp')
         var vm = this;
 		
         // TODO: Move this to an environment file
-        vm.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E";
+        vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
         
         vm.positions = [
             [38.55, -121.45], [38.54, -121.44], [38.53, -121.43], [38.52, -121.42]
@@ -28,10 +28,10 @@ angular.module('safeRidesWebApp')
         }, 15000);
 		
 		vm.STATUS = Object.freeze({
-			WAITING : {value: 0, name: "Waiting"}, 
-			ASSIGNED: {value: 1, name: "Assigned"}, 
-			COMPLETE : {value: 2, name: "Complete"},
-			CANCELED : {value: 3, name: "Canceled"}
+			WAITING : {value: 0, name: 'Waiting'}, 
+			ASSIGNED: {value: 1, name: 'Assigned'}, 
+			COMPLETE : {value: 2, name: 'Complete'},
+			CANCELED : {value: 3, name: 'Canceled'}
 		});
 		
 		// Waiting time until the row turns red. 
@@ -84,8 +84,8 @@ angular.module('safeRidesWebApp')
 		];
 		
 		vm.requestAgeInMinutes = function(start){
-			return moment.duration(moment().diff(moment(start))).asMinutes() 
-		}
+			return moment.duration(moment().diff(moment(start))).asMinutes();
+		};
 		
 		vm.showRequestDetails = function(req) {
 			var modalInstance = $uibModal.open({

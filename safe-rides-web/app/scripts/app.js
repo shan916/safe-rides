@@ -54,7 +54,7 @@ angular
       .when('/coordinatordashboard', {
         templateUrl: 'views/coordinatordashboard.html',
         controller: 'CoordinatordashboardCtrl',
-        controllerAs: 'cd'
+        controllerAs: 'ctrl'
       })
       .when('/coordinatorreport', {
         templateUrl: 'views/coordinatorreport.html',
