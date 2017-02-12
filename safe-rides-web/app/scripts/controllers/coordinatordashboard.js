@@ -8,37 +8,37 @@
  * Controller of the safeRidesWebApp
  */
 var REQUEST_STATUS = Object.freeze({
-	WAITING: {
-		value: 0,
-		name: 'Waiting'
-	},
-	ASSIGNED: {
-		value: 1,
-		name: 'Assigned'
-	},
-	COMPLETE: {
-		value: 2,
-		name: 'Complete'
-	},
-	CANCELED: {
-		value: 3,
-		name: 'Canceled'
-	}
+  WAITING: {
+    value: 0,
+    name: 'Waiting'
+  },
+  ASSIGNED: {
+    value: 1,
+    name: 'Assigned'
+  },
+  COMPLETE: {
+    value: 2,
+    name: 'Complete'
+  },
+  CANCELED: {
+    value: 3,
+    name: 'Canceled'
+  }
 });
 
 var DRIVER_STATUS = Object.freeze({
-	AVAILABLE: {
-		value: 0,
-		name: 'Available'
-	},
-	DRIVING: {
-		value: 1,
-		name: 'Driving'
-	},
-	INACTIVE: {
-		value: 2,
-		name: 'Inactive'
-	}
+  AVAILABLE: {
+    value: 0,
+    name: 'Available'
+  },
+  DRIVING: {
+    value: 1,
+    name: 'Driving'
+  },
+  INACTIVE: {
+    value: 2,
+    name: 'Inactive'
+  }
 });
 
 angular.module('safeRidesWebApp')
@@ -72,72 +72,79 @@ angular.module('safeRidesWebApp')
     vm.DANGER_ZONE = Object.freeze(30);
 
     vm.rideRequests = [{
-				'id': 0,
+        'id': 0,
         'name': 'Bill',
         'status': vm.REQUEST_STATUS.COMPLETE,
         'riders': 1,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(60, 'm').valueOf()
+        'time': moment().subtract(60, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 1,
+        'id': 1,
         'name': 'Bryce',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 1,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(20, 'm').valueOf()
+        'time': moment().subtract(20, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 2,
+        'id': 2,
         'name': 'Edward',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 4,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(21, 'm').valueOf()
+        'time': moment().subtract(21, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 3,
+        'id': 3,
         'name': 'Justin',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 20,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(28, 'm').valueOf()
+        'time': moment().subtract(28, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 4,
+        'id': 4,
         'name': 'Nik',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 2,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(29, 'm').valueOf()
+        'time': moment().subtract(29, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 5,
+        'id': 5,
         'name': 'Ryan',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 2,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(22, 'm').valueOf()
+        'time': moment().subtract(22, 'm').valueOf(),
+        'deleted': false
       },
       {
-				'id': 6,
+        'id': 6,
         'name': 'Zeeshan',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 4,
         'pickupLocation': '123 Main St.',
         'destination': '234 Main St.',
-        'time': moment().subtract(40, 'm').valueOf()
+        'time': moment().subtract(40, 'm').valueOf(),
+        'deleted': false
       }
     ];
 
     vm.drivers = [{
-				'id': 0,
+        'id': 0,
         'name': 'Mark',
         'status': vm.DRIVER_STATUS.AVAILABLE,
         'driverLicense': 'A1234567',
@@ -151,7 +158,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
-				'id': 1,
+        'id': 1,
         'name': 'Jacob',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -165,7 +172,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
-				'id': 2,
+        'id': 2,
         'name': 'Larry',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -179,7 +186,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
-				'id': 3,
+        'id': 3,
         'name': 'Penny',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -218,7 +225,7 @@ angular.module('safeRidesWebApp')
       });
     };
 
-		vm.showAssignDriver= function(req) {
+    vm.showAssignDriver = function(req) {
       var modalInstance = $uibModal.open({
         templateUrl: 'views/partials/coordinator/assigndriver.html',
         controller: 'AssignDriverModalCtrl',
@@ -227,7 +234,7 @@ angular.module('safeRidesWebApp')
           request: function() {
             return req;
           },
-					drivers: function() {
+          drivers: function() {
             return vm.drivers;
           }
         },
@@ -241,17 +248,37 @@ angular.module('safeRidesWebApp')
       });
     };
 
-		vm.showAssignRequest = function(driver) {
+    vm.showAssignRequest = function(driver) {
       var modalInstance = $uibModal.open({
         templateUrl: 'views/partials/coordinator/assignrequest.html',
         controller: 'AssignRequestModalCtrl',
         controllerAs: 'arModal',
         resolve: {
-					driver: function() {
+          driver: function() {
             return driver;
           },
           requests: function() {
             return vm.rideRequests;
+          }
+        },
+        size: 'lg'
+      });
+
+      modalInstance.result.then(function() {
+        console.log('ok');
+      }, function() {
+        console.log('cancel');
+      });
+    };
+
+    vm.confirmCancelRequest = function(request) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'views/partials/_shared/confirm.html',
+        controller: 'ConfirmCancelRequestCtrl',
+        controllerAs: 'confirmModal',
+        resolve: {
+          request: function() {
+            return request;
           }
         },
         size: 'lg'
@@ -280,52 +307,68 @@ angular.module('safeRidesWebApp')
     };
   });
 
-	angular.module('safeRidesWebApp')
-	  .controller('AssignDriverModalCtrl', function($uibModalInstance, request, drivers) {
-	    var vm = this;
-	    vm.request = request;
-			vm.drivers = drivers;
-			vm.selectedDriver = null;
-			vm.selectedDriverID = null;
-			vm.DRIVER_STATUS = DRIVER_STATUS;
+angular.module('safeRidesWebApp')
+  .controller('AssignDriverModalCtrl', function($uibModalInstance, request, drivers) {
+    var vm = this;
+    vm.request = request;
+    vm.drivers = drivers;
+    vm.selectedDriver = null;
+    vm.selectedDriverID = null;
+    vm.DRIVER_STATUS = DRIVER_STATUS;
 
-	    vm.cancel = function() {
-	      $uibModalInstance.dismiss('cancel');
-	    };
+    vm.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
 
-	    vm.ok = function() {
-				vm.selectedDriver.status = DRIVER_STATUS.DRIVING;
-				vm.request.status = REQUEST_STATUS.ASSIGNED;
-	      $uibModalInstance.close();
-	    };
+    vm.ok = function() {
+      vm.selectedDriver.status = DRIVER_STATUS.DRIVING;
+      vm.request.status = REQUEST_STATUS.ASSIGNED;
+      $uibModalInstance.close();
+    };
 
-			vm.changed = function(){
-				// assuming id = index :o
-				vm.selectedDriver = drivers[vm.selectedDriverID];
-			};
-	  });
+    vm.changed = function() {
+      // assuming id = index :o
+      vm.selectedDriver = drivers[vm.selectedDriverID];
+    };
+  });
 
-		angular.module('safeRidesWebApp')
-		  .controller('AssignRequestModalCtrl', function($uibModalInstance, driver, requests) {
-		    var vm = this;
-				vm.driver = driver;
-				vm.requests = requests;
-				vm.selectedRequest = null;
-				vm.selectedRequestID = null;
-				vm.REQUEST_STATUS = REQUEST_STATUS;
+angular.module('safeRidesWebApp')
+  .controller('AssignRequestModalCtrl', function($uibModalInstance, driver, requests) {
+    var vm = this;
+    vm.driver = driver;
+    vm.requests = requests;
+    vm.selectedRequest = null;
+    vm.selectedRequestID = null;
+    vm.REQUEST_STATUS = REQUEST_STATUS;
 
-		    vm.cancel = function() {
-		      $uibModalInstance.dismiss('cancel');
-		    };
+    vm.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
 
-		    vm.ok = function() {
-					vm.selectedRequest.status = REQUEST_STATUS.ASSIGNED;
-					vm.driver.status = DRIVER_STATUS.DRIVING;
-		      $uibModalInstance.close();
-		    };
+    vm.ok = function() {
+      vm.selectedRequest.status = REQUEST_STATUS.ASSIGNED;
+      vm.driver.status = DRIVER_STATUS.DRIVING;
+      $uibModalInstance.close();
+    };
 
-				vm.changed = function(){
-					// assuming id = index :o
-					vm.selectedRequest = vm.requests[vm.selectedRequestID];
-				};
-		  });
+    vm.changed = function() {
+      // assuming id = index :o
+      vm.selectedRequest = vm.requests[vm.selectedRequestID];
+    };
+  });
+
+angular.module('safeRidesWebApp')
+  .controller('ConfirmCancelRequestCtrl', function($uibModalInstance, request) {
+    var vm = this;
+    vm.body = 'You selected to cancel ' + request.name + '\'s ride request. Are you sure you want to continue? The request will be remove from the queue and ' + request.name + ' will be notified that their request is canceled.';
+    vm.danger = true;
+
+    vm.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
+
+    vm.ok = function() {
+      request.deleted = true;
+      $uibModalInstance.close();
+    };
+  });

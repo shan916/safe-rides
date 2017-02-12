@@ -23,7 +23,7 @@
       <div class="form-group">
         <label for="selectDriver">Assign driver</label>
         <select name="selectDriver" id="selectDriver" class="form-control" ng-model="adModal.selectedDriverID" ng-change="adModal.changed()">
-          <option ng-if="driver.status === adModal.DRIVER_STATUS.AVAILABLE" ng-repeat="driver in adModal.drivers" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
+          <option ng-repeat="driver in adModal.drivers | filter: {status: adModal.DRIVER_STATUS.AVAILABLE}" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
         </select>
       </div>
       <div ng-hide="adModal.selectedDriver == null">

@@ -17,7 +17,7 @@
       <div class="form-group">
         <label for="selectRequest">Assign request</label>
         <select name="selectRequest" id="selectRequest" class="form-control" ng-model="arModal.selectedRequestID" ng-change="arModal.changed()">
-          <option ng-if="request.status === arModal.REQUEST_STATUS.WAITING" ng-repeat="request in arModal.requests" value="{{request.id}}">{{'Riders: ' + request.riders + ' - ' + request.name}}</option>
+          <option ng-repeat="request in arModal.requests | filter: {deleted: false, status: arModal.REQUEST_STATUS.WAITING}" value="{{request.id}}">{{'Riders: ' + request.riders + ' - ' + request.name}}</option>
         </select>
       </div>
       <div ng-hide="arModal.selectedRequest == null">

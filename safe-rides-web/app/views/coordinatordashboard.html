@@ -31,7 +31,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']" ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | filter: {deleted: false} | orderBy:['status.value','time']" ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
                                 warning: req.status === ctrl.REQUEST_STATUS.WAITING,
                                 info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
                                 success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
@@ -41,7 +41,7 @@
                   <td>{{req.time | date:'h:mma'}}</td>
                   <td>
                     <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-danger">Cancel</button>
+                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
                   </td>
                 </tr>
               </tbody>
