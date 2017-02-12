@@ -26,6 +26,16 @@
           <option ng-repeat="driver in adModal.drivers | filter: {status: adModal.DRIVER_STATUS.AVAILABLE}" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="estimateArrival">Estimated Arrival</label>
+        <select name="estimateArrival" id="selectDriver" class="form-control">
+          <option value=""></option>
+          <option value="15">15 Minutes</option>
+          <option value="30">30 Minutes</option>
+          <option value="45">45 Minutes</option>
+          <option value="60">1 Hour</option>
+        </select>
+      </div>
       <div ng-hide="adModal.selectedDriver == null">
         <h4>Selected Driver's Details</h4>
         <dl class="dl-horizontal">
