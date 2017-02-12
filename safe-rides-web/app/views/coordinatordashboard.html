@@ -39,18 +39,18 @@
                             </thead>
                             <tbody>
 								<tr ng-click="ctrl.showRequestDetails(req)"
-									ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']" 
-									ng-class="{	danger: req.status === ctrl.STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE, 
-												warning: req.status === ctrl.STATUS.WAITING, 
-												info: req.status === ctrl.STATUS.ASSIGNED, 
-												success: req.status === ctrl.STATUS.COMPLETE}">
+									ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']"
+									ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+												warning: req.status === ctrl.REQUEST_STATUS.WAITING,
+												info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
+												success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
 									<td>{{req.name}}</td>
 									<td>{{req.status.name}}</td>
 									<td>{{req.riders}}</td>
 									<td>{{req.time | date:'h:mma'}}</td>
 									<td>
-										<button ng-if="req.status === ctrl.STATUS.WAITING" class="btn btn-primary">Assign</button>
-										<button ng-if="req.status === ctrl.STATUS.WAITING || req.status === ctrl.STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
+										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
 									</td>
 								</tr>
                             </tbody>
@@ -72,37 +72,26 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Name</th>
                                 <th>Status</th>
                                 <th>Seats Available</th>
                             </tr>
-                            </thead>
+                            </thea
                             <tbody>
-                            <tr class="success">
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Available</td>
-                                <td>5</td>
-                            </tr>
-                            <tr class="info">
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Driving</td>
-                                <td>4</td>
-                            </tr>
-                            <tr class="info">
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>Driving</td>
-                                <td>3</td>
-                            </tr>
-                            <tr class="info">
-                                <th scope="row">3</th>
-                                <td>Penny</td>
-                                <td>Driving</td>
-                                <td>3</td>
-                            </tr>
+							<tr ng-click="ctrl.showRequestDetails(driver)"
+									ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']"
+									ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
+												info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
+												warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
+												}">
+									<td>{{driver.name}}</td>
+									<td>{{driver.status.name}}</td>
+									<td>{{driver.vehicle.seats}}</td>
+									<td>
+										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
+										<button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+									</td>
+								</tr>
                             </tbody>
                         </table>
 
