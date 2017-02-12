@@ -31,8 +31,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']"
-                    ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy:['status.value','time']" ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
                                 warning: req.status === ctrl.REQUEST_STATUS.WAITING,
                                 info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
                                 success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
@@ -41,8 +40,8 @@
                   <td>{{req.riders}}</td>
                   <td>{{req.time | date:'h:mma'}}</td>
                   <td>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" ng-click="ctrl.showRequestAssignment(req, drivers); $event.stopPropagation();" class="btn btn-primary">Assign</button>
+                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-danger">Cancel</button>
                   </td>
                 </tr>
               </tbody>
@@ -67,10 +66,11 @@
                   <th>Name</th>
                   <th>Status</th>
                   <th>Seats Available</th>
+                  <th>Action</th>
                 </tr>
-                </thea <tbody>
-                <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']"
-                    ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
+              </thead>
+              <tbody>
+                <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']" ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
                                 info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
                                 warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
                               }">
@@ -78,11 +78,10 @@
                   <td>{{driver.status.name}}</td>
                   <td>{{driver.vehicle.seats}}</td>
                   <td>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" class="btn btn-primary">Assign</button>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" class="btn btn-default">Cancel</button>
+                    <button ng-if="driver.status === ctrl.DRIVER_STATUS.AVAILABLE" class="btn btn-primary">Assign</button>
                   </td>
                 </tr>
-                </tbody>
+              </tbody>
             </table>
 
             <button type="submit" class="btn btn-primary btn-block">Add New Driver</button>

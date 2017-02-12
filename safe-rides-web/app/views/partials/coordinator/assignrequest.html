@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-title">Assign Request to a Driver</h3>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Name:</dt>
+        <dd>{{arModal.request.name}}</dd>
+        <dt>Riders:</dt>
+        <dd>{{arModal.request.riders}}</dd>
+        <dt>Pickup Location:</dt>
+        <dd>{{arModal.request.pickupLocation}}</dd>
+        <dt>Destination:</dt>
+        <dd>{{arModal.request.destination}}</dd>
+        <dt>Request Time:</dt>
+        <dd>{{arModal.request.time | date:'MMM dd, yyyy h:mma'}}</dd>
+        <dt>Status:</dt>
+        <dd>{{arModal.request.status.name}}</dd>
+      </dl>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="selectDriver">Assign driver</label>
+        <select name="selectDriver" id="selectDriver" class="form-control" ng-model="arModal.selectedDriverID" ng-change="arModal.changed()">
+          <option ng-if="driver.status === arModal.DRIVER_STATUS.AVAILABLE" ng-repeat="driver in arModal.drivers" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
+        </select>
+      </div>
+      <div ng-hide="arModal.selectedDriver == null">
+        <h4>Selected Driver's Details</h4>
+        <dl class="dl-horizontal">
+          <dt>Name:</dt>
+          <dd>{{arModal.selectedDriver.name}}</dd>
+          <dt>Seats:</dt>
+          <dd>{{arModal.selectedDriver.vehicle.seats}}</dd>
+          <dt>Vehicle:</dt>
+          <dd>{{arModal.selectedDriver.vehicle.year + ' - ' + arModal.selectedDriver.vehicle.make + ', ' + arModal.selectedDriver.vehicle.model}}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="arModal.ok()">Assign Driver</button>
+  <button type="button" class="btn btn-default" ng-click="arModal.cancel()">Cancel</button>
+</div>

@@ -7,6 +7,40 @@
  * # CoordinatordashboardCtrl
  * Controller of the safeRidesWebApp
  */
+var REQUEST_STATUS = Object.freeze({
+	WAITING: {
+		value: 0,
+		name: 'Waiting'
+	},
+	ASSIGNED: {
+		value: 1,
+		name: 'Assigned'
+	},
+	COMPLETE: {
+		value: 2,
+		name: 'Complete'
+	},
+	CANCELED: {
+		value: 3,
+		name: 'Canceled'
+	}
+});
+
+var DRIVER_STATUS = Object.freeze({
+	AVAILABLE: {
+		value: 0,
+		name: 'Available'
+	},
+	DRIVING: {
+		value: 1,
+		name: 'Driving'
+	},
+	INACTIVE: {
+		value: 2,
+		name: 'Inactive'
+	}
+});
+
 angular.module('safeRidesWebApp')
   .controller('CoordinatordashboardCtrl', function($interval, $uibModal) {
     var vm = this;
@@ -30,39 +64,8 @@ angular.module('safeRidesWebApp')
       }
     }, 15000);
 
-    vm.REQUEST_STATUS = Object.freeze({
-      WAITING: {
-        value: 0,
-        name: 'Waiting'
-      },
-      ASSIGNED: {
-        value: 1,
-        name: 'Assigned'
-      },
-      COMPLETE: {
-        value: 2,
-        name: 'Complete'
-      },
-      CANCELED: {
-        value: 3,
-        name: 'Canceled'
-      }
-    });
-
-    vm.DRIVER_STATUS = Object.freeze({
-      AVAILABLE: {
-        value: 0,
-        name: 'Available'
-      },
-      DRIVING: {
-        value: 1,
-        name: 'Driving'
-      },
-      INACTIVE: {
-        value: 2,
-        name: 'Inactive'
-      }
-    });
+    vm.REQUEST_STATUS = REQUEST_STATUS;
+    vm.DRIVER_STATUS = DRIVER_STATUS;
 
     // Waiting time until the row turns red.
     // Variable set by admin?
@@ -127,6 +130,7 @@ angular.module('safeRidesWebApp')
     ];
 
     vm.drivers = [{
+				'id': 0,
         'name': 'Mark',
         'status': vm.DRIVER_STATUS.AVAILABLE,
         'driverLicense': 'A1234567',
@@ -140,6 +144,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
+				'id': 1,
         'name': 'Jacob',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -153,6 +158,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
+				'id': 2,
         'name': 'Larry',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -166,6 +172,7 @@ angular.module('safeRidesWebApp')
         }
       },
       {
+				'id': 3,
         'name': 'Penny',
         'status': vm.DRIVER_STATUS.DRIVING,
         'driverLicense': 'A1234567',
@@ -186,12 +193,35 @@ angular.module('safeRidesWebApp')
 
     vm.showRequestDetails = function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/requestdetails.html',
+        templateUrl: 'views/partials/coordinator/requestdetails.html',
         controller: 'RequestDetailModalCtrl',
         controllerAs: 'rdModal',
         resolve: {
           request: function() {
             return req;
+          }
+        },
+        size: 'sm'
+      });
+
+      modalInstance.result.then(function() {
+        console.log('ok');
+      }, function() {
+        console.log('cancel');
+      });
+    };
+
+		vm.showRequestAssignment = function(req) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'views/partials/coordinator/assignrequest.html',
+        controller: 'RequestAssignemntModalCtrl',
+        controllerAs: 'arModal',
+        resolve: {
+          request: function() {
+            return req;
+          },
+					drivers: function() {
+            return vm.drivers;
           }
         },
         size: 'lg'
@@ -219,3 +249,28 @@ angular.module('safeRidesWebApp')
       $uibModalInstance.close();
     };
   });
+
+	angular.module('safeRidesWebApp')
+	  .controller('RequestAssignemntModalCtrl', function($uibModalInstance, request, drivers) {
+	    var vm = this;
+	    vm.request = request;
+			vm.drivers = drivers;
+			vm.selectedDriver = null;
+			vm.selectedDriverID = null;
+			vm.DRIVER_STATUS = DRIVER_STATUS;
+
+	    vm.cancel = function() {
+	      $uibModalInstance.dismiss('cancel');
+	    };
+
+	    vm.ok = function() {
+				vm.selectedDriver.status = DRIVER_STATUS.DRIVING;
+				vm.request.status = REQUEST_STATUS.ASSIGNED;
+	      $uibModalInstance.close();
+	    };
+
+			vm.changed = function(){
+				// assuming id = index :o
+				vm.selectedDriver = drivers[vm.selectedDriverID];
+			};
+	  });
