@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-title">Assign Driver to a Request</h3>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <dl class="dl-horizontal">
+        <dt>Name:</dt>
+        <dd>{{adModal.driver.name}}</dd>
+        <dt>Seats:</dt>
+        <dd>{{adModal.driver.vehicle.seats}}</dd>
+        <dt>Vehicle:</dt>
+        <dd>{{adModal.driver.vehicle.year + ' - ' + adModal.driver.vehicle.make + ', ' + adModal.driver.vehicle.model}}</dd>
+      </dl>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="selectRequest">Assign request</label>
+        <select name="selectRequest" id="selectRequest" class="form-control" ng-model="adModal.selectedRequestID" ng-change="adModal.changed()">
+          <option ng-if="request.status === adModal.REQUEST_STATUS.WAITING" ng-repeat="request in adModal.requests" value="{{request.id}}">{{'Riders: ' + request.riders + ' - ' + request.name}}</option>
+        </select>
+      </div>
+      <div ng-hide="adModal.selectedRequest == null">
+        <h4>Selected Request's Details</h4>
+        <dl class="dl-horizontal">
+          <dt>Name:</dt>
+          <dd>{{adModal.selectedRequest.name}}</dd>
+          <dt>Riders:</dt>
+          <dd>{{adModal.selectedRequest.riders}}</dd>
+          <dt>Pickup Location:</dt>
+          <dd>{{adModal.selectedRequest.pickupLocation}}</dd>
+          <dt>Destination:</dt>
+          <dd>{{adModal.selectedRequest.destination}}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="adModal.ok()">Assign Request</button>
+  <button type="button" class="btn btn-default" ng-click="adModal.cancel()">Cancel</button>
+</div>

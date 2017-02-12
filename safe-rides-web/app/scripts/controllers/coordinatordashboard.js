@@ -72,6 +72,7 @@ angular.module('safeRidesWebApp')
     vm.DANGER_ZONE = Object.freeze(30);
 
     vm.rideRequests = [{
+				'id': 0,
         'name': 'Bill',
         'status': vm.REQUEST_STATUS.COMPLETE,
         'riders': 1,
@@ -80,6 +81,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(60, 'm').valueOf()
       },
       {
+				'id': 1,
         'name': 'Bryce',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 1,
@@ -88,6 +90,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(20, 'm').valueOf()
       },
       {
+				'id': 2,
         'name': 'Edward',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 4,
@@ -96,6 +99,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(21, 'm').valueOf()
       },
       {
+				'id': 3,
         'name': 'Justin',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 20,
@@ -104,6 +108,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(28, 'm').valueOf()
       },
       {
+				'id': 4,
         'name': 'Nik',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 2,
@@ -112,6 +117,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(29, 'm').valueOf()
       },
       {
+				'id': 5,
         'name': 'Ryan',
         'status': vm.REQUEST_STATUS.ASSIGNED,
         'riders': 2,
@@ -120,6 +126,7 @@ angular.module('safeRidesWebApp')
         'time': moment().subtract(22, 'm').valueOf()
       },
       {
+				'id': 6,
         'name': 'Zeeshan',
         'status': vm.REQUEST_STATUS.WAITING,
         'riders': 4,
@@ -234,6 +241,29 @@ angular.module('safeRidesWebApp')
       });
     };
 
+		vm.showAssignDriver = function(driver) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'views/partials/coordinator/assigndriver.html',
+        controller: 'AssignDriverModalCtrl',
+        controllerAs: 'adModal',
+        resolve: {
+					driver: function() {
+            return driver;
+          },
+          requests: function() {
+            return vm.rideRequests;
+          }
+        },
+        size: 'lg'
+      });
+
+      modalInstance.result.then(function() {
+        console.log('ok');
+      }, function() {
+        console.log('cancel');
+      });
+    };
+
   });
 
 angular.module('safeRidesWebApp')
@@ -274,3 +304,28 @@ angular.module('safeRidesWebApp')
 				vm.selectedDriver = drivers[vm.selectedDriverID];
 			};
 	  });
+
+		angular.module('safeRidesWebApp')
+		  .controller('AssignDriverModalCtrl', function($uibModalInstance, driver, requests) {
+		    var vm = this;
+				vm.driver = driver;
+				vm.requests = requests;
+				vm.selectedRequest = null;
+				vm.selectedRequestID = null;
+				vm.REQUEST_STATUS = REQUEST_STATUS;
+
+		    vm.cancel = function() {
+		      $uibModalInstance.dismiss('cancel');
+		    };
+
+		    vm.ok = function() {
+					vm.selectedRequest.status = REQUEST_STATUS.ASSIGNED;
+					vm.driver.status = DRIVER_STATUS.DRIVING;
+		      $uibModalInstance.close();
+		    };
+
+				vm.changed = function(){
+					// assuming id = index :o
+					vm.selectedRequest = vm.requests[vm.selectedRequestID];
+				};
+		  });
