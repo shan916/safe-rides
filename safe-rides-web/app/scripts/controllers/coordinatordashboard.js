@@ -101,7 +101,7 @@ angular.module('safeRidesWebApp')
             return {
                 isValid: isValid,
                 error: error
-            }
+            };
         };
         var showError = function($input) {
             var klass = $input.attr('class'),/* class form-control required */
@@ -297,7 +297,7 @@ angular.module('safeRidesWebApp')
 
     vm.showRequestDetails = function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/coordinator/requestdetails.html',
+        templateUrl: 'views/requestdetails.html',
         controller: 'RequestDetailModalCtrl',
         controllerAs: 'rdModal',
         resolve: {
@@ -317,7 +317,7 @@ angular.module('safeRidesWebApp')
 
     vm.showAssignDriver = function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/coordinator/assigndriver.html',
+        templateUrl: 'views/assigndriver.html',
         controller: 'AssignDriverModalCtrl',
         controllerAs: 'adModal',
         resolve: {
@@ -340,7 +340,7 @@ angular.module('safeRidesWebApp')
 
     vm.showAssignRequest = function(driver) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/coordinator/assignrequest.html',
+        templateUrl: 'views/assignrequest.html',
         controller: 'AssignRequestModalCtrl',
         controllerAs: 'arModal',
         resolve: {
@@ -363,8 +363,8 @@ angular.module('safeRidesWebApp')
 
     vm.confirmCancelRequest = function(request) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/partials/_shared/confirm.html',
-        controller: 'ConfirmCancelRequestCtrl',
+        templateUrl: 'views/confirm.html',
+        controller: 'ConfirmCancelRequestModalCtrl',
         controllerAs: 'confirmModal',
         resolve: {
           request: function() {
@@ -381,84 +381,4 @@ angular.module('safeRidesWebApp')
       });
     };
 
-  });
-
-angular.module('safeRidesWebApp')
-  .controller('RequestDetailModalCtrl', function($uibModalInstance, request) {
-    var vm = this;
-    vm.request = request;
-
-    vm.cancel = function() {
-      $uibModalInstance.dismiss('cancel');
-    };
-
-    vm.ok = function() {
-      $uibModalInstance.close();
-    };
-  });
-
-angular.module('safeRidesWebApp')
-  .controller('AssignDriverModalCtrl', function($uibModalInstance, request, drivers) {
-    var vm = this;
-    vm.request = request;
-    vm.drivers = drivers;
-    vm.selectedDriver = null;
-    vm.selectedDriverID = null;
-    vm.DRIVER_STATUS = DRIVER_STATUS;
-
-    vm.cancel = function() {
-      $uibModalInstance.dismiss('cancel');
-    };
-
-    vm.ok = function() {
-      vm.selectedDriver.status = DRIVER_STATUS.DRIVING;
-      vm.request.status = REQUEST_STATUS.ASSIGNED;
-      $uibModalInstance.close();
-    };
-
-    vm.changed = function() {
-      // assuming id = index :o
-      vm.selectedDriver = drivers[vm.selectedDriverID];
-    };
-  });
-
-angular.module('safeRidesWebApp')
-  .controller('AssignRequestModalCtrl', function($uibModalInstance, driver, requests) {
-    var vm = this;
-    vm.driver = driver;
-    vm.requests = requests;
-    vm.selectedRequest = null;
-    vm.selectedRequestID = null;
-    vm.REQUEST_STATUS = REQUEST_STATUS;
-
-    vm.cancel = function() {
-      $uibModalInstance.dismiss('cancel');
-    };
-
-    vm.ok = function() {
-      vm.selectedRequest.status = REQUEST_STATUS.ASSIGNED;
-      vm.driver.status = DRIVER_STATUS.DRIVING;
-      $uibModalInstance.close();
-    };
-
-    vm.changed = function() {
-      // assuming id = index :o
-      vm.selectedRequest = vm.requests[vm.selectedRequestID];
-    };
-  });
-
-angular.module('safeRidesWebApp')
-  .controller('ConfirmCancelRequestCtrl', function($uibModalInstance, request) {
-    var vm = this;
-    vm.body = 'You selected to cancel ' + request.name + '\'s ride request. Are you sure you want to continue? The request will be remove from the queue and ' + request.name + ' will be notified that their request is canceled.';
-    vm.danger = true;
-
-    vm.cancel = function() {
-      $uibModalInstance.dismiss('cancel');
-    };
-
-    vm.ok = function() {
-      request.deleted = true;
-      $uibModalInstance.close();
-    };
   });

@@ -13,10 +13,10 @@ angular.module('safeRidesWebApp')
 
   vm.routes = [
     { text: 'Home', path: '#!/' },
-    { text: 'Login', path: '#!/login '},
+    // { text: 'Login', path: '#!/login '},
     { text: 'Coordinator Dashboard', path: '#!/coordinatordashboard' },
-    { text: 'Driver Dashboard', path: '#!/driverdashboard' },
-    { text: 'Rider Dashboard', path: '#!/riderdashboard' },
+    // { text: 'Driver Dashboard', path: '#!/driverdashboard' },
+    // { text: 'Rider Dashboard', path: '#!/riderdashboard' },
     { text: 'Manage Drivers', path: '#!/managedrivers' }
   ];
 
