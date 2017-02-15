@@ -10,7 +10,14 @@
                     <div class="form-group">
                         <label for="csusid">CSUS ID</label>
                         <input id="csusid" name="csusid" type="text" class="form-control" required
-                        placeholder="Enter the driver's CSUS ID" ng-model="ctrl.driver.csusId">
+                        placeholder="Enter the driver's CSUS ID" ng-model="ctrl.driver.csusId"
+                        ng-minlength="9" ng-maxlength="9" ng-pattern="ctrl.NUM_REGEX">
+                        <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
+                            <div class="input-error" ng-message="required">* CSUS ID is required</div>
+                            <div class="input-error" ng-message="pattern">* CSUS ID must consist only of numbers</div>
+                            <div class="input-error" ng-message="minlength">* CSUS ID must be 9 digits</div>
+                            <div class="input-error" ng-message="maxlength">* CSUS ID must be 9 digits</div>
+                        </div>
                     </div>
                 </div>
 
@@ -110,7 +117,10 @@
                     <div class="form-group">
                         <label for="seats">Seats</label>
                         <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats"
-                        required ng-min="2" ng-model="ctrl.driver.vehicle.seats">
+                        required min="2" ng-model="ctrl.driver.vehicle.seats">
+                        <div ng-messages="vehicleForm.seats.$error">
+                            <div class="input-error" ng-message="min">* Enter >= 2</div>
+                        </div>
                     </div>
                 </div>
 

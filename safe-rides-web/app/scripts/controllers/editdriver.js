@@ -11,6 +11,8 @@ angular.module('safeRidesWebApp')
 .controller('EditdriverCtrl', function ($routeParams, DriverService, $location) {
     var vm = this;
 
+    vm.NUM_REGEX = '\\d+';
+
     vm.yearChoices = [];
 
     vm.stateChoices = [

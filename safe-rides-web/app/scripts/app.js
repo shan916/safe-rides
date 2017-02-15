@@ -18,7 +18,8 @@ angular
     'ngTouch',
     'ngMap',
     'ui.bootstrap',
-    'ui.select'
+    'ui.select',
+    'ngMessages'
   ])
   .config(function ($routeProvider) {
     $routeProvider
