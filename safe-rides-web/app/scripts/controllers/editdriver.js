@@ -8,8 +8,10 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('EditdriverCtrl', function ($routeParams, DriverService, $location) {
+.controller('EditdriverCtrl', function ($routeParams, $location, DriverService, Driver) {
     var vm = this;
+
+    vm.driver = new Driver();
 
     vm.NUM_REGEX = '\\d+';
 
@@ -23,26 +25,26 @@ angular.module('safeRidesWebApp')
         'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
     ];
 
-    vm.driver = {
-        csusId: undefined,
-        name: undefined,
-        dlNumber: undefined,
-        dlState: undefined,
-        sex: undefined,
-        active: true,
-        vehicle: {
-            make: undefined,
-            model: undefined,
-            year: undefined,
-            licensePlate: undefined,
-            bodyType: undefined,
-            color: undefined,
-            seats: undefined
-        }
-    };
+    function getDriver(driverId) {
+        DriverService.get({id: driverId}).$promise.then(function(response) {
+            vm.driver = response;
+            console.log('got driver:', response);
+        }, function(error) {
+            console.log('error getting driver:', error);
+        });
+    }
+
+    function updateDriver() {
+        DriverService.update({id: vm.driver.id}, vm.driver).$promise.then(function(response) {
+            console.log('updated driver:', response);
+            $location.path('/managedrivers');
+        }, function(error) {
+            console.log('error updating driver:', error);
+        });
+    }
 
     if ($routeParams.driverId) {
-        vm.driver = DriverService.getDriver($routeParams.driverId);
+        getDriver($routeParams.driverId);
     }
 
     for (var year = new Date().getFullYear() + 1; year >= 1980; year--) {
@@ -50,10 +52,16 @@ angular.module('safeRidesWebApp')
     }
 
     vm.saveDriver = function() {
-        if (!$routeParams.driverId) {
-            DriverService.saveDriver(vm.driver);
+        if ($routeParams.driverId) {
+            updateDriver();
+        } else {
+            DriverService.save(vm.driver).$promise.then(function(response) {
+                console.log('saved driver:', response);
+                $location.path('/managedrivers');
+            }, function(error) {
+                console.log('error saving driver:', error);
+            });
         }
-        $location.path('/managedrivers');
     };
 
 });

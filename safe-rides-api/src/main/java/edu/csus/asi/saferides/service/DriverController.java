@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import edu.csus.asi.saferides.repository.DriverRepository;
  * Rest API controller for the Driver resource 
  * */
 @RestController
+@CrossOrigin(origins = "http://localhost:9000")
 @RequestMapping("/drivers")
 public class DriverController {
 
@@ -67,15 +69,15 @@ public class DriverController {
 	/*
 	 * POST "/drivers" 
 	 * 
-	 * Creates or saves the given driver
+	 * Creates the given driver
 	 * 
-	 * @param driver - the driver to be saved in the database
+	 * @param driver - the driver to be created in the database
 	 * 
 	 * @return HTTP response containing saved entity with status of "created" 
 	 *  	   and the location header set to location of the entity
 	 * */
-	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-	public ResponseEntity<?> save(@Valid @RequestBody Driver driver) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<?> save(@RequestBody Driver driver) {
 		Driver result = driverRepository.save(driver);
 		
 		// create URI of where the driver was created
@@ -85,6 +87,23 @@ public class DriverController {
 				
 		return ResponseEntity.created(location).body(result);
 	}
+	
+	/*
+	 * PUT "/drivers/{id}" 
+	 * 
+	 * Updates the given driver
+	 * 
+	 * @param driver - the driver to be updated in the database
+	 * 
+	 * @return HTTP response containing saved entity with status of "ok"
+	 * */
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	public ResponseEntity<?> save(@PathVariable Long id, @RequestBody Driver driver) {
+		Driver result = driverRepository.save(driver);
+				
+		return ResponseEntity.ok(result);
+	}
+	
 	
 	/*
 	 * DELETE "/drivers/{id} 
