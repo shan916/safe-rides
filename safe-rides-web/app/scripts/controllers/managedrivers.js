@@ -11,7 +11,18 @@ angular.module('safeRidesWebApp')
 .controller('ManagedriversCtrl', function (DriverService, $uibModal) {
     var vm = this;
 
-    vm.drivers = DriverService.getDrivers();
+    vm.drivers = [];
+
+    getDrivers();
+
+    function getDrivers() {
+        DriverService.query().$promise.then(function(response) {
+            vm.drivers = response;
+            console.log('got drivers:', response);
+        }, function(error) {
+            console.log('error getting drivers:', error);
+        });
+    }
 
     vm.openConfirmModal = function(driver) {
         var modalInstance = $uibModal.open({
@@ -55,6 +66,13 @@ angular.module('safeRidesWebApp')
     };
 
     function deleteDriver(driver) {
-        DriverService.deleteDriver(driver);
+        console.log(driver);
+        DriverService.remove({id: driver.id}).$promise.then(function(response) {
+            console.log('deleted driver:', response);
+            getDrivers();
+        }, function(error) {
+            console.log('error deleting driver:', error);
+        });
     }
+
 });

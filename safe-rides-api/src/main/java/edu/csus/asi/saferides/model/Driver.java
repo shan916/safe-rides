@@ -1,10 +1,13 @@
 package edu.csus.asi.saferides.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /*
  * @author Zeeshan Khaliq
@@ -14,19 +17,28 @@ import javax.persistence.Id;
 
 @Entity
 public class Driver {
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Vehicle vehicle;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO) // Will generate a unique id automatically
+	@GeneratedValue(strategy = GenerationType.AUTO) // Will generate a unique id automatically
 	private Long id;
 	
-	@Column(nullable = false)
-	private String firstName;
+	@Column(nullable = false, unique = true)
+	private String csusId;
 	
 	@Column(nullable = false)
-	private String lastName;
+	private String name;
+	
+	@Column(nullable = false)
+	private String dlState;
 	
 	@Column(nullable = false, unique = true)
 	private String dlNumber;
+	
+	@Column(nullable = false)
+	private String sex;
 	
 	@Column(nullable = false)
 	private Boolean insuranceChecked;
@@ -37,13 +49,23 @@ public class Driver {
 	// protected Constructor required for JPA
 	protected Driver() { }
 	
-	public Driver(String firstName, String lastName, String dlNumber, Boolean insuranceChecked, Boolean active) {
+	public Driver(String csusId, String name, String dlNumber, String dlState, String sex, Boolean insuranceChecked, Boolean active) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.csusId = csusId;
+		this.name = name;
 		this.dlNumber = dlNumber;
+		this.dlState = dlState;
+		this.sex = sex;
 		this.insuranceChecked = insuranceChecked;
 		this.active = active;
+	}
+	
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+	
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 	
 	public Long getId() {
@@ -54,22 +76,30 @@ public class Driver {
 		this.id = id;
 	}
 	
-	public String getFirstName() {
-		return firstName;
+	public String getCsusId() {
+		return csusId;
+	}
+
+	public void setCsusId(String csusId) {
+		this.csusId = csusId;
+	}
+
+	public String getName() {
+		return name;
 	}
 	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public String getLastName() {
-		return lastName;
+	public String getDlState() {
+		return dlState;
 	}
-	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+	public void setDlState(String dlState) {
+		this.dlState = dlState;
 	}
-	
+
 	public String getDlNumber() {
 		return dlNumber;
 	}
@@ -78,6 +108,14 @@ public class Driver {
 		this.dlNumber = dlNumber;
 	}
 	
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
 	public Boolean isInsuranceChecked() {
 		return insuranceChecked;
 	}
@@ -96,7 +134,7 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dlNumber=" + dlNumber
+		return "Driver [id=" + id + ", csusId=" + csusId + ", name=" + name + ", dlNumber=" + dlNumber
 				+ ", insuranceChecked=" + insuranceChecked + ", active=" + active + "]";
 	}
 
