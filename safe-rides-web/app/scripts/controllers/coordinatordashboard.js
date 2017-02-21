@@ -354,6 +354,15 @@ angular.module('safeRidesWebApp')
         size: 'lg'
       });
 
+      /* Modal Add ride request */
+      vm.showRideRequest = function() {
+        var modalInstance = $uibModal.open({
+          templateUrl: 'views/addriderequestmodal.html',
+          controller: 'AddriderequestmodalCtrl',
+          controllerAs: 'addrideCtrl',
+          size: 'lg'
+        });
+
       modalInstance.result.then(function() {
         console.log('ok');
       }, function() {

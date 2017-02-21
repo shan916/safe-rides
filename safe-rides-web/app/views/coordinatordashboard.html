@@ -92,80 +92,9 @@
   </div>
 </div>
 
-<!-- Start Modal -->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h2 id="myModalLabel" align="center">Create Ride Request</h2>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-      <!--Start Form -->
-        <form class="form-vertical" layout="column" layout-align="start center">
-        <!--Row 1 -->
-          <div class="row"><!-- CONTAINER TODO capture info -->
-              <div class="form-group col-md-2"><label>CSUS ID</label><input class="form-control required" id="#csusid_form" placeholder="9-digits" data-placement="top" data-trigger="manual" data-content="Must be 9-digits." type="text"></div>
-              <div class="form-group col-md-2"><label>Phone #</label><input class="form-control required" id="#phone_form" placeholder="916-555-5555" data-placement="top" data-trigger="manual" data-content="ex: 916-555-5555" type="text"></div>
-              <div class="form-group col-md-4"><label>First Name</label><input class="form-control required" id="#fname_form" placeholder="First Name" data-placement="top" data-trigger="manual" data-content="Must be at least 2 characters." type="text"></div>
-              <div class="form-group col-md-4"><label>Last Name</label><input class="form-control required" id="#lname_form" placeholder="Last Name" data-placement="top" data-trigger="manual" data-content="Must be at least 2 characters." type="text"></div>
-          </div>
-        <!--Row 2 -->
-          <div class="row"><!-- CONTAINER TODO add pickupAddress, dropoffAddress, peopleCount -->
+<!-- the addriderequestmodal has been moved to own file
+  addriderequestmodal.html
+  see also addriderequestmodal.js
+-->
 
-            <div class="col-md-5">
-              <h3>Pickup Address</h3>
-              <div class="form-group"><label>Line 1</label><input class="form-control required" id="#pickupAddress_line1_form" placeholder="Address Line 1" data-placement="top" data-trigger="manual" data-content="Address Required" type="text"></div>
-              <div class="form-group"><label>Line 2</label><input class="form-control " id="#pickupAddress_line2_form" placeholder="Address Line 2" data-placement="top" data-trigger="manual" data-content="Line 2 Not Required" type="text"></div>
-              <div class="form-group"><label>City</label><input class="form-control required" id="#pickupAddress_city_form" placeholder="City" data-placement="top" data-trigger="manual" data-content="City Required" type="text"></div>
-              <div class="form-group"><label>Zip</label><input class="form-control required" id="#pickupAddress_zip_form" placeholder="Zip" data-placement="top" data-trigger="manual" data-content="Zip Required" type="text"></div>
-            </div>
-
-            <div class="col-md-5">
-              <h3>Drop-Off Address</h3>
-              <div class="form-group"><label>Line 1</label><input class="form-control required" id="#dropAddress_line1_form" placeholder="Address Line 1" data-placement="top" data-trigger="manual" data-content="Address Required" type="text"></div>
-              <div class="form-group"><label>Line 2</label><input class="form-control " id="#dropAddress_line2_form" placeholder="Address Line 2" data-placement="top" data-trigger="manual" data-content="Line 2 Not Required" type="text"></div>
-              <div class="form-group"><label>City</label><input class="form-control required" id="#dropAddress_city_form" placeholder="City" data-placement="top" data-trigger="manual" data-content="City Required" type="text"></div>
-              <div class="form-group"><label>Zip</label><input class="form-control required" id="#dropAddress_zip_form" placeholder="Zip" data-placement="top" data-trigger="manual" data-content="Zip Required" type="text"></div>
-            </div>
-
-            <div class="col-md-2">
-              <h3>People</h3>
-              <select class="selectpicker">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-
-            </div>
-
-          </div>
-
-
-
-
-        <!--Row 3 -->
-          <div class="row"><!-- CONTAINER TODO capture info -->
-            <div class="form-group col-md-8"><label>Message</label><textarea class="form-control" placeholder=" Special Message" data-placement="top" data-trigger="manual"></textarea></div>
-          </div>
-        </form>
-
-      </div><!--end container fluid-->
-
-      <!--Add Request button -->
-      <div align="center" class="btn-group" style="width:100%">
-      <a class="btn btn-primary btn-block" ng-href="" role="button" data-toggle="modal">Add Request</a>
-      </div>
-
-    </div><!--end modal-body -->
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end Modal -->
 </div>
