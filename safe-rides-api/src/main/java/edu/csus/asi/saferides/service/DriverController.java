@@ -24,7 +24,7 @@ import edu.csus.asi.saferides.repository.DriverRepository;
  * Rest API controller for the Driver resource 
  * */
 @RestController
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/drivers")
 public class DriverController {
 
