@@ -20,8 +20,6 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
 	 * Other query methods can be defined by simply declaring the method signature.
 	 * Spring Data JPA will automagically create an implementation on the fly.
 	 * */
-	List<Driver> findByFirstName(String firstName);
-	List<Driver> findByLastName(String lastName);
 	List<Driver> findByActive(Boolean active);
 	
 }
