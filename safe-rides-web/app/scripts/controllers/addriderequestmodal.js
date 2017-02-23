@@ -15,14 +15,14 @@ angular.module('safeRidesWebApp')
       {phone: undefined},
       {fname: undefined},
       {lname: undefined},
-      {pickup-line1: undefined},
-      {pickup-line2: undefined},
-      {pickup-city: undefined},
-      {pickup-zip: undefined},
-      {dropOff-line1: undefined},
-      {dropOff-line2: undefined},
-      {dropOff-city: undefined},
-      {dropOff-zip: undefined},
+      {pickupline1: undefined},
+      {pickupline2: undefined},
+      {pickupcity: undefined},
+      {pickupzip: undefined},
+      {dropOffline1: undefined},
+      {dropOffline2: undefined},
+      {dropOffcity: undefined},
+      {dropOffzip: undefined},
       {peopleCount: undefined},
       {msg: undefined}
     ];
@@ -32,7 +32,7 @@ angular.module('safeRidesWebApp')
 
     vm.saveRideRequest = function(){
       //TODO add the rest of the captures
-      vm.riderequest.csusid = element(by.binding('csusId')); 
+      vm.riderequest.csusid = element(by.binding('csusId'));
     };
 
   });
