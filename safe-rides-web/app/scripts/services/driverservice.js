@@ -8,9 +8,9 @@
 * Factory in the safeRidesWebApp.
 */
 angular.module('safeRidesWebApp')
-.factory('DriverService', function ($resource) {
+.factory('DriverService', function ($resource, ENV) {
 
-    return $resource('http://localhost:8080/safe-rides-api/drivers/:id', { id: '@id' }, {
+    return $resource(ENV.apiEndpoint + 'drivers/:id', { id: '@id' }, {
         update: {
             method: 'PUT'
         }
