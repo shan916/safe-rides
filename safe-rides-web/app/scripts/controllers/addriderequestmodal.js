@@ -12,7 +12,8 @@ angular.module('safeRidesWebApp')
     var vm = this;
     vm.riderequest = new RideRequest();
     vm.rider = new Rider();
-
+    vm.NUM_REGEX = '\\d+';
+    vm.PHONE_REGEX = '/^[2-9]\d{2}-\d{3}-\d{4}$/';
     vm.maxPeopleCount = [1, 2, 3, 4, 5, 6, 7, 8];
 
     vm.cancel = function(){
@@ -23,7 +24,7 @@ angular.module('safeRidesWebApp')
       //TODO if the ride request exists already?
       //if($routeParams.csusid)
       RideRequestService.save(vm.rider, vm.riderequest).$promise.then(function(response){
-
+      $uibModalInstance.dismiss('ok');
       },function(error){
 
       });

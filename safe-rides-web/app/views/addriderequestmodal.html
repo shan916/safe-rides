@@ -10,24 +10,46 @@
       <!-- Row 1 -->
       <div class="row">
               <div class="form-group col-md-2">
-                <label for="csusid_form">CSUS ID</label>
-                <input id="csusid_form" name="csusid_form" type="text" class="form-control" required
-                placeholder="9-digits" ng-model="addrideCtrl.rider.csusid">
+                <label for="csusid">CSUS ID</label>
+                <input id="csusid" name="csusid" type="text" class="form-control" required
+                placeholder="9-digits" ng-model="addrideCtrl.rider.csusid"
+                ng-minlength="9" ng-maxlength="9" ng-pattern="addrideCtrl.NUM_REGEX">
+                <div ng-messages="addriderequestForm.csusid.$dirty && addriderequestForm.csusid.$error">
+                  <div class="input-error" ng-message="required">* required</div>
+                  <div class="input-error" ng-message="pattern">* must consist only of numbers</div>
+                  <div class="input-error" ng-message="minlength">* must be 9 digits</div>
+                  <div class="input-error" ng-message="maxlength">* must be 9 digits</div>
+                </div>
               </div>
               <div class="form-group col-md-2">
                 <label for="phone">Phone</label>
                 <input id="phone" name="phone" type="text" class="form-control" required
-                placeholder="916-555-5555" ng-model="addrideCtrl.rider.phone">
+                placeholder="9165555555" ng-model="addrideCtrl.rider.phone"
+                ng-minlength="10" ng-maxlength="10">
+                    <!-- TODO can't get phone pattern to work
+                     ng-pattern="addrideCtrl.PHONE_REGEX" -->
+                <div ng-messages="addriderequestForm.phone.$dirty && addriderequestForm.phone.$error">
+                  <div class="input-error" ng-message="required">* required</div>
+                  <div class="input-error" ng-message="minlength">* must be 10 digits</div>
+                  <div class="input-error" ng-message="maxlength">* must be 10 digits</div>
+                  <!-- div class="input-error" ng-message="pattern">* must be valid phone number</div> -->
+                </div>
               </div>
               <div class="form-group col-md-4">
-                <label for="fname">First Name</label>
-                <input id="fname" name="fname" type="text" class="form-control" required
+                <label for="firstname">First Name</label>
+                <input id="firstname" name="firstname" type="text" class="form-control" required
                 placeholder="First" ng-model="addrideCtrl.rider.firstname">
+                <div ng-messages="addriderequestForm.firstname.$dirty && addriderequestForm.firstname.$error">
+                  <div class="input-error" ng-message="required">* required</div>
+                </div>
               </div>
               <div class="form-group col-md-4">
-                <label for="lname">Last Name</label>
-                <input id="lname" name="lname" type="text" class="form-control" required
+                <label for="lastname">Last Name</label>
+                <input id="lastname" name="lastname" type="text" class="form-control" required
                 placeholder="Last" ng-model="addrideCtrl.rider.lastname">
+                <div ng-messages="addriderequestForm.lastname.$dirty && addriderequestForm.lastname.$error">
+                  <div class="input-error" ng-message="required">* required</div>
+                </div>
               </div>
       </div><!-- end top row of form -->
 
@@ -40,21 +62,33 @@
             <label for="pickupLine1">Line 1</label>
             <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required
             placeholder="Pickup Line 1" ng-model="addrideCtrl.riderequest.pickupLine1">
+            <div ng-messages="addriderequestForm.pickupLine1.$dirty && addriderequestForm.pickupLine1.$error">
+              <div class="input-error" ng-message="required">* required</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="pickupLine2">Line 2</label>
-            <input id="pickupLine2" name="pickupLine2" type="text" class="form-control" required
+            <input id="pickupLine2" name="pickupLine2" type="text" class="form-control"
             placeholder="Pickup Line 2" ng-model="addrideCtrl.riderequest.pickupLine2">
           </div>
           <div class="form-group">
             <label for="pickupCity">City</label>
             <input id="pickupCity" name="pickupCity" type="text" class="form-control" required
-            placeholder="City" ng-model="addrideCtrl.riderequest.pickupCity">
+            placeholder="Pickup City" ng-model="addrideCtrl.riderequest.pickupCity">
+            <div ng-messages="addriderequestForm.pickupCity.$dirty && addriderequestForm.pickupCity.$error">
+              <div class="input-error" ng-message="required">* required</div>
+            </div>
           </div>
           <div class="form-group">
-            <label for="pickupZip">City</label>
+            <label for="pickupZip">Zip</label>
             <input id="pickupZip" name="pickupZip" type="text" class="form-control" required
-            placeholder="Zip Code" ng-model="addrideCtrl.riderequest.pickupZip">
+            placeholder="Pickup Zip Code" ng-model="addrideCtrl.riderequest.pickupZip"
+            ng-minlength="5" ng-maxlength="5">
+            <div ng-messages="addriderequestForm.pickupZip.$dirty && addriderequestForm.pickupZip.$error">
+              <div class="input-error" ng-message="required">* required</div>
+              <div class="input-error" ng-message="minlength">* must be 5 digits</div>
+              <div class="input-error" ng-message="maxlength">* must be 5 digits</div>
+            </div>
           </div>
         </div><!-- end Pickup Address -->
 
@@ -65,6 +99,9 @@
               <label for="dropoffLine1">Line 1</label>
               <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required
               placeholder="Drop-off Line 1" ng-model="addrideCtrl.riderequest.dropoffLine1">
+              <div ng-messages="addriderequestForm.dropoffLine1.$dirty && addriderequestForm.dropoffLine1.$error">
+                <div class="input-error" ng-message="required">* required</div>
+              </div>
             </div>
             <div class="form-group">
               <label for="dropoffLine2">Line 2</label>
@@ -74,12 +111,21 @@
             <div class="form-group">
               <label for="dropoffCity">City</label>
               <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required
-              placeholder="City" ng-model="addrideCtrl.riderequest.dropoffCity">
+              placeholder="Drop-off City" ng-model="addrideCtrl.riderequest.dropoffCity">
+              <div ng-messages="addriderequestForm.dropoffCity.$dirty && addriderequestForm.dropoffCity.$error">
+                <div class="input-error" ng-message="required">* required</div>
+              </div>
             </div>
             <div class="form-group">
-              <label for="dropoffZip">City</label>
+              <label for="dropoffZip">Zip</label>
               <input id="dropoffZip" name="dropoffZip" type="text" class="form-control" required
-              placeholder="Zip Code" ng-model="addrideCtrl.riderequest.dropoffZip">
+              placeholder="Drop-off Zip Code" ng-model="addrideCtrl.riderequest.dropoffZip"
+              ng-maxlength="5" ng-minlength="5">
+              <div ng-messages="addriderequestForm.dropoffZip.$dirty && addriderequestForm.dropoffZip.$error">
+                <div class="input-error" ng-message="required">* required</div>
+                <div class="input-error" ng-message="minlength">* must be 5 digits</div>
+                <div class="input-error" ng-message="maxlength">* must be 5 digits</div>
+              </div>
             </div>
           </div><!-- end dropoff Address -->
           <!-- People Count -->
@@ -88,6 +134,9 @@
             <label for="peopleCount">How many?</label>
             <select name="peopleCount" id="peopleCount" class="form-control" required
             ng-model="addrideCtrl.riderequest.peopleCount">
+            <div ng-messages="addriderequestForm.peopleCount.$dirty && addriderequestForm.peopleCount.$error">
+              <div class="input-error" ng-message="required">* required</div>
+            </div>
               <option ng-repeat="count in addrideCtrl.maxPeopleCount" value="{{count}}">{{count}}</option>
             </select>
           </div>
