@@ -4,6 +4,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -63,15 +65,15 @@ public class RideRequest {
 	@Column(nullable = false)
 	private double endLongitude;
 	
-	@Column(nullable = false)
-	private int status;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 	
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, Date date, String requestorFirstName, String requestorLastName,
 			String requestorContactNumber, int numPassengers, int startOdometer, int endOdometer, String startAddress,
 			String endAddress, double startLatitude, double endLatitude, double startLongitude, double endLongitude,
-			int status) {
+			Status status) {
 		super();
 		this.requestorId = requestorId;
 		this.date = date;

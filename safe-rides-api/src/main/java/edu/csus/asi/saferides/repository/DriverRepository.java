@@ -1,9 +1,7 @@
 package edu.csus.asi.saferides.repository;
 
 import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
-
 import edu.csus.asi.saferides.model.Driver;
 
 /*
