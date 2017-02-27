@@ -21,6 +21,7 @@ angular.module('safeRidesWebApp')
       this.dropOffZip = undefined;
       this.peopleCount = undefined;
       this.msg = undefined;
+      this.driver =undefined;
     }
 
     return RideRequest;
