@@ -8,32 +8,26 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-  .controller('AddriderequestmodalCtrl', function ($uibModalInstance) {
+  .controller('AddriderequestmodalCtrl', function ($uibModalInstance, RideRequest, RideRequestService, Rider) {
     var vm = this;
-    vm.riderequest = {
-      csusid: undefined,
-      phone: undefined,
-      firstname: undefined,
-      lastname: undefined,
-      pickupLine1: undefined,
-      pickupLine2: undefined,
-      pickupCity: undefined,
-      pickupZip: undefined,
-      dropOffLine1: undefined,
-      dropOffLine2: undefined,
-      dropOffCity: undefined,
-      dropOffZip: undefined,
-      peopleCount: undefined,
-      msg: undefined
-    };
+    vm.riderequest = new RideRequest();
+    vm.rider = new Rider();
+
+    vm.maxPeopleCount = [1, 2, 3, 4, 5, 6, 7, 8];
 
     vm.cancel = function(){
         $uibModalInstance.dismiss('cancel');
     };
 
     vm.saveRideRequest = function(){
-      //TODO add the rest of the captures
-      vm.riderequest.csusid = element(by.binding('csusId'));
-    };
+      //TODO if the ride request exists already?
+      //if($routeParams.csusid)
+      RideRequestService.save(vm.rider, vm.riderequest).$promise.then(function(response){
+
+      },function(error){
+
+      });
+//      vm.riderequest.csusid = element(by.binding('csusId'));
+    };//end vm.saveRideRequest
 
   });
