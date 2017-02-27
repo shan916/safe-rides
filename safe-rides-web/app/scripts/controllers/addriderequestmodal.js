@@ -12,7 +12,8 @@ angular.module('safeRidesWebApp')
     var vm = this;
     vm.riderequest = new RideRequest();
     vm.rider = new Rider();
-
+    vm.NUM_REGEX = '\\d+';
+    vm.PHONE_REGEX = '/^\d{0,9}(\.\d{1,9})?$/';
     vm.maxPeopleCount = [1, 2, 3, 4, 5, 6, 7, 8];
 
     vm.cancel = function(){
