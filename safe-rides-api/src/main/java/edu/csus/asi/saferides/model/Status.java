@@ -1,6 +1,6 @@
 package edu.csus.asi.saferides.model;
 
-enum Status {
+public enum Status {
 	Unassigned,
 	InProgress,
 	Complete,

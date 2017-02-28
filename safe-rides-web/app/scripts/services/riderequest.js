@@ -8,9 +8,12 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-  .factory('RideRequest', function (Rider) {
+  .factory('RideRequest', function () {
     function RideRequest() {
-      this.rider = new Rider();
+      this.csusid = undefined;
+      this.phone = undefined;
+      this.firstname = undefined;
+      this.lastname = undefined;
       this.pickupLine1 = undefined;
       this.pickupLine2 = undefined;
       this.pickupCity = undefined;

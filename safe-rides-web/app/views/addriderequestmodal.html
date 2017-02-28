@@ -12,7 +12,7 @@
               <div class="form-group col-md-2">
                 <label for="csusid">CSUS ID</label>
                 <input id="csusid" name="csusid" type="text" class="form-control" required
-                placeholder="9-digits" ng-model="addrideCtrl.rider.csusid"
+                placeholder="9-digits" ng-model="addrideCtrl.riderequest.csusid"
                 ng-minlength="9" ng-maxlength="9" ng-pattern="addrideCtrl.NUM_REGEX">
                 <div ng-messages="addriderequestForm.csusid.$dirty && addriderequestForm.csusid.$error">
                   <div class="input-error" ng-message="required">* required</div>
@@ -24,7 +24,7 @@
               <div class="form-group col-md-2">
                 <label for="phone">Phone</label>
                 <input id="phone" name="phone" type="text" class="form-control" required
-                placeholder="9165555555" ng-model="addrideCtrl.rider.phone"
+                placeholder="9165555555" ng-model="addrideCtrl.riderequest.phone"
                 ng-minlength="10" ng-maxlength="10">
                     <!-- TODO can't get phone pattern to work
                      ng-pattern="addrideCtrl.PHONE_REGEX" -->
@@ -38,7 +38,7 @@
               <div class="form-group col-md-4">
                 <label for="firstname">First Name</label>
                 <input id="firstname" name="firstname" type="text" class="form-control" required
-                placeholder="First" ng-model="addrideCtrl.rider.firstname">
+                placeholder="First" ng-model="addrideCtrl.riderequest.firstname">
                 <div ng-messages="addriderequestForm.firstname.$dirty && addriderequestForm.firstname.$error">
                   <div class="input-error" ng-message="required">* required</div>
                 </div>
@@ -46,7 +46,7 @@
               <div class="form-group col-md-4">
                 <label for="lastname">Last Name</label>
                 <input id="lastname" name="lastname" type="text" class="form-control" required
-                placeholder="Last" ng-model="addrideCtrl.rider.lastname">
+                placeholder="Last" ng-model="addrideCtrl.riderequest.lastname">
                 <div ng-messages="addriderequestForm.lastname.$dirty && addriderequestForm.lastname.$error">
                   <div class="input-error" ng-message="required">* required</div>
                 </div>

@@ -1,73 +1,63 @@
 package edu.csus.asi.saferides.model;
 
+import javax.persistence.*;
 import java.util.Date;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class RideRequest {
-	
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Driver driver;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long requestId;
-	
+
 	@Column(nullable = false)
 	private int requestorId;
-	
+
 	@Column(nullable = false)
 	private Date date;
-	
+
 	@Column(nullable = false)
 	private String requestorFirstName;
-	
+
 	@Column(nullable = false)
 	private String requestorLastName;
-	
+
 	@Column(nullable = false)
 	private String requestorContactNumber;
-	
+
 	@Column(nullable = false)
 	private int numPassengers;
-	
+
 	@Column(nullable = true)
 	private int startOdometer;
-	
+
 	@Column(nullable = true)
 	private int endOdometer;
-	
+
 	@Column(nullable = false)
 	private String startAddress;
-	
+
 	@Column(nullable = false)
 	private String endAddress;
-	
+
 	@Column(nullable = false)
 	private double startLatitude;
-	
+
 	@Column(nullable = false)
 	private double endLatitude;
-	
+
 	@Column(nullable = false)
 	private double startLongitude;
-	
+
 	@Column(nullable = false)
 	private double endLongitude;
-	
+
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
+
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, Date date, String requestorFirstName, String requestorLastName,
@@ -89,6 +79,25 @@ public class RideRequest {
 		this.endLatitude = endLatitude;
 		this.startLongitude = startLongitude;
 		this.endLongitude = endLongitude;
+		this.status = status;
+	}
+
+	/*
+	* RideRequest Constructor without
+	* odometer, latitude, longitude, status
+	*/
+	public RideRequest(int requestorId, Date date, String requestorFirstName, String requestorLastName,
+			String requestorContactNumber, int numPassengers, String startAddress,
+			String endAddress, Status status) {
+		super();
+		this.requestorId = requestorId;
+		this.date = date;
+		this.requestorFirstName = requestorFirstName;
+		this.requestorLastName = requestorLastName;
+		this.requestorContactNumber = requestorContactNumber;
+		this.numPassengers = numPassengers;
+		this.startAddress = startAddress;
+		this.endAddress = endAddress;
 		this.status = status;
 	}
 
