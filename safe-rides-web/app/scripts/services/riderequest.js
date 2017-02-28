@@ -18,10 +18,10 @@ angular.module('safeRidesWebApp')
       this.pickupLine2 = undefined;
       this.pickupCity = undefined;
       this.pickupZip = undefined;
-      this.dropOffLine1 = undefined;
-      this.dropOffLine2 = undefined;
-      this.dropOffCity = undefined;
-      this.dropOffZip = undefined;
+      this.dropoffLine1 = undefined;
+      this.dropoffLine2 = undefined;
+      this.dropoffCity = undefined;
+      this.dropoffZip = undefined;
       this.peopleCount = undefined;
       this.msg = undefined;
       this.driver =undefined;
