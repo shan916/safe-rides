@@ -70,26 +70,23 @@ public class RideRequest {
 	
 	protected RideRequest() { }
 
-	public RideRequest(int requestorId, Date date, String requestorFirstName, String requestorLastName,
-			String requestorContactNumber, int numPassengers, int startOdometer, int endOdometer, String startAddress,
-			String endAddress, double startLatitude, double endLatitude, double startLongitude, double endLongitude,
-			Status status) {
+	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
+			String requestorContactNumber, int numPassengers, String startAddress,
+			String endAddress, double startLatitude, double endLatitude, double startLongitude, double endLongitude) {
 		super();
 		this.requestorId = requestorId;
-		this.date = date;
+		this.date = new Date();
 		this.requestorFirstName = requestorFirstName;
 		this.requestorLastName = requestorLastName;
 		this.requestorContactNumber = requestorContactNumber;
 		this.numPassengers = numPassengers;
-		this.startOdometer = startOdometer;
-		this.endOdometer = endOdometer;
 		this.startAddress = startAddress;
 		this.endAddress = endAddress;
 		this.startLatitude = startLatitude;
 		this.endLatitude = endLatitude;
 		this.startLongitude = startLongitude;
 		this.endLongitude = endLongitude;
-		this.status = status;
+		this.status = Status.Unassigned;
 	}
 
 	public Driver getDriver() {
