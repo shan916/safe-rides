@@ -58,9 +58,9 @@ public class SafeRidesApiApplication {
 			RideRequest rideRequest7 = new RideRequest(7, "Bill", "", "9161231234", 1, "123 Main St.",
 					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
 
-			// rideRequest3.setDriver(driver4);
-			// rideRequest4.setDriver(driver5);
-			// rideRequest5.setDriver(driver6);
+			 rideRequest3.setDriver(driver4);
+			 rideRequest4.setDriver(driver5);
+			 rideRequest5.setDriver(driver6);
 
 
 			driverRepository.save(driver1);

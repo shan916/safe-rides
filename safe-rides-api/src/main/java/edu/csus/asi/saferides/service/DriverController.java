@@ -56,7 +56,7 @@ public class DriverController {
 	 * @return driver with specified id else not found
 	 * */
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	public ResponseEntity<?> retrive(@PathVariable Long id) {
+	public ResponseEntity<?> retrieve(@PathVariable Long id) {
 		Driver result = driverRepository.findOne(id);
 		
 		if (result == null) {

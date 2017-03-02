@@ -1,12 +1,22 @@
 package edu.csus.asi.saferides.model;
 
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class RideRequest {
-
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ManyToOne
 	private Driver driver;
 
 	@Id
@@ -79,13 +89,6 @@ public class RideRequest {
 		this.status = Status.Unassigned;
 	}
 
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
 
 	public Long getRequestId() {
 		return requestId;
@@ -207,9 +210,25 @@ public class RideRequest {
 		this.endLongitude = endLongitude;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public Driver getDriver() {
+		return driver;
+	}
+
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
+
 	@Override
 	public String toString() {
-		return "RideRequest [driver=" + driver + ", requestId=" + requestId + ", requestorId=" + requestorId + ", date="
+		return "RideRequest [requestId=" + requestId + ", requestorId=" + requestorId + ", date="
 				+ date + ", requestorFirstName=" + requestorFirstName + ", requestorLastName=" + requestorLastName
 				+ ", requestorContactNumber=" + requestorContactNumber + ", numPassengers=" + numPassengers
 				+ ", startOdometer=" + startOdometer + ", endOdometer=" + endOdometer + ", startAddress=" + startAddress

@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /*
  * @author Zeeshan Khaliq
@@ -20,6 +25,9 @@ public class Driver {
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
+	
+	@OneToMany(mappedBy = "driver")
+	private Set<RideRequest> rides;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO) // Will generate a unique id automatically
@@ -130,6 +138,14 @@ public class Driver {
 	
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public Set<RideRequest> getRides() {
+		return rides;
+	}
+
+	public void setRides(Set<RideRequest> rides) {
+		this.rides = rides;
 	}
 
 	@Override

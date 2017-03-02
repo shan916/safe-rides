@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import edu.csus.asi.saferides.model.Status;
 import java.net.URI;
 
 /*
@@ -31,12 +31,8 @@ public class RideRequestController {
 	 * @return list rideRequests based on query param
 	 * */
 	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) int status) {
-		if (status != 0) {
-			return rideRequestRepository.findByStatus(status);
-		} else {
-			return rideRequestRepository.findAll();
-		}
+	public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) Status status) {
+		return rideRequestRepository.findAll();
 	}
 	
 	/*
