@@ -74,30 +74,32 @@ public class DriverController {
 	}
 
 	/*
-	 * GET "/drivers/{id}/currentride
+	 * GET "/drivers/{id}/rides?status=active
 	 *
-	 * @param id - the id of the driver to find
+	 * @param id - the id of the driver to get the rides for based on query params
 	 *
-	 * @return driver's ride with specified id else not found
+	 * @return driver's assigned ride and ride request status, else not found
 	 * */
-	@RequestMapping(method = RequestMethod.GET, value="/{id}/currentride")
-	public ResponseEntity<?> retrieveRide(@PathVariable Long id) {
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/rides")
+	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) Status status) {
 		Driver result = driverRepository.findOne(id);
 
 		if (result == null) {
 			return ResponseEntity.notFound().build();
-		} else {
+		} else if(status != null) {
 			Set<RideRequest> requests = result.getRides();
-			Iterator<RideRequest> it = requests.iterator();
-			while(it.hasNext()){
-				RideRequest req = it.next();
-				if(req.getStatus() != Status.INPROGRESS && req.getStatus() != Status.ASSIGNED){
-					it.remove();
-				}
-			}
-			if(requests.size() > 0) {
+			requests.removeIf((RideRequest req) -> req.getStatus() != status);
+
+			if (requests.size() > 0) {
 				return ResponseEntity.ok(requests);
-			}else {
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		}else{
+			Set<RideRequest> requests = result.getRides();
+			if (requests.size() > 0) {
+				return ResponseEntity.ok(requests);
+			} else {
 				return ResponseEntity.notFound().build();
 			}
 		}
@@ -126,7 +128,7 @@ public class DriverController {
 	}
 
 	/*
-	 * POST "/drivers/{id}/assignriderequest"
+	 * POST "/drivers/{id}/rides"
 	 *
 	 * Assigns a ride request to the given driver
 	 *
@@ -134,7 +136,7 @@ public class DriverController {
 	 *
 	 * @return HTTP response containing saved entity with status of "ok"
 	 * */
-	@RequestMapping(method = RequestMethod.POST, value="/{id}/assignriderequest")
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/rides")
 	public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
 		Driver driver = driverRepository.findOne(id);
 		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());

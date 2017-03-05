@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.Status;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -58,9 +59,11 @@ public class SafeRidesApiApplication {
 			RideRequest rideRequest7 = new RideRequest(7, "Bill", "", "9161231234", 1, "123 Main St.", "Sacramento",
 					"95818", "345 Main St.", "Sacramento", "95818");
 
-			 rideRequest3.setDriver(driver4);
-			 rideRequest4.setDriver(driver5);
-			 rideRequest5.setDriver(driver6);
+			rideRequest2.setDriver(driver4);
+			rideRequest2.setStatus(Status.COMPLETE);
+			rideRequest3.setDriver(driver4);
+			rideRequest4.setDriver(driver5);
+			rideRequest5.setDriver(driver6);
 
 
 			driverRepository.save(driver1);
