@@ -60,10 +60,6 @@ var app = angular.module('safeRidesWebApp')
         });
     }
 
-    vm.random = function() {
-        return 0.5 - Math.random();
-    }
-
     vm.requestAgeInMinutes = function(start) {
       return moment.duration(moment().diff(moment(start))).asMinutes();
     };

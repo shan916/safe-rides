@@ -1,9 +1,13 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,6 +67,32 @@ public class DriverController {
 			return ResponseEntity.notFound().build();
 		} else {
 			return ResponseEntity.ok(result);
+		}
+	}
+
+	/*
+	 * GET "/drivers/{id}/currentride
+	 *
+	 * @param id - the id of the driver to find
+	 *
+	 * @return driver's ride with specified id else not found
+	 * */
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/currentride")
+	public ResponseEntity<?> retrieveRide(@PathVariable Long id) {
+		Driver result = driverRepository.findOne(id);
+
+		if (result == null) {
+			return ResponseEntity.notFound().build();
+		} else {
+			Set<RideRequest> requests = result.getRides();
+			Iterator<RideRequest> it = requests.iterator();
+			while(it.hasNext()){
+				RideRequest req = it.next();
+				if(req.getStatus() != Status.INPROGRESS && req.getStatus() != Status.ASSIGNED){
+					it.remove();
+				}
+			}
+			return ResponseEntity.ok(requests);
 		}
 	}
 	
