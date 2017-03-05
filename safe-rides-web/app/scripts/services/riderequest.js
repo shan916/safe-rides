@@ -11,6 +11,7 @@ angular.module('safeRidesWebApp')
   .factory('RideRequest', function () {
     function RideRequest() {
       this.requestorId = undefined;
+      this.date = undefined;
       this.requestorContactNumber = undefined;
       this.requestorFirstName = undefined;
       this.requestorLastName = undefined;
@@ -24,6 +25,7 @@ angular.module('safeRidesWebApp')
       this.dropoffZip = undefined;
       this.numPassengers = undefined;
       this.driver = undefined;
+      this.status = undefined;
     }
 
     return RideRequest;

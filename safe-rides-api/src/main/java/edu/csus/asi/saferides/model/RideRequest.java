@@ -91,7 +91,7 @@ public class RideRequest {
 		this.dropoffLine1 = dropoffLine1;
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
-		this.status = Status.Unassigned;
+		this.status = Status.UNASSIGNED;
 	}
 
 	public Driver getDriver() {
@@ -100,6 +100,7 @@ public class RideRequest {
 
 	public void setDriver(Driver driver) {
 		this.driver = driver;
+		status = Status.ASSIGNED;
 	}
 
 	public Long getId() {

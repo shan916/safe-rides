@@ -7,42 +7,8 @@
  * # CoordinatordashboardCtrl
  * Controller of the safeRidesWebApp
  */
-var REQUEST_STATUS = Object.freeze({
-  WAITING: {
-    value: 0,
-    name: 'Waiting'
-  },
-  ASSIGNED: {
-    value: 1,
-    name: 'Assigned'
-  },
-  COMPLETE: {
-    value: 2,
-    name: 'Complete'
-  },
-  CANCELED: {
-    value: 3,
-    name: 'Canceled'
-  }
-});
-
-var DRIVER_STATUS = Object.freeze({
-  AVAILABLE: {
-    value: 0,
-    name: 'Available'
-  },
-  DRIVING: {
-    value: 1,
-    name: 'Driving'
-  },
-  INACTIVE: {
-    value: 2,
-    name: 'Inactive'
-  }
-});
-
-angular.module('safeRidesWebApp')
-  .controller('CoordinatordashboardCtrl', function($interval, $uibModal) {
+var app = angular.module('safeRidesWebApp')
+  .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, $interval, $uibModal) {
     var vm = this;
 
     // TODO: Move this to an environment file
@@ -64,142 +30,39 @@ angular.module('safeRidesWebApp')
       }
     }, 15000);
 
-    vm.REQUEST_STATUS = REQUEST_STATUS;
-    vm.DRIVER_STATUS = DRIVER_STATUS;
-
     // Waiting time until the row turns red.
     // Variable set by admin?
     vm.DANGER_ZONE = Object.freeze(30);
 
-    vm.rideRequests = [{
-        'id': 0,
-        'name': 'Bill',
-        'status': vm.REQUEST_STATUS.COMPLETE,
-        'riders': 1,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(60, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 1,
-        'name': 'Bryce',
-        'status': vm.REQUEST_STATUS.ASSIGNED,
-        'riders': 1,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(20, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 2,
-        'name': 'Edward',
-        'status': vm.REQUEST_STATUS.ASSIGNED,
-        'riders': 4,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(21, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 3,
-        'name': 'Justin',
-        'status': vm.REQUEST_STATUS.WAITING,
-        'riders': 20,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(28, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 4,
-        'name': 'Nik',
-        'status': vm.REQUEST_STATUS.WAITING,
-        'riders': 2,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(29, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 5,
-        'name': 'Ryan',
-        'status': vm.REQUEST_STATUS.ASSIGNED,
-        'riders': 2,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(22, 'm').valueOf(),
-        'deleted': false
-      },
-      {
-        'id': 6,
-        'name': 'Zeeshan',
-        'status': vm.REQUEST_STATUS.WAITING,
-        'riders': 4,
-        'pickupLocation': '123 Main St.',
-        'destination': '234 Main St.',
-        'time': moment().subtract(40, 'm').valueOf(),
-        'deleted': false
-      }
-    ];
+    vm.drivers = [];
 
-    vm.drivers = [{
-        'id': 0,
-        'name': 'Mark',
-        'status': vm.DRIVER_STATUS.AVAILABLE,
-        'driverLicense': 'A1234567',
-        'vehicle': {
-          'make': 'Toyota',
-          'model': 'Corolla',
-          'year': 1876,
-          'color': 'yellow',
-          'licensePlate': 'ABC123',
-          'seats': 5
-        }
-      },
-      {
-        'id': 1,
-        'name': 'Jacob',
-        'status': vm.DRIVER_STATUS.DRIVING,
-        'driverLicense': 'A1234567',
-        'vehicle': {
-          'make': 'Toyota',
-          'model': 'Corolla',
-          'year': 1876,
-          'color': 'yellow',
-          'licensePlate': 'ABC123',
-          'seats': 4
-        }
-      },
-      {
-        'id': 2,
-        'name': 'Larry',
-        'status': vm.DRIVER_STATUS.DRIVING,
-        'driverLicense': 'A1234567',
-        'vehicle': {
-          'make': 'Toyota',
-          'model': 'Corolla',
-          'year': 1876,
-          'color': 'yellow',
-          'licensePlate': 'ABC123',
-          'seats': 3
-        }
-      },
-      {
-        'id': 3,
-        'name': 'Penny',
-        'status': vm.DRIVER_STATUS.DRIVING,
-        'driverLicense': 'A1234567',
-        'vehicle': {
-          'make': 'Toyota',
-          'model': 'Corolla',
-          'year': 1876,
-          'color': 'yellow',
-          'licensePlate': 'ABC123',
-          'seats': 3
-        }
-      }
-    ];
+    getDrivers();
+
+    function getDrivers() {
+        DriverService.query().$promise.then(function(response) {
+            vm.drivers = response;
+            console.log('got drivers:', response);
+        }, function(error) {
+            console.log('error getting drivers:', error);
+        });
+    }
+
+    vm.rideRequests = [];
+
+    getRideRequests();
+
+    function getRideRequests() {
+        RideRequestService.query().$promise.then(function(response) {
+            vm.rideRequests = response;
+            console.log('got ride requests:', response);
+        }, function(error) {
+            console.log('error getting ride requests:', error);
+        });
+    }
+
+    vm.random = function() {
+        return 0.5 - Math.random();
+    }
 
     vm.requestAgeInMinutes = function(start) {
       return moment.duration(moment().diff(moment(start))).asMinutes();
@@ -215,7 +78,7 @@ angular.module('safeRidesWebApp')
             return req;
           }
         },
-        size: 'sm'
+        size: 'lg'
       });
 
       modalInstance.result.then(function() {
@@ -303,11 +166,27 @@ angular.module('safeRidesWebApp')
       modalInstance.result.then(function(){
           console.log('ok');
         }, function(){
-          console.console.log('cancel');
+          getRideRequests();
+          console.log('cancel');
         });
-    };//end showRideRequest function
+      };//end showRideRequest function
+}); //End CoordinatordashboardCtrl
 
-
-
-
-  }); //End CoordinatordashboardCtrl
+app.filter('FriendlyStatusName', function () {
+    return function(text) {
+      switch(text){
+        case 'UNASSIGNED':
+          return 'Unassigned';
+        case 'ASSIGNED':
+          return 'Assigned';
+        case 'INPROGRESS':
+          return 'In Progress';
+        case 'COMPLETE':
+          return 'Complete';
+        case 'CANCELEDBYCOORDINATOR':
+          return 'Canceled by Coordinator';
+        case 'CANCELEDBYREQUESTOR':
+          return 'Canceled by Requestor';
+      }
+    };
+});
