@@ -66,8 +66,8 @@ public class RideRequestController {
 	 * */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
-		rideRequest.setDate(new Date());
-		rideRequest.setStatus(Status.Unassigned);
+		rideRequest.setDate(new Date());	// default to current datetime
+		rideRequest.setStatus(Status.Unassigned);	// default to unassigned status
 
 		RideRequest result = rideRequestRepository.save(rideRequest);
 		
