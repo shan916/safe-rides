@@ -10,11 +10,11 @@
       <!-- Row 1 -->
       <div class="row">
               <div class="form-group col-md-2">
-                <label for="csusid">CSUS ID</label>
-                <input id="csusid" name="csusid" type="text" class="form-control" required
-                placeholder="9-digits" ng-model="addrideCtrl.riderequest.csusid"
+                <label for="requestorId">CSUS ID</label>
+                <input id="requestorId" name="requestorId" type="text" class="form-control" required
+                placeholder="9-digits" ng-model="addrideCtrl.riderequest.requestorId"
                 ng-minlength="9" ng-maxlength="9" ng-pattern="addrideCtrl.NUM_REGEX">
-                <div ng-messages="addriderequestForm.csusid.$dirty && addriderequestForm.csusid.$error">
+                <div ng-messages="addriderequestForm.requestorId.$dirty && addriderequestForm.requestorId.$error">
                   <div class="input-error" ng-message="required">* required</div>
                   <div class="input-error" ng-message="pattern">* must consist only of numbers</div>
                   <div class="input-error" ng-message="minlength">* must be 9 digits</div>
@@ -22,13 +22,13 @@
                 </div>
               </div>
               <div class="form-group col-md-2">
-                <label for="phone">Phone</label>
-                <input id="phone" name="phone" type="text" class="form-control" required
-                placeholder="9165555555" ng-model="addrideCtrl.riderequest.phone"
+                <label for="requestorContactNumber">Phone</label>
+                <input id="requestorContactNumber" name="requestorContactNumber" type="text" class="form-control" required
+                placeholder="9165555555" ng-model="addrideCtrl.riderequest.requestorContactNumber"
                 ng-minlength="10" ng-maxlength="10">
                     <!-- TODO can't get phone pattern to work
                      ng-pattern="addrideCtrl.PHONE_REGEX" -->
-                <div ng-messages="addriderequestForm.phone.$dirty && addriderequestForm.phone.$error">
+                <div ng-messages="addriderequestForm.requestorContactNumber.$dirty && addriderequestForm.requestorContactNumber.$error">
                   <div class="input-error" ng-message="required">* required</div>
                   <div class="input-error" ng-message="minlength">* must be 10 digits</div>
                   <div class="input-error" ng-message="maxlength">* must be 10 digits</div>
@@ -36,18 +36,18 @@
                 </div>
               </div>
               <div class="form-group col-md-4">
-                <label for="firstname">First Name</label>
-                <input id="firstname" name="firstname" type="text" class="form-control" required
-                placeholder="First" ng-model="addrideCtrl.riderequest.firstname">
-                <div ng-messages="addriderequestForm.firstname.$dirty && addriderequestForm.firstname.$error">
+                <label for="requestorFirstName">First Name</label>
+                <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control" required
+                placeholder="First" ng-model="addrideCtrl.riderequest.requestorFirstName">
+                <div ng-messages="addriderequestForm.requestorFirstName.$dirty && addriderequestForm.requestorFirstName.$error">
                   <div class="input-error" ng-message="required">* required</div>
                 </div>
               </div>
               <div class="form-group col-md-4">
-                <label for="lastname">Last Name</label>
-                <input id="lastname" name="lastname" type="text" class="form-control" required
-                placeholder="Last" ng-model="addrideCtrl.riderequest.lastname">
-                <div ng-messages="addriderequestForm.lastname.$dirty && addriderequestForm.lastname.$error">
+                <label for="requestorLastName">Last Name</label>
+                <input id="requestorLastName" name="requestorLastName" type="text" class="form-control" required
+                placeholder="Last" ng-model="addrideCtrl.riderequest.requestorLastName">
+                <div ng-messages="addriderequestForm.requestorLastName.$dirty && addriderequestForm.requestorLastName.$error">
                   <div class="input-error" ng-message="required">* required</div>
                 </div>
               </div>
@@ -131,21 +131,16 @@
           <!-- People Count -->
           <div class="col-md-2 form-group">
             <h3>People</h3>
-            <label for="peopleCount">How many?</label>
-            <select name="peopleCount" id="peopleCount" class="form-control" required
-            ng-model="addrideCtrl.riderequest.peopleCount">
-            <div ng-messages="addriderequestForm.peopleCount.$dirty && addriderequestForm.peopleCount.$error">
+            <label for="numPassengers">How many?</label>
+            <select name="numPassengers" id="numPassengers" class="form-control" required
+            ng-model="addrideCtrl.riderequest.numPassengers">
+            <div ng-messages="addriderequestForm.numPassengers.$dirty && addriderequestForm.numPassengers.$error">
               <div class="input-error" ng-message="required">* required</div>
             </div>
               <option ng-repeat="count in addrideCtrl.maxPeopleCount" value="{{count}}">{{count}}</option>
             </select>
           </div>
         </div><!--end row 2 -->
-
-        <!--Row 3 -->
-          <div class="row">
-            <div class="form-group col-md-8"><label>Message</label><textarea class="form-control" ng-model="addrideCtrl.riderequest.msg"></textarea></div>
-          </div>
     </form>
 </div><!-- modal body -->
 

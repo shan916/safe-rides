@@ -43,20 +43,20 @@ public class SafeRidesApiApplication {
 			driver5.setVehicle(vehicle5);
 			driver6.setVehicle(vehicle6);
 
-			RideRequest rideRequest1 = new RideRequest(123456, "Zeeshan", "", "9161231234", 4, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest2 = new RideRequest(23456, "Nik", "", "9161231234", 2, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest3 = new RideRequest(3456, "Justin", "", "9161231234", 8, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest4 = new RideRequest(456, "Ryan", "", "9161231234", 2, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest5 = new RideRequest(56, "Edward", "", "9161231234", 4, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest6 = new RideRequest(6, "Bryce", "", "9161231234", 1, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
-			RideRequest rideRequest7 = new RideRequest(7, "Bill", "", "9161231234", 1, "123 Main St.",
-					"345 Main St.", 31.123123, 21.12312, 31.12312, 31.31234);
+			RideRequest rideRequest1 = new RideRequest(123456, "Zeeshan", "", "9161231234", 4, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest2 = new RideRequest(23456, "Nik", "", "9161231234", 2, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest3 = new RideRequest(3456, "Justin", "", "9161231234", 8, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest4 = new RideRequest(456, "Ryan", "", "9161231234", 2, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest5 = new RideRequest(56, "Edward", "", "9161231234", 4, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest6 = new RideRequest(6, "Bryce", "", "9161231234", 1, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
+			RideRequest rideRequest7 = new RideRequest(7, "Bill", "", "9161231234", 1, "123 Main St.", "Sacramento",
+					"95818", "345 Main St.", "Sacramento", "95818");
 
 			 rideRequest3.setDriver(driver4);
 			 rideRequest4.setDriver(driver5);

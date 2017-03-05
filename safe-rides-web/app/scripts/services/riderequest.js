@@ -10,10 +10,10 @@
 angular.module('safeRidesWebApp')
   .factory('RideRequest', function () {
     function RideRequest() {
-      this.csusid = undefined;
-      this.phone = undefined;
-      this.firstname = undefined;
-      this.lastname = undefined;
+      this.requestorId = undefined;
+      this.requestorContactNumber = undefined;
+      this.requestorFirstName = undefined;
+      this.requestorLastName = undefined;
       this.pickupLine1 = undefined;
       this.pickupLine2 = undefined;
       this.pickupCity = undefined;
@@ -22,9 +22,8 @@ angular.module('safeRidesWebApp')
       this.dropoffLine2 = undefined;
       this.dropoffCity = undefined;
       this.dropoffZip = undefined;
-      this.peopleCount = undefined;
-      this.msg = undefined;
-      this.driver =undefined;
+      this.numPassengers = undefined;
+      this.driver = undefined;
     }
 
     return RideRequest;

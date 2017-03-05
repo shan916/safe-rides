@@ -15,13 +15,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class RideRequest {
-	@JsonIgnore
 	@ManyToOne
 	private Driver driver;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long requestId;
+	private Long id;
 
 	@Column(nullable = false)
 	private int requestorId;
@@ -41,29 +40,35 @@ public class RideRequest {
 	@Column(nullable = false)
 	private int numPassengers;
 
-	@Column(nullable = true)
+	@Column
 	private int startOdometer;
 
-	@Column(nullable = true)
+	@Column
 	private int endOdometer;
 
 	@Column(nullable = false)
-	private String startAddress;
+	private String pickupLine1;
+
+	@Column
+	private String pickupLine2;
+
+	@Column (nullable = false)
+	private String pickupCity;
 
 	@Column(nullable = false)
-	private String endAddress;
+	private String pickupZip;
 
 	@Column(nullable = false)
-	private double startLatitude;
+	private String dropoffLine1;
+
+	@Column
+	private String dropoffLine2;
 
 	@Column(nullable = false)
-	private double endLatitude;
+	private String dropoffCity;
 
 	@Column(nullable = false)
-	private double startLongitude;
-
-	@Column(nullable = false)
-	private double endLongitude;
+	private String dropoffZip;
 
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -71,8 +76,8 @@ public class RideRequest {
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
-			String requestorContactNumber, int numPassengers, String startAddress,
-			String endAddress, double startLatitude, double endLatitude, double startLongitude, double endLongitude) {
+					   String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity,
+					   String pickupZip, String dropoffLine1, String dropoffCity, String dropoffZip ) {
 		super();
 		this.requestorId = requestorId;
 		this.date = new Date();
@@ -80,22 +85,29 @@ public class RideRequest {
 		this.requestorLastName = requestorLastName;
 		this.requestorContactNumber = requestorContactNumber;
 		this.numPassengers = numPassengers;
-		this.startAddress = startAddress;
-		this.endAddress = endAddress;
-		this.startLatitude = startLatitude;
-		this.endLatitude = endLatitude;
-		this.startLongitude = startLongitude;
-		this.endLongitude = endLongitude;
+		this.pickupLine1 = pickupLine1;
+		this.pickupCity = pickupCity;
+		this.pickupZip = pickupZip;
+		this.dropoffLine1 = dropoffLine1;
+		this.dropoffCity = dropoffCity;
+		this.dropoffZip = dropoffZip;
 		this.status = Status.Unassigned;
 	}
 
-
-	public Long getRequestId() {
-		return requestId;
+	public Driver getDriver() {
+		return driver;
 	}
 
-	public void setRequestId(Long requestId) {
-		this.requestId = requestId;
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public int getRequestorId() {
@@ -162,52 +174,68 @@ public class RideRequest {
 		this.endOdometer = endOdometer;
 	}
 
-	public String getStartAddress() {
-		return startAddress;
+	public String getPickupLine1() {
+		return pickupLine1;
 	}
 
-	public void setStartAddress(String startAddress) {
-		this.startAddress = startAddress;
+	public void setPickupLine1(String pickupLine1) {
+		this.pickupLine1 = pickupLine1;
 	}
 
-	public String getEndAddress() {
-		return endAddress;
+	public String getPickupLine2() {
+		return pickupLine2;
 	}
 
-	public void setEndAddress(String endAddress) {
-		this.endAddress = endAddress;
+	public void setPickupLine2(String pickupLine2) {
+		this.pickupLine2 = pickupLine2;
 	}
 
-	public double getStartLatitude() {
-		return startLatitude;
+	public String getPickupCity() {
+		return pickupCity;
 	}
 
-	public void setStartLatitude(double startLatitude) {
-		this.startLatitude = startLatitude;
+	public void setPickupCity(String pickupCity) {
+		this.pickupCity = pickupCity;
 	}
 
-	public double getEndLatitude() {
-		return endLatitude;
+	public String getPickupZip() {
+		return pickupZip;
 	}
 
-	public void setEndLatitude(double endLatitude) {
-		this.endLatitude = endLatitude;
+	public void setPickupZip(String pickupZip) {
+		this.pickupZip = pickupZip;
 	}
 
-	public double getStartLongitude() {
-		return startLongitude;
+	public String getDropoffLine1() {
+		return dropoffLine1;
 	}
 
-	public void setStartLongitude(double startLongitude) {
-		this.startLongitude = startLongitude;
+	public void setDropoffLine1(String dropoffLine1) {
+		this.dropoffLine1 = dropoffLine1;
 	}
 
-	public double getEndLongitude() {
-		return endLongitude;
+	public String getDropoffLine2() {
+		return dropoffLine2;
 	}
 
-	public void setEndLongitude(double endLongitude) {
-		this.endLongitude = endLongitude;
+	public void setDropoffLine2(String dropoffLine2) {
+		this.dropoffLine2 = dropoffLine2;
+	}
+
+	public String getDropoffCity() {
+		return dropoffCity;
+	}
+
+	public void setDropoffCity(String dropoffCity) {
+		this.dropoffCity = dropoffCity;
+	}
+
+	public String getDropoffZip() {
+		return dropoffZip;
+	}
+
+	public void setDropoffZip(String dropoffZip) {
+		this.dropoffZip = dropoffZip;
 	}
 
 	public Status getStatus() {
@@ -218,21 +246,28 @@ public class RideRequest {
 		this.status = status;
 	}
 
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
-
 	@Override
 	public String toString() {
-		return "RideRequest [requestId=" + requestId + ", requestorId=" + requestorId + ", date="
-				+ date + ", requestorFirstName=" + requestorFirstName + ", requestorLastName=" + requestorLastName
-				+ ", requestorContactNumber=" + requestorContactNumber + ", numPassengers=" + numPassengers
-				+ ", startOdometer=" + startOdometer + ", endOdometer=" + endOdometer + ", startAddress=" + startAddress
-				+ ", endAddress=" + endAddress + ", startLatitude=" + startLatitude + ", endLatitude=" + endLatitude
-				+ ", startLongitude=" + startLongitude + ", endLongitude=" + endLongitude + "]";
+		return "RideRequest{" +
+				"driver=" + driver +
+				", id=" + id +
+				", requestorId=" + requestorId +
+				", date=" + date +
+				", requestorFirstName='" + requestorFirstName + '\'' +
+				", requestorLastName='" + requestorLastName + '\'' +
+				", requestorContactNumber='" + requestorContactNumber + '\'' +
+				", numPassengers=" + numPassengers +
+				", startOdometer=" + startOdometer +
+				", endOdometer=" + endOdometer +
+				", pickupLine1='" + pickupLine1 + '\'' +
+				", pickupLine2='" + pickupLine2 + '\'' +
+				", pickupCity='" + pickupCity + '\'' +
+				", pickupZip='" + pickupZip + '\'' +
+				", dropoffLine1='" + dropoffLine1 + '\'' +
+				", dropoffLine2='" + dropoffLine2 + '\'' +
+				", dropoffCity='" + dropoffCity + '\'' +
+				", dropoffZip='" + dropoffZip + '\'' +
+				", status=" + status +
+				'}';
 	}
 }

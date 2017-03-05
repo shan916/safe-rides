@@ -22,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Driver {
-	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
 	private Set<RideRequest> rides;
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import edu.csus.asi.saferides.model.Status;
 import java.net.URI;
+import java.util.Date;
 
 /*
  * @author Zeeshan Khaliq
@@ -16,7 +17,7 @@ import java.net.URI;
  * */
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
-@RequestMapping("/rideRequests")
+@RequestMapping("/rides")
 public class RideRequestController {
 
 	// this creates a singleton for RideRequestRepository
@@ -65,12 +66,15 @@ public class RideRequestController {
 	 * */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
+		rideRequest.setDate(new Date());
+		rideRequest.setStatus(Status.Unassigned);
+
 		RideRequest result = rideRequestRepository.save(rideRequest);
 		
 		// create URI of where the rideRequest was created
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(result.getRequestId()).toUri();
+				.buildAndExpand(result.getId()).toUri();
 				
 		return ResponseEntity.created(location).body(result);
 	}
