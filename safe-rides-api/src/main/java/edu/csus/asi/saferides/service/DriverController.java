@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.repository.RideRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +36,9 @@ public class DriverController {
 	// this creates a singleton for DriverRepository
 	@Autowired
 	private DriverRepository driverRepository;
-	
+	@Autowired
+	private RideRequestRepository rideRequestRepository;
+
 	/*
 	 * GET "/drivers"
 	 * GET "/drivers?active=true"
@@ -92,7 +95,11 @@ public class DriverController {
 					it.remove();
 				}
 			}
-			return ResponseEntity.ok(requests);
+			if(requests.size() > 0) {
+				return ResponseEntity.ok(requests);
+			}else {
+				return ResponseEntity.notFound().build();
+			}
 		}
 	}
 	
@@ -117,7 +124,30 @@ public class DriverController {
 				
 		return ResponseEntity.created(location).body(result);
 	}
-	
+
+	/*
+	 * POST "/drivers/{id}/assignriderequest"
+	 *
+	 * Assigns a ride request to the given driver
+	 *
+	 * @param rideRequest - the ride request to be assigned to the driver
+	 *
+	 * @return HTTP response containing saved entity with status of "ok"
+	 * */
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/assignriderequest")
+	public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+		Driver driver = driverRepository.findOne(id);
+		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
+		driver.assignRideRequest(rideReq);
+		driverRepository.save(driver);
+		// create URI of where the driver was updated
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentContextPath().path("/drivers/{id}")
+				.buildAndExpand(driver.getId()).toUri();
+
+		return ResponseEntity.ok(location);
+	}
+
 	/*
 	 * PUT "/drivers/{id}" 
 	 * 
