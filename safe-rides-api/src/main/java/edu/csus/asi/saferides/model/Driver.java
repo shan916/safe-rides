@@ -150,6 +150,7 @@ public class Driver {
 
 	public void assignRideRequest(RideRequest rideRequest){
 		rideRequest.setStatus(Status.ASSIGNED);
+		rideRequest.setDriver(this);
 		Set<RideRequest> reqs = getRides();
 		reqs.add(rideRequest);
 		setRides(reqs);
