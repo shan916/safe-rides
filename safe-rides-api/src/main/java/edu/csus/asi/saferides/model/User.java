@@ -18,8 +18,6 @@ import de.mkammerer.argon2.Argon2Factory.Argon2Types;
  * Model object for User Entity
  * */
 
-
-
 @Entity
 public class User {
 	@Id
@@ -29,25 +27,25 @@ public class User {
 	@Column
 	private String name;
 	
-	@Column
+	@Column(unique = true)
 	private String username;
 	
 	@Column
 	private byte[] salt;
 	
 	@Column
-	private char[] password;
+	private String password;
 	
 	// protected Constructor required for JPA
 	protected User() { }
 
-	public User(Long id, String name, String username, char[] password) {
+	public User(Long id, String name, String username, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.username = username;
 		generateSalt();
-		this.password = password;
+		setPassword(password);
 	}
 	
 	protected void generateSalt(){
@@ -68,27 +66,27 @@ public class User {
 		return username;
 	}
 
-	public byte[] getSalt() {
-		return salt;
-	}
-
-	public void setPassword(char[] password) {
+	public void setPassword(String password) {
 		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-		try {
-		    // Hash password
-		    String hash = argon2.hash(2, 65536, 1, password);
-
-		    // Verify password
-		    if (argon2.verify(hash, password)) {
-		        // Hash matches password
-		    } else {
-		        // Hash doesn't match password
-		    }
-		} finally {
-		// Wipe confidential data
-	    argon2.wipeArray(password);
-		}
+		// Hash password
+		String saltedPassword = this.salt.toString() + password; 
+		String hash = argon2.hash(2, 65536, 1, saltedPassword);
+	    /**
+	     * String hash(int iterations, int memory, int parallelism, char[] password);
+	     * Hashes a password.
+	     * @param iterations  Number of iterations
+	     * @param memory      Sets memory usage to x kibibytes
+	     * @param parallelism Number of threads and compute lanes
+	     * @param password    Password to hash
+	     * @param charset     Charset of the password
+	     * @return Hashed password.
+	     */
+		this.password = hash;
 	}
 	
-	
+	public Boolean checkPassword(String password){
+		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
+		String saltedPassword = this.salt.toString() + password;
+		return argon2.verify(this.password, saltedPassword);
+	}
 }
