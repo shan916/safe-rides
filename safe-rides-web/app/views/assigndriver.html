@@ -1,22 +1,28 @@
 <div class="modal-header">
-  <h3 class="modal-title" id="modal-title">Assign driver to {{adModal.request.name}}'s request</h3>
+  <h3 class="modal-title" id="modal-title">Assign driver to {{adModal.request.requestorFirstName}}'s request</h3>
 </div>
 <div class="modal-body" id="modal-body">
   <div class="row">
     <div class="col-md-6">
       <dl class="dl-horizontal">
         <dt>Name:</dt>
-        <dd>{{adModal.request.name}}</dd>
+        <dd>{{adModal.request.requestorFirstName + ' ' + adModal.request.requestorLastName}}</dd>
         <dt>Riders:</dt>
-        <dd>{{adModal.request.riders}}</dd>
+        <dd>{{adModal.request.numPassengers}}</dd>
         <dt>Pickup Location:</dt>
-        <dd>{{adModal.request.pickupLocation}}</dd>
-        <dt>Destination:</dt>
-        <dd>{{adModal.request.destination}}</dd>
+        <dd>{{adModal.request.pickupLine1}} <br />
+          {{adModal.request.pickupLine2.value || "" }}
+          {{adModal.request.pickupCity + ' ' + adModal.request.pickupZip}}
+        </dd>
+        <dt>Dropoff Location:</dt>
+        <dd>{{adModal.request.dropoffLine1}} <br />
+          {{adModal.request.dropoffLine2.value || "" }}
+          {{adModal.request.dropoffCity + ' ' + adModal.request.dropoffZip}}
+        </dd>
         <dt>Request Time:</dt>
-        <dd>{{adModal.request.time | date:'MMM dd, yyyy h:mma'}}</dd>
+        <dd>{{adModal.request.date | date:'MMM dd, yyyy h:mma'}}</dd>
         <dt>Status:</dt>
-        <dd>{{adModal.request.status.name}}</dd>
+        <dd>{{adModal.request.status | FriendlyStatusName}}</dd>
       </dl>
     </div>
     <div class="col-md-6">

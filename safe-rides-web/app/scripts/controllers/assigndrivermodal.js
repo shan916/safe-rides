@@ -14,15 +14,13 @@ angular.module('safeRidesWebApp')
     vm.drivers = drivers;
     vm.selectedDriver = null;
     vm.selectedDriverID = null;
-    vm.DRIVER_STATUS = DRIVER_STATUS;
 
     vm.cancel = function() {
         $uibModalInstance.dismiss('cancel');
     };
 
     vm.ok = function() {
-        vm.selectedDriver.status = DRIVER_STATUS.DRIVING;
-        vm.request.status = REQUEST_STATUS.ASSIGNED;
+        
         $uibModalInstance.close();
     };
 

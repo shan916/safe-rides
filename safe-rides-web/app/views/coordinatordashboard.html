@@ -3,7 +3,7 @@
   <div class="col-sm-7">
     <div class="col-sm-12">
       <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{ctrl.googleMapsUrl}}">
-        <ng-map center="38.56,-121.41" zoom="11" style="height:650px;">
+        <ng-map center="38.56,-121.41" zoom="11" style="height:650px;" scrollwheel="false">
           <shape name="circle" stroke-color="#FFFF00" stroke-opacity="0.8" stroke-weight="2" fill-color="#FFFF00" fill-opacity="0.35" center="38.559146,-121.4234905" radius="16093.44">
           </shape>
           <marker ng-repeat="p in ctrl.positions" position="{{p}}"></marker>
@@ -20,33 +20,35 @@
             <h3 class="panel-title">Ride Requests</h3>
           </div>
           <div class="panel-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Riders</th>
-                  <th>Time Requested</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | filter: {deleted: false} | orderBy:['status.value','time']" ng-class="{	danger: req.status === ctrl.REQUEST_STATUS.WAITING && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
-                                warning: req.status === ctrl.REQUEST_STATUS.WAITING,
-                                info: req.status === ctrl.REQUEST_STATUS.ASSIGNED,
-                                success: req.status === ctrl.REQUEST_STATUS.COMPLETE}">
-                  <td>{{req.name}}</td>
-                  <td>{{req.status.name}}</td>
-                  <td>{{req.riders}}</td>
-                  <td>{{req.time | date:'h:mma'}}</td>
-                  <td>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
-                    <button ng-if="req.status === ctrl.REQUEST_STATUS.WAITING || req.status === ctrl.REQUEST_STATUS.ASSIGNED" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button id="#addNewRide_button" type="submit" class="btn btn-primary btn-block"  data-toggle="modal" data-target="#myModal">Add New Ride Request</button>
+            <div style="max-height:450px; overflow: auto;">
+              <table class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Riders</th>
+                    <th>Time Requested</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests" ng-class="{	danger: req.status === 'UNASSIGNED' && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                                  warning: req.status === 'UNASSIGNED',
+                                  info: req.status === 'ASSIGNED' || req.status === 'INPROGRESS',
+                                  success: req.status === 'COMPLETE'}">
+                    <td>{{req.requestorFirstName}}</td>
+                    <td>{{req.status | FriendlyStatusName}}</td>
+                    <td>{{req.numPassengers}}</td>
+                    <td>{{req.date | date:'h:mma'}}</td>
+                    <td>
+                      <button ng-if="req.status === 'UNASSIGNED'" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
+                      <button ng-if="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'INPROGRESS'" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button ng-click="ctrl.showRideRequest();" id="addNewRideButton" type="submit" class="btn btn-primary btn-block">Add New Ride Request</button>
           </div>
         </div>
       </div>
@@ -60,31 +62,32 @@
           </div>
 
           <div class="panel-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Seats Available</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | orderBy:['status.value','vehicle.seats']" ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
-                                info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
-                                warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
-                              }">
-                  <td>{{driver.name}}</td>
-                  <td>{{driver.status.name}}</td>
-                  <td>{{driver.vehicle.seats}}</td>
-                  <td>
-                    <button ng-if="driver.status === ctrl.DRIVER_STATUS.AVAILABLE" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <button type="submit" class="btn btn-primary btn-block">Add New Driver</button>
+            <div style="max-height:450px; overflow: auto;">
+              <table class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Seats Available</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | orderBy:['vehicle.seats']" ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
+                                  info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
+                                  warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
+                                }">
+                    <td>{{driver.name}}</td>
+                    <td>{{driver.status.name}}</td>
+                    <td>{{driver.vehicle.seats}}</td>
+                    <td>
+                      <button ng-if="driver.status === ctrl.DRIVER_STATUS.AVAILABLE" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <a href="#!/managedrivers" class="btn btn-primary btn-block">Manage Drivers</a>
           </div>
         </div>
       </div>
@@ -92,80 +95,9 @@
   </div>
 </div>
 
-<!-- Start Modal -->
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h2 id="myModalLabel" align="center">Create Ride Request</h2>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-      <!--Start Form -->
-        <form class="form-vertical" layout="column" layout-align="start center">
-        <!--Row 1 -->
-          <div class="row"><!-- CONTAINER TODO capture info -->
-              <div class="form-group col-md-2"><label>CSUS ID</label><input class="form-control required" id="#csusid_form" placeholder="9-digits" data-placement="top" data-trigger="manual" data-content="Must be 9-digits." type="text"></div>
-              <div class="form-group col-md-2"><label>Phone #</label><input class="form-control required" id="#phone_form" placeholder="916-555-5555" data-placement="top" data-trigger="manual" data-content="ex: 916-555-5555" type="text"></div>
-              <div class="form-group col-md-4"><label>First Name</label><input class="form-control required" id="#fname_form" placeholder="First Name" data-placement="top" data-trigger="manual" data-content="Must be at least 2 characters." type="text"></div>
-              <div class="form-group col-md-4"><label>Last Name</label><input class="form-control required" id="#lname_form" placeholder="Last Name" data-placement="top" data-trigger="manual" data-content="Must be at least 2 characters." type="text"></div>
-          </div>
-        <!--Row 2 -->
-          <div class="row"><!-- CONTAINER TODO add pickupAddress, dropoffAddress, peopleCount -->
+<!-- the addriderequestmodal has been moved to own file
+  addriderequestmodal.html
+  see also addriderequestmodal.js
+-->
 
-            <div class="col-md-5">
-              <h3>Pickup Address</h3>
-              <div class="form-group"><label>Line 1</label><input class="form-control required" id="#pickupAddress_line1_form" placeholder="Address Line 1" data-placement="top" data-trigger="manual" data-content="Address Required" type="text"></div>
-              <div class="form-group"><label>Line 2</label><input class="form-control " id="#pickupAddress_line2_form" placeholder="Address Line 2" data-placement="top" data-trigger="manual" data-content="Line 2 Not Required" type="text"></div>
-              <div class="form-group"><label>City</label><input class="form-control required" id="#pickupAddress_city_form" placeholder="City" data-placement="top" data-trigger="manual" data-content="City Required" type="text"></div>
-              <div class="form-group"><label>Zip</label><input class="form-control required" id="#pickupAddress_zip_form" placeholder="Zip" data-placement="top" data-trigger="manual" data-content="Zip Required" type="text"></div>
-            </div>
-
-            <div class="col-md-5">
-              <h3>Drop-Off Address</h3>
-              <div class="form-group"><label>Line 1</label><input class="form-control required" id="#dropAddress_line1_form" placeholder="Address Line 1" data-placement="top" data-trigger="manual" data-content="Address Required" type="text"></div>
-              <div class="form-group"><label>Line 2</label><input class="form-control " id="#dropAddress_line2_form" placeholder="Address Line 2" data-placement="top" data-trigger="manual" data-content="Line 2 Not Required" type="text"></div>
-              <div class="form-group"><label>City</label><input class="form-control required" id="#dropAddress_city_form" placeholder="City" data-placement="top" data-trigger="manual" data-content="City Required" type="text"></div>
-              <div class="form-group"><label>Zip</label><input class="form-control required" id="#dropAddress_zip_form" placeholder="Zip" data-placement="top" data-trigger="manual" data-content="Zip Required" type="text"></div>
-            </div>
-
-            <div class="col-md-2">
-              <h3>People</h3>
-              <select class="selectpicker">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-
-            </div>
-
-          </div>
-
-
-
-
-        <!--Row 3 -->
-          <div class="row"><!-- CONTAINER TODO capture info -->
-            <div class="form-group col-md-8"><label>Message</label><textarea class="form-control" placeholder=" Special Message" data-placement="top" data-trigger="manual"></textarea></div>
-          </div>
-        </form>
-
-      </div><!--end container fluid-->
-
-      <!--Add Request button -->
-      <div align="center" class="btn-group" style="width:100%">
-      <a class="btn btn-primary btn-block" ng-href="" role="button" data-toggle="modal">Add Request</a>
-      </div>
-
-    </div><!--end modal-body -->
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end Modal -->
 </div>
