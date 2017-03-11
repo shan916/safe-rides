@@ -25,7 +25,7 @@
                             <input type="checkbox" ng-model="driver.active">
                         </td>
                         <td>
-                            <a ng-href="#!/editdriver/{{driver.id}}" class="btn btn-primary">Edit</a>
+                            <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                             <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmModal(driver)">Delete</button>
                         </td>
                     </tr>
@@ -61,7 +61,7 @@
                             <input type="checkbox" ng-model="driver.active">
                         </td>
                         <td>
-                            <a ng-href="#!/editdriver/{{driver.id}}" class="btn btn-primary">Edit</a>
+                            <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                             <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmModal(driver)">Delete</button>
                         </td>
                     </tr>
@@ -74,7 +74,7 @@
 <div class="row margin-top-15 margin-bottom-15">
     <div class="col-sm-12">
         <div class="pull-right">
-            <a class="btn btn-primary" ng-href="#!/editdriver">Add New Driver</a>
+            <a class="btn btn-primary" ui-sref="editdriver()">Add New Driver</a>
         </div>
     </div>
 </div>

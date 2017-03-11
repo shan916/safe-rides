@@ -153,7 +153,7 @@
 <div class="row margin-top-15 margin-bottom-15">
     <div class="col-sm-12">
         <div class="pull-right">
-            <a ng-href="#!/managedrivers" class="btn btn-default">Cancel</a>
+            <a ui-sref="managedrivers" class="btn btn-default">Cancel</a>
             <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)"
             ng-click="ctrl.saveDriver()">
                 Save
