@@ -6,7 +6,7 @@
     <div class="panel-body">
         <form name="driverForm" novalidate>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="csusid">CSUS ID</label>
                         <input id="csusid" name="csusid" type="text" class="form-control" required
@@ -20,18 +20,29 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-sm-6">
+                <!-- Start of driver's first name -->
+                <div class="col-sm-4">
                     <div class="form-group">
-                        <label for="name">Full Name</label>
+                        <label for="name">First Name</label>
                         <input id="name" name="name" type="text" class="form-control" required
-                        placeholder="Enter the driver's full name" ng-model="ctrl.driver.name">
+                        placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName">
                     </div>
                 </div>
+                <!-- End of driver's first name -->
+
+                <!-- Start of driver's last name -->
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="name">Last Name</label>
+                        <input id="name" name="name" type="text" class="form-control" required
+                        placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName">
+                    </div>
+                </div>
+                <!-- End of driver's last name -->
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="dlnum">Driver's License Number</label>
                         <input id="dlnum" name="dlnum" type="text" class="form-control" required
@@ -39,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="state">State</label>
                         <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState">
@@ -48,7 +59,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="sex">Sex</label>
                         <select name="sex" id="sex" class="form-control" ng-model="ctrl.driver.sex">
