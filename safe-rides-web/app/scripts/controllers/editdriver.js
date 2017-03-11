@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('EditdriverCtrl', function ($routeParams, $location, DriverService, Driver) {
+.controller('EditdriverCtrl', function ($stateParams, $location, DriverService, Driver) {
     var vm = this;
 
     vm.driver = new Driver();
@@ -43,8 +43,8 @@ angular.module('safeRidesWebApp')
         });
     }
 
-    if ($routeParams.driverId) {
-        getDriver($routeParams.driverId);
+    if ($stateParams.driverId) {
+        getDriver($stateParams.driverId);
     }
 
     for (var year = new Date().getFullYear() + 1; year >= 1980; year--) {
@@ -52,7 +52,7 @@ angular.module('safeRidesWebApp')
     }
 
     vm.saveDriver = function() {
-        if ($routeParams.driverId) {
+        if ($stateParams.driverId) {
             updateDriver();
         } else {
             DriverService.save(vm.driver).$promise.then(function(response) {

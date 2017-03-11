@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-  .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $routeParams, RideRequest, RideRequestService) {
+  .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $stateParams, RideRequest, RideRequestService) {
     var vm = this;
     vm.riderequest = new RideRequest();
     vm.NUM_REGEX = '\\d+';
@@ -29,8 +29,8 @@ angular.module('safeRidesWebApp')
         });
     }
 
-    if ($routeParams.requestId) {
-        getRideRequest($routeParams.requestId);
+    if ($stateParams.requestId) {
+        getRideRequest($stateParams.requestId);
     }
 
     function getRideRequest(requestId) {
