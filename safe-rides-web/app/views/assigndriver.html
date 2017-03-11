@@ -27,10 +27,13 @@
     </div>
     <div class="col-md-6">
       <div class="form-group">
-        <label for="selectDriver">Assign driver</label>
-        <select name="selectDriver" id="selectDriver" class="form-control" ng-model="adModal.selectedDriverID" ng-change="adModal.changed()">
-          <option ng-repeat="driver in adModal.drivers | filter: {status: adModal.DRIVER_STATUS.AVAILABLE}" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
-        </select>
+        <label for="selectDriver">Assign Driver</label>
+        <ui-select ng-model="adModal.selectedDriver">
+            <ui-select-match>{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="driver in adModal.drivers">
+            <div ng-bind-html="'Seats: ' + driver.vehicle.seats + ' - ' + driver.name"></div>
+          </ui-select-choices>
+        </ui-select>
       </div>
       <div class="form-group">
         <label for="estimateArrival">Estimated Arrival</label>
