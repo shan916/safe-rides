@@ -12,20 +12,14 @@ angular.module('safeRidesWebApp')
     var vm = this;
     vm.request = request;
     vm.drivers = drivers;
-    vm.selectedDriver = null;
-    vm.selectedDriverID = null;
+    vm.selectedDriver = undefined;
 
     vm.cancel = function() {
         $uibModalInstance.dismiss('cancel');
     };
 
     vm.ok = function() {
-
         $uibModalInstance.close();
     };
 
-    vm.changed = function() {
-        // driver.id is 1-based, drivers[] is 0-based
-        vm.selectedDriver = drivers[vm.selectedDriverID-1];
-    };
 });

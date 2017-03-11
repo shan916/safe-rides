@@ -16,9 +16,12 @@
     <div class="col-md-6">
       <div class="form-group">
         <label for="selectRequest">Assign request</label>
-        <select name="selectRequest" id="selectRequest" class="form-control" ng-model="arModal.selectedRequestID" ng-change="arModal.changed()">
-          <option ng-repeat="request in arModal.requests | filter: {status: 'UNASSIGNED'}" value="{{request.id}}">{{'Riders: ' + request.numPassengers + ' - ' + request.requestorFirstName + ' ' + request.requestorLastName}}</option>
-        </select>
+        <ui-select ng-model="arModal.selectedRequest">
+            <ui-select-match>{{$select.selected.requestorFirstName}}</ui-select-match>
+          <ui-select-choices repeat="request in arModal.requests | filter: {status: 'UNASSIGNED'}">
+            <div ng-bind-html="'Riders: ' + request.numPassengers + ' - ' + request.requestorFirstName + ' ' + request.requestorLastName"></div>
+          </ui-select-choices>
+        </ui-select>
       </div>
       <div ng-hide="arModal.selectedRequest == null">
         <h4>Selected Request's Details</h4>
