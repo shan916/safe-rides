@@ -12,7 +12,8 @@ angular.module('safeRidesWebApp')
 
     function Driver() {
         this.csusId = undefined;
-        this.name = undefined;
+        this.driverfirstname = undefined;
+        this.driverlastname = undefined;
         this.dlState = undefined;
         this.dlNumber = undefined;
         this.sex = undefined;
