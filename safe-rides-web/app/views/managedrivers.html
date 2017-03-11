@@ -16,7 +16,7 @@
 
                 <tbody>
                     <tr ng-repeat="driver in ctrl.drivers | filter: {active: true}">
-                        <td>{{driver.name}}</td>
+                        <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                         <td>{{driver.csusId}}</td>
                         <td>{{driver.dlState}}</td>
                         <td>{{driver.dlNumber}}</td>
@@ -52,7 +52,7 @@
 
                 <tbody>
                     <tr ng-repeat="driver in ctrl.drivers | filter: {active: false}">
-                        <td>{{driver.name}}</td>
+                        <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                         <td>{{driver.csusId}}</td>
                         <td>{{driver.dlState}}</td>
                         <td>{{driver.dlNumber}}</td>
