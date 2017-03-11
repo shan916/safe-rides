@@ -35,9 +35,16 @@ public class Driver {
 	
 	@Column(nullable = false, unique = true)
 	private String csusId;
-	
+	/*
 	@Column(nullable = false)
 	private String name;
+	*/
+	
+	@Column(nullable = false)
+	private String driverFirstName;
+	
+	@Column(nullable = false)
+	private String driverLastName;
 	
 	@Column(nullable = false)
 	private String dlState;
@@ -57,10 +64,12 @@ public class Driver {
 	// protected Constructor required for JPA
 	protected Driver() { }
 	
-	public Driver(String csusId, String name, String dlNumber, String dlState, String sex, Boolean insuranceChecked, Boolean active) {
+	public Driver(String csusId, String driverFirstName, String driverLastName, String dlNumber, String dlState, String sex, Boolean insuranceChecked, Boolean active) {
 		super();
 		this.csusId = csusId;
-		this.name = name;
+		//this.name = name;
+		this.driverFirstName = driverFirstName;
+		this.driverLastName = driverLastName;
 		this.dlNumber = dlNumber;
 		this.dlState = dlState;
 		this.sex = sex;
@@ -92,12 +101,20 @@ public class Driver {
 		this.csusId = csusId;
 	}
 
-	public String getName() {
-		return name;
+	public String getdriverFirstName() {
+		return driverFirstName;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public String getdriverLastName() {
+		return driverLastName;
+	}
+	
+	public void setdriverFirstName(String name) {
+		this.driverFirstName = name;
+	}
+	
+	public void setdriverLastName(String name) {
+		this.driverLastName = name;
 	}
 	
 	public String getDlState() {
@@ -158,8 +175,8 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", csusId=" + csusId + ", name=" + name + ", dlNumber=" + dlNumber
-				+ ", insuranceChecked=" + insuranceChecked + ", active=" + active + "]";
+		return "Driver [id=" + id + ", csusId=" + csusId + ", name=" + driverFirstName + " " + driverLastName 
+				+ ", dlNumber=" + dlNumber + ", insuranceChecked=" + insuranceChecked + ", active=" + active + "]";
 	}
 
 }

@@ -23,12 +23,12 @@ public class SafeRidesApiApplication {
 	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository) {
 		return (args) -> {
 			// save a few drivers
-			Driver driver1 = new Driver("000000000", "Zeeshan Khaliq", "E0000000", "CA", "male", true, true);
-			Driver driver2 = new Driver("000000001", "Ryan Long", "E1111111", "CA", "male", true, false);
-			Driver driver3 = new Driver("000000002", "Bryce Hairabedian", "E2222222", "CA", "male", true, true);
-			Driver driver4 = new Driver("000000003", "Edward Ozeruga", "E3333333", "CA", "male", true, false);
-			Driver driver5 = new Driver("000000004", "Justin Mendiguarin", "E4444444", "CA", "male", true, true);
-			Driver driver6 = new Driver("000000005", "Nik Sorvari", "E5555555", "CA", "male", true, false);
+			Driver driver1 = new Driver("000000000", "Zeeshan", "Khaliq", "E0000000", "CA", "male", true, true);
+			Driver driver2 = new Driver("000000001", "Ryan", "Long", "E1111111", "CA", "male", true, false);
+			Driver driver3 = new Driver("000000002", "Bryce", "Hairabedian", "E2222222", "CA", "male", true, true);
+			Driver driver4 = new Driver("000000003", "Edward", "Ozeruga", "E3333333", "CA", "male", true, false);
+			Driver driver5 = new Driver("000000004", "Justin", "Mendiguarin", "E4444444", "CA", "male", true, true);
+			Driver driver6 = new Driver("000000005", "Nik", "Sorvari", "E5555555", "CA", "male", true, false);
 
 			Vehicle vehicle1 = new Vehicle(driver1, "Honda", "Civic", "2018", "AAAAAAA", "Magenta", 5);
 			Vehicle vehicle2 = new Vehicle(driver2, "Toyota", "Corolla", "2017", "BBBBBBB", "Blue", 7);
