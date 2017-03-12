@@ -165,13 +165,6 @@ public class Driver {
 		this.rides = rides;
 	}
 
-	public void assignRideRequest(RideRequest rideRequest){
-		rideRequest.setStatus(Status.ASSIGNED);
-		rideRequest.setDriver(this);
-		Set<RideRequest> reqs = getRides();
-		reqs.add(rideRequest);
-		setRides(reqs);
-	}
 
 	@Override
 	public String toString() {

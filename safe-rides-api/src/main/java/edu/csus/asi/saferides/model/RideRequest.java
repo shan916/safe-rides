@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class RideRequest {
 	@ManyToOne
@@ -100,7 +98,6 @@ public class RideRequest {
 
 	public void setDriver(Driver driver) {
 		this.driver = driver;
-		status = Status.ASSIGNED;
 	}
 
 	public Long getId() {

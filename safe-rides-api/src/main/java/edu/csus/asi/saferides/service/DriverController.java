@@ -1,14 +1,8 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
-import java.util.Iterator;
 import java.util.Set;
 
-import javax.validation.Valid;
-
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.csus.asi.saferides.model.Driver;
+import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.Status;
 import edu.csus.asi.saferides.repository.DriverRepository;
+import edu.csus.asi.saferides.repository.RideRequestRepository;
 
 /*
  * @author Zeeshan Khaliq
@@ -140,8 +137,13 @@ public class DriverController {
 	public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
 		Driver driver = driverRepository.findOne(id);
 		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
-		driver.assignRideRequest(rideReq);
+		
+		rideReq.setStatus(Status.ASSIGNED);
+		rideReq.setDriver(driver);
+		driver.getRides().add(rideReq);
+		
 		driverRepository.save(driver);
+//		rideRequestRepository.save(rideReq);
 		// create URI of where the driver was updated
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentContextPath().path("/drivers/{id}")
