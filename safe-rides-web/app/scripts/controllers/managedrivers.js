@@ -31,7 +31,7 @@ angular.module('safeRidesWebApp')
             '</div>' +
             '<div class="modal-body" id="modal-body">' +
             '<p>Are you sure you want to delete the following driver?</p>' +
-            '<strong>{{ctrl.driver.name}}</strong>' +
+            '<strong>{{ctrl.driver.driverFirstName}}&nbsp;{{ctrl.driver.driverLastName}}</strong>' +
             '</div>' +
             '<div class="modal-footer">' +
             '<button type="button" class="btn btn-danger" ng-click="ctrl.ok()">OK</button>' +
