@@ -8,7 +8,7 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-  .factory('RideRequest', function () {
+  .factory('RideRequest', function (Driver) {
     function RideRequest(data) {
       this.requestorId = undefined;
       this.date = undefined;
