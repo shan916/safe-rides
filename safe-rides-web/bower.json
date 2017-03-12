@@ -1,34 +1,35 @@
 {
-    "name": "safe-rides-web",
-    "version": "0.0.0",
-    "dependencies": {
-        "angular": "^1.6.2",
-        "bootstrap": "^3.2.0",
-        "angular-animate": "^1.6.2",
-        "angular-cookies": "^1.6.2",
-        "angular-resource": "^1.6.2",
-        "angular-route": "^1.6.2",
-        "angular-sanitize": "^1.6.2",
-        "angular-touch": "^1.6.2",
-        "ngmap": "^1.17.8",
-        "eonasdan-bootstrap-datetimepicker": "^4.17.45",
-        "angular-ui-select": "^0.19.6",
-        "angular-bootstrap": "^2.5.0",
-        "angular-messages": "^1.6.2",
-        "angular-ui-router": "^0.4.2"
-    },
-    "devDependencies": {
-        "angular-mocks": "^1.6.2"
-    },
-    "appPath": "app",
-    "moduleName": "safeRidesWebApp",
-    "overrides": {
-        "bootstrap": {
-            "main": [
-                "less/bootstrap.less",
-                "dist/css/bootstrap.css",
-                "dist/js/bootstrap.js"
-            ]
-        }
+  "name": "safe-rides-web",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "^1.6.2",
+    "bootstrap": "^3.2.0",
+    "angular-animate": "^1.6.2",
+    "angular-cookies": "^1.6.2",
+    "angular-resource": "^1.6.2",
+    "angular-route": "^1.6.2",
+    "angular-sanitize": "^1.6.2",
+    "angular-touch": "^1.6.2",
+    "ngmap": "^1.17.8",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.45",
+    "angular-ui-select": "^0.19.6",
+    "angular-bootstrap": "^2.5.0",
+    "angular-messages": "^1.6.2",
+    "angular-ui-router": "^0.4.2",
+    "angular-ui-mask": "^1.8.7"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.6.2"
+  },
+  "appPath": "app",
+  "moduleName": "safeRidesWebApp",
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
     }
+  }
 }

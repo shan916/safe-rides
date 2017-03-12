@@ -5,7 +5,7 @@
     <p ng-bind-html='ctrl.body'></p>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn" ng-class="{ 'btn-danger': confirmModal.danger,
-                                                'btn-primary': !confirmModal.danger }" ng-click="confirmModal.ok()">OK</button>
-    <button type="button" class="btn btn-default" ng-click="confirmModal.cancel()">Cancel</button>
+    <button type="button" class="btn" ng-class="{ 'btn-danger': ctrl.danger,
+                                                'btn-primary': !ctrl.danger }" ng-click="ctrl.ok()">OK</button>
+    <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
 </div>

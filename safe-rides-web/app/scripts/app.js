@@ -20,7 +20,8 @@ angular
         'ngMap',
         'ui.bootstrap',
         'ui.select',
-        'ngMessages'
+        'ngMessages',
+        'ui.mask'
     ])
 
     .run(function($rootScope) {

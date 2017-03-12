@@ -7,26 +7,25 @@
             <table class="table">
                 <thead>
                     <th>Name</th>
+                    <th>Phone #</th>
                     <th>CSUS ID</th>
                     <th>DL State</th>
                     <th>DL Number</th>
-                    <th>Sex</th>
-                    <th>Active</th>
+                    <th>Gender</th>
                     <th>Actions</th>
 
                     <tbody>
                         <tr ng-repeat="driver in ctrl.drivers | filter: {active: true}">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                            <td>{{driver.phoneNumber | phone}}</td>
                             <td>{{driver.csusId}}</td>
                             <td>{{driver.dlState}}</td>
                             <td>{{driver.dlNumber}}</td>
-                            <td>{{driver.sex}}</td>
-                            <td>
-                                <input type="checkbox" ng-model="driver.active">
-                            </td>
+                            <td>{{driver.gender}}</td>
                             <td>
                                 <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmModal(driver)">Delete</button>
+                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
+                                <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeActiveModal(driver)">Inactivate</button>
                             </td>
                         </tr>
                     </tbody>
@@ -40,29 +39,28 @@
             <h3 class="panel-title">Inactive Drivers</h3>
         </div>
         <div class="panel-body">
-            <table class="table">
+            <table class="table table-responsive">
                 <thead>
                     <th>Name</th>
+                    <th>Phone #</th>
                     <th>CSUS ID</th>
                     <th>DL State</th>
                     <th>DL Number</th>
-                    <th>Sex</th>
-                    <th>Active</th>
+                    <th>Gender</th>
                     <th>Actions</th>
 
                     <tbody>
                         <tr ng-repeat="driver in ctrl.drivers | filter: {active: false}">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                            <td>{{driver.phoneNumber | phone}}</td>
                             <td>{{driver.csusId}}</td>
                             <td>{{driver.dlState}}</td>
                             <td>{{driver.dlNumber}}</td>
-                            <td>{{driver.sex}}</td>
-                            <td>
-                                <input type="checkbox" ng-model="driver.active">
-                            </td>
+                            <td>{{driver.gender}}</td>
                             <td>
                                 <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmModal(driver)">Delete</button>
+                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
+                                <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeActiveModal(driver)">Activate</button>
                             </td>
                         </tr>
                     </tbody>

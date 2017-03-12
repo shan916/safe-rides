@@ -14,9 +14,10 @@ angular.module('safeRidesWebApp')
             this.csusId = undefined;
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
+            this.phoneNumber = undefined;
             this.dlState = undefined;
             this.dlNumber = undefined;
-            this.sex = undefined;
+            this.gender = undefined;
             this.insuranceChecked = undefined;
             this.active = true;
             this.vehicle = new Vehicle();

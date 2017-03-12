@@ -36,6 +36,7 @@ module.exports = function(config) {
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/angular-messages/angular-messages.js',
             'bower_components/angular-ui-router/release/angular-ui-router.js',
+            'bower_components/angular-ui-mask/dist/mask.js',
             'bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'app/scripts/**/*.js',
