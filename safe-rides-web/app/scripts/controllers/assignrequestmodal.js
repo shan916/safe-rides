@@ -23,11 +23,10 @@ angular.module('safeRidesWebApp')
                 id: vm.driver.id
             }, vm.selectedRequest).$promise.then(function(response) {
                 console.log('asssigned request to driver:', response);
+                $uibModalInstance.close();
             }, function(error) {
                 console.log('error assigning request to driver:', error);
             });
-
-            $uibModalInstance.close();
         };
 
     });
