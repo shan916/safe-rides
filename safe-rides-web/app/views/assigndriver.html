@@ -27,10 +27,13 @@
     </div>
     <div class="col-md-6">
       <div class="form-group">
-        <label for="selectDriver">Assign driver</label>
-        <select name="selectDriver" id="selectDriver" class="form-control" ng-model="adModal.selectedDriverID" ng-change="adModal.changed()">
-          <option ng-repeat="driver in adModal.drivers | filter: {status: adModal.DRIVER_STATUS.AVAILABLE}" value="{{driver.id}}">{{'Seats: ' + driver.vehicle.seats + ' - ' + driver.name}}</option>
-        </select>
+        <label for="selectDriver">Assign Driver</label>
+        <ui-select ng-model="adModal.selectedDriver">
+            <ui-select-match>{{$select.selected.driverFirstName}} {{$select.selected.driverLastName}}</ui-select-match>
+          <ui-select-choices repeat="driver in adModal.drivers">
+            <div ng-bind-html="'Seats: ' + driver.vehicle.seats + ' - ' + driver.driverFirstName + ' ' + driver.driverLastName"></div>
+          </ui-select-choices>
+        </ui-select>
       </div>
       <div class="form-group">
         <label for="estimateArrival">Estimated Arrival</label>
@@ -42,11 +45,11 @@
           <option value="60">1 Hour</option>
         </select>
       </div>
-      <div ng-hide="adModal.selectedDriver == null">
+      <div ng-show="adModal.selectedDriver">
         <h4>Selected Driver's Details</h4>
         <dl class="dl-horizontal">
           <dt>Name:</dt>
-          <dd>{{adModal.selectedDriver.name}}</dd>
+          <dd>{{adModal.selectedDriver.driverFirstName}} {{adModal.selectedDriver.driverLastName}}</dd>
           <dt>Seats:</dt>
           <dd>{{adModal.selectedDriver.vehicle.seats}}</dd>
           <dt>Vehicle:</dt>
