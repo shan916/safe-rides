@@ -130,7 +130,9 @@ var app = angular.module('safeRidesWebApp')
       });
 
       modalInstance.result.then(function() {
-        console.log('ok');
+        console.log('ok clicked, refreshing drivers');
+        getRideRequests();
+        getDrivers();
       }, function() {
         console.log('cancel');
       });

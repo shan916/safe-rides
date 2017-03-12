@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.Date;
 
 /*
- * @author Zeeshan Khaliq
+ * @author Ryan Long
  * 
  * Rest API controller for the RideRequest resource 
  * */
@@ -44,7 +44,7 @@ public class RideRequestController {
 	 * @return rideRequest with specified id else not found
 	 * */
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	public ResponseEntity<?> retrive(@PathVariable Long id) {
+	public ResponseEntity<?> retrieve(@PathVariable Long id) {
 		RideRequest result = rideRequestRepository.findOne(id);
 		
 		if (result == null) {

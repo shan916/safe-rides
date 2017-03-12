@@ -24,7 +24,7 @@ angular.module('safeRidesWebApp')
       this.dropoffCity = undefined;
       this.dropoffZip = undefined;
       this.numPassengers = undefined;
-      this.driver = new Driver();
+      this.driver = undefined;
       this.status = undefined;
 
       if (data) {

@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('AssignRequestModalCtrl', function(RideRequestService, $uibModalInstance, driver, requests) {
+.controller('AssignRequestModalCtrl', function(RideRequestService, AssignRideService, $uibModalInstance, driver, requests) {
     var vm = this;
     vm.driver = driver;
     vm.requests = requests;
@@ -19,7 +19,13 @@ angular.module('safeRidesWebApp')
     };
 
     vm.ok = function() {
-          $uibModalInstance.close();
-      };
+      AssignRideService.save({id: vm.driver.id}, vm.selectedRequest).$promise.then(function(response) {
+          console.log('asssigned request to driver:', response);
+      }, function(error) {
+          console.log('error assigning request to driver:', error);
+      });
+
+      $uibModalInstance.close();
+    };
 
 });
