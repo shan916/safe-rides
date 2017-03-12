@@ -9,7 +9,7 @@
  */
 angular.module('safeRidesWebApp')
   .factory('RideRequest', function () {
-    function RideRequest() {
+    function RideRequest(data) {
       this.requestorId = undefined;
       this.date = undefined;
       this.requestorContactNumber = undefined;
@@ -26,7 +26,28 @@ angular.module('safeRidesWebApp')
       this.numPassengers = undefined;
       this.driver = undefined;
       this.status = undefined;
+
+      if (data) {
+        angular.extend(this, data);
+      }
     }
+
+    RideRequest.prototype.statusOrderValue = function() {
+      switch(this.status) {
+        case 'UNASSIGNED':
+          return 0;
+        case 'ASSIGNED':
+          return 1;
+        case 'INPROGRESS':
+          return 2;
+        case 'COMPLETE':
+          return 3;
+        case 'CANCELEDBYCOORDINATOR':
+          return 4;
+        case 'CANCELEDBYREQUESTOR':
+          return 5;
+      }
+    };
 
     return RideRequest;
   });

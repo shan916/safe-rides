@@ -32,7 +32,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests" ng-class="{	danger: req.status === 'UNASSIGNED' && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                  <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{	danger: req.status === 'UNASSIGNED' && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
                                   warning: req.status === 'UNASSIGNED',
                                   info: req.status === 'ASSIGNED' || req.status === 'INPROGRESS',
                                   success: req.status === 'COMPLETE'}">

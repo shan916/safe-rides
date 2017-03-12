@@ -19,6 +19,14 @@ angular.module('safeRidesWebApp')
         $uibModalInstance.dismiss('cancel');
     };
 
+    function getRideRequest(requestId) {
+        RideRequestService.get({id: requestId}).$promise.then(function(response) {
+            vm.riderequest = response;
+            console.log('got riderequest:', response);
+        }, function(error) {
+            console.log('error getting riderequest:', error);
+        });
+    }
 
     function updateRideRequest() {
         RideRequestService.update({id: vm.riderequest.id}, vm.riderequest).$promise.then(function(response) {
@@ -31,15 +39,6 @@ angular.module('safeRidesWebApp')
 
     if ($stateParams.requestId) {
         getRideRequest($stateParams.requestId);
-    }
-
-    function getRideRequest(requestId) {
-        RideRequestService.get({id: requestId}).$promise.then(function(response) {
-            vm.riderequest = response;
-            console.log('got riderequest:', response);
-        }, function(error) {
-            console.log('error getting riderequest:', error);
-        });
     }
 
     vm.saveRideRequest = function(){
