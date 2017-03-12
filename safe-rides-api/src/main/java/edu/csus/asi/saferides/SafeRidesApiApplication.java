@@ -1,13 +1,13 @@
 package edu.csus.asi.saferides;
 
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import edu.csus.asi.saferides.model.Driver;
+import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.Status;
 import edu.csus.asi.saferides.model.Vehicle;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;

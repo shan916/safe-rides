@@ -13,8 +13,6 @@ angular.module('safeRidesWebApp')
 
     vm.drivers = [];
 
-    getDrivers();
-
     function getDrivers() {
         DriverService.query().$promise.then(function(response) {
             vm.drivers = response;
@@ -23,6 +21,8 @@ angular.module('safeRidesWebApp')
             console.log('error getting drivers:', error);
         });
     }
+
+  getDrivers();
 
     vm.openConfirmModal = function(driver) {
         var modalInstance = $uibModal.open({

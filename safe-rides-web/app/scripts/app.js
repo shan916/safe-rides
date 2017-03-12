@@ -13,7 +13,7 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
+    'ui.router',
     'ngSanitize',
     'ngTouch',
     'config',
@@ -22,69 +22,110 @@ angular
     'ui.select',
     'ngMessages'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
+
+  .run(function($rootScope) {
+  $rootScope.$on("$stateChangeError", console.log.bind(console));
+  })
+
+  .config(function ($stateProvider,$urlRouterProvider) {
+
+    $stateProvider
+      .state('/', {
+        url:'/',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/about', {
+      });
+      $stateProvider
+      .state('about', {
+        url:'/about',
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about'
-      })
-      .when('/login', {
+      });
+      $stateProvider
+      .state('login', {
+        url:'/login',
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/register', {
+      });
+      $stateProvider
+      .state('register', {
+        url:'/register',
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/resetpasswordrequest', {
+      });
+      $stateProvider
+      .state('resetpasswordrequest', {
+        url:'/resetpasswordrequest',
         templateUrl: 'views/resetpasswordrequest.html',
         controller: 'ResetpasswordrequestCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/resetpassword', {
+      });
+      $stateProvider
+      .state('resetpassword', {
+        url:'/resetpassword',
         templateUrl: 'views/resetpassword.html',
         controller: 'ResetpasswordCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/coordinatordashboard', {
+      });
+      $stateProvider
+      .state('coordinatordashboard', {
+        url:'/coordinatordashboard',
         templateUrl: 'views/coordinatordashboard.html',
         controller: 'CoordinatordashboardCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/coordinatorreport', {
+        controllerAs: 'ctrl',
+        data: {
+          requireLogin: true
+        }
+      });
+      $stateProvider
+      .state('coordinatorreport', {
+        url:'/coordinatorreport',
         templateUrl: 'views/coordinatorreport.html',
         controller: 'CoordinatorreportCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/editdriver/:driverId?', {
+        controllerAs: 'ctrl',
+        data: {
+          requireLogin: true
+        }
+      });
+      $stateProvider
+      .state('editdriver', {
+        url:'/editdriver/:driverId?',
         templateUrl: 'views/editdriver.html',
         controller: 'EditdriverCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/driverdashboard', {
+        controllerAs: 'ctrl',
+        data: {
+          requireLogin: true
+        }
+      });
+      $stateProvider
+      .state('driverdashboard', {
+        url:'/driverdashboard',
         templateUrl: 'views/driverdashboard.html',
         controller: 'DriverdashboardCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/riderdashboard', {
+        controllerAs: 'ctrl',
+        data: {
+          requireLogin: true
+        }
+      });
+      $stateProvider
+      .state('riderdashboard', {
+        url:'/riderdashboard',
         templateUrl: 'views/riderdashboard.html',
         controller: 'RiderdashboardCtrl',
         controllerAs: 'ctrl'
-      })
-      .when('/managedrivers', {
-          templateUrl: 'views/managedrivers.html',
-          controller: 'ManagedriversCtrl',
-          controllerAs: 'ctrl'
-      })
-      .otherwise({
-        redirectTo: '/'
+      });
+      $stateProvider
+      .state('managedrivers', {
+        url:'/managedrivers',
+        templateUrl: 'views/managedrivers.html',
+        controller: 'ManagedriversCtrl',
+        controllerAs: 'ctrl',
+        data: {
+          requireLogin: true
+        }
       });
   });

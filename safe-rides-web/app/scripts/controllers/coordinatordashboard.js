@@ -30,14 +30,6 @@ var app = angular.module('safeRidesWebApp')
       }
     }, 15000);
 
-    // Waiting time until the row turns red.
-    // Variable set by admin?
-    vm.DANGER_ZONE = Object.freeze(30);
-
-    vm.drivers = [];
-
-    getDrivers();
-
     function getDrivers() {
         DriverService.query().$promise.then(function(response) {
             vm.drivers = response;
@@ -47,10 +39,6 @@ var app = angular.module('safeRidesWebApp')
         });
     }
 
-    vm.rideRequests = [];
-
-    getRideRequests();
-
     function getRideRequests() {
         RideRequestService.query().$promise.then(function(response) {
             vm.rideRequests = response;
@@ -59,6 +47,18 @@ var app = angular.module('safeRidesWebApp')
             console.log('error getting ride requests:', error);
         });
     }
+
+    // Waiting time until the row turns red.
+    // Variable set by admin?
+    vm.DANGER_ZONE = Object.freeze(30);
+
+    vm.drivers = [];
+
+    getDrivers();
+
+    vm.rideRequests = [];
+
+    getRideRequests();
 
     vm.requestAgeInMinutes = function(start) {
       return moment.duration(moment().diff(moment(start))).asMinutes();
