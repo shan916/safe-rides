@@ -39,16 +39,18 @@ public class Driver {
 	private String csusId;
 	
 	@Column(nullable = false)
+	@Size(min = 2, max = 30)
 	private String driverFirstName;
 	
 	@Column(nullable = false)
+	@Size(min = 2, max = 30)
 	private String driverLastName;
 	
 	@Column(nullable = false, length = 10)
 	@Size(min = 10, max = 10)
 	private String phoneNumber;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 2)
 	private String dlState;
 	
 	@Column(nullable = false, unique = true)

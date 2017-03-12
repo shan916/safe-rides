@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,7 +33,7 @@ public class Vehicle {
 	@Column(nullable = false)
 	private String model;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4)
 	private String year;
 	
 	@Column(nullable = false)
@@ -42,6 +43,7 @@ public class Vehicle {
 	private String color;
 	
 	@Column(nullable = false)
+	@Min(2)
 	private Integer seats;
 	
 	protected Vehicle() { }
