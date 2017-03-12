@@ -1,171 +1,165 @@
 <div class="container">
-<div class="alert alert-info alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
-</div>
+        <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
+    </div>
 
-<div class="alert alert-info alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <strong>Incoming Ride Requests</strong> There is a ride requests assigned to you.
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Incoming Ride Request</h3>
+        <strong>Incoming Ride Requests</strong> There is a ride requests assigned to you.
     </div>
-    <div class="panel-body">
-        <button class="btn btn-primary btn-block">Accept</button>
-    </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Current Ride Request</h3>
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-6">
-                <dl class="dl-horizontal">
-                    <dt>Name</dt>
-                    <dd>Jane Smith</dd>
-                    <dt>Pickup Address</dt>
-                    <dd>123 Main St.</dd>
-                    <dt>Other Information</dt>
-                    <dd>Near the giant oak tree</dd>
-                </dl>
-            </div>
-
-            <div class="col-sm-6">
-                <dl class="dl-horizontal">
-                    <dt>CSUS ID</dt>
-                    <dd>123456789</dd>
-                    <dt>Dropoff Address</dt>
-                    <dd>456 Main St.</dd>
-                </dl>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Incoming Ride Request</h3>
         </div>
-
-        <div class="row">
-            <div class="col-sm-6">
-                <button class="btn btn-default btn-block">Directions</button>
-            </div>
-
-            <div class="col-sm-6">
-                <button class="btn btn-default btn-block">Notify Rider</button>
-            </div>
-        </div>
-
-        <div class="row margin-top-15">
-            <div class="col-sm-6">
-                <button class="btn btn-default btn-block">Report Issue</button>
-            </div>
-
-            <div class="col-sm-6">
-                <button class="btn btn-default btn-block">Dropoff</button>
-            </div>
+        <div class="panel-body">
+            <button class="btn btn-primary btn-block">Accept</button>
         </div>
     </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Directions</h3>
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
-                    <ng-map center="current-location">
-                        <directions
-                                draggable="true"
-                                panel="directions-panel"
-                                travel-mode="DRIVING"
-                                origin="current-location"
-                                destination="6000 J St, Sacramento, CA 95819">
-                        </directions>
-                    </ng-map>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Current Ride Request</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <dl class="dl-horizontal">
+                        <dt>Name</dt>
+                        <dd>Jane Smith</dd>
+                        <dt>Pickup Address</dt>
+                        <dd>123 Main St.</dd>
+                        <dt>Other Information</dt>
+                        <dd>Near the giant oak tree</dd>
+                    </dl>
                 </div>
-                <div id="directions-panel"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Notify Rider</h3>
-    </div>
-    <div class="panel-body">
-        Would you like to notify the rider that you arrived at the pickup location?
-        <div class="row margin-top-15">
-            <div class="col-sm-12">
-                <div class="pull-right">
-                    <button class="btn btn-default">No</button>
-                    <button class="btn btn-primary">Yes</button>
+                <div class="col-sm-6">
+                    <dl class="dl-horizontal">
+                        <dt>CSUS ID</dt>
+                        <dd>123456789</dd>
+                        <dt>Dropoff Address</dt>
+                        <dd>456 Main St.</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <button class="btn btn-default btn-block">Directions</button>
+                </div>
+
+                <div class="col-sm-6">
+                    <button class="btn btn-default btn-block">Notify Rider</button>
+                </div>
+            </div>
+
+            <div class="row margin-top-15">
+                <div class="col-sm-6">
+                    <button class="btn btn-default btn-block">Report Issue</button>
+                </div>
+
+                <div class="col-sm-6">
+                    <button class="btn btn-default btn-block">Dropoff</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Report Issue</h3>
-    </div>
-    <div class="panel-body">
-        Report an issue to the coordinator either by phone call or by a message
-
-        <div class="row margin-top-15">
-            <div class="col-sm-12">
-                <dl class="dl-horizontal">
-                    <dt>Office Phone</dt>
-                    <dd>916-000-0000</dd>
-                    <dt>Emergency Phone</dt>
-                    <dd>911</dd>
-                </dl>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Directions</h3>
         </div>
-
-        <div class="row margin-top-15">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" class="form-control"
-                              placeholder="Enter your message"></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="row margin-top-15">
-            <div class="col-sm-12">
-                <div class="pull-right">
-                    <button class="btn btn-default">Cancel</button>
-                    <button class="btn btn-primary">Submit</button>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
+                        <ng-map center="current-location">
+                            <directions draggable="true" panel="directions-panel" travel-mode="DRIVING" origin="current-location" destination="6000 J St, Sacramento, CA 95819">
+                            </directions>
+                        </ng-map>
+                    </div>
+                    <div id="directions-panel"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Dropoff</h3>
-    </div>
-    <div class="panel-body">
-        Would you like to complete this ride request?
-
-        <div class="row margin-top-15">
-            <div class="col-sm-12">
-                <div class="pull-right">
-                    <button class="btn btn-default">No</button>
-                    <button class="btn btn-primary">Yes</button>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Notify Rider</h3>
+        </div>
+        <div class="panel-body">
+            Would you like to notify the rider that you arrived at the pickup location?
+            <div class="row margin-top-15">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button class="btn btn-default">No</button>
+                        <button class="btn btn-primary">Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Report Issue</h3>
+        </div>
+        <div class="panel-body">
+            Report an issue to the coordinator either by phone call or by a message
+
+            <div class="row margin-top-15">
+                <div class="col-sm-12">
+                    <dl class="dl-horizontal">
+                        <dt>Office Phone</dt>
+                        <dd>916-000-0000</dd>
+                        <dt>Emergency Phone</dt>
+                        <dd>911</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="row margin-top-15">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="form-control" placeholder="Enter your message"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row margin-top-15">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button class="btn btn-default">Cancel</button>
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Dropoff</h3>
+        </div>
+        <div class="panel-body">
+            Would you like to complete this ride request?
+
+            <div class="row margin-top-15">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button class="btn btn-default">No</button>
+                        <button class="btn btn-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

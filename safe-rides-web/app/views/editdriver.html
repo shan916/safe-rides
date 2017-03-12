@@ -1,164 +1,153 @@
 <div class="container">
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Driver Information</h3>
-    </div>
-    <div class="panel-body">
-        <form name="driverForm" novalidate>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="csusid">CSUS ID</label>
-                        <input id="csusid" name="csusid" type="text" class="form-control" required
-                        placeholder="Enter the driver's CSUS ID" ng-model="ctrl.driver.csusId"
-                        ng-minlength="9" ng-maxlength="9" ng-pattern="ctrl.NUM_REGEX">
-                        <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
-                            <div class="input-error" ng-message="required">* CSUS ID is required</div>
-                            <div class="input-error" ng-message="pattern">* CSUS ID must consist only of numbers</div>
-                            <div class="input-error" ng-message="minlength">* CSUS ID must be 9 digits</div>
-                            <div class="input-error" ng-message="maxlength">* CSUS ID must be 9 digits</div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Driver Information</h3>
+        </div>
+        <div class="panel-body">
+            <form name="driverForm" novalidate>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="csusid">CSUS ID</label>
+                            <input id="csusid" name="csusid" type="text" class="form-control" required placeholder="Enter the driver's CSUS ID" ng-model="ctrl.driver.csusId" ng-minlength="9" ng-maxlength="9" ng-pattern="ctrl.NUM_REGEX">
+                            <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
+                                <div class="input-error" ng-message="required">* CSUS ID is required</div>
+                                <div class="input-error" ng-message="pattern">* CSUS ID must consist only of numbers</div>
+                                <div class="input-error" ng-message="minlength">* CSUS ID must be 9 digits</div>
+                                <div class="input-error" ng-message="maxlength">* CSUS ID must be 9 digits</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Start of driver's first name -->
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="name">First Name</label>
-                        <input id="name" name="name" type="text" class="form-control" required
-                        placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName">
+                    <!-- Start of driver's first name -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name">First Name</label>
+                            <input id="name" name="name" type="text" class="form-control" required placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName">
+                        </div>
                     </div>
-                </div>
-                <!-- End of driver's first name -->
+                    <!-- End of driver's first name -->
 
-                <!-- Start of driver's last name -->
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="name">Last Name</label>
-                        <input id="name" name="name" type="text" class="form-control" required
-                        placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName">
+                    <!-- Start of driver's last name -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="name">Last Name</label>
+                            <input id="name" name="name" type="text" class="form-control" required placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName">
+                        </div>
                     </div>
-                </div>
-                <!-- End of driver's last name -->
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="dlnum">Driver's License Number</label>
-                        <input id="dlnum" name="dlnum" type="text" class="form-control" required
-                        placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber">
-                    </div>
+                    <!-- End of driver's last name -->
                 </div>
 
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="state">State</label>
-                        <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="dlnum">Driver's License Number</label>
+                            <input id="dlnum" name="dlnum" type="text" class="form-control" required placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState">
                             <option ng-repeat="state in ctrl.stateChoices" value={{state}}>{{state}}</option>
                         </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="sex">Sex</label>
-                        <select name="sex" id="sex" class="form-control" ng-model="ctrl.driver.sex">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="sex">Sex</label>
+                            <select name="sex" id="sex" class="form-control" ng-model="ctrl.driver.sex">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" ng-model="ctrl.driver.insuranceChecked" required> Insurance Checked
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Vehicle Information</h3>
-    </div>
-
-    <div class="panel-body">
-        <form name="vehicleForm" novalidate>
-            <div class="row">
-                <div class="col-sm-5">
-                    <div class="form-group">
-                        <label for="make">Make</label>
-                        <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make"
-                        required ng-model="ctrl.driver.vehicle.make">
-                    </div>
-                </div>
-
-                <div class="col-sm-5">
-                    <div class="form-group">
-                        <label for="model">Model</label>
-                        <input id="model" name="model" type="text" class="form-control" placeholder="Enter the model"
-                        required ng-model="ctrl.driver.vehicle.model">
-                    </div>
-                </div>
-
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label for="year">Year</label>
-                        <select name="year" id="year" class="form-control" ng-model="ctrl.driver.vehicle.year">
-                            <option ng-repeat="year in ctrl.yearChoices" value={{year}}>{{year}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-5">
-                    <div class="form-group">
-                        <label for="licenseplate">License Plate</label>
-                        <input id="licenseplate" name="licenseplate" type="text" class="form-control"
-                        placeholder="Enter the license plate number" required ng-model="ctrl.driver.vehicle.licensePlate">
-                    </div>
-                </div>
-
-                <div class="col-sm-5">
-                    <div class="form-group">
-                        <label for="color">Color</label>
-                        <input id="color" name="color" type="text" class="form-control" placeholder="Enter the color"
-                        required ng-model="ctrl.driver.vehicle.color">
-                    </div>
-                </div>
-
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label for="seats">Seats</label>
-                        <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats"
-                        required min="2" ng-model="ctrl.driver.vehicle.seats">
-                        <div ng-messages="vehicleForm.seats.$error">
-                            <div class="input-error" ng-message="min">* Enter >= 2</div>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row margin-top-15 margin-bottom-15">
-    <div class="col-sm-12">
-        <div class="pull-right">
-            <a ui-sref="managedrivers" class="btn btn-default">Cancel</a>
-            <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)"
-            ng-click="ctrl.saveDriver()">
-                Save
-            </button>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="checkbox">
+                            <label>
+                            <input type="checkbox" ng-model="ctrl.driver.insuranceChecked" required> Insurance Checked
+                        </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Vehicle Information</h3>
+        </div>
+
+        <div class="panel-body">
+            <form name="vehicleForm" novalidate>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="make">Make</label>
+                            <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make" required ng-model="ctrl.driver.vehicle.make">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="model">Model</label>
+                            <input id="model" name="model" type="text" class="form-control" placeholder="Enter the model" required ng-model="ctrl.driver.vehicle.model">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="year">Year</label>
+                            <select name="year" id="year" class="form-control" ng-model="ctrl.driver.vehicle.year">
+                            <option ng-repeat="year in ctrl.yearChoices" value={{year}}>{{year}}</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="licenseplate">License Plate</label>
+                            <input id="licenseplate" name="licenseplate" type="text" class="form-control" placeholder="Enter the license plate number" required ng-model="ctrl.driver.vehicle.licensePlate">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <input id="color" name="color" type="text" class="form-control" placeholder="Enter the color" required ng-model="ctrl.driver.vehicle.color">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="seats">Seats</label>
+                            <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats" required min="2" ng-model="ctrl.driver.vehicle.seats">
+                            <div ng-messages="vehicleForm.seats.$error">
+                                <div class="input-error" ng-message="min">* Enter >= 2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row margin-top-15 margin-bottom-15">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <a ui-sref="managedrivers" class="btn btn-default">Cancel</a>
+                <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)" ng-click="ctrl.saveDriver()">
+                Save
+            </button>
+            </div>
+        </div>
+    </div>
 </div>
