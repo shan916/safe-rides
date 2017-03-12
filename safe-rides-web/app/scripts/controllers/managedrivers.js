@@ -68,10 +68,10 @@ angular.module('safeRidesWebApp')
         vm.openConfirmChangeActiveModal = function(driver) {
             var modalInstance = $uibModal.open({
                 template: '<div class="modal-header">' +
-                    '<h3 class="modal-title" id="modal-title">Confirm <span ng-show="!ctrl.driver.active">Activate</span><span ng-show="ctrl.driver.active">Inactivate</span></h3>' +
+                    '<h3 class="modal-title" id="modal-title">Confirm <span ng-show="!ctrl.driver.active">Activate</span><span ng-show="ctrl.driver.active">Deactivate</span></h3>' +
                     '</div>' +
                     '<div class="modal-body" id="modal-body">' +
-                    '<p>Are you sure you want to <span ng-show="!ctrl.driver.active">activate</span><span ng-show="ctrl.driver.active">inactivate</span> the following driver?</p>' +
+                    '<p>Are you sure you want to <span ng-show="!ctrl.driver.active">activate</span><span ng-show="ctrl.driver.active">deactivate</span> the following driver?</p>' +
                     '<strong>{{ctrl.driver.driverFirstName}}&nbsp;{{ctrl.driver.driverLastName}}</strong>' +
                     '</div>' +
                     '<div class="modal-footer">' +
