@@ -11,24 +11,16 @@
         <div class="row">
             <div class="form-group col-md-2">
                 <label for="requestorId">CSUS ID</label>
-                <input id="requestorId" name="requestorId" type="text" class="form-control" required placeholder="9-digits" ng-model="ctrl.riderequest.requestorId" ng-minlength="9" ng-maxlength="9" ng-pattern="ctrl.NUM_REGEX">
+                <input id="requestorId" name="requestorId" type="text" class="form-control" required ng-model="ctrl.riderequest.requestorId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="-" placeholder="9 digit ID">
                 <div ng-messages="addriderequestForm.requestorId.$dirty && addriderequestForm.requestorId.$error">
                     <div class="input-error" ng-message="required">* required</div>
-                    <div class="input-error" ng-message="pattern">* must consist only of numbers</div>
-                    <div class="input-error" ng-message="minlength">* must be 9 digits</div>
-                    <div class="input-error" ng-message="maxlength">* must be 9 digits</div>
                 </div>
             </div>
             <div class="form-group col-md-2">
                 <label for="requestorContactNumber">Phone</label>
-                <input id="requestorContactNumber" name="requestorContactNumber" type="text" class="form-control" required placeholder="9165555555" ng-model="ctrl.riderequest.requestorContactNumber" ng-minlength="10" ng-maxlength="10">
-                <!-- TODO can't get phone pattern to work
-                ng-pattern="ctrl.PHONE_REGEX" -->
+                <input id="requestorContactNumber" name="requestorContactNumber" type="text" class="form-control" required ng-model="ctrl.riderequest.requestorContactNumber" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
                 <div ng-messages="addriderequestForm.requestorContactNumber.$dirty && addriderequestForm.requestorContactNumber.$error">
                     <div class="input-error" ng-message="required">* required</div>
-                    <div class="input-error" ng-message="minlength">* must be 10 digits</div>
-                    <div class="input-error" ng-message="maxlength">* must be 10 digits</div>
-                    <!-- div class="input-error" ng-message="pattern">* must be valid phone number</div> -->
                 </div>
             </div>
             <div class="form-group col-md-4">
@@ -95,7 +87,7 @@
                 </div>
                 <div class="form-group">
                     <label for="dropoffLine2">Line 2</label>
-                    <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control" required placeholder="Drop-off Line 2" ng-model="ctrl.riderequest.dropoffLine2">
+                    <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control" placeholder="Drop-off Line 2" ng-model="ctrl.riderequest.dropoffLine2">
                 </div>
                 <div class="form-group">
                     <label for="dropoffCity">City</label>
@@ -134,7 +126,7 @@
 
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-click="ctrl.saveRideRequest()">Create Ride</button>
+    <button type="button" class="btn btn-primary" ng-click="ctrl.saveRideRequest()" ng-disabled="addriderequestForm.$invalid">Create Ride</button>
 </div>
 <!-- end modal footer-->
 <!-- end Modal -->
