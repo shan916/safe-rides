@@ -72,9 +72,9 @@ var app = angular.module('safeRidesWebApp')
 
     vm.showRequestDetails = function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/requestdetails.html',
+        templateUrl: 'views/requestdetailsmodal.html',
         controller: 'RequestDetailModalCtrl',
-        controllerAs: 'rdModal',
+        controllerAs: 'ctrl',
         resolve: {
           request: function() {
             return req;
@@ -92,9 +92,9 @@ var app = angular.module('safeRidesWebApp')
 
     vm.showAssignDriver = function(req) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/assigndriver.html',
+        templateUrl: 'views/assigndrivermodal.html',
         controller: 'AssignDriverModalCtrl',
-        controllerAs: 'adModal',
+        controllerAs: 'ctrl',
         resolve: {
           request: function() {
             return req;
@@ -115,9 +115,9 @@ var app = angular.module('safeRidesWebApp')
 
     vm.showAssignRequest = function(driver) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/assignrequest.html',
+        templateUrl: 'views/assignrequestmodal.html',
         controller: 'AssignRequestModalCtrl',
-        controllerAs: 'arModal',
+        controllerAs: 'ctrl',
         resolve: {
           driver: function() {
             return driver;
@@ -140,9 +140,9 @@ var app = angular.module('safeRidesWebApp')
 
     vm.confirmCancelRequest = function(request) {
       var modalInstance = $uibModal.open({
-        templateUrl: 'views/confirm.html',
+        templateUrl: 'views/confirmmodal.html',
         controller: 'ConfirmCancelRequestModalCtrl',
-        controllerAs: 'confirmModal',
+        controllerAs: 'ctrl',
         resolve: {
           request: function() {
             return request;
@@ -163,7 +163,7 @@ var app = angular.module('safeRidesWebApp')
       var modalInstance = $uibModal.open({
         templateUrl: 'views/addriderequestmodal.html',
         controller: 'AddriderequestmodalCtrl',
-        controllerAs: 'addrideCtrl',
+        controllerAs: 'ctrl',
         size: 'lg'
       });
 

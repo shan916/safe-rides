@@ -1,36 +1,36 @@
 <div class="modal-header">
-  <h3 class="modal-title" id="modal-title">Assign driver to {{adModal.request.requestorFirstName}}'s request</h3>
+  <h3 class="modal-title" id="modal-title">Assign driver to {{ctrl.request.requestorFirstName}}'s request</h3>
 </div>
 <div class="modal-body" id="modal-body">
   <div class="row">
     <div class="col-md-6">
       <dl class="dl-horizontal">
         <dt>Name:</dt>
-        <dd>{{adModal.request.requestorFirstName + ' ' + adModal.request.requestorLastName}}</dd>
+        <dd>{{ctrl.request.requestorFirstName + ' ' + ctrl.request.requestorLastName}}</dd>
         <dt>Riders:</dt>
-        <dd>{{adModal.request.numPassengers}}</dd>
+        <dd>{{ctrl.request.numPassengers}}</dd>
         <dt>Pickup Location:</dt>
-        <dd>{{adModal.request.pickupLine1}} <br />
-          {{adModal.request.pickupLine2.value || "" }}
-          {{adModal.request.pickupCity + ' ' + adModal.request.pickupZip}}
+        <dd>{{ctrl.request.pickupLine1}} <br />
+          {{ctrl.request.pickupLine2.value || "" }}
+          {{ctrl.request.pickupCity + ' ' + ctrl.request.pickupZip}}
         </dd>
         <dt>Dropoff Location:</dt>
-        <dd>{{adModal.request.dropoffLine1}} <br />
-          {{adModal.request.dropoffLine2.value || "" }}
-          {{adModal.request.dropoffCity + ' ' + adModal.request.dropoffZip}}
+        <dd>{{ctrl.request.dropoffLine1}} <br />
+          {{ctrl.request.dropoffLine2.value || "" }}
+          {{ctrl.request.dropoffCity + ' ' + ctrl.request.dropoffZip}}
         </dd>
         <dt>Request Time:</dt>
-        <dd>{{adModal.request.date | date:'MMM dd, yyyy h:mma'}}</dd>
+        <dd>{{ctrl.request.date | date:'MMM dd, yyyy h:mma'}}</dd>
         <dt>Status:</dt>
-        <dd>{{adModal.request.status | FriendlyStatusName}}</dd>
+        <dd>{{ctrl.request.status | FriendlyStatusName}}</dd>
       </dl>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label for="selectDriver">Assign Driver</label>
-        <ui-select ng-model="adModal.selectedDriver">
+        <ui-select ng-model="ctrl.selectedDriver">
             <ui-select-match>{{$select.selected.driverFirstName}} {{$select.selected.driverLastName}}</ui-select-match>
-          <ui-select-choices repeat="driver in adModal.drivers">
+          <ui-select-choices repeat="driver in ctrl.drivers">
             <div ng-bind-html="'Seats: ' + driver.vehicle.seats + ' - ' + driver.driverFirstName + ' ' + driver.driverLastName"></div>
           </ui-select-choices>
         </ui-select>
@@ -45,21 +45,21 @@
           <option value="60">1 Hour</option>
         </select>
       </div>
-      <div ng-show="adModal.selectedDriver">
+      <div ng-show="ctrl.selectedDriver">
         <h4>Selected Driver's Details</h4>
         <dl class="dl-horizontal">
           <dt>Name:</dt>
-          <dd>{{adModal.selectedDriver.driverFirstName}} {{adModal.selectedDriver.driverLastName}}</dd>
+          <dd>{{ctrl.selectedDriver.driverFirstName}} {{ctrl.selectedDriver.driverLastName}}</dd>
           <dt>Seats:</dt>
-          <dd>{{adModal.selectedDriver.vehicle.seats}}</dd>
+          <dd>{{ctrl.selectedDriver.vehicle.seats}}</dd>
           <dt>Vehicle:</dt>
-          <dd>{{adModal.selectedDriver.vehicle.year + ' - ' + adModal.selectedDriver.vehicle.make + ', ' + adModal.selectedDriver.vehicle.model}}</dd>
+          <dd>{{ctrl.selectedDriver.vehicle.year + ' - ' + ctrl.selectedDriver.vehicle.make + ', ' + ctrl.selectedDriver.vehicle.model}}</dd>
         </dl>
       </div>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" ng-click="adModal.ok()">Assign Request</button>
-  <button type="button" class="btn btn-default" ng-click="adModal.cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" ng-click="ctrl.ok()">Assign Request</button>
+  <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
 </div>
