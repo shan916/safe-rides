@@ -1,8 +1,10 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
+import edu.csus.asi.saferides.model.DriverStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,9 +48,9 @@ public class DriverController {
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<Driver> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
 		if (active != null) {
-			return driverRepository.findByActive(active);
+			return setDriverStatus(driverRepository.findByActive(active));
 		} else {
-			return driverRepository.findAll();
+			return setDriverStatus((List<Driver>)driverRepository.findAll());
 		}
 	}
 	
@@ -168,7 +170,6 @@ public class DriverController {
 		return ResponseEntity.ok(result);
 	}
 	
-	
 	/*
 	 * DELETE "/drivers/{id} 
 	 * 
@@ -186,5 +187,18 @@ public class DriverController {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+
+	private List<Driver> setDriverStatus(List<Driver> drivers){
+		for (Driver d: drivers) {
+			Set<RideRequest> requests = d.getRides();
+			if(requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
+				d.setStatus(DriverStatus.ASSIGNED);
+			} else if(requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
+				d.setStatus(DriverStatus.INPROGRESS);
+			} else {
+				d.setStatus(DriverStatus.AVAILABLE);
+			}
+		}
+		return drivers;
+	}
 }

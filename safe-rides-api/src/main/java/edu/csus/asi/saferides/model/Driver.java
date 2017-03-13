@@ -64,6 +64,8 @@ public class Driver {
 	
 	@Column(nullable = false)
 	private Boolean active;
+
+	private DriverStatus status;
 	
 	protected Driver() { }
 	
@@ -176,6 +178,13 @@ public class Driver {
 		this.rides = rides;
 	}
 
+	public DriverStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(DriverStatus status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
