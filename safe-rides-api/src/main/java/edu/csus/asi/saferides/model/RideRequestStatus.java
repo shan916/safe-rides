@@ -1,6 +1,6 @@
 package edu.csus.asi.saferides.model;
 
-public enum Status {
+public enum RideRequestStatus {
 	UNASSIGNED,
 	ASSIGNED,
 	INPROGRESS,

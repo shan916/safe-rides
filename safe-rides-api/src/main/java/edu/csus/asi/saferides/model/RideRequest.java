@@ -69,7 +69,7 @@ public class RideRequest {
 	private String dropoffZip;
 
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private RideRequestStatus status;
 
 	protected RideRequest() { }
 
@@ -89,7 +89,7 @@ public class RideRequest {
 		this.dropoffLine1 = dropoffLine1;
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
-		this.status = Status.UNASSIGNED;
+		this.status = RideRequestStatus.UNASSIGNED;
 	}
 
 	public Driver getDriver() {
@@ -236,11 +236,11 @@ public class RideRequest {
 		this.dropoffZip = dropoffZip;
 	}
 
-	public Status getStatus() {
+	public RideRequestStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(RideRequestStatus status) {
 		this.status = status;
 	}
 

@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, $interval, $uibModal) {
         var vm = this;
 
         // TODO: Move this to an environment file
@@ -33,6 +33,21 @@ var app = angular.module('safeRidesWebApp')
         function getDrivers() {
             DriverService.query().$promise.then(function(response) {
                 vm.drivers = response;
+
+                vm.drivers.forEach(function(element, index, drivers) {
+                    var driver = new Driver(element);
+                    DriverRidesService.query({
+                        id: driver.id
+                    }).$promise.then(function(ridesResponse) {
+                        driver.rides = ridesResponse;
+                        console.log('got driver\'s rides:' + ridesResponse);
+                    }, function(ridesError) {
+                        console.log('error getting driver\'s rides:' + ridesError);
+                    })
+
+                    drivers[index] = driver;
+                });
+
                 console.log('got drivers:', response);
             }, function(error) {
                 console.log('error getting drivers:', error);
@@ -78,6 +93,26 @@ var app = angular.module('safeRidesWebApp')
                 resolve: {
                     request: function() {
                         return req;
+                    }
+                },
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function() {
+                console.log('ok');
+            }, function() {
+                console.log('cancel');
+            });
+        };
+
+        vm.showDriverDetails = function(driver) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/driverdetailsmodal.html',
+                controller: 'DriverDetailsModalCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    driver: function() {
+                        return driver;
                     }
                 },
                 size: 'lg'
@@ -193,6 +228,8 @@ app.filter('FriendlyStatusName', function() {
                 return 'Canceled by Coordinator';
             case 'CANCELEDBYREQUESTOR':
                 return 'Canceled by Requestor';
+            case 'AVAILABLE':
+                return 'Available';
         }
     };
 });

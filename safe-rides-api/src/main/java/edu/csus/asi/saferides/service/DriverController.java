@@ -1,8 +1,10 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
+import edu.csus.asi.saferides.model.DriverStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 
@@ -46,9 +48,9 @@ public class DriverController {
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<Driver> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
 		if (active != null) {
-			return driverRepository.findByActive(active);
+			return setDriverStatus(driverRepository.findByActive(active));
 		} else {
-			return driverRepository.findAll();
+			return setDriverStatus((List<Driver>)driverRepository.findAll());
 		}
 	}
 	
@@ -66,7 +68,7 @@ public class DriverController {
 		if (result == null) {
 			return ResponseEntity.notFound().build();
 		} else {
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(setDriverStatus(result));
 		}
 	}
 
@@ -78,7 +80,7 @@ public class DriverController {
 	 * @return driver's assigned ride and ride request status, else not found
 	 * */
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/rides")
-	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) Status status) {
+	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) RideRequestStatus status) {
 		Driver result = driverRepository.findOne(id);
 
 		if (result == null) {
@@ -138,12 +140,11 @@ public class DriverController {
 		Driver driver = driverRepository.findOne(id);
 		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
 		
-		rideReq.setStatus(Status.ASSIGNED);
+		rideReq.setStatus(RideRequestStatus.ASSIGNED);
 		rideReq.setDriver(driver);
 		driver.getRides().add(rideReq);
 		
 		driverRepository.save(driver);
-//		rideRequestRepository.save(rideReq);
 		// create URI of where the driver was updated
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentContextPath().path("/drivers/{id}")
@@ -168,7 +169,6 @@ public class DriverController {
 		return ResponseEntity.ok(result);
 	}
 	
-	
 	/*
 	 * DELETE "/drivers/{id} 
 	 * 
@@ -186,5 +186,24 @@ public class DriverController {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+
+	private List<Driver> setDriverStatus(List<Driver> drivers){
+		for (Driver d: drivers) {
+            d = setDriverStatus(d);
+		}
+		return drivers;
+	}
+
+    private Driver setDriverStatus(Driver driver) {
+        Set<RideRequest> requests = driver.getRides();
+        if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
+            driver.setStatus(DriverStatus.ASSIGNED);
+        } else if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
+            driver.setStatus(DriverStatus.INPROGRESS);
+        } else {
+            driver.setStatus(DriverStatus.AVAILABLE);
+        }
+
+        return driver;
+    }
 }
