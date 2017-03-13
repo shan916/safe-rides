@@ -10,7 +10,7 @@
 angular.module('safeRidesWebApp')
     .factory('Driver', function(Vehicle) {
 
-        function Driver() {
+        function Driver(data) {
             this.csusId = undefined;
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
@@ -22,6 +22,10 @@ angular.module('safeRidesWebApp')
             this.active = true;
             this.vehicle = new Vehicle();
             this.status = undefined;
+
+            if (data) {
+                angular.extend(this, data);
+            }
         }
 
         Driver.prototype.statusOrderValue = function() {
