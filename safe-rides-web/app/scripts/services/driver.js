@@ -21,7 +21,19 @@ angular.module('safeRidesWebApp')
             this.insuranceChecked = undefined;
             this.active = true;
             this.vehicle = new Vehicle();
+            this.status = undefined;
         }
+
+        Driver.prototype.statusOrderValue = function() {
+            switch (this.status) {
+                case 'AVAILABLE':
+                    return 0;
+                case 'ASSIGNED':
+                    return 1;
+                case 'INPROGRESS':
+                    return 2;
+            }
+        };
 
         return Driver;
 

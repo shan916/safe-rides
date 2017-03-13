@@ -193,6 +193,8 @@ app.filter('FriendlyStatusName', function() {
                 return 'Canceled by Coordinator';
             case 'CANCELEDBYREQUESTOR':
                 return 'Canceled by Requestor';
+            case 'AVAILABLE':
+                return 'Available';
         }
     };
 });
