@@ -73,7 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
+                                        <tr ng-click="ctrl.showDriverDetails(driver)" ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
                                             ng-class="{success: driver.status === 'AVAILABLE',
                                                 info: driver.status === 'INPROGRESS' || driver.status === 'ASSIGNED'}">
                                             <td>{{driver.driverFirstName}}</td>

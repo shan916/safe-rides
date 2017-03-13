@@ -145,7 +145,6 @@ public class DriverController {
 		driver.getRides().add(rideReq);
 		
 		driverRepository.save(driver);
-//		rideRequestRepository.save(rideReq);
 		// create URI of where the driver was updated
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentContextPath().path("/drivers/{id}")

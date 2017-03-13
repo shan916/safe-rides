@@ -96,6 +96,26 @@ var app = angular.module('safeRidesWebApp')
             });
         };
 
+        vm.showDriverDetails = function(driver) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/driverdetailsmodal.html',
+                controller: 'DriverDetailsModalCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    request: function() {
+                        return driver;
+                    }
+                },
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function() {
+                console.log('ok');
+            }, function() {
+                console.log('cancel');
+            });
+        };
+
         vm.showAssignDriver = function(req) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/assigndrivermodal.html',

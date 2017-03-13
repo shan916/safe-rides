@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="ctrl.ok()">&times;</button>
+    <h3 class="modal-title" id="modal-title">Driver Details</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+                <dt>Name:</dt>
+                <dd>{{ctrl.driver.driverFirstName}} {{ctrl.driver.driverFirstName}}</dd>
+                <dt>Status:</dt>
+                <dd>{{ctrl.driver.status | FriendlyStatusName}}</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <div ng-hide="ctrl.driver.status === 'AVAILABLE'">
+                <h4>Assigned Request Information:</h4>
+                <dl class="dl-horizontal">
+                    <dt>Requestor Name:</dt>
+                    <dd></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="ctrl.ok()">Close</button>
+</div>
