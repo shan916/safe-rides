@@ -68,7 +68,7 @@ public class DriverController {
 		if (result == null) {
 			return ResponseEntity.notFound().build();
 		} else {
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(setDriverStatus(result));
 		}
 	}
 
@@ -189,15 +189,21 @@ public class DriverController {
 
 	private List<Driver> setDriverStatus(List<Driver> drivers){
 		for (Driver d: drivers) {
-			Set<RideRequest> requests = d.getRides();
-			if(requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
-				d.setStatus(DriverStatus.ASSIGNED);
-			} else if(requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
-				d.setStatus(DriverStatus.INPROGRESS);
-			} else {
-				d.setStatus(DriverStatus.AVAILABLE);
-			}
+            d = setDriverStatus(d);
 		}
 		return drivers;
 	}
+
+    private Driver setDriverStatus(Driver driver) {
+        Set<RideRequest> requests = driver.getRides();
+        if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
+            driver.setStatus(DriverStatus.ASSIGNED);
+        } else if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
+            driver.setStatus(DriverStatus.INPROGRESS);
+        } else {
+            driver.setStatus(DriverStatus.AVAILABLE);
+        }
+
+        return driver;
+    }
 }
