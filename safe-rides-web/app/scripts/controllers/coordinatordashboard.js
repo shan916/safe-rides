@@ -102,7 +102,7 @@ var app = angular.module('safeRidesWebApp')
                 controller: 'DriverDetailsModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    request: function() {
+                    driver: function() {
                         return driver;
                     }
                 },
