@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, $interval, $uibModal) {
         var vm = this;
 
         // TODO: Move this to an environment file
@@ -36,6 +36,15 @@ var app = angular.module('safeRidesWebApp')
 
                 vm.drivers.forEach(function(element, index, drivers) {
                     var driver = new Driver(element);
+                    DriverRidesService.query({
+                        id: driver.id
+                    }).$promise.then(function(ridesResponse) {
+                        driver.rides = ridesResponse;
+                        console.log('got driver\'s rides:' + ridesResponse);
+                    }, function(ridesError) {
+                        console.log('error getting driver\'s rides:' + ridesError);
+                    })
+
                     drivers[index] = driver;
                 });
 

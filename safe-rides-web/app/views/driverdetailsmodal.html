@@ -8,6 +8,10 @@
             <dl class="dl-horizontal">
                 <dt>Name:</dt>
                 <dd>{{ctrl.driver.driverFirstName}} {{ctrl.driver.driverLastName}}</dd>
+                <dt>Phone:</dt>
+                <dd>{{ctrl.driver.phoneNumber | phone }}</dd>
+                <dt>Passenger Seats:</dt>
+                <dd>{{ctrl.driver.vehicle.seats}}</dd>
                 <dt>Status:</dt>
                 <dd>{{ctrl.driver.status | FriendlyStatusName}}</dd>
             </dl>
@@ -16,8 +20,22 @@
             <div ng-hide="ctrl.driver.status === 'AVAILABLE'">
                 <h4>Assigned Request Information:</h4>
                 <dl class="dl-horizontal">
-                    <dt>Requestor Name:</dt>
-                    <dd></dd>
+                    <div ng-init='currentRide = ctrl.driver.currentRide()'>
+                        <dt>Name:</dt>
+                        <dd>{{currentRide.requestorFirstName}} {{currentRide.requestorLastName}}</dd>
+                        <dt>Riders:</dt>
+                        <dd>{{currentRide.numPassengers}}</dd>
+                        <dt>Pickup Location:</dt>
+                        <dd>{{currentRide.pickupLine1}} <br /> {{currentRide.pickupLine2.value || "" }} {{currentRide.pickupCity + ' ' + currentRide.pickupZip}}
+                        </dd>
+                        <dt>Dropoff Location:</dt>
+                        <dd>{{currentRide.dropoffLine1}} <br /> {{currentRide.dropoffLine2.value || "" }} {{currentRide.dropoffCity + ' ' + currentRide.dropoffZip}}
+                        </dd>
+                        <dt>Request Time:</dt>
+                        <dd>{{currentRide.date | date:'MMM dd, yyyy h:mma'}}</dd>
+                        <dt>Status:</dt>
+                        <dd>{{currentRide.status | FriendlyStatusName}}</dd>
+                    </div>
                 </dl>
             </div>
         </div>

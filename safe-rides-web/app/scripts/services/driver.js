@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('Driver', function(Vehicle) {
+    .factory('Driver', function(Vehicle, DriverRidesService) {
 
         function Driver(data) {
             this.csusId = undefined;
@@ -22,6 +22,7 @@ angular.module('safeRidesWebApp')
             this.active = true;
             this.vehicle = new Vehicle();
             this.status = undefined;
+            this.rides = undefined;
 
             if (data) {
                 angular.extend(this, data);
@@ -36,6 +37,15 @@ angular.module('safeRidesWebApp')
                     return 1;
                 case 'INPROGRESS':
                     return 2;
+            }
+        };
+
+        // returns the first assigned or inprogress ride
+        Driver.prototype.currentRide = function() {
+            for (var i = 0; i < this.rides.length; i++) {
+                if (this.rides[i].status === 'ASSIGNED' || this.rides[i].status === 'INPROGRESS') {
+                    return this.rides[i];
+                }
             }
         };
 
