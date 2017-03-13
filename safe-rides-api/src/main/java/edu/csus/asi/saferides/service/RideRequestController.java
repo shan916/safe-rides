@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import java.net.URI;
 import java.util.Date;
 
@@ -32,7 +32,7 @@ public class RideRequestController {
 	 * @return list rideRequests based on query param
 	 * */
 	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) Status status) {
+	public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
 		return rideRequestRepository.findAll();
 	}
 	
@@ -67,7 +67,7 @@ public class RideRequestController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
 		rideRequest.setDate(new Date());	// default to current datetime
-		rideRequest.setStatus(Status.UNASSIGNED);	// default to unassigned status
+		rideRequest.setStatus(RideRequestStatus.UNASSIGNED);	// default to unassigned status
 
 		RideRequest result = rideRequestRepository.save(rideRequest);
 		

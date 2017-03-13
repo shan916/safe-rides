@@ -16,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 
@@ -78,7 +78,7 @@ public class DriverController {
 	 * @return driver's assigned ride and ride request status, else not found
 	 * */
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/rides")
-	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) Status status) {
+	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) RideRequestStatus status) {
 		Driver result = driverRepository.findOne(id);
 
 		if (result == null) {
@@ -138,7 +138,7 @@ public class DriverController {
 		Driver driver = driverRepository.findOne(id);
 		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
 		
-		rideReq.setStatus(Status.ASSIGNED);
+		rideReq.setStatus(RideRequestStatus.ASSIGNED);
 		rideReq.setDriver(driver);
 		driver.getRides().add(rideReq);
 		

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.Vehicle;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -60,7 +60,7 @@ public class SafeRidesApiApplication {
 					"95818", "345 Main St.", "Sacramento", "95818");
 
 			rideRequest2.setDriver(driver4);
-			rideRequest2.setStatus(Status.COMPLETE);
+			rideRequest2.setStatus(RideRequestStatus.COMPLETE);
 			rideRequest3.setDriver(driver4);
 			rideRequest4.setDriver(driver5);
 			rideRequest5.setDriver(driver6);
