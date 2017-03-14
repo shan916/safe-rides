@@ -2,6 +2,8 @@ package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.User;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +13,7 @@ import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.Vehicle;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.repository.UserRepository;
 
 @SpringBootApplication
 public class SafeRidesApiApplication {
@@ -20,7 +23,7 @@ public class SafeRidesApiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository) {
+	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository, UserRepository userRepository) {
 		return (args) -> {
 			// save a few drivers
 			Driver driver1 = new Driver("000000000", "Zeeshan Khaliq", "E0000000", "CA", "male", true, true);
@@ -36,7 +39,7 @@ public class SafeRidesApiApplication {
 			Vehicle vehicle4 = new Vehicle(driver4, "Smart", "Fortwo", "2015", "DDDDDDD", "Grey", 3);
 			Vehicle vehicle5 = new Vehicle(driver5, "Volkswagen", "Jetta", "2014", "EEEEEEE", "White", 4);
 			Vehicle vehicle6 = new Vehicle(driver6, "Lexus", "Rx", "2013", "FFFFFFF", "Black", 2);
-
+			
 			driver1.setVehicle(vehicle1);
 			driver2.setVehicle(vehicle2);
 			driver3.setVehicle(vehicle3);

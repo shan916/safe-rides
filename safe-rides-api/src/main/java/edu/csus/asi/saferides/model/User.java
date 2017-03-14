@@ -39,9 +39,8 @@ public class User {
 	// protected Constructor required for JPA
 	protected User() { }
 
-	public User(Long id, String name, String username, String password) {
+	public User(String name, String username, String password) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.username = username;
 		generateSalt();
