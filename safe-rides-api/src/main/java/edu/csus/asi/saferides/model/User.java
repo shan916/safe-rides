@@ -1,13 +1,8 @@
 package edu.csus.asi.saferides.model;
 
-import java.security.SecureRandom;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import de.mkammerer.argon2.Argon2Factory.Argon2Types;
@@ -18,20 +13,18 @@ import de.mkammerer.argon2.Argon2Factory.Argon2Types;
  * Model object for User Entity
  * */
 
+
 @Entity
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO) // Will generate a unique id automatically
-	private Long id;
+	static final int SALTLEN = 32;
+	static final int HASHLEN = 64;
 	
 	@Column
 	private String name;
 	
+	@Id
 	@Column(unique = true)
 	private String username;
-	
-	@Column
-	private byte[] salt;
 	
 	@Column
 	private String password;
@@ -43,19 +36,9 @@ public class User {
 		super();
 		this.name = name;
 		this.username = username;
-		generateSalt();
 		setPassword(password);
 	}
 	
-	protected void generateSalt(){
-		SecureRandom sr = new SecureRandom(); 
-		this.salt = new byte[32];
-		sr.nextBytes(this.salt);
-	}
-
-	public Long getId() {
-		return id;
-	}
 
 	public String getName() {
 		return name;
@@ -66,10 +49,9 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
+		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id, SALTLEN, HASHLEN);
 		// Hash password
-		String saltedPassword = this.salt.toString() + password; 
-		String hash = argon2.hash(2, 65536, 1, saltedPassword);
+		String hash = argon2.hash(2, 65536, 1, password);
 	    /**
 	     * String hash(int iterations, int memory, int parallelism, char[] password);
 	     * Hashes a password.
@@ -85,7 +67,6 @@ public class User {
 	
 	public Boolean checkPassword(String password){
 		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-		String saltedPassword = this.salt.toString() + password;
-		return argon2.verify(this.password, saltedPassword);
+		return argon2.verify(this.password, password);
 	}
 }

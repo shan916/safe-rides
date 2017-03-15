@@ -34,11 +34,13 @@ public class UserController {
 	 * GET "/users"
 	 * 
 	 * @return list users
-	 * */
+	 
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<User> retrieveAll() {
 			return userRepository.findAll();
 	}
+	* */
+	
 	
 	/*
 	 * GET "/users/{id} 
@@ -46,7 +48,7 @@ public class UserController {
 	 * @param id - the id of the user to find
 	 * 
 	 * @return user with specified id else not found
-	 * */
+	 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	public ResponseEntity<?> retrieve(@PathVariable Long id) {
 		User result = userRepository.findOne(id);
@@ -57,7 +59,7 @@ public class UserController {
 			return ResponseEntity.ok(result);
 		}
 	}
-	
+	* */
 	
 	/*
 	 * GET "/users/byUsername/{username} 
@@ -65,7 +67,7 @@ public class UserController {
 	 * @param username - the username of the user to find
 	 * 
 	 * @return user with specified username else not found
-	 * */
+	 
 	@RequestMapping(method = RequestMethod.GET, value="/byUsername/{username}")
 	public ResponseEntity<?> retrieve(@PathVariable String username) {
 		User result = userRepository.findByUsername(username);
@@ -76,7 +78,7 @@ public class UserController {
 			return ResponseEntity.ok(result);
 		}
 	}
-	
+	* */
 
 	
 	/*
@@ -95,8 +97,8 @@ public class UserController {
 		
 		// create URI of where the user was created
 		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(result.getId()).toUri();
+				.fromCurrentRequest().path("/{username}")
+				.buildAndExpand(result.getUsername()).toUri();
 				
 		return ResponseEntity.created(location).body(result);
 	}
@@ -113,7 +115,7 @@ public class UserController {
 	 *  	   and the location header set to location of the entity
 	 * */
 	@RequestMapping(method = RequestMethod.POST, value="/authenticate")
-	public int authenticate(@RequestBody String usrAndPass) {
+	public Boolean authenticate(@RequestBody String usrAndPass) {
 		String username = null;
 		String password = null;
 		User result = null;
@@ -124,16 +126,10 @@ public class UserController {
 		
 		if(username != null)
 			result = userRepository.findByUsername(username);
-		System.out.println(username);
-		System.out.println(password);
-		if(result != null){
-			if(result.checkPassword(password))
-				return 1;
-			else
-				return 0;
-		}
+		if(result != null)
+			return result.checkPassword(password);
 		else
-			return -1;
+			return false;
 	}
 	
 	
@@ -148,8 +144,8 @@ public class UserController {
 	 * 
 	 * @return HTTP response containing saved entity with status of "ok"
 	 * */
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-	public ResponseEntity<?> save(@PathVariable Long id, @RequestBody User user) {
+	@RequestMapping(method = RequestMethod.PUT, value = "/{username}")
+	public ResponseEntity<?> save(@PathVariable String username, @RequestBody User user) {
 		User result = userRepository.save(user);
 				
 		return ResponseEntity.ok(result);
@@ -163,7 +159,7 @@ public class UserController {
 	 * 
 	 * @return HTTP response with status of "no content" if deleted successfully
 	 * 		   else response with status of "not found"
-	 * */
+	 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		if (userRepository.findOne(id) == null) {
@@ -173,5 +169,5 @@ public class UserController {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+	* */
 }
