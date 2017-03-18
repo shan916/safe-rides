@@ -234,8 +234,6 @@ app.filter('FriendlyStatusName', function() {
                 return 'Canceled by Rider';
             case 'AVAILABLE':
                 return 'Available';
-            case 'CANCELEDBYDRIVER':
-                return 'Canceled by Driver';
             case 'CANCELEDOTHER':
                 return 'Canceled by Other';
         }

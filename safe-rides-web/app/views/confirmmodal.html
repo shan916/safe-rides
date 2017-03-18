@@ -17,8 +17,13 @@
       <option selected ng-repeat="reason in ctrl.cancelReasons" value="{{reason}}">{{reason}}</option>
     </select>
     <label ng-bind-html="ctrl.reasonRequest"></label>
-    <textarea name="cancelMessage" id="cancelMessage" class="form-control" ng-required="ctrl.reasonForCancellation === 'Other'"
-              ng-model="ctrl.cancelMessage" style="overflow:auto;resize:none;" placeholder="Remarks"></textarea>
+    <textarea name="cancelMessage" id="cancelMessage" class="form-control" required
+              ng-model="ctrl.cancelMessage" style="overflow:auto;resize:none;"
+              placeholder="Remarks" ng-minlength="ctrl.textareaMinLength">
+              <div ng-messages="reasonForCancelForm.cancelMessage.$dirty && reasonForCancelForm.cancelMessage.$error">
+                  <div class="input-error" ng-message="required">* required</div>
+              </div>
+    </textarea>
     </div>
   </form>
   </div>

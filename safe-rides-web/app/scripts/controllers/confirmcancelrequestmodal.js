@@ -12,6 +12,7 @@ angular.module('safeRidesWebApp')
         var vm = this;
         vm.drivers = drivers;
         vm.request = request;
+        vm.textareaMinLength = 5;
         vm.reasonForCancellation = undefined;
         vm.cancelMessage = undefined;
         vm.cancelReasons = ['Rider', 'Coordinator', 'Other'];
@@ -36,10 +37,10 @@ angular.module('safeRidesWebApp')
             console.log('Request cancelled by: '+vm.reasonForCancellation+'  status: '+vm.request.status);
             RideRequestService.update({id: vm.request.requestorId}, vm.request).$promise.then(function(response){
               console.log('updated reasonForCancellation AND status: ', response);
+              $uibModalInstance.close();
             }, function(error){
               console.log('error setting reasonForCancellation AND status: ', error);
             });
-            $uibModalInstance.close();
         };
 
         function getStatusFromReason(){
