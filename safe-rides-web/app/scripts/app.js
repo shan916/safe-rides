@@ -21,7 +21,8 @@ angular
         'ui.bootstrap',
         'ui.select',
         'ngMessages',
-        'ui.mask'
+        'ui.mask',
+        'angularSpinner'
     ])
 
     .run(function($rootScope) {

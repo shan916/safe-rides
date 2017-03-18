@@ -10,6 +10,11 @@
 var app = angular.module('safeRidesWebApp')
     .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, $interval, $uibModal) {
         var vm = this;
+        vm.loadingRideRequests = true;
+        vm.loadingCoordinatorDrivers = true;
+        vm.loadingCoordinatorTables = true;
+
+
 
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
@@ -31,15 +36,21 @@ var app = angular.module('safeRidesWebApp')
         }, 15000);
 
         function getDrivers() {
+          vm.loadingCoordinatorDrivers = true;
             DriverService.query().$promise.then(function(response) {
                 vm.drivers = response;
                 console.log('got drivers:', response);
+                vm.loadingCoordinatorDrivers = false;
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+                    vm.loadingCoordinatorTables = false;
+                }
             }, function(error) {
                 console.log('error getting drivers:', error);
             });
         }
 
         function getRideRequests() {
+          vm.loadingRideRequests = true;
             RideRequestService.query().$promise.then(function(response) {
                 vm.rideRequests = response;
 
@@ -47,15 +58,19 @@ var app = angular.module('safeRidesWebApp')
                     var rideRequest = new RideRequest(element);
                     rideRequests[index] = rideRequest;
                 });
-
+                vm.loadingRideRequests = false;
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+                    vm.loadingCoordinatorTables = false;
+                }
                 console.log('got ride requests:', response);
             }, function(error) {
                 console.log('error getting ride requests:', error);
             });
         }
 
-        // Waiting time until the row turns red.
-        // Variable set by admin?
+        // if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+        //     vm.loadingCoordinatorTables = false;
+        // }
         vm.DANGER_ZONE = Object.freeze(30);
 
         vm.drivers = [];
