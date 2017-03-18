@@ -16,6 +16,12 @@
       </div>
       <option selected ng-repeat="reason in ctrl.cancelReasons" value="{{reason}}">{{reason}}</option>
     </select>
+    <!-- if Reason for cancellation === Other  show other message -->
+    <div ng-show="ctrl.reasonForCancellation === 'Other'">
+    <label>Message</label>
+    <textarea name="cancelMessage" id="cancelMessage" class="form-control" ng-required="ctrl.reasonForCancellation === 'Other'"
+              ng-model="ctrl.cancelMessage"></textarea>
+    </div>
   </form>
   </div>
 

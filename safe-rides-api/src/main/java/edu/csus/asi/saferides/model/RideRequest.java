@@ -63,8 +63,8 @@ public class RideRequest {
 	@Enumerated(EnumType.STRING)
 	private RideRequestStatus status;
 
-	@Column
-	private String reasonForCancellation;
+	@Column(nullable = true)
+	private String cancelMessage;
 
 	protected RideRequest() { }
 
@@ -85,7 +85,6 @@ public class RideRequest {
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
 		this.status = RideRequestStatus.UNASSIGNED;
-		this.reasonForCancellation = "n/a";
 	}
 
 	public Driver getDriver() {
@@ -240,13 +239,14 @@ public class RideRequest {
 		this.status = status;
 	}
 
-	public String getReasonForCancellation() {
-		return reasonForCancellation;
+	public String getCancelMessage() {
+		return cancelMessage;
 	}
 
-	public void setReasonForCancellation(String reasonForCancellation) {
-		this.reasonForCancellation = reasonForCancellation;
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
 	}
+
 
 	@Override
 	public String toString() {
@@ -270,7 +270,7 @@ public class RideRequest {
 				", dropoffCity='" + dropoffCity + '\'' +
 				", dropoffZip='" + dropoffZip + '\'' +
 				", status=" + status +
-				", reasonForCancellation=" + reasonForCancellation +
+				", cancelMessage=" + cancelMessage +
 				'}';
 	}
 }
