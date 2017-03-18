@@ -183,16 +183,20 @@ var app = angular.module('safeRidesWebApp')
                 resolve: {
                     request: function() {
                         return request;
+                    },
+                    drivers: function() {
+                        return vm.drivers;
                     }
                 },
                 size: 'lg'
             });
-
-            modalInstance.result.then(function() {
-                console.log('ok');
-            }, function() {
-                console.log('cancel');
-            });
+          modalInstance.result.then(function(){
+            console.log('cancelling ride, refreshing Ride Requests table');
+            getRideRequests();
+            getDrivers();
+          }, function() {
+              console.log('cancel cancelling ride');
+          });
         };
 
         /* Modal Add ride request */
@@ -227,9 +231,13 @@ app.filter('FriendlyStatusName', function() {
             case 'CANCELEDBYCOORDINATOR':
                 return 'Canceled by Coordinator';
             case 'CANCELEDBYREQUESTOR':
-                return 'Canceled by Requestor';
+                return 'Canceled by Rider';
             case 'AVAILABLE':
                 return 'Available';
+            case 'CANCELEDBYDRIVER':
+                return 'Canceled by Driver';
+            case 'CANCELEDOTHER':
+                return 'Canceled by Other';
         }
     };
 });
