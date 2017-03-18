@@ -177,7 +177,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.confirmCancelRequest = function(request) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmmodal.html',
+                templateUrl: 'views/confirmcancelmodal.html',
                 controller: 'ConfirmCancelRequestModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
