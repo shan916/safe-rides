@@ -26,6 +26,7 @@ angular.module('safeRidesWebApp')
             this.numPassengers = undefined;
             this.driver = undefined;
             this.status = undefined;
+            this.cancelMessage = undefined;
 
             if (data) {
                 angular.extend(this, data);
@@ -46,6 +47,10 @@ angular.module('safeRidesWebApp')
                     return 4;
                 case 'CANCELEDBYREQUESTOR':
                     return 5;
+                case 'CANCELEDBYDRIVER':
+                    return 6;
+                    case 'CANCELEDBYCOORDINATOR':
+                        return 4;
             }
         };
 

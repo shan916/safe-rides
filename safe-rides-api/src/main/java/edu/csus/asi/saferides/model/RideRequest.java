@@ -1,15 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class RideRequest {
@@ -70,6 +62,9 @@ public class RideRequest {
 
 	@Enumerated(EnumType.STRING)
 	private RideRequestStatus status;
+
+	@Column(nullable = true)
+	private String cancelMessage;
 
 	protected RideRequest() { }
 
@@ -244,6 +239,15 @@ public class RideRequest {
 		this.status = status;
 	}
 
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
+
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
+	}
+
+
 	@Override
 	public String toString() {
 		return "RideRequest{" +
@@ -266,6 +270,7 @@ public class RideRequest {
 				", dropoffCity='" + dropoffCity + '\'' +
 				", dropoffZip='" + dropoffZip + '\'' +
 				", status=" + status +
+				", cancelMessage=" + cancelMessage +
 				'}';
 	}
 }
