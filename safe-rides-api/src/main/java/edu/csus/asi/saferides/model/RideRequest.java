@@ -1,15 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class RideRequest {
@@ -71,6 +63,9 @@ public class RideRequest {
 	@Enumerated(EnumType.STRING)
 	private RideRequestStatus status;
 
+	@Column
+	private String reasonForCancellation;
+
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
@@ -90,6 +85,7 @@ public class RideRequest {
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
 		this.status = RideRequestStatus.UNASSIGNED;
+		this.reasonForCancellation = "n/a";
 	}
 
 	public Driver getDriver() {
@@ -244,6 +240,14 @@ public class RideRequest {
 		this.status = status;
 	}
 
+	public String getReasonForCancellation() {
+		return reasonForCancellation;
+	}
+
+	public void setReasonForCancellation(String reasonForCancellation) {
+		this.reasonForCancellation = reasonForCancellation;
+	}
+
 	@Override
 	public String toString() {
 		return "RideRequest{" +
@@ -266,6 +270,7 @@ public class RideRequest {
 				", dropoffCity='" + dropoffCity + '\'' +
 				", dropoffZip='" + dropoffZip + '\'' +
 				", status=" + status +
+				", reasonForCancellation=" + reasonForCancellation +
 				'}';
 	}
 }
