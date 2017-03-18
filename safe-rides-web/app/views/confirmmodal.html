@@ -8,19 +8,17 @@
   </div>
 
   <div class="col-md-5">
-    <p ng-bind-html='ctrl.reasonRequest'></p>
     <form name="reasonForCancelForm"><!-- class="my-form form-vertical" layout="column"-->
+    <label>Ride Request cancelled by</label>
     <select name="reasonForCancellation" id="reasonForCancellation" class="form-control" required ng-model="ctrl.reasonForCancellation">
       <div ng-messages="reasonForCancelForm.reasonForCancellation.$dirty && reasonForCancelForm.reasonForCancellation.$error">
           <div class="option-error" ng-message="required">* required</div>
       </div>
       <option selected ng-repeat="reason in ctrl.cancelReasons" value="{{reason}}">{{reason}}</option>
     </select>
-    <!-- if Reason for cancellation === Other  show other message -->
-    <div ng-show="ctrl.reasonForCancellation === 'Other'">
-    <label>Message</label>
+    <label ng-bind-html="ctrl.reasonRequest"></label>
     <textarea name="cancelMessage" id="cancelMessage" class="form-control" ng-required="ctrl.reasonForCancellation === 'Other'"
-              ng-model="ctrl.cancelMessage"></textarea>
+              ng-model="ctrl.cancelMessage" style="overflow:auto;resize:none;" placeholder="Remarks"></textarea>
     </div>
   </form>
   </div>

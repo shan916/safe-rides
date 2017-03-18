@@ -14,7 +14,7 @@ angular.module('safeRidesWebApp')
         vm.request = request;
         vm.reasonForCancellation = undefined;
         vm.cancelMessage = undefined;
-        vm.cancelReasons = ['Rider', 'Driver', 'Coordinator', 'Other'];
+        vm.cancelReasons = ['Rider', 'Coordinator', 'Other'];
         vm.body = 'You selected to cancel <strong>' + $sanitize(request.requestorFirstName) + '\'s</strong> ride request. The request will be removed from the queue and <strong>' + $sanitize(request.requestorFirstName) + '</strong> will be notified that their request is canceled.';
         vm.reasonRequest = '<strong>Reason for ' + $sanitize(request.requestorFirstName) + '\'s ride cancellation?</strong>';
         vm.danger = true;
@@ -28,13 +28,9 @@ angular.module('safeRidesWebApp')
           //RideRequestService.save({id: request.requestorId}, request.reasonForCancellation).$promise.then(function(response){
             vm.request.status = getStatusFromReason();
             //if other set the cancelMessage to what was entered
-            if(vm.reasonForCancellation === 'Other'){
+            if(vm.cancelMessage != undefined){
               vm.request.cancelMessage = vm.cancelMessage;
-            }else {
-              //message not required
-              vm.request.cancelMessage = 'This ride was cancelled by the ' + vm.reasonForCancellation;
             }
-
 
             request.deleted = true;
             console.log('Request cancelled by: '+vm.reasonForCancellation+'  status: '+vm.request.status);
@@ -52,8 +48,6 @@ angular.module('safeRidesWebApp')
               return 'CANCELEDBYREQUESTOR';
             case 'Coordinator':
               return 'CANCELEDBYCOORDINATOR';
-            case 'Driver':
-              return 'CANCELEDBYDRIVER';
             case 'Other':
               return 'CANCELEDOTHER';
           }
