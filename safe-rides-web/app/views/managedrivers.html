@@ -39,6 +39,18 @@
             <h3 class="panel-title">Inactive Drivers</h3>
         </div>
         <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="search">Filter:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon glyphicon glyphicon-search"></span>
+                            <input type="text" id="search" class="form-control" placeholder="Search" ng-model="ctrl.searchString">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             <table class="table table-responsive">
                 <thead>
                     <th>Name</th>
@@ -50,7 +62,7 @@
                     <th>Actions</th>
 
                     <tbody>
-                        <tr ng-repeat="driver in ctrl.drivers | filter: {active: false}">
+                        <tr ng-repeat="driver in ctrl.drivers | filter: {active: false} | filter: ctrl.searchString | limitTo: 25">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                             <td>{{driver.phoneNumber | phone}}</td>
                             <td>{{driver.csusId}}</td>
@@ -66,7 +78,6 @@
                     </tbody>
                 </thead>
             </table>
-        </div>
     </div>
 
     <div class="row margin-top-15 margin-bottom-15">

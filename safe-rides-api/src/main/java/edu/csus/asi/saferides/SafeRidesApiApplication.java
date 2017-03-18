@@ -29,6 +29,15 @@ public class SafeRidesApiApplication {
 			Driver driver4 = new Driver("000000003", "Edward", "Ozeruga", "9163456789", "CA", "E3333333", "male", true, false);
 			Driver driver5 = new Driver("000000004", "Justin", "Mendiguarin", "9164567890", "CA", "E4444444", "male", true, true);
 			Driver driver6 = new Driver("000000005", "Nik", "Sorvari", "9165678901", "CA", "E5555555", "male", true, false);
+			
+			Vehicle vehicle = new Vehicle(driver1, "Tesla", "Model S", "2018", "ELECTRIC", "Silver", 5);
+			
+			for (int i = 6; i < 1000; i++) {
+				Driver driver = new Driver (String.format("%09d", i), "Zeeshan" + i, "Khaliq" + i, "9161234567", "CA",
+						String.format("%09d", i), "male", true, false);
+				vehicle.setDriver(driver);
+				driverRepository.save(driver);
+			}
 
 			Vehicle vehicle1 = new Vehicle(driver1, "Honda", "Civic", "2018", "AAAAAAA", "Magenta", 5);
 			Vehicle vehicle2 = new Vehicle(driver2, "Toyota", "Corolla", "2017", "BBBBBBB", "Blue", 7);
