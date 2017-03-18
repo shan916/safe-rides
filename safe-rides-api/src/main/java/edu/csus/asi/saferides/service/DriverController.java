@@ -1,10 +1,8 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Set;
 
-import edu.csus.asi.saferides.model.DriverStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,9 +46,9 @@ public class DriverController {
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<Driver> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
 		if (active != null) {
-			return setDriverStatus(driverRepository.findByActive(active));
+			return driverRepository.findByActive(active);
 		} else {
-			return setDriverStatus((List<Driver>)driverRepository.findAll());
+			return driverRepository.findAll();
 		}
 	}
 	
@@ -68,7 +66,8 @@ public class DriverController {
 		if (result == null) {
 			return ResponseEntity.notFound().build();
 		} else {
-			return ResponseEntity.ok(setDriverStatus(result));
+//			return ResponseEntity.ok(setDriverStatus(result));
+			return ResponseEntity.ok(result);
 		}
 	}
 
@@ -187,23 +186,4 @@ public class DriverController {
 		}
 	}
 
-	private List<Driver> setDriverStatus(List<Driver> drivers){
-		for (Driver d: drivers) {
-            d = setDriverStatus(d);
-		}
-		return drivers;
-	}
-
-    private Driver setDriverStatus(Driver driver) {
-        Set<RideRequest> requests = driver.getRides();
-        if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
-            driver.setStatus(DriverStatus.ASSIGNED);
-        } else if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
-            driver.setStatus(DriverStatus.INPROGRESS);
-        } else {
-            driver.setStatus(DriverStatus.AVAILABLE);
-        }
-
-        return driver;
-    }
 }
