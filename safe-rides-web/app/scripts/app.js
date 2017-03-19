@@ -21,82 +21,126 @@
  }
 
 angular
-  .module('safeRidesWebApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
-    'ngRoute',
-    'ngSanitize',
-    'ngTouch',
-    'config',
-    'ngMap',
-    'ui.bootstrap',
-    'ui.select',
-    'ngMessages'
-  ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .when('/login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/register', {
-        templateUrl: 'views/register.html',
-        controller: 'RegisterCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/resetpasswordrequest', {
-        templateUrl: 'views/resetpasswordrequest.html',
-        controller: 'ResetpasswordrequestCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/resetpassword', {
-        templateUrl: 'views/resetpassword.html',
-        controller: 'ResetpasswordCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/coordinatordashboard', {
-        templateUrl: 'views/coordinatordashboard.html',
-        controller: 'CoordinatordashboardCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/coordinatorreport', {
-        templateUrl: 'views/coordinatorreport.html',
-        controller: 'CoordinatorreportCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/editdriver/:driverId?', {
-        templateUrl: 'views/editdriver.html',
-        controller: 'EditdriverCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/driverdashboard', {
-        templateUrl: 'views/driverdashboard.html',
-        controller: 'DriverdashboardCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/riderdashboard', {
-        templateUrl: 'views/riderdashboard.html',
-        controller: 'RiderdashboardCtrl',
-        controllerAs: 'ctrl'
-      })
-      .when('/managedrivers', {
-          templateUrl: 'views/managedrivers.html',
-          controller: 'ManagedriversCtrl',
-          controllerAs: 'ctrl'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+    .module('safeRidesWebApp', [
+        'ngAnimate',
+        'ngCookies',
+        'ngResource',
+        'ui.router',
+        'ngSanitize',
+        'ngTouch',
+        'config',
+        'ngMap',
+        'ui.bootstrap',
+        'ui.select',
+        'ngMessages',
+        'ui.mask'
+    ])
+
+    .run(function($rootScope) {
+        $rootScope.$on("$stateChangeError", console.log.bind(console));
+    })
+
+    .config(function($stateProvider, $urlRouterProvider) {
+
+        $urlRouterProvider.otherwise('/');
+
+        $stateProvider
+            .state('/', {
+                url: '/',
+                templateUrl: 'views/main.html',
+                controller: 'MainCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('about', {
+                url: '/about',
+                templateUrl: 'views/about.html',
+                controller: 'AboutCtrl',
+                controllerAs: 'about'
+            });
+        $stateProvider
+            .state('login', {
+                url: '/login',
+                templateUrl: 'views/login.html',
+                controller: 'LoginCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('register', {
+                url: '/register',
+                templateUrl: 'views/register.html',
+                controller: 'RegisterCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('resetpasswordrequest', {
+                url: '/resetpasswordrequest',
+                templateUrl: 'views/resetpasswordrequest.html',
+                controller: 'ResetpasswordrequestCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('resetpassword', {
+                url: '/resetpassword',
+                templateUrl: 'views/resetpassword.html',
+                controller: 'ResetpasswordCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('coordinatordashboard', {
+                url: '/coordinatordashboard',
+                templateUrl: 'views/coordinatordashboard.html',
+                controller: 'CoordinatordashboardCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true
+                }
+            });
+        $stateProvider
+            .state('coordinatorreport', {
+                url: '/coordinatorreport',
+                templateUrl: 'views/coordinatorreport.html',
+                controller: 'CoordinatorreportCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true
+                }
+            });
+        $stateProvider
+            .state('editdriver', {
+                url: '/editdriver/:driverId?',
+                templateUrl: 'views/editdriver.html',
+                controller: 'EditdriverCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true
+                }
+            });
+        $stateProvider
+            .state('driverdashboard', {
+                url: '/driverdashboard',
+                templateUrl: 'views/driverdashboard.html',
+                controller: 'DriverdashboardCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true
+                }
+            });
+        $stateProvider
+            .state('riderdashboard', {
+                url: '/riderdashboard',
+                templateUrl: 'views/riderdashboard.html',
+                controller: 'RiderdashboardCtrl',
+                controllerAs: 'ctrl'
+            });
+        $stateProvider
+            .state('managedrivers', {
+                url: '/managedrivers',
+                templateUrl: 'views/managedrivers.html',
+                controller: 'ManagedriversCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true
+                }
+            });
+    });

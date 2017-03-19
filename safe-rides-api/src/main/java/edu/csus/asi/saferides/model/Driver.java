@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,60 +31,73 @@ public class Driver {
 	private Set<RideRequest> rides;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO) // Will generate a unique id automatically
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column(nullable = false, unique = true)
+
+	@Column(nullable = false, unique = true, length = 9)
+	@Size(min = 9, max = 9)
 	private String csusId;
-	
+
 	@Column(nullable = false)
-	private String name;
-	
+	@Size(min = 2, max = 30)
+	private String driverFirstName;
+
 	@Column(nullable = false)
+	@Size(min = 2, max = 30)
+	private String driverLastName;
+
+	@Column(nullable = false, length = 10)
+	@Size(min = 10, max = 10)
+	private String phoneNumber;
+
+	@Column(nullable = false, length = 2)
 	private String dlState;
-	
+
 	@Column(nullable = false, unique = true)
 	private String dlNumber;
-	
+
 	@Column(nullable = false)
-	private String sex;
-	
+	private String gender;
+
 	@Column(nullable = false)
 	private Boolean insuranceChecked;
-	
+
 	@Column(nullable = false)
 	private Boolean active;
-	
-	// protected Constructor required for JPA
-	protected Driver() { }
-	
-	public Driver(String csusId, String name, String dlNumber, String dlState, String sex, Boolean insuranceChecked, Boolean active) {
+
+	protected Driver() {
+	}
+
+	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
+			String dlNumber, String gender, Boolean insuranceChecked, Boolean active) {
 		super();
 		this.csusId = csusId;
-		this.name = name;
-		this.dlNumber = dlNumber;
+		this.driverFirstName = driverFirstName;
+		this.driverLastName = driverLastName;
+		this.phoneNumber = phoneNumber;
 		this.dlState = dlState;
-		this.sex = sex;
+		this.dlNumber = dlNumber;
+		this.gender = gender;
 		this.insuranceChecked = insuranceChecked;
 		this.active = active;
 	}
-	
+
 	public Vehicle getVehicle() {
 		return vehicle;
 	}
-	
+
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getCsusId() {
 		return csusId;
 	}
@@ -92,14 +106,30 @@ public class Driver {
 		this.csusId = csusId;
 	}
 
-	public String getName() {
-		return name;
+	public String getdriverFirstName() {
+		return driverFirstName;
 	}
-	
-	public void setName(String name) {
-		this.name = name;
+
+	public void setdriverFirstName(String name) {
+		this.driverFirstName = name;
 	}
-	
+
+	public String getdriverLastName() {
+		return driverLastName;
+	}
+
+	public void setdriverLastName(String name) {
+		this.driverLastName = name;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getDlState() {
 		return dlState;
 	}
@@ -111,31 +141,31 @@ public class Driver {
 	public String getDlNumber() {
 		return dlNumber;
 	}
-	
+
 	public void setDlNumber(String dlNumber) {
 		this.dlNumber = dlNumber;
 	}
-	
-	public String getSex() {
-		return sex;
+
+	public String getGender() {
+		return gender;
 	}
 
-	public void setSex(String sex) {
-		this.sex = sex;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public Boolean isInsuranceChecked() {
 		return insuranceChecked;
 	}
-	
+
 	public void setInsuranceChecked(Boolean insuranceChecked) {
 		this.insuranceChecked = insuranceChecked;
 	}
-	
+
 	public Boolean isActive() {
 		return active;
 	}
-	
+
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
@@ -148,17 +178,22 @@ public class Driver {
 		this.rides = rides;
 	}
 
-	public void assignRideRequest(RideRequest rideRequest){
-		rideRequest.setStatus(Status.ASSIGNED);
-		rideRequest.setDriver(this);
-		Set<RideRequest> reqs = getRides();
-		reqs.add(rideRequest);
-		setRides(reqs);
+	public DriverStatus getStatus() {
+		Set<RideRequest> requests = getRides();
+		if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
+			return DriverStatus.ASSIGNED;
+		} else if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
+			return DriverStatus.INPROGRESS;
+		} else {
+			return DriverStatus.AVAILABLE;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", csusId=" + csusId + ", name=" + name + ", dlNumber=" + dlNumber
+		return "Driver [vehicle=" + vehicle + ", rides=" + rides + ", id=" + id + ", csusId=" + csusId
+				+ ", driverFirstName=" + driverFirstName + ", driverLastName=" + driverLastName + ", phoneNumber="
+				+ phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber + ", gender=" + gender
 				+ ", insuranceChecked=" + insuranceChecked + ", active=" + active + "]";
 	}
 

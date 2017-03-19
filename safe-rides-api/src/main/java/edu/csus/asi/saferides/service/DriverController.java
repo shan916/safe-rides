@@ -1,27 +1,17 @@
 package edu.csus.asi.saferides.service;
 
-import java.net.URI;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.validation.Valid;
-
+import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import edu.csus.asi.saferides.model.Driver;
-import edu.csus.asi.saferides.repository.DriverRepository;
+import java.net.URI;
+import java.util.Set;
 
 /*
  * @author Zeeshan Khaliq
@@ -69,6 +59,7 @@ public class DriverController {
 		if (result == null) {
 			return ResponseEntity.notFound().build();
 		} else {
+//			return ResponseEntity.ok(setDriverStatus(result));
 			return ResponseEntity.ok(result);
 		}
 	}
@@ -81,7 +72,7 @@ public class DriverController {
 	 * @return driver's assigned ride and ride request status, else not found
 	 * */
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/rides")
-	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) Status status) {
+	public ResponseEntity<?> retrieveRide(@PathVariable Long id, @RequestParam(value = "status", required = false) RideRequestStatus status) {
 		Driver result = driverRepository.findOne(id);
 
 		if (result == null) {
@@ -140,7 +131,14 @@ public class DriverController {
 	public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
 		Driver driver = driverRepository.findOne(id);
 		RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
-		driver.assignRideRequest(rideReq);
+		
+		rideReq.setStatus(RideRequestStatus.ASSIGNED);
+		rideReq.setDriver(driver);
+		//set messageToDriver from rideRequest
+		rideReq.setMessageToDriver(rideRequest.getMessageToDriver());
+		rideReq.setEstimatedTime(rideRequest.getEstimatedTime());
+		driver.getRides().add(rideReq);
+		
 		driverRepository.save(driver);
 		// create URI of where the driver was updated
 		URI location = ServletUriComponentsBuilder
@@ -166,7 +164,6 @@ public class DriverController {
 		return ResponseEntity.ok(result);
 	}
 	
-	
 	/*
 	 * DELETE "/drivers/{id} 
 	 * 
@@ -184,5 +181,5 @@ public class DriverController {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+
 }

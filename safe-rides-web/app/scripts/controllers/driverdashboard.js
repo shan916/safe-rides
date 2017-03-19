@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function ($scope) {
+    .controller('DriverdashboardCtrl', function($scope) {
         this.awesomeThings = [
             'HTML5 Boilerplate',
             'AngularJS',

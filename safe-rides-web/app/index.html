@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
@@ -16,59 +17,62 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-  </head>
-  <body ng-app="safeRidesWebApp">
+</head>
+
+<body ng-app="safeRidesWebApp">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
 
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
-          </div>
+                    <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
+                </div>
 
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+                <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
-            <ul class="nav navbar-nav ng-cloak" >
-              <li ng-repeat="route in header.routes" ng-class="{active: header.activeRoute === route}">
-                <a ng-href="{{route.path}}" ng-click="header.setActive(route)">{{route.text}}</a>
-              </li>
+                    <ul class="nav navbar-nav ng-cloak">
+                        <li ng-repeat="route in header.routes" ng-class="{active: header.activeRoute === route}">
+                            <a ng-href="{{route.path}}" ng-click="header.setActive(route)">{{route.text}}</a>
+                        </li>
 
-            </ul>
-          </div>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <div ng-view=""></div>
+    <div ui-view=""></div>
 
     <div class="footer">
-      <div class="container">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Code Team 6 developers</p>
-      </div>
+        <div class="container">
+            <p><span class="glyphicon glyphicon-heart"></span> from the Code Team 6 developers</p>
+        </div>
     </div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <script>
+        ! function(A, n, g, u, l, a, r) {
+            A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
+                    (A[l].q = A[l].q || []).push(arguments)
+                }, A[l].l = +new Date, a = n.createElement(g),
+                r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+        }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
+        ga('create', 'UA-XXXXX-X');
+        ga('send', 'pageview');
     </script>
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -88,35 +92,41 @@
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-ui-mask/dist/mask.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/config.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/controllers/register.js"></script>
-        <script src="scripts/controllers/resetpasswordrequest.js"></script>
-        <script src="scripts/controllers/resetpassword.js"></script>
-        <script src="scripts/controllers/coordinatordashboard.js"></script>
-        <script src="scripts/controllers/coordinatorreport.js"></script>
-        <script src="scripts/controllers/editdriver.js"></script>
-        <script src="scripts/controllers/driverdashboard.js"></script>
-        <script src="scripts/controllers/riderdashboard.js"></script>
-        <script src="scripts/controllers/header.js"></script>
-        <script src="scripts/controllers/managedrivers.js"></script>
-        <script src="scripts/services/driverservice.js"></script>
-        <script src="scripts/controllers/requestdetailmodal.js"></script>
-        <script src="scripts/controllers/assigndrivermodal.js"></script>
-        <script src="scripts/controllers/assignrequestmodal.js"></script>
-        <script src="scripts/controllers/confirmcancelrequestmodal.js"></script>
-        <script src="scripts/controllers/addriderequestmodal.js"></script>
-        <script src="scripts/services/driver.js"></script>
-        <script src="scripts/services/vehicle.js"></script>
-        <script src="scripts/services/riderequestservice.js"></script>
-        <script src="scripts/services/riderequest.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/about.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/register.js"></script>
+    <script src="scripts/controllers/resetpasswordrequest.js"></script>
+    <script src="scripts/controllers/resetpassword.js"></script>
+    <script src="scripts/controllers/coordinatordashboard.js"></script>
+    <script src="scripts/controllers/coordinatorreport.js"></script>
+    <script src="scripts/controllers/editdriver.js"></script>
+    <script src="scripts/controllers/driverdashboard.js"></script>
+    <script src="scripts/controllers/riderdashboard.js"></script>
+    <script src="scripts/controllers/header.js"></script>
+    <script src="scripts/controllers/managedrivers.js"></script>
+    <script src="scripts/services/driverservice.js"></script>
+    <script src="scripts/controllers/requestdetailmodal.js"></script>
+    <script src="scripts/controllers/assigndrivermodal.js"></script>
+    <script src="scripts/controllers/assignrequestmodal.js"></script>
+    <script src="scripts/controllers/confirmcancelrequestmodal.js"></script>
+    <script src="scripts/controllers/addriderequestmodal.js"></script>
+    <script src="scripts/controllers/driverdetailsmodal.js"></script>
+    <script src="scripts/services/driver.js"></script>
+    <script src="scripts/services/vehicle.js"></script>
+    <script src="scripts/services/riderequestservice.js"></script>
+    <script src="scripts/services/riderequest.js"></script>
+    <script src="scripts/services/assignrideservice.js"></script>
+    <script src="scripts/filters/phone.js"></script>
+    <!-- endbuild -->
 </body>
+
 </html>
