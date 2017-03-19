@@ -1,24 +1,17 @@
 package edu.csus.asi.saferides.service;
 
-import java.net.URI;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.Set;
 
 /*
  * @author Zeeshan Khaliq
@@ -141,6 +134,8 @@ public class DriverController {
 		
 		rideReq.setStatus(RideRequestStatus.ASSIGNED);
 		rideReq.setDriver(driver);
+		//set messageToDriver from rideRequest
+		rideReq.setMessageToDriver(rideRequest.getMessageToDriver());
 		driver.getRides().add(rideReq);
 		
 		driverRepository.save(driver);

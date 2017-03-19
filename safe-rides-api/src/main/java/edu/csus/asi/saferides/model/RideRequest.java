@@ -66,6 +66,9 @@ public class RideRequest {
 	@Column(nullable = true)
 	private String cancelMessage;
 
+	@Column(nullable = true)
+	private String messageToDriver;
+
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
@@ -85,6 +88,14 @@ public class RideRequest {
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
 		this.status = RideRequestStatus.UNASSIGNED;
+	}
+
+	public String getMessageToDriver() {
+		return messageToDriver;
+	}
+
+	public void setMessageToDriver(String messageToDriver) {
+		this.messageToDriver = messageToDriver;
 	}
 
 	public Driver getDriver() {
@@ -271,6 +282,7 @@ public class RideRequest {
 				", dropoffZip='" + dropoffZip + '\'' +
 				", status=" + status +
 				", cancelMessage=" + cancelMessage +
+				", messageToDriver=" + messageToDriver +
 				'}';
 	}
 }

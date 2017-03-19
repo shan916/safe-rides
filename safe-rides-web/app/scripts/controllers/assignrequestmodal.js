@@ -13,15 +13,20 @@ angular.module('safeRidesWebApp')
         vm.driver = driver;
         vm.requests = requests;
         vm.selectedRequest = undefined;
+        vm.messageToDriver = undefined;
+        vm.textareaMinLength = 5;
 
         vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
 
         vm.ok = function() {
+          vm.selectedRequest.messageToDriver = vm.messageToDriver;
             AssignRideService.save({
                 id: vm.driver.id
             }, vm.selectedRequest).$promise.then(function(response) {
+                console.log(vm.driver.driverFirstName+' was assigned to '+vm.selectedRequest.requestorFirstName
+                            +' with message '+vm.selectedRequest.messageToDriver);
                 console.log('asssigned request to driver:', response);
                 $uibModalInstance.close();
             }, function(error) {
