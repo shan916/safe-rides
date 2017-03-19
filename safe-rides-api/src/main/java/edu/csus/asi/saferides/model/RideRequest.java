@@ -69,6 +69,9 @@ public class RideRequest {
 	@Column(nullable = true)
 	private String messageToDriver;
 
+	@Column(nullable = true)
+	private String estimatedTime;
+
 	protected RideRequest() { }
 
 	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
@@ -88,6 +91,14 @@ public class RideRequest {
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
 		this.status = RideRequestStatus.UNASSIGNED;
+	}
+
+	public String getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(String estimatedTime) {
+		this.estimatedTime = estimatedTime;
 	}
 
 	public String getMessageToDriver() {

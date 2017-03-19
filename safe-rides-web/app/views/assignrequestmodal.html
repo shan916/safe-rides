@@ -2,6 +2,7 @@
     <h3 class="modal-title" id="modal-title">Assign request to {{ctrl.driver.driverFirstName}}</h3>
 </div>
 <div class="modal-body" id="modal-body">
+  <form name="messageToDriverForm">
     <div class="row">
         <div class="col-md-6">
             <dl class="dl-horizontal">
@@ -16,12 +17,18 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="selectRequest">Assign request</label>
-                <ui-select ng-model="ctrl.selectedRequest">
+                <ui-select ng-model="ctrl.selectedRequest" required>
                     <ui-select-match>{{$select.selected.requestorFirstName}} {{$select.selected.requestorLastName}}</ui-select-match>
                     <ui-select-choices repeat="request in ctrl.requests | filter: {status: 'UNASSIGNED'}">
                         <div ng-bind-html="'Riders: ' + request.numPassengers + ' - ' + request.requestorFirstName + ' ' + request.requestorLastName"></div>
                     </ui-select-choices>
                 </ui-select>
+            </div>
+            <div class="form-group">
+                <label for="estimateArrival">Estimated Arrival</label>
+                <select name="estimateArrival" id="estimateArrival" class="form-control" required ng-model="ctrl.estimatedTime">
+                  <option selected ng-repeat="time in ctrl.estimateTimes" value="{{time}}">{{time}}</option>
+                </select>
             </div>
             <div ng-show="ctrl.selectedRequest">
                 <h4>Selected Request's Details</h4>
@@ -38,23 +45,18 @@
                     </dd>
                     <dt>Message To Driver</dt>
                     <dd>
-                      <form name="messageToDriverForm">
-
-                        <textarea name="messageToDriver" id="messageToDriver" class="form-control" required
+                        <textarea name="messageToDriver" id="messageToDriver" class="form-control"
                                   ng-model="ctrl.messageToDriver" style="overflow:auto;resize:none;"
                                   placeholder="Remarks" ng-minlength="ctrl.textareaMinLength">
-                                  <div ng-messages="messageToDriverForm.messageToDriver.$dirty && messageToDriverForm.messageToDriver.$error">
-                                      <div class="input-error" ng-message="required">* required</div>
-                                  </div>
                         </textarea>
-                      </form>
                     </dd>
                 </dl>
             </div>
         </div>
     </div>
+  </form>
 </div><!-- end modal body -->
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="ctrl.ok()">Assign Driver</button>
+    <button type="button" class="btn btn-primary" ng-click="ctrl.ok()" ng-disabled="messageToDriverForm.$invalid">Assign Driver</button>
     <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
 </div>

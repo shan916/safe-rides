@@ -15,6 +15,8 @@ angular.module('safeRidesWebApp')
         vm.selectedRequest = undefined;
         vm.messageToDriver = undefined;
         vm.textareaMinLength = 5;
+        vm.estimateTimes = ['15', '30', '45', '1 hour', '> 1 hour'];
+        vm.estimatedTime = undefined;
 
         vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
@@ -22,6 +24,7 @@ angular.module('safeRidesWebApp')
 
         vm.ok = function() {
           vm.selectedRequest.messageToDriver = vm.messageToDriver;
+          vm.selectedRequest.estimatedTime = vm.estimatedTime;
             AssignRideService.save({
                 id: vm.driver.id
             }, vm.selectedRequest).$promise.then(function(response) {
