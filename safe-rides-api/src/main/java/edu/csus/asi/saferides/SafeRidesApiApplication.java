@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Bean;
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
-import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.model.Vehicle;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
-import edu.csus.asi.saferides.repository.UserRepository;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 
 @SpringBootApplication
 public class SafeRidesApiApplication {
@@ -82,6 +82,9 @@ public class SafeRidesApiApplication {
 			rideRequestRepository.save(rideRequest5);
 			rideRequestRepository.save(rideRequest6);
 			rideRequestRepository.save(rideRequest7);
+
+			User newUser = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
+			userRepository.save(newUser);
 		};
 	}
 

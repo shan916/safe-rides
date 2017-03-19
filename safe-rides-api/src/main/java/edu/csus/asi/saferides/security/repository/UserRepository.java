@@ -1,6 +1,6 @@
-package edu.csus.asi.saferides.repository;
+package edu.csus.asi.saferides.security.repository;
 
-import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

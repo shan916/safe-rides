@@ -1,21 +1,15 @@
 package edu.csus.asi.saferides.service;
 
 import java.net.URI;
-import java.util.Iterator;
-import java.util.Set;
-import javax.validation.Valid;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import edu.csus.asi.saferides.model.User;
-import edu.csus.asi.saferides.repository.UserRepository;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 
 /*
  * @author Zeeshan Khaliq
@@ -103,7 +97,7 @@ public class UserController {
 		return ResponseEntity.created(location).body(result);
 	}
 	
-	
+
 	/*
 	 * POST "/users/authenticate" 
 	 * 
@@ -114,6 +108,7 @@ public class UserController {
 	 * @return HTTP response containing saved entity with status of "created" 
 	 *  	   and the location header set to location of the entity
 	 * */
+	/*
 	@RequestMapping(method = RequestMethod.POST, value="/authenticate")
 	public Boolean authenticate(@RequestBody String usrAndPass) {
 		String username = null;
@@ -130,7 +125,7 @@ public class UserController {
 			return result.checkPassword(password);
 		else
 			return false;
-	}
+	}*/
 	
 	
 

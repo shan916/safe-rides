@@ -6,6 +6,14 @@ server.port: 8080
 management.security.enabled: false
 spring.jpa.show-sql: true
 spring.h2.console.enabled: true
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 604800
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
 
 ---
 spring:
