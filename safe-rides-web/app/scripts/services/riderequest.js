@@ -27,6 +27,8 @@ angular.module('safeRidesWebApp')
             this.driver = undefined;
             this.status = undefined;
             this.cancelMessage = undefined;
+            this.messageToDriver = undefined;
+            this.estimatedTime = undefined;
 
             if (data) {
                 angular.extend(this, data);
