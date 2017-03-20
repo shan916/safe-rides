@@ -11,16 +11,30 @@ angular.module('safeRidesWebApp')
     .controller('ManagedriversCtrl', function(DriverService, $uibModal) {
         var vm = this;
 
-        vm.drivers = [];
-
+        vm.activeDrivers = [];
+        vm.inactiveDrivers = [];
         vm.searchString = undefined;
 
+        vm.loadingActiveDrivers = true;
+        vm.loadingInactiveDrivers = true;
+
         function getDrivers() {
-            DriverService.query().$promise.then(function(response) {
-                vm.drivers = response;
-                console.log('got drivers:', response);
+            DriverService.query({active: true}).$promise.then(function(response) {
+                vm.loadingActiveDrivers = false;
+                vm.activeDrivers = response;
+                console.log('got active drivers:', response);
             }, function(error) {
-                console.log('error getting drivers:', error);
+                vm.loadingActiveDrivers = false;
+                console.log('error getting active drivers:', error);
+            });
+
+            DriverService.query({active: false}).$promise.then(function(response) {
+                vm.loadingInactiveDrivers = false;
+                vm.inactiveDrivers = response;
+                console.log('got inactive drivers:', response);
+            }, function(error) {
+                vm.loadingInactiveDrivers = false;
+                console.log('error getting inactive drivers:', error);
             });
         }
 
@@ -28,29 +42,8 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmDeleteModal = function(driver) {
             var modalInstance = $uibModal.open({
-                template: '<div class="modal-header">' +
-                    '<h3 class="modal-title" id="modal-title">Confirm Delete</h3>' +
-                    '</div>' +
-                    '<div class="modal-body" id="modal-body">' +
-                    '<p>Are you sure you want to delete the following driver?</p>' +
-                    '<strong>{{ctrl.driver.driverFirstName}}&nbsp;{{ctrl.driver.driverLastName}}</strong>' +
-                    '</div>' +
-                    '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-danger" ng-click="ctrl.ok()">OK</button>' +
-                    '<button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>' +
-                    '</div>',
-                controller: ['driver', '$uibModalInstance', function(driver, $uibModalInstance) {
-                    var vm = this;
-                    vm.driver = driver;
-
-                    vm.cancel = function() {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-
-                    vm.ok = function() {
-                        $uibModalInstance.close(driver);
-                    };
-                }],
+                templateUrl: 'views/confirmdeletedrivermodal.html',
+                controller: 'ConfirmDeleteDriverModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     driver: function() {
@@ -67,37 +60,10 @@ angular.module('safeRidesWebApp')
             });
         };
 
-        vm.openConfirmChangeActiveModal = function(driver) {
+        vm.openConfirmChangeDriverActiveModal = function(driver) {
             var modalInstance = $uibModal.open({
-                template: '<div class="modal-header">' +
-                    '<h3 class="modal-title" id="modal-title">Confirm <span ng-show="!ctrl.driver.active">Activate</span><span ng-show="ctrl.driver.active">Deactivate</span></h3>' +
-                    '</div>' +
-                    '<div class="modal-body" id="modal-body">' +
-                    '<p>Are you sure you want to <span ng-show="!ctrl.driver.active">activate</span><span ng-show="ctrl.driver.active">deactivate</span> the following driver?</p>' +
-                    '<strong>{{ctrl.driver.driverFirstName}}&nbsp;{{ctrl.driver.driverLastName}}</strong>' +
-                    '</div>' +
-                    '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-danger" ng-click="ctrl.ok()">OK</button>' +
-                    '<button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>' +
-                    '</div>',
-                controller: ['driver', '$uibModalInstance', function(driver, $uibModalInstance) {
-                    var vm = this;
-                    vm.driver = driver;
-
-                    vm.cancel = function() {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-
-                    vm.ok = function() {
-                        vm.driver.active = !vm.driver.active;
-                        DriverService.update({id: driver.id}, driver).$promise.then(function(response) {
-                            console.log('updated driver:', response);
-                            $uibModalInstance.close();
-                        }, function(error) {
-                            console.log('error updating driver:', error);
-                        });
-                    };
-                }],
+                templateUrl: 'views/confirmchangedriveractivemodal.html',
+                controller: 'ConfirmChangeDriverActiveModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     driver: function() {
@@ -108,8 +74,13 @@ angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function(driver) {
-                console.log('ok clicked, refreshing drivers');
-                getDrivers();
+                driver.active = !driver.active;
+                DriverService.update({id: driver.id}, driver).$promise.then(function(response) {
+                    console.log('updated driver, now refreshing', response);
+                    getDrivers();
+                }, function(error) {
+                    console.log('error updating driver:', error);
+                });
             }, function() {
                 // cancel clicked
             });
