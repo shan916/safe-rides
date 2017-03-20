@@ -41,8 +41,8 @@ angular
         $rootScope.$on("$stateChangeError", console.log.bind(console));
     })
 
-    .config(function($stateProvider, $urlRouterProvider) {
-
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+        $httpProvider.interceptors.push('APIInterceptor');
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
