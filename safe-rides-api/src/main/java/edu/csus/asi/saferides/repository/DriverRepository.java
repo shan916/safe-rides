@@ -20,4 +20,10 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
 	 * */
 	List<Driver> findByActive(Boolean active);
 	
+	List<Driver> findByActiveTrueOrderByModifiedDateDesc();
+	
+	List<Driver> findByActiveFalseOrderByModifiedDateDesc();
+	
+	List<Driver> findAllByOrderByModifiedDateDesc();
+	
 }

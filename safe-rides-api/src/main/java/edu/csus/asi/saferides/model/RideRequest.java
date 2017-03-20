@@ -1,15 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class RideRequest {
@@ -69,7 +61,16 @@ public class RideRequest {
 	private String dropoffZip;
 
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private RideRequestStatus status;
+
+	@Column(nullable = true)
+	private String cancelMessage;
+
+	@Column(nullable = true)
+	private String messageToDriver;
+
+	@Column(nullable = true)
+	private String estimatedTime;
 
 	protected RideRequest() { }
 
@@ -89,7 +90,23 @@ public class RideRequest {
 		this.dropoffLine1 = dropoffLine1;
 		this.dropoffCity = dropoffCity;
 		this.dropoffZip = dropoffZip;
-		this.status = Status.UNASSIGNED;
+		this.status = RideRequestStatus.UNASSIGNED;
+	}
+
+	public String getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(String estimatedTime) {
+		this.estimatedTime = estimatedTime;
+	}
+
+	public String getMessageToDriver() {
+		return messageToDriver;
+	}
+
+	public void setMessageToDriver(String messageToDriver) {
+		this.messageToDriver = messageToDriver;
 	}
 
 	public Driver getDriver() {
@@ -236,13 +253,22 @@ public class RideRequest {
 		this.dropoffZip = dropoffZip;
 	}
 
-	public Status getStatus() {
+	public RideRequestStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(RideRequestStatus status) {
 		this.status = status;
 	}
+
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
+
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
+	}
+
 
 	@Override
 	public String toString() {
@@ -266,6 +292,8 @@ public class RideRequest {
 				", dropoffCity='" + dropoffCity + '\'' +
 				", dropoffZip='" + dropoffZip + '\'' +
 				", status=" + status +
+				", cancelMessage=" + cancelMessage +
+				", messageToDriver=" + messageToDriver +
 				'}';
 	}
 }

@@ -1,7 +1,7 @@
 package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.Status;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,6 +13,6 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
 	 * Other query methods can be defined by simply declaring the method signature.
 	 * Spring Data JPA will automagically create an implementation on the fly.
 	 * */
-	List<RideRequest> findByStatus(Status status);
+	List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 	
 }

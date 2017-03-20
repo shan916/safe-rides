@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, $interval, $uibModal) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -37,13 +37,30 @@ var app = angular.module('safeRidesWebApp')
 
         function getDrivers() {
           vm.loadingCoordinatorDrivers = true;
-            DriverService.query().$promise.then(function(response) {
+          
+            DriverService.query({active: true}).$promise.then(function(response) {
                 vm.drivers = response;
-                console.log('got drivers:', response);
+
+                vm.drivers.forEach(function(element, index, drivers) {
+                    var driver = new Driver(element);
+                    DriverRidesService.query({
+                        id: driver.id
+                    }).$promise.then(function(ridesResponse) {
+                        driver.rides = ridesResponse;
+                        console.log('got driver\'s rides:' + ridesResponse);
+                    }, function(ridesError) {
+                        console.log('error getting driver\'s rides:' + ridesError);
+                    })
+
+                    drivers[index] = driver;
+                });
+
                 vm.loadingCoordinatorDrivers = false;
                 if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
                     vm.loadingCoordinatorTables = false;
                 }
+
+                console.log('got drivers:', response);
             }, function(error) {
                 console.log('error getting drivers:', error);
             });
@@ -93,6 +110,26 @@ var app = angular.module('safeRidesWebApp')
                 resolve: {
                     request: function() {
                         return req;
+                    }
+                },
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function() {
+                console.log('ok');
+            }, function() {
+                console.log('cancel');
+            });
+        };
+
+        vm.showDriverDetails = function(driver) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/driverdetailsmodal.html',
+                controller: 'DriverDetailsModalCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    driver: function() {
+                        return driver;
                     }
                 },
                 size: 'lg'
@@ -157,22 +194,26 @@ var app = angular.module('safeRidesWebApp')
 
         vm.confirmCancelRequest = function(request) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmmodal.html',
+                templateUrl: 'views/confirmcancelmodal.html',
                 controller: 'ConfirmCancelRequestModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     request: function() {
                         return request;
+                    },
+                    drivers: function() {
+                        return vm.drivers;
                     }
                 },
                 size: 'lg'
             });
-
-            modalInstance.result.then(function() {
-                console.log('ok');
-            }, function() {
-                console.log('cancel');
-            });
+          modalInstance.result.then(function(){
+            console.log('cancelling ride, refreshing Ride Requests table');
+            getRideRequests();
+            getDrivers();
+          }, function() {
+              console.log('cancel cancelling ride');
+          });
         };
 
         /* Modal Add ride request */
@@ -207,7 +248,11 @@ app.filter('FriendlyStatusName', function() {
             case 'CANCELEDBYCOORDINATOR':
                 return 'Canceled by Coordinator';
             case 'CANCELEDBYREQUESTOR':
-                return 'Canceled by Requestor';
+                return 'Canceled by Rider';
+            case 'AVAILABLE':
+                return 'Available';
+            case 'CANCELEDOTHER':
+                return 'Canceled by Other';
         }
     };
 });

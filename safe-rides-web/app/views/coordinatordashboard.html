@@ -60,7 +60,7 @@
                                 <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorTables">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>Rider Name</th>
                                             <th>Status</th>
                                             <th>Riders</th>
                                             <th>Time Requested</th>
@@ -103,22 +103,21 @@
                                 <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorTables">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
+                                            <th>Driver Name</th>
                                             <th>Status</th>
                                             <th>Seats Available</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showRequestDetails(driver)" ng-repeat="driver in ctrl.drivers | orderBy:['vehicle.seats']" ng-class="{	success: driver.status === ctrl.DRIVER_STATUS.AVAILABLE,
-                                  info: driver.status === ctrl.DRIVER_STATUS.DRIVING,
-                                  warning: driver.status === ctrl.DRIVER_STATUS.INACTIVE
-                                }">
+                                        <tr ng-click="ctrl.showDriverDetails(driver)" ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
+                                            ng-class="{success: driver.status === 'AVAILABLE',
+                                                info: driver.status === 'INPROGRESS' || driver.status === 'ASSIGNED'}">
                                             <td>{{driver.driverFirstName}}</td>
-                                            <td>{{driver.status.name}}</td>
+                                            <td>{{driver.status | FriendlyStatusName}}</td>
                                             <td>{{driver.vehicle.seats}}</td>
                                             <td>
-                                                <button ng-if="driver.status === ctrl.DRIVER_STATUS.AVAILABLE" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
+                                                <button ng-if="driver.status === 'AVAILABLE'" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
                                             </td>
                                         </tr>
                                     </tbody>
