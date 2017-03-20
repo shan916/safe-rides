@@ -177,22 +177,26 @@ var app = angular.module('safeRidesWebApp')
 
         vm.confirmCancelRequest = function(request) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmmodal.html',
+                templateUrl: 'views/confirmcancelmodal.html',
                 controller: 'ConfirmCancelRequestModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     request: function() {
                         return request;
+                    },
+                    drivers: function() {
+                        return vm.drivers;
                     }
                 },
                 size: 'lg'
             });
-
-            modalInstance.result.then(function() {
-                console.log('ok');
-            }, function() {
-                console.log('cancel');
-            });
+          modalInstance.result.then(function(){
+            console.log('cancelling ride, refreshing Ride Requests table');
+            getRideRequests();
+            getDrivers();
+          }, function() {
+              console.log('cancel cancelling ride');
+          });
         };
 
         /* Modal Add ride request */
@@ -227,9 +231,11 @@ app.filter('FriendlyStatusName', function() {
             case 'CANCELEDBYCOORDINATOR':
                 return 'Canceled by Coordinator';
             case 'CANCELEDBYREQUESTOR':
-                return 'Canceled by Requestor';
+                return 'Canceled by Rider';
             case 'AVAILABLE':
                 return 'Available';
+            case 'CANCELEDOTHER':
+                return 'Canceled by Other';
         }
     };
 });

@@ -137,6 +137,9 @@ public class DriverController {
 
 		rideReq.setStatus(RideRequestStatus.ASSIGNED);
 		rideReq.setDriver(driver);
+		//set messageToDriver from rideRequest
+		rideReq.setMessageToDriver(rideRequest.getMessageToDriver());
+		rideReq.setEstimatedTime(rideRequest.getEstimatedTime());
 		driver.getRides().add(rideReq);
 
 		driverRepository.save(driver);

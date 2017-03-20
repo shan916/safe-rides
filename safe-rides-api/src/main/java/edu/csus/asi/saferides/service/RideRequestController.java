@@ -94,8 +94,8 @@ public class RideRequestController {
 				
 		return ResponseEntity.ok(result);
 	}
-	
-	
+
+
 	/*
 	 * DELETE "/rideRequests/{id} 
 	 * 
