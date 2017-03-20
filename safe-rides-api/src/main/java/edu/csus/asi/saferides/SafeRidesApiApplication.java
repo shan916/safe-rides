@@ -23,12 +23,21 @@ public class SafeRidesApiApplication {
 	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository) {
 		return (args) -> {
 			// save a few drivers
-			Driver driver1 = new Driver("000000000", "Zeeshan", "Khaliq", "9160123456", "CA", "E0000000", "male", true, true);
-			Driver driver2 = new Driver("000000001", "Ryan", "Long", "9161234567", "CA", "E1111111", "male", true, false);
-			Driver driver3 = new Driver("000000002", "Bryce", "Hairabedian", "9162345678", "CA", "E2222222", "male", true, true);
-			Driver driver4 = new Driver("000000003", "Edward", "Ozeruga", "9163456789", "CA", "E3333333", "male", true, false);
-			Driver driver5 = new Driver("000000004", "Justin", "Mendiguarin", "9164567890", "CA", "E4444444", "male", true, true);
-			Driver driver6 = new Driver("000000005", "Nik", "Sorvari", "9165678901", "CA", "E5555555", "male", true, false);
+			Driver driver1 = new Driver("000000000", "Zeeshan", "Khaliq", "9160123456", "CA", "E0000000", "male", true, "Farmers", true);
+			Driver driver2 = new Driver("000000001", "Ryan", "Long", "9161234567", "CA", "E1111111", "male", true, "Farmers", false);
+			Driver driver3 = new Driver("000000002", "Bryce", "Hairabedian", "9162345678", "CA", "E2222222", "male", true, "Farmers", true);
+			Driver driver4 = new Driver("000000003", "Edward", "Ozeruga", "9163456789", "CA", "E3333333", "male", true, "Farmers", false);
+			Driver driver5 = new Driver("000000004", "Justin", "Mendiguarin", "9164567890", "CA", "E4444444", "male", true, "Farmers", true);
+			Driver driver6 = new Driver("000000005", "Nik", "Sorvari", "9165678901", "CA", "E5555555", "male", true, "Farmers", false);
+			
+//			Vehicle vehicle = new Vehicle(driver1, "Tesla", "Model S", "2018", "ELECTRIC", "Silver", 5);
+			
+//			for (int i = 6; i < 1000; i++) {
+//				Driver driver = new Driver (String.format("%09d", i), "Zeeshan" + i, "Khaliq" + i, "9161234567", "CA",
+//						String.format("%09d", i), "male", true, "Farmers", false);
+//				vehicle.setDriver(driver);
+//				driverRepository.save(driver);
+//			}
 
 			Vehicle vehicle1 = new Vehicle(driver1, "Honda", "Civic", "2018", "AAAAAAA", "Magenta", 5);
 			Vehicle vehicle2 = new Vehicle(driver2, "Toyota", "Corolla", "2017", "BBBBBBB", "Blue", 7);
@@ -59,12 +68,7 @@ public class SafeRidesApiApplication {
 			RideRequest rideRequest7 = new RideRequest(7, "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
 					"95818", "345 Main St.", "Sacramento", "95818");
 
-			rideRequest2.setDriver(driver4);
 			rideRequest2.setStatus(RideRequestStatus.COMPLETE);
-			rideRequest3.setDriver(driver4);
-			rideRequest4.setDriver(driver5);
-			rideRequest5.setDriver(driver6);
-
 
 			driverRepository.save(driver1);
 			driverRepository.save(driver2);

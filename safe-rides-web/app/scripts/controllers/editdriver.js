@@ -17,6 +17,8 @@ angular.module('safeRidesWebApp')
 
         vm.yearChoices = [];
 
+        vm.loading = false;
+
         vm.stateChoices = [
             'CA', 'AL', 'AK', 'AZ', 'AR', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
             'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
@@ -26,12 +28,15 @@ angular.module('safeRidesWebApp')
         ];
 
         function getDriver(driverId) {
+            vm.loading = true;
             DriverService.get({
                 id: driverId
             }).$promise.then(function(response) {
+                vm.loading = false;
                 vm.driver = response;
                 console.log('got driver:', response);
             }, function(error) {
+                vm.loading = false;
                 console.log('error getting driver:', error);
             });
         }
