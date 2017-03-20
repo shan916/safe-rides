@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${spring.h2.console.enabled}")
+    private boolean h2ConsoleEnabled;
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -49,38 +53,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
+        if(h2ConsoleEnabled){
+            httpSecurity.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+
+            httpSecurity.headers().frameOptions().disable();
+        }
+
         httpSecurity
-                // we don't need CSRF because our token is invulnerable
+                // we don't need CSRF because our token is invulnerable (we are not passing teh JWT as a cookie but rather in the header)
                 .csrf().disable()
 
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .authorizeRequests()
-
-                // allow anonymous resource requests
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/",
-                        "/*.html",
-                        "/favicon.ico",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js"
-                ).permitAll()
-                .antMatchers("/auth/**").permitAll()
-                //.antMatchers("/h2-console/**").permitAll()
+                // allow POST to /users/auth
+                .antMatchers(HttpMethod.POST, "/users/auth/**").permitAll()
+                // all other request need a JWT
                 .anyRequest().authenticated();
 
         // Custom JWT based security filter
-        httpSecurity
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         // disable page caching
         httpSecurity.headers().cacheControl();
-
-        //httpSecurity.headers().frameOptions().disable();
     }
 }

@@ -26,7 +26,8 @@ public class JwtUser implements UserDetails {
           String firstname,
           String lastname,
           String email,
-          String password, Collection<? extends GrantedAuthority> authorities,
+          String password,
+          Collection<? extends GrantedAuthority> authorities,
           boolean enabled,
           Date lastPasswordResetDate
     ) {

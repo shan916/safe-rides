@@ -8,12 +8,8 @@ spring.jpa.show-sql: true
 spring.h2.console.enabled: true
 jwt:
   header: Authorization
-  secret: mySecret
-  expiration: 604800
-  route:
-    authentication:
-      path: auth
-      refresh: refresh
+  secret: secretKeyGoesHere
+  expiration: 43200
 
 ---
 spring:
