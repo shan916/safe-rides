@@ -2,13 +2,29 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.JwtUser;
+import edu.csus.asi.saferides.security.JwtUserFactory;
+import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.AuthorityRepository;
+import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * @author Ryan Long
@@ -20,10 +36,19 @@ import java.util.Date;
 @RequestMapping("/rides")
 public class RideRequestController {
 
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+
 	// this creates a singleton for RideRequestRepository
 	@Autowired
 	private RideRequestRepository rideRequestRepository;
-	
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private AuthorityRepository authorityRepository;
+
 	/*
 	 * GET "/rideRequests"
 	 * GET "/rideRequests?status=true"
@@ -65,7 +90,7 @@ public class RideRequestController {
 	 *  	   and the location header set to location of the entity
 	 * */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
+	public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device) {
 		rideRequest.setDate(new Date());	// default to current datetime
 		rideRequest.setStatus(RideRequestStatus.UNASSIGNED);	// default to unassigned status
 
@@ -76,7 +101,26 @@ public class RideRequestController {
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(result.getId()).toUri();
 				
-		return ResponseEntity.created(location).body(result);
+		//return ResponseEntity.created(location).body(result);
+
+		Date currentDate = new Date();
+
+		User requestor = new User("" + rideRequest.getRequestorId(),
+				rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName(), currentDate.toString(), "null@null.null");
+
+		requestor.setLastPasswordResetDate(currentDate);
+
+		List<Authority> authorityList = new ArrayList<Authority>();
+		authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
+
+		requestor.setAuthorities(authorityList);
+
+		userRepository.save(requestor);
+
+		final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(requestor), device);
+
+		// Return the token
+		return ResponseEntity.ok(new JwtAuthenticationResponse(token));
 	}
 	
 	/*
@@ -112,6 +156,12 @@ public class RideRequestController {
 			rideRequestRepository.delete(id);
 			return ResponseEntity.noContent().build();
 		}
+	}
+
+	private static List<GrantedAuthority> mapToGrantedAuthorities(List<Authority> authorities) {
+		return authorities.stream()
+				.map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
+				.collect(Collectors.toList());
 	}
 	
 }
