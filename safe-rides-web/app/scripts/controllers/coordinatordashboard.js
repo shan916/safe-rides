@@ -36,9 +36,11 @@ var app = angular.module('safeRidesWebApp')
         }, 15000);
 
         function getDrivers() {
-          vm.loadingCoordinatorDrivers = true;
-          
-            DriverService.query({active: true}).$promise.then(function(response) {
+            vm.loadingCoordinatorDrivers = true;
+
+            DriverService.query({
+                active: true
+            }).$promise.then(function(response) {
                 vm.drivers = response;
 
                 vm.drivers.forEach(function(element, index, drivers) {
@@ -56,7 +58,7 @@ var app = angular.module('safeRidesWebApp')
                 });
 
                 vm.loadingCoordinatorDrivers = false;
-                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
                     vm.loadingCoordinatorTables = false;
                 }
 
@@ -67,7 +69,7 @@ var app = angular.module('safeRidesWebApp')
         }
 
         function getRideRequests() {
-          vm.loadingRideRequests = true;
+            vm.loadingRideRequests = true;
             RideRequestService.query().$promise.then(function(response) {
                 vm.rideRequests = response;
 
@@ -76,7 +78,7 @@ var app = angular.module('safeRidesWebApp')
                     rideRequests[index] = rideRequest;
                 });
                 vm.loadingRideRequests = false;
-                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
                     vm.loadingCoordinatorTables = false;
                 }
                 console.log('got ride requests:', response);
@@ -207,13 +209,13 @@ var app = angular.module('safeRidesWebApp')
                 },
                 size: 'lg'
             });
-          modalInstance.result.then(function(){
-            console.log('cancelling ride, refreshing Ride Requests table');
-            getRideRequests();
-            getDrivers();
-          }, function() {
-              console.log('cancel cancelling ride');
-          });
+            modalInstance.result.then(function() {
+                console.log('cancelling ride, refreshing Ride Requests table');
+                getRideRequests();
+                getDrivers();
+            }, function() {
+                console.log('cancel cancelling ride');
+            });
         };
 
         /* Modal Add ride request */
