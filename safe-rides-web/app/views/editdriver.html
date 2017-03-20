@@ -1,4 +1,5 @@
-<div class="container">
+<span us-spinner ng-show="ctrl.loading"></span>
+<div class="container" ng-hide="ctrl.loading">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Driver Information</h3>
@@ -92,7 +93,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" ng-hide="ctrl.driver.insuranceChecked">
                     <div class="col-sm-4">
                         <div class="checkbox">
                             <label>
@@ -100,6 +101,18 @@
                             </label>
                             <div ng-messages="driverForm.insurance.$error">
                                 <div class="input-error" ng-message="required">* Have you checked that the driver's insurance is valid?</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="insuranceCompany">Insurance Company</label>
+                            <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control" required placeholder="Enter the driver's insurance company" ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
+                            <div ng-messages="driverForm.insuranceCompany.$dirty && driverForm.insuranceCompany.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 3 characters</div>
                             </div>
                         </div>
                     </div>
