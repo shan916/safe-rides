@@ -1,5 +1,8 @@
 package edu.csus.asi.saferides;
 
+import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +17,9 @@ import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class SafeRidesApiApplication {
 
@@ -22,7 +28,8 @@ public class SafeRidesApiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository, UserRepository userRepository) {
+	public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
+								  UserRepository userRepository, AuthorityRepository authorityRepository) {
 		return (args) -> {
 			// save a few drivers
 			Driver driver1 = new Driver("000000000", "Zeeshan", "Khaliq", "9160123456", "CA", "E0000000", "male", true, true);
@@ -83,8 +90,29 @@ public class SafeRidesApiApplication {
 			rideRequestRepository.save(rideRequest6);
 			rideRequestRepository.save(rideRequest7);
 
+			Authority authAdmin = new Authority();
+			authAdmin.setName(AuthorityName.ROLE_ADMIN);
+			Authority authCoordinator = new Authority();
+			authCoordinator.setName(AuthorityName.ROLE_COORDINATOR);
+			Authority authDriver = new Authority();
+			authDriver.setName(AuthorityName.ROLE_DRIVER);
+			Authority authRider = new Authority();
+			authRider.setName(AuthorityName.ROLE_DRIVER);
+			authorityRepository.save(authAdmin);
+			authorityRepository.save(authCoordinator);
+			authorityRepository.save(authDriver);
+			authorityRepository.save(authRider);
+
 			User newUser = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
+			List<Authority> authorityList = new ArrayList<Authority>();
+			authorityList.add(authAdmin);
+			authorityList.add(authCoordinator);
+			authorityList.add(authDriver);
+			authorityList.add(authRider);
+			newUser.setAuthorities(authorityList);
 			userRepository.save(newUser);
+
+
 		};
 	}
 
