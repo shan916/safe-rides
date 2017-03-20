@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.security.repository;
 
 import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 
@@ -14,6 +15,6 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
 	 * */
 	List<Authority> findAll();
 	
-	User findByName(String name);
+	Authority findByName(AuthorityName name);
 	
 }

@@ -97,7 +97,7 @@ public class SafeRidesApiApplication {
 			Authority authDriver = new Authority();
 			authDriver.setName(AuthorityName.ROLE_DRIVER);
 			Authority authRider = new Authority();
-			authRider.setName(AuthorityName.ROLE_DRIVER);
+			authRider.setName(AuthorityName.ROLE_RIDER);
 			authorityRepository.save(authAdmin);
 			authorityRepository.save(authCoordinator);
 			authorityRepository.save(authDriver);
