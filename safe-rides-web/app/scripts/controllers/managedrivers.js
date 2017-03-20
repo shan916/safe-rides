@@ -19,6 +19,9 @@ angular.module('safeRidesWebApp')
         vm.loadingInactiveDrivers = true;
 
         function getDrivers() {
+            vm.loadingActiveDrivers = true;
+            vm.loadingInactiveDrivers = true;
+
             DriverService.query({active: true}).$promise.then(function(response) {
                 vm.loadingActiveDrivers = false;
                 vm.activeDrivers = response;
@@ -73,7 +76,7 @@ angular.module('safeRidesWebApp')
                 size: 'md'
             });
 
-            modalInstance.result.then(function(driver) {
+            modalInstance.result.then(function() {
                 driver.active = !driver.active;
                 DriverService.update({id: driver.id}, driver).$promise.then(function(response) {
                     console.log('updated driver, now refreshing', response);

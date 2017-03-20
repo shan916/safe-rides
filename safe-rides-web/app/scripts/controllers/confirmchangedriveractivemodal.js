@@ -17,6 +17,6 @@ angular.module('safeRidesWebApp')
       };
 
       vm.ok = function() {
-          $uibModalInstance.close(driver);
+          $uibModalInstance.close();
       };
   });
