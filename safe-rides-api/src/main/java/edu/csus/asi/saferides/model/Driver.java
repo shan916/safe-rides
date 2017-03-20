@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,13 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Driver {
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Vehicle vehicle;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "driver")
-	private Set<RideRequest> rides;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -61,15 +60,36 @@ public class Driver {
 
 	@Column(nullable = false)
 	private Boolean insuranceChecked;
+	
+	@Column(nullable = false)
+	@Size(min = 3)
+	private String insuranceCompany;
 
 	@Column(nullable = false)
 	private Boolean active;
+	
+	@Transient
+	DriverStatus status;
+	
+	@JsonIgnore
+	@Column(updatable = false)
+	private Date createdDate;
+	
+	@JsonIgnore
+	private Date modifiedDate;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Vehicle vehicle;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "driver")
+	private Set<RideRequest> rides;
 
 	protected Driver() {
 	}
 
 	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-			String dlNumber, String gender, Boolean insuranceChecked, Boolean active) {
+			String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;
@@ -79,6 +99,7 @@ public class Driver {
 		this.dlNumber = dlNumber;
 		this.gender = gender;
 		this.insuranceChecked = insuranceChecked;
+		this.insuranceCompany = insuranceCompany;
 		this.active = active;
 	}
 
@@ -171,6 +192,9 @@ public class Driver {
 	}
 
 	public Set<RideRequest> getRides() {
+		if (this.rides == null) {
+			return new HashSet<RideRequest>();
+		}
 		return rides;
 	}
 
@@ -179,22 +203,51 @@ public class Driver {
 	}
 
 	public DriverStatus getStatus() {
-		Set<RideRequest> requests = getRides();
-		if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.ASSIGNED).count() > 0) {
-			return DriverStatus.ASSIGNED;
-		} else if (requests.stream().filter(req -> req.getStatus() == RideRequestStatus.INPROGRESS).count() > 0) {
-			return DriverStatus.INPROGRESS;
-		} else {
-			return DriverStatus.AVAILABLE;
+		for (RideRequest ride : getRides()) {
+			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
+				return DriverStatus.ASSIGNED;
+			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
+				return DriverStatus.INPROGRESS;
+			} else {
+				return DriverStatus.AVAILABLE;
+			}
+		}
+		
+		return DriverStatus.AVAILABLE;
+	}
+	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+	
+	public String getInsuranceCompany() {
+		return insuranceCompany;
+	}
+
+	public void setInsuranceCompany(String insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
+	}
+
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		modifiedDate = new Date();
+		if (createdDate == null) {
+			createdDate = new Date();
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "Driver [vehicle=" + vehicle + ", rides=" + rides + ", id=" + id + ", csusId=" + csusId
-				+ ", driverFirstName=" + driverFirstName + ", driverLastName=" + driverLastName + ", phoneNumber="
-				+ phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber + ", gender=" + gender
-				+ ", insuranceChecked=" + insuranceChecked + ", active=" + active + "]";
+		return "Driver [id=" + id + ", csusId=" + csusId + ", driverFirstName=" + driverFirstName + ", driverLastName="
+				+ driverLastName + ", phoneNumber=" + phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber
+				+ ", gender=" + gender + ", insuranceChecked=" + insuranceChecked + ", insuranceCompany="
+				+ insuranceCompany + ", active=" + active + ", status=" + status + ", createdDate=" + createdDate
+				+ ", modifiedDate=" + modifiedDate + ", vehicle=" + vehicle + ", rides=" + rides + "]";
 	}
 
 }
