@@ -87,9 +87,6 @@ var app = angular.module('safeRidesWebApp')
             });
         }
 
-        // if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
-        //     vm.loadingCoordinatorTables = false;
-        // }
         vm.DANGER_ZONE = Object.freeze(30);
 
         vm.drivers = [];
