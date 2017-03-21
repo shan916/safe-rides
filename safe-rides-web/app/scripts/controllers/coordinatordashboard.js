@@ -72,7 +72,7 @@ var app = angular.module('safeRidesWebApp')
                     rideRequests[index] = rideRequest;
                 });
 
-                //vm.loadingRideRequests = false;
+                vm.loadingRideRequests = false;
 
                 console.log('got ride requests:', response);
             }, function(error) {
