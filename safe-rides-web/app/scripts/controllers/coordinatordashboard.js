@@ -12,7 +12,6 @@ var app = angular.module('safeRidesWebApp')
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
-        vm.loadingCoordinatorTables = true;
 
 
 
@@ -55,12 +54,10 @@ var app = angular.module('safeRidesWebApp')
                 });
 
                 vm.loadingCoordinatorDrivers = false;
-                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
-                    vm.loadingCoordinatorTables = false;
-                }
 
                 console.log('got drivers:', response);
             }, function(error) {
+                vm.loadingCoordinatorDrivers = false;
                 console.log('error getting drivers:', error);
             });
         }
@@ -74,13 +71,12 @@ var app = angular.module('safeRidesWebApp')
                     var rideRequest = new RideRequest(element);
                     rideRequests[index] = rideRequest;
                 });
-                
-                vm.loadingRideRequests = false;
-                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
-                    vm.loadingCoordinatorTables = false;
-                }
+
+                //vm.loadingRideRequests = false;
+
                 console.log('got ride requests:', response);
             }, function(error) {
+                vm.loadingRideRequests = false;
                 console.log('error getting ride requests:', error);
             });
         }

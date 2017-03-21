@@ -57,9 +57,10 @@
                             <h3 class="panel-title">Ride Requests</h3>
                         </div>
                         <div class="panel-body">
+                            <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers"></span>
                             <div style="max-height:450px; overflow: auto;">
-                                <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingCoordinatorTables"></span>
-                                <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorTables">
+                                <!-- <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers"></span> -->
+                                <table class="table table-responsive" ng-hide="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers">
                                     <thead>
                                         <tr>
                                             <th>Rider Name</th>
@@ -101,8 +102,8 @@
 
                         <div class="panel-body">
                             <div style="max-height:450px; overflow: auto;">
-                                <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingCoordinatorTables"></span>
-                                <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorTables">
+                                <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests"></span>
+                                <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests">
                                     <thead>
                                         <tr>
                                             <th>Driver Name</th>
