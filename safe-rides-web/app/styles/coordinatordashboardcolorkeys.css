@@ -1,26 +1,26 @@
   .my-legend .legend-scale ul {
     /*margin: auto;*/ /*added*/
-    margin: 20px; /*0*/
-    margin-bottom: 15px; /*5px*/
+    margin: 0px; /*0*/
+    margin-bottom: 0px; /*5px*/
     /*padding: 0;*/ /*0*/
-    padding-left: 20px; /*Added in*/
+    padding-left: 10px; /*Added in*/
     float: left;
     list-style: none;
     }
   .my-legend .legend-scale ul li {
-    font-size: 120%; /*Original 80%. Manipulate for font-size of text for key boxes*/
+    font-size: 100%; /*Original 80%. Manipulate for font-size of text for key boxes*/
     list-style: none;
     margin-left: 0;
-    line-height: 52px; /*Original 18px. Manipulate for height total - Max 72!*/
-    margin-top: 12px; /*added in*/
-    margin-bottom: 11px; /*Original 2px*/
+    line-height: 35px; /*Original 18px. Manipulate for height total - Max 72!*/
+    margin-top: 0px; /*added in*/
+    margin-bottom: 0px; /*Original 2px*/
     }
   .my-legend ul.legend-labels li span {
     display: block;
     float: left; /*Original left*/
-    height: 50px; /*Original 16px. Manipulate for height of key boxes*/
-    width: 50px; /*Original 30px. Manipulate for width of key boxes*/
-    margin-right: 10px; /*Original 5px. Manipulate for margin of the texts next to the key boxes*/
+    height: 30px; /*Original 16px. Manipulate for height of key boxes*/
+    width: 30px; /*Original 30px. Manipulate for width of key boxes*/
+    margin-right: 5px; /*Original 5px. Manipulate for margin of the texts next to the key boxes*/
     margin-left: 0px; /*Original 0px*/
-    border: 2px solid #999; /*Original 1px*/
+    border: 1px solid #999; /*Original 1px*/
     }
