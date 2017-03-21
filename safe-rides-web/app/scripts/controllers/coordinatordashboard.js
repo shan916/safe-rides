@@ -74,6 +74,7 @@ var app = angular.module('safeRidesWebApp')
                     var rideRequest = new RideRequest(element);
                     rideRequests[index] = rideRequest;
                 });
+                
                 vm.loadingRideRequests = false;
                 if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
                     vm.loadingCoordinatorTables = false;
