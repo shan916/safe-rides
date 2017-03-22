@@ -72,7 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow POST to /users/auth
                 .antMatchers(HttpMethod.POST, "/users/auth/**", "/rides").permitAll()
                 // allow OPTIONS to /rides
-                .antMatchers(HttpMethod.OPTIONS, "/rides").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/users/auth/**", "/rides").permitAll()
+                .antMatchers("/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 // all other request need a JWT
                 .anyRequest().authenticated();
 
