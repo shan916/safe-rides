@@ -16,9 +16,7 @@ angular.module('safeRidesWebApp')
               return req;
           },
           responseError: function(rejection) {
-              if (rejection.status === 401) {
                   $injector.get('$state').go('login');
-              }
           }
       };
   });

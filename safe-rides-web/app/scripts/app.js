@@ -7,7 +7,7 @@
  * # safeRidesWebApp
  *
  * Main module of the application.
- */
+
  if ('serviceWorker' in navigator) {
    window.addEventListener('load', function() {
      navigator.serviceWorker.register('/sw.js').then(function(registration) {
@@ -19,7 +19,7 @@
      });
    });
  }
-
+*/
 angular
     .module('safeRidesWebApp', [
         'ngAnimate',
