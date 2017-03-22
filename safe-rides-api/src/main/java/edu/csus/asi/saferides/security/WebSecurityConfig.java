@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        if(h2ConsoleEnabled){
+        if (h2ConsoleEnabled) {
             httpSecurity.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 
             httpSecurity.headers().frameOptions().disable();
@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 // allow POST to /users/auth
-                .antMatchers(HttpMethod.POST,"/users/auth/**", "/rides").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/auth/**", "/rides").permitAll()
                 // allow OPTIONS to /rides
                 .antMatchers(HttpMethod.OPTIONS, "/rides").permitAll()
                 // all other request need a JWT

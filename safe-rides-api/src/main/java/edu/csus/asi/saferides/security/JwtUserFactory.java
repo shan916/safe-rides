@@ -1,12 +1,12 @@
 package edu.csus.asi.saferides.security;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import edu.csus.asi.saferides.security.model.User;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 

@@ -1,12 +1,11 @@
 package edu.csus.asi.saferides.security;
 
-import java.util.Collection;
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.Date;
 
 public class JwtUser implements UserDetails {
 
@@ -21,15 +20,15 @@ public class JwtUser implements UserDetails {
     private final Date lastPasswordResetDate;
 
     public JwtUser(
-          Long id,
-          String username,
-          String firstname,
-          String lastname,
-          String email,
-          String password,
-          Collection<? extends GrantedAuthority> authorities,
-          boolean enabled,
-          Date lastPasswordResetDate
+            Long id,
+            String username,
+            String firstname,
+            String lastname,
+            String email,
+            String password,
+            Collection<? extends GrantedAuthority> authorities,
+            boolean enabled,
+            Date lastPasswordResetDate
     ) {
         this.id = id;
         this.username = username;
