@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('LoginCtrl', function($scope, $http, $window, ENV) {
+.controller('LoginCtrl', function($http, $window, ENV) {
     var vm = this;
     vm.username = undefined;
     vm.password = undefined;
