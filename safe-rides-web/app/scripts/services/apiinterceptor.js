@@ -19,8 +19,16 @@ angular.module('safeRidesWebApp')
                 return req;
             },
             responseError: function(rejection, $window) {
-              if(!$window.sessionStorage.token)
-                $injector.get('$state').go('login');
+                console.log(rejection);
+                switch (rejection.status) {
+                    case 401:
+                    case -1:
+                        $injector.get('$state').go('login');
+                        break;
+                    case 404:
+                    default:
+                        console.log("Error, that page does not exist");
+                }
             }
         };
     });
