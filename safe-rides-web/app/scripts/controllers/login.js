@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('LoginCtrl', function($http, ENV) {
+.controller('LoginCtrl', function($scope, $http, $window, ENV) {
     var vm = this;
     vm.username = undefined;
     vm.password = undefined;
@@ -28,6 +28,11 @@ angular.module('safeRidesWebApp')
         },
         function(data, status, headers, config) {
             console.log(data);
-        });
+        })
+        .then(function (data, status, headers, config) {
+          console.log(data.data.token);
+        $window.sessionStorage.token = data.data.token;
+      });
+
     };
 });

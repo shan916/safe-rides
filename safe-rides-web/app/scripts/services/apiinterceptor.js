@@ -8,15 +8,19 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-  .factory('APIInterceptor', function ($injector) {
-      return {
-          request: function(req) {
-              // TODO: add JWT token here
-              req.headers.Authorization = '';
-              return req;
-          },
-          responseError: function(rejection) {
-                  $injector.get('$state').go('login');
-          }
-      };
-  });
+    .factory('APIInterceptor', function($injector, $window) {
+        return {
+            request: function(req) {
+                if ($window.sessionStorage.token) {
+                    req.headers.Authorization = $window.sessionStorage.token;
+                } else {
+                    req.headers.Authorization = '';
+                }
+                return req;
+            },
+            responseError: function(rejection, $window) {
+              if(!$window.sessionStorage.token)
+                $injector.get('$state').go('login');
+            }
+        };
+    });
