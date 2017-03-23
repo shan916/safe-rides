@@ -10,6 +10,11 @@
 var app = angular.module('safeRidesWebApp')
     .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, $interval, $uibModal) {
         var vm = this;
+        vm.loadingRideRequests = true;
+        vm.loadingCoordinatorDrivers = true;
+        vm.loadingCoordinatorTables = true;
+
+
 
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
@@ -31,7 +36,11 @@ var app = angular.module('safeRidesWebApp')
         }, 15000);
 
         function getDrivers() {
-            DriverService.query({active: true}).$promise.then(function(response) {
+            vm.loadingCoordinatorDrivers = true;
+
+            DriverService.query({
+                active: true
+            }).$promise.then(function(response) {
                 vm.drivers = response;
 
                 vm.drivers.forEach(function(element, index, drivers) {
@@ -48,6 +57,11 @@ var app = angular.module('safeRidesWebApp')
                     drivers[index] = driver;
                 });
 
+                vm.loadingCoordinatorDrivers = false;
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
+                    vm.loadingCoordinatorTables = false;
+                }
+
                 console.log('got drivers:', response);
             }, function(error) {
                 console.log('error getting drivers:', error);
@@ -55,6 +69,7 @@ var app = angular.module('safeRidesWebApp')
         }
 
         function getRideRequests() {
+            vm.loadingRideRequests = true;
             RideRequestService.query().$promise.then(function(response) {
                 vm.rideRequests = response;
 
@@ -62,15 +77,19 @@ var app = angular.module('safeRidesWebApp')
                     var rideRequest = new RideRequest(element);
                     rideRequests[index] = rideRequest;
                 });
-
+                vm.loadingRideRequests = false;
+                if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false) {
+                    vm.loadingCoordinatorTables = false;
+                }
                 console.log('got ride requests:', response);
             }, function(error) {
                 console.log('error getting ride requests:', error);
             });
         }
 
-        // Waiting time until the row turns red.
-        // Variable set by admin?
+        // if (vm.loadingRideRequests === false && vm.loadingCoordinatorDrivers === false){
+        //     vm.loadingCoordinatorTables = false;
+        // }
         vm.DANGER_ZONE = Object.freeze(30);
 
         vm.drivers = [];
@@ -190,13 +209,13 @@ var app = angular.module('safeRidesWebApp')
                 },
                 size: 'lg'
             });
-          modalInstance.result.then(function(){
-            console.log('cancelling ride, refreshing Ride Requests table');
-            getRideRequests();
-            getDrivers();
-          }, function() {
-              console.log('cancel cancelling ride');
-          });
+            modalInstance.result.then(function() {
+                console.log('cancelling ride, refreshing Ride Requests table');
+                getRideRequests();
+                getDrivers();
+            }, function() {
+                console.log('cancel cancelling ride');
+            });
         };
 
         /* Modal Add ride request */
