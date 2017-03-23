@@ -81,7 +81,7 @@ var app = angular.module('safeRidesWebApp')
             });
         }
 
-        vm.DANGER_ZONE = Object.freeze(30);
+        vm.DANGER_ZONE = 30;
 
         vm.drivers = [];
 
