@@ -123,3 +123,15 @@ body {
 .input-error {
     color: #d9534f;
 }
+
+/* Border size for color key and margin for column cells with text */
+
+.color-key-box {
+  border-style: solid;
+  border-width: 1px;
+  width: 35px;
+  height: 35px;
+}
+.color-key-text-padding {
+  padding-left: 5px;
+}
