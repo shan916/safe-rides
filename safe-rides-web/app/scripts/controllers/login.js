@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('LoginCtrl', function($http, $window, ENV) {
+.controller('LoginCtrl', function($http, $window, ENV, $cookies) {
     var vm = this;
     vm.username = undefined;
     vm.password = undefined;
@@ -29,9 +29,12 @@ angular.module('safeRidesWebApp')
         function(data, status, headers, config) {
             console.log(data);
         })
-        .then(function (data, status, headers, config) {
+        .then(function (data) {
           console.log(data.data.token);
-        $window.sessionStorage.token = data.data.token;
+          var expirationDate = new Date();
+          expirationDate.setTime(expirationDate.getTime() + 6 * 60 * 60 * 1000);
+          $window.localStorage.token = data.data.token;
+          $cookies.put("Authorization", data.data.token,{expires: expirationDate});
       });
 
     };

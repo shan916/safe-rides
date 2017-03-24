@@ -8,13 +8,13 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('APIInterceptor', function($injector, $window) {
+    .factory('APIInterceptor', function($injector, $window, $cookies) {
         return {
             request: function(req) {
-                if ($window.sessionStorage.token) {
-                    req.headers.Authorization = $window.sessionStorage.token;
+                if ($window.localStorage.token) {
+                    req.headers.Authorization = $window.localStorage.token;
                 } else {
-                    req.headers.Authorization = '';
+                    req.headers.Authorization = $cookies.get("Authorization");
                 }
                 return req;
             },
