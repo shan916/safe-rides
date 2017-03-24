@@ -16,3 +16,4 @@ spring:
 server:
   context-path: /api
   port: 8081
+spring.h2.console.enabled: false
