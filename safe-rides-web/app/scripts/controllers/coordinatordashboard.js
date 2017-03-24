@@ -8,8 +8,11 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, UserService, $interval, $uibModal) {
         var vm = this;
+
+        vm.loadingRideRequests = true;
+        vm.loadingCoordinatorDrivers = true;
 
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
