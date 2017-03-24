@@ -3,6 +3,9 @@ package edu.csus.asi.saferides.service;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.repository.AuthorityRepository;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -24,9 +27,18 @@ import java.util.Date;
 @RequestMapping("/rides")
 public class RideRequestController {
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     // this creates a singleton for RideRequestRepository
     @Autowired
     private RideRequestRepository rideRequestRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     /*
      * GET /rides
@@ -121,5 +133,4 @@ public class RideRequestController {
             return ResponseEntity.noContent().build();
         }
     }
-
 }

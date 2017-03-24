@@ -7,7 +7,19 @@
  * # safeRidesWebApp
  *
  * Main module of the application.
- */
+
+ if ('serviceWorker' in navigator) {
+   window.addEventListener('load', function() {
+     navigator.serviceWorker.register('/sw.js').then(function(registration) {
+       // Registration was successful
+       console.log('ServiceWorker registration successful with scope: ', registration.scope);
+     }).catch(function(err) {
+       // registration failed :(
+       console.log('ServiceWorker registration failed: ', err);
+     });
+   });
+ }
+*/
 angular
     .module('safeRidesWebApp', [
         'ngAnimate',
@@ -29,8 +41,8 @@ angular
         $rootScope.$on("$stateChangeError", console.log.bind(console));
     })
 
-    .config(function($stateProvider, $urlRouterProvider) {
-
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+        $httpProvider.interceptors.push('APIInterceptor');
         $urlRouterProvider.otherwise('/');
 
         $stateProvider

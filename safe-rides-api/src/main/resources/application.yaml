@@ -5,6 +5,10 @@ server.context-path: /safe-rides-api
 server.port: 8080
 spring.jpa.show-sql: true
 spring.h2.console.enabled: true
+jwt:
+  header: Authorization
+  secret: secretKeyGoesHere
+  expiration: 43200
 
 ---
 spring:
