@@ -61,7 +61,7 @@ angular
             });
         $stateProvider
             .state('login', {
-                url: '/login',
+                url: '/login?redirect',
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 controllerAs: 'ctrl'
