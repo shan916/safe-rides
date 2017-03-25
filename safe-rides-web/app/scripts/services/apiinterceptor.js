@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('APIInterceptor', function($injector, $window, $cookies) {
+    .factory('APIInterceptor', function($injector, $window, $cookies, $q) {
         return {
             request: function(req) {
                 if ($window.localStorage.token) {
@@ -25,10 +25,10 @@ angular.module('safeRidesWebApp')
                     case -1:
                         $injector.get('$state').go('login');
                         break;
-                    case 404:
                     default:
-                        console.log("Error, that page does not exist");
+                        return $q.reject(rejection);
                 }
+
             }
         };
     });
