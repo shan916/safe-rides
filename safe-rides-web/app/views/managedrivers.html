@@ -1,24 +1,34 @@
-<div class="container">
+<!-- <div class="container"> -->
+<div class="container-fluid">
+  <div clas="row">
     <span us-spinner ng-show="ctrl.loadingActiveDrivers || ctrl.loadingInactiveDrivers"></span>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Active Drivers</h3>
-        </div>
-        <div class="panel-body">
-        </div>
-        <table class="table">
-            <thead>
-                <th>Name</th>
-                <th>Phone #</th>
-                <th>CSUS ID</th>
-                <th>DL State</th>
-                <th>DL Number</th>
-                <th>Gender</th>
-                <th>Status</th>
-                <th>Actions</th>
+    <div class="col-sm-12">
 
-                <tbody>
-                    <tr ng-repeat="driver in ctrl.activeDrivers">
+      <!-- Start of Active Drivers -->
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Active Drivers</h3>
+            </div>
+
+            <div class="panel-body">
+              <div style="max-height:450px; overflow: auto;">
+                <!-- </div> -->
+                <!-- <table class="table"> -->
+                <table class="table table-responsive">
+                  <thead>
+                    <th>Name</th>
+                    <th>Phone #</th>
+                    <th>CSUS ID</th>
+                    <th>DL State</th>
+                    <th>DL Number</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                    <tbody>
+                      <tr ng-repeat="driver in ctrl.activeDrivers">
                         <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                         <td>{{driver.phoneNumber | phone}}</td>
                         <td>{{driver.csusId}}</td>
@@ -27,67 +37,95 @@
                         <td>{{driver.gender}}</td>
                         <td>{{driver.status}}</td>
                         <td>
-                            <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                            <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Delete</button>
-                            <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Deactivate</button>
+                          <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                          <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Delete</button>
+                          <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Deactivate</button>
                         </td>
-                    </tr>
-                </tbody>
-            </thead>
-        </table>
-    </div>
-
-    <div class="panel panel-danger">
-        <div class="panel-heading">
-            <h3 class="panel-title">Inactive Drivers</h3>
+                      </tr>
+                    </tbody>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-inline">
-                        <label for="search">Filter:</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                            <input type="text" id="search" class="form-control" placeholder="Search" ng-model="ctrl.searchString">
-                        </div>
+      </div>
+      <!-- End of Active Drivers -->
+
+      <!-- Start of Inactive Drivers -->
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">Inactive Drivers</h3>
+            </div>
+            <div class="panel-body">
+              <!-- Start of Filter/Search -->
+                <div class="row form-group">
+                  <!-- <div class="col-md-12"> -->
+                    <div class="col-md-4">
+                    <!-- <div class="form-inline" style="padding-left: 5px"> -->
+                    <!-- <div class="form-inline"> -->
+                      <label for="search">Filter:</label>
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                        <input type="text" id="search" class="form-control" placeholder="Search" ng-model="ctrl.searchString">
+                      </div>
                     </div>
+                  <!-- </div> -->
+                </div>
+                <!-- End of Filter/Search -->
+
+                <div style="max-height:450px; overflow: auto;">
+                  <div class="row form-group">
+                    <div class="col-sm-12">
+                      <table class="table table-responsive">
+                        <thead>
+                          <th>Name</th>
+                          <th>Phone #</th>
+                          <th>CSUS ID</th>
+                          <th>DL State</th>
+                          <th>DL Number</th>
+                          <th>Gender</th>
+                          <th style="padding-left: 140px">Actions</th>
+
+                          <tbody>
+                            <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
+                              <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                              <td>{{driver.phoneNumber | phone}}</td>
+                              <td>{{driver.csusId}}</td>
+                              <td>{{driver.dlState}}</td>
+                              <td>{{driver.dlNumber}}</td>
+                              <td>{{driver.gender}}</td>
+                              <td style="padding-left: 140px">
+                                <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
+                                <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
                 </div>
             </div>
+          </div>
         </div>
-        <table class="table table-responsive">
-            <thead>
-                <th>Name</th>
-                <th>Phone #</th>
-                <th>CSUS ID</th>
-                <th>DL State</th>
-                <th>DL Number</th>
-                <th>Gender</th>
-                <th>Actions</th>
+      </div>
+      <!-- End of Inactive Drivers -->
 
-                <tbody>
-                    <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
-                        <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
-                        <td>{{driver.phoneNumber | phone}}</td>
-                        <td>{{driver.csusId}}</td>
-                        <td>{{driver.dlState}}</td>
-                        <td>{{driver.dlNumber}}</td>
-                        <td>{{driver.gender}}</td>
-                        <td>
-                            <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                            <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
-                            <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </thead>
-        </table>
-    </div>
-
-    <div class="row margin-top-15 margin-bottom-15">
+      <!-- Start of Add New Driver -->
+      <div class="row form-group margin-top-15 margin-bottom-15">
         <div class="col-sm-12">
-            <div class="pull-right">
-                <a class="btn btn-primary" ui-sref="editdriver()">Add New Driver</a>
-            </div>
+          <div class="pull-right">
+            <a class="btn btn-primary" ui-sref="editdriver()">Add New Driver</a>
+          </div>
         </div>
+      </div>
+      <!-- End of Add New Driver -->
+
     </div>
+  </div>
+</div>
 </div>
