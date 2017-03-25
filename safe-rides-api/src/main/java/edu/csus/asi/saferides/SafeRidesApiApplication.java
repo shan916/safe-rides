@@ -128,8 +128,6 @@ public class SafeRidesApiApplication {
             authorityList.add(authAdmin);
             admin.setAuthorities(authorityList);
             userRepository.save(admin);
-
-
         };
     }
 

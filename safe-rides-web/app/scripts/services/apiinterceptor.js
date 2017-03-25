@@ -42,7 +42,6 @@ angular.module('safeRidesWebApp')
                     default:
                         return $q.reject(rejection);
                 }
-
             }
         };
     });
