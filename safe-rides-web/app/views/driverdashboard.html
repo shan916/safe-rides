@@ -1,28 +1,108 @@
 <div class="container">
-    <div class="alert alert-info alert-dismissible" role="alert">
+    <div ng-hide="true" class="alert alert-info alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
         <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
     </div>
 
-    <div class="alert alert-info alert-dismissible" role="alert">
+    <div ng-hide="true" class="alert alert-info alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
         <strong>Incoming Ride Requests</strong> There is a ride requests assigned to you.
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+          <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="row">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+
+                  <form name="odoStartRideForm" class="my-form form-vertical">
+                    <label for="odoStartRide">Enter ODO in miles to View Ride: </label>
+                    <input id="odoStartRide" name="odoStartRide" type="text" class="form-control" required
+                    placeholder="ex: 120,045" ng-model="ctrl.riderequest.dropoffZip"
+                    ng-maxlength="20" ng-minlength="5">
+                    <div ng-messages="odoStartRideForm.odoStartRide.$dirty && odoStartRideForm.odoStartRide.$error">
+                        <div class="input-error" ng-message="required">* required to begin newly assigned ride</div>
+                    </div>
+                  </form>
+
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+        <div class="row"  style="padding-top:5px;">
+          <div class="col-sm-3">
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-success btn-block" ng-disabled="odoStartRideForm.$invalid">View Ride</button>
+          </div>
+          <div class="col-sm-3">
+          </div>
+        </div>
+      </div>
+    </div><!-- end New Ride Assigned Request -->
+
+
+    <!-- start Incoming Ride Request panel-->
+    <div class="panel panel-default"  ng-hide="true"><!--ng-repeat="ride in ctrl.rideRequests"-->
         <div class="panel-heading">
             <h3 class="panel-title">Incoming Ride Request</h3>
         </div>
         <div class="panel-body">
+          <div class="row" ng-repeat="ride in ctrl.rideRequests">
+            <div class="col-sm-4"><!-- rider info -->
+              <h4 class="row" align="center">Rider</h4>
+              <dl class="dl-horizontal"><!-- class="dl-horizontal"-->
+                <dt>Name:</dt>
+                <dd>{{ride.requestorFirstName}}&nbsp;{{ride.requestorLastName}}</dd>
+                <dt>One Card:</dt>
+                <dd>{{ride.requestorId}}</dd>
+                <dt>Passengers:</dt>
+                <dd>{{ride.numPassengers}}</dd>
+                <dt ng-if="ride.messageToDriver">Message To Driver:</dt>
+                <dd ng-if="ride.messageToDriver">{{ride.messageToDriver}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm-4"><!--pickup -->
+              <h4>Pickup Address</h4>
+              <dl class="dl-horizontal"><!-- class="dl-horizontal"-->
+                <dt>Address:</dt>
+                <dd>{{ride.pickupLine1}}</dd>
+                <dt ng-if="ride.pickupLine2">Line 2</dt>
+                <dd ng-if="ride.pickupLine2">{{ride.pickupLine2}}</dd>
+                <dt>City:</dt>
+                <dd>{{ride.pickupCity}}</dd>
+                <dt>Zip:</dt>
+                <dd>{{ride.pickupZip}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm-4"><!-- dropoff -->
+              <h4>Drop-off Address</h4>
+              <dl class="dl-horizontal">
+                <dt>Address:</dt>
+                <dd>{{ride.dropoffLine1}}</dd>
+                <dt ng-if="ride.dropoffLine2">Line 2</dt>
+                <dd ng-if="ride.dropoffLine2">{{ride.dropoffLine2}}</dd>
+                <dt>City:</dt>
+                <dd>{{ride.dropoffCity}}</dd>
+                <dt>Zip:</dt>
+                <dd>{{ride.dropoffZip}}</dd>
+              </dl>
+            </div><!-- end dropoff-->
             <button class="btn btn-primary btn-block">Accept</button>
+          </div>
         </div>
-    </div>
+    </div><!-- end Incoming Ride Request panel-->
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="true">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>
         </div>
@@ -71,7 +151,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default"  ng-hide="true">
         <div class="panel-heading">
             <h3 class="panel-title">Directions</h3>
         </div>
@@ -90,7 +170,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="true">
         <div class="panel-heading">
             <h3 class="panel-title">Notify Rider</h3>
         </div>
@@ -107,7 +187,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="true">
         <div class="panel-heading">
             <h3 class="panel-title">Report Issue</h3>
         </div>
@@ -145,7 +225,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" ng-hide="true">
         <div class="panel-heading">
             <h3 class="panel-title">Dropoff</h3>
         </div>

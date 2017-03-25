@@ -121,6 +121,11 @@ public class SafeRidesApiApplication {
             newUser.setAuthorities(authorityList);
             userRepository.save(newUser);
 
+            System.out.println("***************************************************************");
+            System.out.println(driver1.getId());
+            System.out.println(driver1.getdriverFirstName());
+            System.out.println("***************************************************************");
+
 
         };
     }

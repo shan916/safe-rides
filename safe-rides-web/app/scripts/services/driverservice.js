@@ -25,6 +25,8 @@ angular.module('safeRidesWebApp')
 
         return $resource(ENV.apiEndpoint + 'drivers/:id/rides', {
             id: '@id'
+        }, {
+          get: {method: 'GET', isArray: true}
         });
 
     });
