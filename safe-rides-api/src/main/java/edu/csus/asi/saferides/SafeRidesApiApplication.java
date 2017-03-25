@@ -37,60 +37,270 @@ public class SafeRidesApiApplication {
                                   UserRepository userRepository, AuthorityRepository authorityRepository) {
         return (args) -> {
             // save a few drivers
-            Driver driver1 = new Driver("000000000", "Zeeshan", "Khaliq", "9160123456", "CA", "E0000000", "male", true, "Farmers", true);
-            Driver driver2 = new Driver("000000001", "Ryan", "Long", "9161234567", "CA", "E1111111", "male", true, "Farmers", false);
-            Driver driver3 = new Driver("000000002", "Bryce", "Hairabedian", "9162345678", "CA", "E2222222", "male", true, "Farmers", true);
-            Driver driver4 = new Driver("000000003", "Edward", "Ozeruga", "9163456789", "CA", "E3333333", "male", true, "Farmers", false);
-            Driver driver5 = new Driver("000000004", "Justin", "Mendiguarin", "9164567890", "CA", "E4444444", "male", true, "Farmers", true);
-            Driver driver6 = new Driver("000000005", "Nik", "Sorvari", "9165678901", "CA", "E5555555", "male", true, "Farmers", false);
+            Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", "Female", true, "Farmers", true);
+            Driver driver1 = new Driver("000000001", "Jayne", "Jayne", "9166675866", "CA", "E1111111", "Female", true, "Farmers", false);
+            Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", "Female", true, "Farmers", true);
+            Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", "Male", true, "Farmers", false);
+            Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", "Male", true, "Farmers", true);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", "Male", true, "Farmers", false);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", "Female", true, "Farmers", false);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", "Male", true, "Farmers", false);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", "Male", true, "Farmers", false);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", "Male", true, "Farmers", false);
 
-//			Vehicle vehicle = new Vehicle(driver1, "Tesla", "Model S", "2018", "ELECTRIC", "Silver", 5);
+            Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
+            Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);
+            Vehicle vehicle2 = new Vehicle(driver2, "Ariel", "Atom", "2004", "CCCCCCC", "Green", 2);
+            Vehicle vehicle3 = new Vehicle(driver3, "Green", "Mazda", "1997", "DDDDDDD", "Grey", 3);
+            Vehicle vehicle4 = new Vehicle(driver4, "Volkswagen", "Jetta", "2014", "EEEEEEE", "White", 4);
+            Vehicle vehicle5 = new Vehicle(driver5, "Volvo", "XC90", "2006", "FFFFFFF", "Black", 2);
+            Vehicle vehicle6 = new Vehicle(driver6, "Nissan", "Maxima", "2009", "GGGGGGG", "Grey", 3);
+            Vehicle vehicle7 = new Vehicle(driver7, "BMW", "X5", "2000", "HHHHHHH", "White", 4);
+            Vehicle vehicle8 = new Vehicle(driver8, "Nissan", "Almera", "2003", "IIIIIII", "Black", 2);
+            Vehicle vehicle9 = new Vehicle(driver9, "Ginetta", "G33", "1998", "JJJJJJJ", "White", 4);
 
-//			for (int i = 6; i < 1000; i++) {
-//				Driver driver = new Driver (String.format("%09d", i), "Zeeshan" + i, "Khaliq" + i, "9161234567", "CA",
-//						String.format("%09d", i), "male", true, "Farmers", false);
-//				vehicle.setDriver(driver);
-//				driverRepository.save(driver);
-//			}
 
-            Vehicle vehicle1 = new Vehicle(driver1, "Honda", "Civic", "2018", "AAAAAAA", "Magenta", 5);
-            Vehicle vehicle2 = new Vehicle(driver2, "Toyota", "Corolla", "2017", "BBBBBBB", "Blue", 7);
-            Vehicle vehicle3 = new Vehicle(driver3, "Koenigsegg", "Trevita", "2016", "CCCCCCC", "Green", 2);
-            Vehicle vehicle4 = new Vehicle(driver4, "Smart", "Fortwo", "2015", "DDDDDDD", "Grey", 3);
-            Vehicle vehicle5 = new Vehicle(driver5, "Volkswagen", "Jetta", "2014", "EEEEEEE", "White", 4);
-            Vehicle vehicle6 = new Vehicle(driver6, "Lexus", "Rx", "2013", "FFFFFFF", "Black", 2);
-
+            driver0.setVehicle(vehicle0);
             driver1.setVehicle(vehicle1);
             driver2.setVehicle(vehicle2);
             driver3.setVehicle(vehicle3);
             driver4.setVehicle(vehicle4);
             driver5.setVehicle(vehicle5);
             driver6.setVehicle(vehicle6);
+            driver7.setVehicle(vehicle7);
+            driver8.setVehicle(vehicle8);
+            driver9.setVehicle(vehicle9);
 
-            RideRequest rideRequest1 = new RideRequest(123456, "Zeeshan", "Khaliq", "9161231234", 4, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest2 = new RideRequest(23456, "Nik", "Sorvari", "9161231234", 2, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest3 = new RideRequest(3456, "Justin", "Mendiguarin", "9161231234", 8, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest4 = new RideRequest(456, "Ryan", "Long", "9161231234", 2, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest5 = new RideRequest(56, "Edward", "Ozeruga", "9161231234", 4, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest6 = new RideRequest(6, "Bryce", "Hairabedian", "9161231234", 1, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest7 = new RideRequest(7, "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
-                    "95818", "345 Main St.", "Sacramento", "95818");
 
+            RideRequest rideRequest0 = new RideRequest(
+                    146978572,
+                    "Kevin",
+                    "Winters",
+                    "9162601900",
+                    1,
+                    "8535 La Riviera Dr",
+                    "Sacramento",
+                    "95826",
+                    "3109 Occidental Dr",
+                    "Sacramento",
+                    "95826");
+            RideRequest rideRequest1 = new RideRequest(
+                    380256637,
+                    "Peter",
+                    "Skaggs",
+                    "9165129630",
+                    2,
+                    "4041 C St",
+                    "Sacramento",
+                    "95819",
+                    "6325 14th Ave",
+                    "Sacramento",
+                    "95820");
+            RideRequest rideRequest2 = new RideRequest(
+                    017150500,
+                    "Kevin",
+                    "Winters",
+                    "9162601900",
+                    3,
+                    "4350 J St",
+                    "Sacramento",
+                    "95819",
+                    "1900 22nd St",
+                    "Sacramento",
+                    "95816");
+            RideRequest rideRequest3 = new RideRequest(
+                    353488787,
+                    "Jack",
+                    "Bonner",
+                    "9167033428",
+                    4,
+                    "5540 Spilman Ave",
+                    "Sacramento",
+                    "95819",
+                    "8671 Everglade Dr",
+                    "Sacramento",
+                    "95826");
+            RideRequest rideRequest4 = new RideRequest(
+                    454397082,
+                    "Daniel",
+                    "Reaves",
+                    "9164321498",
+                    1,
+                    "9409 Mira Del Rio Dr",
+                    "Sacramento",
+                    "95827",
+                    "9065 Canberra Dr",
+                    "Sacramento",
+                    "95826");
+            RideRequest rideRequest5 = new RideRequest(
+                    124796316,
+                    "James",
+                    "Miner",
+                    "9169553182",
+                    1,
+                    "8213 Lake Forest Dr",
+                    "Sacramento",
+                    "95826",
+                    "3115 Sierra Oaks Dr",
+                    "Sacramento",
+                    "95864");
+            RideRequest rideRequest6 = new RideRequest(
+                    012644411,
+                    "Jennifer",
+                    "Alexander",
+                    "9165338593",
+                    2,
+                    "4631 Nickles Way",
+                    "Sacramento",
+                    "95864",
+                    "1961 Howe Ave",
+                    "Sacramento",
+                    "95825");
+            RideRequest rideRequest7 = new RideRequest(
+                    507271867,
+                    "Charlene",
+                    "Thomas",
+                    "9162820006",
+                    2,
+                    "3805 Becerra Way",
+                    "Sacramento",
+                    "95821",
+                    "2025 W El Camino Ave",
+                    "Sacramento",
+                    "95833");
+            RideRequest rideRequest8 = new RideRequest(
+                    653902142,
+                    "Rolanda",
+                    "James",
+                    "9167739687",
+                    3,
+                    "3340 Soda Way",
+                    "Sacramento",
+                    "95834",
+                    "1235 Pebblewood Dr",
+                    "Sacramento",
+                    "95834");
+            RideRequest rideRequest9 = new RideRequest(
+                    393465734,
+                    "Debra",
+                    "Lang",
+                    "9164712820",
+                    1,
+                    "8071 La Riviera Dr",
+                    "Sacramento",
+                    "95826",
+                    "345 Main St.",
+                    "Sacramento",
+                    "95818");
+            RideRequest rideRequest10 = new RideRequest(
+                    227299993,
+                    "Sue",
+                    "Grantham",
+                    "9164375577",
+                    1,
+                    "2780 Millcreek Dr",
+                    "Sacramento",
+                    "95833",
+                    "2441 Seamist Dr",
+                    "Sacramento",
+                    "95833");
+            RideRequest rideRequest11 = new RideRequest(
+                    060116327,
+                    "Noemi",
+                    "Cox",
+                    "9162422785",
+                    1,
+                    "505 10th St",
+                    "Sacramento",
+                    "95814",
+                    "7901 La Riviera Dr",
+                    "Sacramento",
+                    "95826");
+            RideRequest rideRequest12 = new RideRequest(
+                    645735866,
+                    "Joy",
+                    "Pence",
+                    "9163505114",
+                    4,
+                    "2349 Fruitridge Rd",
+                    "Sacramento",
+                    "95822",
+                    "4900 10th Ave",
+                    "Sacramento",
+                    "95820");
+            RideRequest rideRequest13 = new RideRequest(
+                    314246498,
+                    "Rochelle",
+                    "Rowell",
+                    "9164639941",
+                    2,
+                    "4617 12th Ave",
+                    "Sacramento",
+                    "95820",
+                    "2498 24th St",
+                    "Sacramento",
+                    "95818");
+            RideRequest rideRequest14 = new RideRequest(
+                    536200095,
+                    "Charles",
+                    "Tuttle",
+                    "9166348237",
+                    1,
+                    "1403 V St",
+                    "Sacramento",
+                    "95818",
+                    "1126 T St",
+                    "Sacramento",
+                    "95811");
+            RideRequest rideRequest15 = new RideRequest(
+                    737128850,
+                    "Mario",
+                    "Tutt",
+                    "9162213034",
+                    3,
+                    "455 Richards Blvd",
+                    "Sacramento",
+                    "95811",
+                    "534 Hartnell Pl",
+                    "Sacramento",
+                    "95825");
+
+            rideRequest0.setDriver(driver0);
+            rideRequest0.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest1.setDriver(driver0);
+            rideRequest1.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest2.setDriver(driver0);
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest3.setDriver(driver0);
+            rideRequest4.setDriver(driver1);
+            rideRequest4.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest5.setDriver(driver1);
+            rideRequest5.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest6.setDriver(driver1);
+            rideRequest7.setDriver(driver2);
+            rideRequest7.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest8.setDriver(driver2);
+            rideRequest9.setDriver(driver3);
+            rideRequest10.setDriver(driver4);
+            rideRequest11.setDriver(driver5);
+            rideRequest12.setDriver(driver6);
+            rideRequest13.setDriver(driver7);
+            rideRequest14.setDriver(driver8);
+            rideRequest15.setDriver(driver9);
 
+
+            driverRepository.save(driver0);
             driverRepository.save(driver1);
             driverRepository.save(driver2);
             driverRepository.save(driver3);
             driverRepository.save(driver4);
             driverRepository.save(driver5);
             driverRepository.save(driver6);
+            driverRepository.save(driver7);
+            driverRepository.save(driver8);
+            driverRepository.save(driver9);
 
+            rideRequestRepository.save(rideRequest0);
             rideRequestRepository.save(rideRequest1);
             rideRequestRepository.save(rideRequest2);
             rideRequestRepository.save(rideRequest3);
@@ -98,6 +308,14 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest5);
             rideRequestRepository.save(rideRequest6);
             rideRequestRepository.save(rideRequest7);
+            rideRequestRepository.save(rideRequest8);
+            rideRequestRepository.save(rideRequest9);
+            rideRequestRepository.save(rideRequest10);
+            rideRequestRepository.save(rideRequest11);
+            rideRequestRepository.save(rideRequest12);
+            rideRequestRepository.save(rideRequest13);
+            rideRequestRepository.save(rideRequest14);
+            rideRequestRepository.save(rideRequest15);
 
             Authority authAdmin = new Authority();
             authAdmin.setName(AuthorityName.ROLE_ADMIN);

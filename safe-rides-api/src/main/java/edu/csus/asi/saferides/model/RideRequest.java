@@ -1,299 +1,408 @@
 package edu.csus.asi.saferides.model;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
+import edu.csus.asi.saferides.utility.Util;
+
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.Date;
 
 @Entity
 public class RideRequest {
-	@ManyToOne
-	private Driver driver;
+    @ManyToOne
+    private Driver driver;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Column(nullable = false)
-	private int requestorId;
+    @Column(nullable = false)
+    private int requestorId;
 
-	@Column(nullable = false)
-	private Date date;
+    @Column(nullable = false)
+    private Date date;
 
-	@Column(nullable = false)
-	private String requestorFirstName;
+    @Column(nullable = false)
+    private String requestorFirstName;
 
-	@Column(nullable = false)
-	private String requestorLastName;
-
-	@Column(nullable = false)
-	private String requestorContactNumber;
-
-	@Column(nullable = false)
-	private int numPassengers;
-
-	@Column
-	private int startOdometer;
-
-	@Column
-	private int endOdometer;
-
-	@Column(nullable = false)
-	private String pickupLine1;
-
-	@Column
-	private String pickupLine2;
-
-	@Column (nullable = false)
-	private String pickupCity;
-
-	@Column(nullable = false)
-	private String pickupZip;
-
-	@Column(nullable = false)
-	private String dropoffLine1;
-
-	@Column
-	private String dropoffLine2;
-
-	@Column(nullable = false)
-	private String dropoffCity;
-
-	@Column(nullable = false)
-	private String dropoffZip;
-
-	@Enumerated(EnumType.STRING)
-	private RideRequestStatus status;
-
-	@Column(nullable = true)
-	private String cancelMessage;
-
-	@Column(nullable = true)
-	private String messageToDriver;
-
-	@Column(nullable = true)
-	private String estimatedTime;
-
-	protected RideRequest() { }
-
-	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
-					   String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity,
-					   String pickupZip, String dropoffLine1, String dropoffCity, String dropoffZip ) {
-		super();
-		this.requestorId = requestorId;
-		this.date = new Date();
-		this.requestorFirstName = requestorFirstName;
-		this.requestorLastName = requestorLastName;
-		this.requestorContactNumber = requestorContactNumber;
-		this.numPassengers = numPassengers;
-		this.pickupLine1 = pickupLine1;
-		this.pickupCity = pickupCity;
-		this.pickupZip = pickupZip;
-		this.dropoffLine1 = dropoffLine1;
-		this.dropoffCity = dropoffCity;
-		this.dropoffZip = dropoffZip;
-		this.status = RideRequestStatus.UNASSIGNED;
-	}
-
-	public String getEstimatedTime() {
-		return estimatedTime;
-	}
-
-	public void setEstimatedTime(String estimatedTime) {
-		this.estimatedTime = estimatedTime;
-	}
-
-	public String getMessageToDriver() {
-		return messageToDriver;
-	}
-
-	public void setMessageToDriver(String messageToDriver) {
-		this.messageToDriver = messageToDriver;
-	}
-
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public int getRequestorId() {
-		return requestorId;
-	}
-
-	public void setRequestorId(int requestorId) {
-		this.requestorId = requestorId;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public String getRequestorFirstName() {
-		return requestorFirstName;
-	}
-
-	public void setRequestorFirstName(String requestorFirstName) {
-		this.requestorFirstName = requestorFirstName;
-	}
-
-	public String getRequestorLastName() {
-		return requestorLastName;
-	}
-
-	public void setRequestorLastName(String requestorLastName) {
-		this.requestorLastName = requestorLastName;
-	}
-
-	public String getRequestorContactNumber() {
-		return requestorContactNumber;
-	}
-
-	public void setRequestorContactNumber(String requestorContactNumber) {
-		this.requestorContactNumber = requestorContactNumber;
-	}
-
-	public int getNumPassengers() {
-		return numPassengers;
-	}
-
-	public void setNumPassengers(int numPassengers) {
-		this.numPassengers = numPassengers;
-	}
-
-	public int getStartOdometer() {
-		return startOdometer;
-	}
-
-	public void setStartOdometer(int startOdometer) {
-		this.startOdometer = startOdometer;
-	}
-
-	public int getEndOdometer() {
-		return endOdometer;
-	}
-
-	public void setEndOdometer(int endOdometer) {
-		this.endOdometer = endOdometer;
-	}
-
-	public String getPickupLine1() {
-		return pickupLine1;
-	}
-
-	public void setPickupLine1(String pickupLine1) {
-		this.pickupLine1 = pickupLine1;
-	}
-
-	public String getPickupLine2() {
-		return pickupLine2;
-	}
-
-	public void setPickupLine2(String pickupLine2) {
-		this.pickupLine2 = pickupLine2;
-	}
-
-	public String getPickupCity() {
-		return pickupCity;
-	}
-
-	public void setPickupCity(String pickupCity) {
-		this.pickupCity = pickupCity;
-	}
-
-	public String getPickupZip() {
-		return pickupZip;
-	}
-
-	public void setPickupZip(String pickupZip) {
-		this.pickupZip = pickupZip;
-	}
-
-	public String getDropoffLine1() {
-		return dropoffLine1;
-	}
-
-	public void setDropoffLine1(String dropoffLine1) {
-		this.dropoffLine1 = dropoffLine1;
-	}
-
-	public String getDropoffLine2() {
-		return dropoffLine2;
-	}
-
-	public void setDropoffLine2(String dropoffLine2) {
-		this.dropoffLine2 = dropoffLine2;
-	}
-
-	public String getDropoffCity() {
-		return dropoffCity;
-	}
-
-	public void setDropoffCity(String dropoffCity) {
-		this.dropoffCity = dropoffCity;
-	}
-
-	public String getDropoffZip() {
-		return dropoffZip;
-	}
-
-	public void setDropoffZip(String dropoffZip) {
-		this.dropoffZip = dropoffZip;
-	}
-
-	public RideRequestStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(RideRequestStatus status) {
-		this.status = status;
-	}
-
-	public String getCancelMessage() {
-		return cancelMessage;
-	}
-
-	public void setCancelMessage(String cancelMessage) {
-		this.cancelMessage = cancelMessage;
-	}
-
-
-	@Override
-	public String toString() {
-		return "RideRequest{" +
-				"driver=" + driver +
-				", id=" + id +
-				", requestorId=" + requestorId +
-				", date=" + date +
-				", requestorFirstName='" + requestorFirstName + '\'' +
-				", requestorLastName='" + requestorLastName + '\'' +
-				", requestorContactNumber='" + requestorContactNumber + '\'' +
-				", numPassengers=" + numPassengers +
-				", startOdometer=" + startOdometer +
-				", endOdometer=" + endOdometer +
-				", pickupLine1='" + pickupLine1 + '\'' +
-				", pickupLine2='" + pickupLine2 + '\'' +
-				", pickupCity='" + pickupCity + '\'' +
-				", pickupZip='" + pickupZip + '\'' +
-				", dropoffLine1='" + dropoffLine1 + '\'' +
-				", dropoffLine2='" + dropoffLine2 + '\'' +
-				", dropoffCity='" + dropoffCity + '\'' +
-				", dropoffZip='" + dropoffZip + '\'' +
-				", status=" + status +
-				", cancelMessage=" + cancelMessage +
-				", messageToDriver=" + messageToDriver +
-				'}';
-	}
+    @Column(nullable = false)
+    private String requestorLastName;
+
+    @Column(nullable = false)
+    private String requestorContactNumber;
+
+    @Column(nullable = false)
+    private int numPassengers;
+
+    @Column
+    private int startOdometer;
+
+    @Column
+    private int endOdometer;
+
+    @Column(nullable = false)
+    private String pickupLine1;
+
+    @Column
+    private String pickupLine2;
+
+    @Column(nullable = false)
+    private String pickupCity;
+
+    @Column(nullable = false)
+    private String pickupZip;
+
+    @Column(nullable = false)
+    private String dropoffLine1;
+
+    @Column
+    private String dropoffLine2;
+
+    @Column(nullable = false)
+    private String dropoffCity;
+
+    @Column(nullable = false)
+    private String dropoffZip;
+
+    @Enumerated(EnumType.STRING)
+    private RideRequestStatus status;
+
+    @Column(nullable = true)
+    private String cancelMessage;
+
+    @Column(nullable = true)
+    private String messageToDriver;
+
+    @Column(nullable = true)
+    private String estimatedTime;
+
+    @Column(precision = 10, scale = 2)
+    private Double pickupLatitude;
+
+    @Column(precision = 10, scale = 2)
+    private Double pickupLongitude;
+
+    @Column(precision = 10, scale = 2)
+    private Double dropoffLatitude;
+
+    @Column(precision = 10, scale = 2)
+    private Double dropoffLongitude;
+
+    protected RideRequest() {
+    }
+
+    public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
+                       String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity,
+                       String pickupZip, String dropoffLine1, String dropoffCity, String dropoffZip) {
+        super();
+        this.requestorId = requestorId;
+        this.date = new Date();
+        this.requestorFirstName = requestorFirstName;
+        this.requestorLastName = requestorLastName;
+        this.requestorContactNumber = requestorContactNumber;
+        this.numPassengers = numPassengers;
+        this.pickupLine1 = pickupLine1;
+        this.pickupCity = pickupCity;
+        this.pickupZip = pickupZip;
+        this.dropoffLine1 = dropoffLine1;
+        this.dropoffCity = dropoffCity;
+        this.dropoffZip = dropoffZip;
+        this.status = RideRequestStatus.UNASSIGNED;
+
+        GeoApiContext ctx = new GeoApiContext();
+        ctx.setApiKey("AIzaSyBsvQDgFRvtFyInVOv0U_HrDaNsrnCuLhc");
+        try {
+            try {
+                try {
+                    GeocodingResult[] results = GeocodingApi.newRequest(ctx)
+                            .address(Util.formatAddress(getPickupLine1(), getPickupLine2(), getPickupCity(), getPickupZip()))
+                            .await();
+                    if (results.length > 0) {
+                        LatLng coords = results[0].geometry.location;
+                        this.pickupLatitude = coords.lat;
+                        this.pickupLongitude = coords.lng;
+                    }
+
+                } catch (ApiException apiException) {
+                    // 'handle' exception
+                    System.out.println(apiException.getMessage());
+                }
+            } catch (InterruptedException interruptedException) {
+                // 'handle' exception
+                System.out.println(interruptedException.getMessage());
+            }
+        } catch (IOException ioException) {
+            // 'handle' exception
+            System.out.println(ioException.getMessage());
+        }
+
+        try {
+            try {
+                try {
+                    GeocodingResult[] results = GeocodingApi.newRequest(ctx)
+                            .address(Util.formatAddress(getDropoffLine1(), getDropoffLine2(), getDropoffCity(), getDropoffZip()))
+                            .await();
+                    if (results.length > 0) {
+                        LatLng coords = results[0].geometry.location;
+                        this.dropoffLatitude = coords.lat;
+                        this.dropoffLongitude = coords.lng;
+                    }
+
+                } catch (ApiException apiException) {
+                    // 'handle' exception
+                    System.out.println(apiException.getMessage());
+                }
+            } catch (InterruptedException interruptedException) {
+                // 'handle' exception
+                System.out.println(interruptedException.getMessage());
+            }
+        } catch (IOException ioException) {
+            // 'handle' exception
+            System.out.println(ioException.getMessage());
+        }
+    }
+
+    public String getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
+    public String getMessageToDriver() {
+        return messageToDriver;
+    }
+
+    public void setMessageToDriver(String messageToDriver) {
+        this.messageToDriver = messageToDriver;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getRequestorId() {
+        return requestorId;
+    }
+
+    public void setRequestorId(int requestorId) {
+        this.requestorId = requestorId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getRequestorFirstName() {
+        return requestorFirstName;
+    }
+
+    public void setRequestorFirstName(String requestorFirstName) {
+        this.requestorFirstName = requestorFirstName;
+    }
+
+    public String getRequestorLastName() {
+        return requestorLastName;
+    }
+
+    public void setRequestorLastName(String requestorLastName) {
+        this.requestorLastName = requestorLastName;
+    }
+
+    public String getRequestorContactNumber() {
+        return requestorContactNumber;
+    }
+
+    public void setRequestorContactNumber(String requestorContactNumber) {
+        this.requestorContactNumber = requestorContactNumber;
+    }
+
+    public int getNumPassengers() {
+        return numPassengers;
+    }
+
+    public void setNumPassengers(int numPassengers) {
+        this.numPassengers = numPassengers;
+    }
+
+    public int getStartOdometer() {
+        return startOdometer;
+    }
+
+    public void setStartOdometer(int startOdometer) {
+        this.startOdometer = startOdometer;
+    }
+
+    public int getEndOdometer() {
+        return endOdometer;
+    }
+
+    public void setEndOdometer(int endOdometer) {
+        this.endOdometer = endOdometer;
+    }
+
+    public String getPickupLine1() {
+        return pickupLine1;
+    }
+
+    public void setPickupLine1(String pickupLine1) {
+        this.pickupLine1 = pickupLine1;
+    }
+
+    public String getPickupLine2() {
+        return pickupLine2;
+    }
+
+    public void setPickupLine2(String pickupLine2) {
+        this.pickupLine2 = pickupLine2;
+    }
+
+    public String getPickupCity() {
+        return pickupCity;
+    }
+
+    public void setPickupCity(String pickupCity) {
+        this.pickupCity = pickupCity;
+    }
+
+    public String getPickupZip() {
+        return pickupZip;
+    }
+
+    public void setPickupZip(String pickupZip) {
+        this.pickupZip = pickupZip;
+    }
+
+    public String getDropoffLine1() {
+        return dropoffLine1;
+    }
+
+    public void setDropoffLine1(String dropoffLine1) {
+        this.dropoffLine1 = dropoffLine1;
+    }
+
+    public String getDropoffLine2() {
+        return dropoffLine2;
+    }
+
+    public void setDropoffLine2(String dropoffLine2) {
+        this.dropoffLine2 = dropoffLine2;
+    }
+
+    public String getDropoffCity() {
+        return dropoffCity;
+    }
+
+    public void setDropoffCity(String dropoffCity) {
+        this.dropoffCity = dropoffCity;
+    }
+
+    public String getDropoffZip() {
+        return dropoffZip;
+    }
+
+    public void setDropoffZip(String dropoffZip) {
+        this.dropoffZip = dropoffZip;
+    }
+
+    public RideRequestStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RideRequestStatus status) {
+        this.status = status;
+    }
+
+    public String getCancelMessage() {
+        return cancelMessage;
+    }
+
+    public void setCancelMessage(String cancelMessage) {
+        this.cancelMessage = cancelMessage;
+    }
+
+    public Double getPickupLatitude() {
+        return pickupLatitude;
+    }
+
+    public void setPickupLatitude(Double pickupLatitude) {
+        this.pickupLatitude = pickupLatitude;
+    }
+
+    public Double getPickupLongitude() {
+        return pickupLongitude;
+    }
+
+    public void setPickupLongitude(Double pickupLongitude) {
+        this.pickupLongitude = pickupLongitude;
+    }
+
+    public Double getDropoffLatitude() {
+        return dropoffLatitude;
+    }
+
+    public void setDropoffLatitude(Double dropoffLatitude) {
+        this.dropoffLatitude = dropoffLatitude;
+    }
+
+    public Double getDropoffLongitude() {
+        return dropoffLongitude;
+    }
+
+    public void setDropoffLongitude(Double getPickupLongitude) {
+        this.dropoffLongitude = getPickupLongitude;
+    }
+
+    @Override
+    public String toString() {
+        return "RideRequest{" +
+                "driver=" + driver +
+                ", id=" + id +
+                ", requestorId=" + requestorId +
+                ", date=" + date +
+                ", requestorFirstName='" + requestorFirstName + '\'' +
+                ", requestorLastName='" + requestorLastName + '\'' +
+                ", requestorContactNumber='" + requestorContactNumber + '\'' +
+                ", numPassengers=" + numPassengers +
+                ", startOdometer=" + startOdometer +
+                ", endOdometer=" + endOdometer +
+                ", pickupLine1='" + pickupLine1 + '\'' +
+                ", pickupLine2='" + pickupLine2 + '\'' +
+                ", pickupCity='" + pickupCity + '\'' +
+                ", pickupZip='" + pickupZip + '\'' +
+                ", dropoffLine1='" + dropoffLine1 + '\'' +
+                ", dropoffLine2='" + dropoffLine2 + '\'' +
+                ", dropoffCity='" + dropoffCity + '\'' +
+                ", dropoffZip='" + dropoffZip + '\'' +
+                ", status=" + status +
+                ", cancelMessage='" + cancelMessage + '\'' +
+                ", messageToDriver='" + messageToDriver + '\'' +
+                ", estimatedTime='" + estimatedTime + '\'' +
+                ", pickupLatitude='" + pickupLatitude + '\'' +
+                ", pickupLongitude='" + pickupLongitude + '\'' +
+                ", dropoffLatitude='" + dropoffLatitude + '\'' +
+                ", dropoffLongitude='" + dropoffLongitude + '\'' +
+                '}';
+    }
 }
