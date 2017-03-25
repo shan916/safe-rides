@@ -13,10 +13,10 @@ public class RideRequest {
 	private Long id;
 
 	@Column(nullable = false)
-	private int requestorId;
+	private String oneCardId;
 
-	@Column(nullable = false)
-	private Date date;
+	@Column(updatable = false)
+	private Date requestDate;
 
 	@Column(nullable = false)
 	private String requestorFirstName;
@@ -25,7 +25,7 @@ public class RideRequest {
 	private String requestorLastName;
 
 	@Column(nullable = false)
-	private String requestorContactNumber;
+	private String requestorPhoneNumber;
 
 	@Column(nullable = false)
 	private int numPassengers;
@@ -42,7 +42,7 @@ public class RideRequest {
 	@Column
 	private String pickupLine2;
 
-	@Column (nullable = false)
+	@Column(nullable = false)
 	private String pickupCity;
 
 	@Column(nullable = false)
@@ -72,17 +72,18 @@ public class RideRequest {
 	@Column(nullable = true)
 	private String estimatedTime;
 
-	protected RideRequest() { }
+	protected RideRequest() {
+	}
 
 	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
-					   String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity,
-					   String pickupZip, String dropoffLine1, String dropoffCity, String dropoffZip ) {
+			String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity, String pickupZip,
+			String dropoffLine1, String dropoffCity, String dropoffZip) {
 		super();
-		this.requestorId = requestorId;
-		this.date = new Date();
+		this.oneCardId = requestorId;
+		this.requestDate = new Date();
 		this.requestorFirstName = requestorFirstName;
 		this.requestorLastName = requestorLastName;
-		this.requestorContactNumber = requestorContactNumber;
+		this.requestorPhoneNumber = requestorContactNumber;
 		this.numPassengers = numPassengers;
 		this.pickupLine1 = pickupLine1;
 		this.pickupCity = pickupCity;
@@ -126,19 +127,19 @@ public class RideRequest {
 	}
 
 	public int getRequestorId() {
-		return requestorId;
+		return oneCardId;
 	}
 
 	public void setRequestorId(int requestorId) {
-		this.requestorId = requestorId;
+		this.oneCardId = requestorId;
 	}
 
 	public Date getDate() {
-		return date;
+		return requestDate;
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.requestDate = date;
 	}
 
 	public String getRequestorFirstName() {
@@ -158,11 +159,11 @@ public class RideRequest {
 	}
 
 	public String getRequestorContactNumber() {
-		return requestorContactNumber;
+		return requestorPhoneNumber;
 	}
 
 	public void setRequestorContactNumber(String requestorContactNumber) {
-		this.requestorContactNumber = requestorContactNumber;
+		this.requestorPhoneNumber = requestorContactNumber;
 	}
 
 	public int getNumPassengers() {
@@ -269,31 +270,23 @@ public class RideRequest {
 		this.cancelMessage = cancelMessage;
 	}
 
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		if (requestDate == null) {
+			requestDate = new Date();
+		}
+	}
 
 	@Override
 	public String toString() {
-		return "RideRequest{" +
-				"driver=" + driver +
-				", id=" + id +
-				", requestorId=" + requestorId +
-				", date=" + date +
-				", requestorFirstName='" + requestorFirstName + '\'' +
-				", requestorLastName='" + requestorLastName + '\'' +
-				", requestorContactNumber='" + requestorContactNumber + '\'' +
-				", numPassengers=" + numPassengers +
-				", startOdometer=" + startOdometer +
-				", endOdometer=" + endOdometer +
-				", pickupLine1='" + pickupLine1 + '\'' +
-				", pickupLine2='" + pickupLine2 + '\'' +
-				", pickupCity='" + pickupCity + '\'' +
-				", pickupZip='" + pickupZip + '\'' +
-				", dropoffLine1='" + dropoffLine1 + '\'' +
-				", dropoffLine2='" + dropoffLine2 + '\'' +
-				", dropoffCity='" + dropoffCity + '\'' +
-				", dropoffZip='" + dropoffZip + '\'' +
-				", status=" + status +
-				", cancelMessage=" + cancelMessage +
-				", messageToDriver=" + messageToDriver +
-				'}';
+		return "RideRequest [driver=" + driver + ", id=" + id + ", oneCardId=" + oneCardId + ", requestDate="
+				+ requestDate + ", requestorFirstName=" + requestorFirstName + ", requestorLastName="
+				+ requestorLastName + ", requestorPhoneNumber=" + requestorPhoneNumber + ", numPassengers="
+				+ numPassengers + ", startOdometer=" + startOdometer + ", endOdometer=" + endOdometer + ", pickupLine1="
+				+ pickupLine1 + ", pickupLine2=" + pickupLine2 + ", pickupCity=" + pickupCity + ", pickupZip="
+				+ pickupZip + ", dropoffLine1=" + dropoffLine1 + ", dropoffLine2=" + dropoffLine2 + ", dropoffCity="
+				+ dropoffCity + ", dropoffZip=" + dropoffZip + ", status=" + status + ", cancelMessage=" + cancelMessage
+				+ ", messageToDriver=" + messageToDriver + ", estimatedTime=" + estimatedTime + "]";
 	}
 }
