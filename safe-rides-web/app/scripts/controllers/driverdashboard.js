@@ -13,6 +13,7 @@ angular.module('safeRidesWebApp')
         vm.loadingRideRequest = true;
         vm.ride = undefined;
         vm.rideRequests = [];
+        vm.isStartOdoEntered = undefined;
         //vm.driver = driver;
 
         function getRideRequests() {
@@ -37,7 +38,11 @@ angular.module('safeRidesWebApp')
         });
       }
       getRideRequests();
-      
+
+      vm.isStartOdoEntered = function isStartOdoEntered(){
+          return true;
+      }
+
 
       /*vm.ride = function(){
         for(var i = 0; i<vm.rideRequests.length;i++){
