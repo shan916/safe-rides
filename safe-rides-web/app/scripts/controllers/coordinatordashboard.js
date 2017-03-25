@@ -10,6 +10,10 @@
 var app = angular.module('safeRidesWebApp')
     .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, UserService, $interval, $uibModal) {
         var vm = this;
+        vm.loadingRideRequests = true;
+        vm.loadingCoordinatorDrivers = true;
+
+
 
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -34,6 +38,7 @@ var app = angular.module('safeRidesWebApp')
         }, 15000);
 
         function getDrivers() {
+            vm.loadingCoordinatorDrivers = true;
             DriverService.query({active: true}).$promise.then(function(response) {
                 vm.drivers = response;
 
@@ -51,13 +56,17 @@ var app = angular.module('safeRidesWebApp')
                     drivers[index] = driver;
                 });
 
+                vm.loadingCoordinatorDrivers = false;
+
                 console.log('got drivers:', response);
             }, function(error) {
+                vm.loadingCoordinatorDrivers = false;
                 console.log('error getting drivers:', error);
             });
         }
 
         function getRideRequests() {
+            vm.loadingRideRequests = true;
             RideRequestService.query().$promise.then(function(response) {
                 vm.rideRequests = response;
 
@@ -66,15 +75,16 @@ var app = angular.module('safeRidesWebApp')
                     rideRequests[index] = rideRequest;
                 });
 
+                vm.loadingRideRequests = false;
+
                 console.log('got ride requests:', response);
             }, function(error) {
+                vm.loadingRideRequests = false;
                 console.log('error getting ride requests:', error);
             });
         }
 
-        // Waiting time until the row turns red.
-        // Variable set by admin?
-        vm.DANGER_ZONE = Object.freeze(30);
+        vm.DANGER_ZONE = 30;
 
         vm.drivers = [];
 
@@ -193,13 +203,13 @@ var app = angular.module('safeRidesWebApp')
                 },
                 size: 'lg'
             });
-          modalInstance.result.then(function(){
-            console.log('cancelling ride, refreshing Ride Requests table');
-            getRideRequests();
-            getDrivers();
-          }, function() {
-              console.log('cancel cancelling ride');
-          });
+            modalInstance.result.then(function() {
+                console.log('cancelling ride, refreshing Ride Requests table');
+                getRideRequests();
+                getDrivers();
+            }, function() {
+                console.log('cancel cancelling ride');
+            });
         };
 
         /* Modal Add ride request */
