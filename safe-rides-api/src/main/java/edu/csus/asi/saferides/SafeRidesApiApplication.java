@@ -111,11 +111,11 @@ public class SafeRidesApiApplication {
             authorityRepository.save(authCoordinator);
             authorityRepository.save(authDriver);
             authorityRepository.save(authRider);
-            
+
             User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
             User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
             User admin = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
-            
+
             List<Authority> authorityList = new ArrayList<Authority>();
 
             authorityList.add(authRider);

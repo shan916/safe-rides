@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.service;
 
-import com.google.common.collect.ImmutableList;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.JwtAuthenticationRequest;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
@@ -61,7 +60,7 @@ public class UserController {
 	* */
 
 	/*
-	 * GET "/users"
+     * GET "/users"
 	 *
 	 * @return JwtUser object of the current authenticated user
 	 */
@@ -73,7 +72,7 @@ public class UserController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
     }
-	
+
 	/*
 	 * GET "/users/{id} 
 	 * 
@@ -162,7 +161,7 @@ public class UserController {
 
             // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-        }catch(AuthenticationException exception){
+        } catch (AuthenticationException exception) {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
     }

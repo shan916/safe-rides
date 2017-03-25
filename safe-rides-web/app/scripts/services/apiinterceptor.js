@@ -30,10 +30,14 @@ angular.module('safeRidesWebApp')
                 console.log(rejection);
                 switch (rejection.status) {
                     case 401:
-                        state.go('login', {redirect: redirect});
+                        state.go('login', {
+                            redirect: redirect
+                        });
                         break;
                     case -1:
-                        state.go('login', {redirect: redirect});
+                        state.go('login', {
+                            redirect: redirect
+                        });
                         break;
                     default:
                         return $q.reject(rejection);
