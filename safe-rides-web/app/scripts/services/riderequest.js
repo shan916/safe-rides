@@ -10,6 +10,7 @@
 angular.module('safeRidesWebApp')
     .factory('RideRequest', function() {
         function RideRequest(data) {
+            this.id = undefined;
             this.oneCardId = undefined;
             this.requestDate = undefined;
             this.requestorFirstName = undefined;

@@ -5,7 +5,6 @@ import edu.csus.asi.saferides.security.JwtAuthenticationRequest;
 import edu.csus.asi.saferides.security.JwtRiderAuthenticationRequest;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUser;
-import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -180,7 +179,7 @@ public class UserController {
 
     
     /*
-     * POST "/users/auth"
+     * POST "/users/authByID"
      *
      * Authenticates the given user
      *
