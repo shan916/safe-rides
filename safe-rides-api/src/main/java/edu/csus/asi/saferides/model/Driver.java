@@ -168,7 +168,7 @@ public class Driver {
 	}
 
 	public String getGender() {
-		return this.gender;
+		return gender;
 	}
 
 	public void setGender(String gender) {
