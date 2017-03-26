@@ -1,6 +1,8 @@
 package edu.csus.asi.saferides.repository;
 
 import java.util.List;
+
+import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 import edu.csus.asi.saferides.model.Driver;
 
@@ -25,5 +27,7 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
 	List<Driver> findByActiveFalseOrderByModifiedDateDesc();
 	
 	List<Driver> findAllByOrderByModifiedDateDesc();
+
+	Driver findByUser(User user);
 	
 }

@@ -23,7 +23,7 @@ import edu.csus.asi.saferides.security.model.User;
 
 /*
  * @author Zeeshan Khaliq
- * 
+ *
  * Model object for Driver Entity
  * */
 

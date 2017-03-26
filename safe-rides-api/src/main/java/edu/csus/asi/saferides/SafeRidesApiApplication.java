@@ -84,6 +84,30 @@ public class SafeRidesApiApplication {
 
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
 
+            List<Authority> driverAuthorityList = new ArrayList<Authority>();
+
+            Authority authAdmin = new Authority();
+            authAdmin.setName(AuthorityName.ROLE_ADMIN);
+            Authority authCoordinator = new Authority();
+            authCoordinator.setName(AuthorityName.ROLE_COORDINATOR);
+            Authority authDriver = new Authority();
+            authDriver.setName(AuthorityName.ROLE_DRIVER);
+            Authority authRider = new Authority();
+            authRider.setName(AuthorityName.ROLE_RIDER);
+            authorityRepository.save(authAdmin);
+            authorityRepository.save(authCoordinator);
+            authorityRepository.save(authDriver);
+            authorityRepository.save(authRider);
+
+            driverAuthorityList.add(authRider);
+            driverAuthorityList.add(authDriver);
+            driver1.getUser().setAuthorities(driverAuthorityList);
+            driver2.getUser().setAuthorities(driverAuthorityList);
+            driver3.getUser().setAuthorities(driverAuthorityList);
+            driver4.getUser().setAuthorities(driverAuthorityList);
+            driver5.getUser().setAuthorities(driverAuthorityList);
+            driver6.getUser().setAuthorities(driverAuthorityList);
+
             driverRepository.save(driver1);
             driverRepository.save(driver2);
             driverRepository.save(driver3);
@@ -99,23 +123,12 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest6);
             rideRequestRepository.save(rideRequest7);
 
-            Authority authAdmin = new Authority();
-            authAdmin.setName(AuthorityName.ROLE_ADMIN);
-            Authority authCoordinator = new Authority();
-            authCoordinator.setName(AuthorityName.ROLE_COORDINATOR);
-            Authority authDriver = new Authority();
-            authDriver.setName(AuthorityName.ROLE_DRIVER);
-            Authority authRider = new Authority();
-            authRider.setName(AuthorityName.ROLE_RIDER);
-            authorityRepository.save(authAdmin);
-            authorityRepository.save(authCoordinator);
-            authorityRepository.save(authDriver);
-            authorityRepository.save(authRider);
+
 
             User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
             User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
             User admin = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
-            
+
             List<Authority> authorityList = new ArrayList<Authority>();
 
             authorityList.add(authRider);

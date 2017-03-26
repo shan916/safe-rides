@@ -6,16 +6,23 @@ import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -37,6 +44,14 @@ public class DriverController {
     @Autowired
     private RideRequestRepository rideRequestRepository;
 
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /*
      * GET /drivers
@@ -170,6 +185,39 @@ public class DriverController {
 
         } else {
             return ResponseEntity.ok(result.getRides());
+        }
+    }
+
+    /*
+     * GET /drivers/{id}/rides
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/rides")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> retrieveRides(HttpServletRequest request,
+                                           @RequestParam(value = "status", required = false) RideRequestStatus status) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+
+        if (driver == null) {
+            return ResponseEntity.notFound().build();
+        } else if (status != null) {
+            Set<RideRequest> requests = driver.getRides();
+            requests.removeIf((RideRequest req) -> req.getStatus() != status);
+
+            return ResponseEntity.ok(requests);
+
+        } else {
+            return ResponseEntity.ok(driver.getRides());
         }
     }
 
