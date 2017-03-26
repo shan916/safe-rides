@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,6 +26,7 @@ import java.util.Date;
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/rides")
+@PreAuthorize("hasRole('COORDINATOR')")
 public class RideRequestController {
 
     @Autowired
@@ -78,6 +80,7 @@ public class RideRequestController {
      * POST /rides
      */
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "save", nickname = "save", notes = "Creates a given ride request")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
