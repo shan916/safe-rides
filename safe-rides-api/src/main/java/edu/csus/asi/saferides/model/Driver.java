@@ -167,11 +167,8 @@ public class Driver {
 		this.dlNumber = dlNumber;
 	}
 
-	public Gender getGender() {
-		if (this.gender == "male")
-			return Gender.MALE;
-		else
-			return Gender.FEMALE;
+	public String getGender() {
+		return this.gender;
 	}
 
 	public void setGender(String gender) {
