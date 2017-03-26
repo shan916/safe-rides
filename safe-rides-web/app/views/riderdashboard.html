@@ -1,5 +1,26 @@
-<div class="container">
-    <div class="panel panel-default">
+<span us-spinner ng-show="ctrl.loading"></span>
+<div class="container" ng-hide="ctrl.loading">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 col-sm-12">
+            <div class="panel panel-default" ng-show="!ctrl.loggedIn">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Enter your One Card ID</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="oneCardId">One Card ID</label>
+                        <input id="oneCardId" name="oneCardId" type="text" class="form-control" required ng-model="ctrl.rideRequest.oneCardId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="9 digit ID">
+                        <div ng-messages="rideRequestForm.oneCardId.$dirty && rideRequestForm.oneCardId.$error">
+                            <div class="input-error" ng-message="required">* required</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="ctrl.login()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" ng-show="ctrl.loggedIn && !ctrl.rideRequested">
         <div class="panel-heading">
             <h3 class="panel-title">Request a Ride</h3>
         </div>
@@ -10,11 +31,20 @@
                     <div class="col-sm-12">
                         <h3>Rider Info</h3>
                     </div>
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-12 col-md-4">
                         <div class="form-group">
-                            <label for="oneCardId">One Card ID</label>
-                            <input id="oneCardId" name="oneCardId" type="text" class="form-control" required ng-model="ctrl.rideRequest.oneCardId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="9 digit ID">
-                            <div ng-messages="rideRequestForm.oneCardId.$dirty && rideRequestForm.oneCardId.$error">
+                            <label for="requestorFirstName">First Name</label>
+                            <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control" required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
+                            <div ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label for="requestorLastName">Last Name</label>
+                            <input id="requestorLastName" name="requestorLastName" type="text" class="form-control" required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
+                            <div ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -24,24 +54,6 @@
                             <label for="requestorPhoneNumber">Phone</label>
                             <input id="requestorPhoneNumber" name="requestorPhoneNumber" type="text" class="form-control" required ng-model="ctrl.rideRequest.requestorPhoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
                             <div ng-messages="rideRequestForm.requestorPhoneNumber.$dirty && rideRequestForm.requestorPhoneNumber.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-3">
-                        <div class="form-group">
-                            <label for="requestorFirstName">First Name</label>
-                            <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control" required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
-                            <div ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-3">
-                        <div class="form-group">
-                            <label for="requestorLastName">Last Name</label>
-                            <input id="requestorLastName" name="requestorLastName" type="text" class="form-control" required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
-                            <div ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -63,7 +75,7 @@
                 <!-- Row 2-->
                 <div class="row">
                     <!-- Pickup Address column -->
-                    <div class="col-md-5 col-sm-12">
+                    <div class="col-md-6 col-sm-12">
                         <h3>Pickup Address</h3>
                         <div class="form-group">
                             <label for="pickupLine1">Line 1</label>
@@ -94,7 +106,7 @@
                     <!-- end Pickup Address -->
 
                     <!-- Drop Off Address column -->
-                    <div class="col-md-5 col-sm-12">
+                    <div class="col-md-6 col-sm-12">
                         <h3>Drop-off Address</h3>
                         <div class="form-group">
                             <label for="dropoffLine1">Line 1</label>
