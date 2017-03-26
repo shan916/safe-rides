@@ -203,17 +203,19 @@ public class Driver {
 	}
 
 	public DriverStatus getStatus() {
+		boolean inprogress = false;
 		for (RideRequest ride : getRides()) {
 			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
 				return DriverStatus.ASSIGNED;
 			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
-				return DriverStatus.INPROGRESS;
-			} else {
-				return DriverStatus.AVAILABLE;
+				inprogress = true;
 			}
 		}
-		
-		return DriverStatus.AVAILABLE;
+		if (inprogress) {
+			return DriverStatus.INPROGRESS;
+		} else {
+			return DriverStatus.AVAILABLE;
+		}
 	}
 	
 	public Date getCreatedDate() {
