@@ -48,9 +48,9 @@ var app = angular.module('safeRidesWebApp')
                         id: driver.id
                     }).$promise.then(function(ridesResponse) {
                         driver.rides = ridesResponse;
-                        console.log('got driver\'s rides:' + ridesResponse);
+                        console.log('got driver\'s rides:', ridesResponse);
                     }, function(ridesError) {
-                        console.log('error getting driver\'s rides:' + ridesError);
+                        console.log('error getting driver\'s rides:', ridesError);
                     });
 
                     drivers[index] = driver;

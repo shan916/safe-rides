@@ -272,21 +272,31 @@ public class SafeRidesApiApplication {
             rideRequest2.setDriver(driver0);
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
             rideRequest3.setDriver(driver0);
+            rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
             rideRequest5.setDriver(driver1);
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
+            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
+            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest9.setDriver(driver3);
+            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest10.setDriver(driver4);
+            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest11.setDriver(driver5);
+            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest12.setDriver(driver6);
+            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest13.setDriver(driver7);
+            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest14.setDriver(driver8);
+            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest15.setDriver(driver9);
+            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
 
 
             driverRepository.save(driver0);
