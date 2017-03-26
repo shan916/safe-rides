@@ -9,8 +9,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="csusid">CSUS ID</label>
-                            <input id="csusid" name="csusid" type="text" class="form-control" required ng-model="ctrl.driver.csusId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="-" placeholder="Enter the driver's 9 digit CSUS ID">
+                            <label for="csusid">OneCard ID</label>
+                            <input id="csusid" name="csusid" type="text" class="form-control" required ng-model="ctrl.driver.csusId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit CSUS ID">
                             <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
