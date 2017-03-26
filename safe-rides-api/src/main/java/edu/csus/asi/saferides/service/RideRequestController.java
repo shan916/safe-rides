@@ -107,25 +107,7 @@ public class RideRequestController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(result.getId()).toUri();
-
-        Date currentDate = new Date();
-
-        User requestor = new User("" + rideRequest.getOneCardId(),
-                rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName(), currentDate.toString(), "null@null.null");
-
-        requestor.setLastPasswordResetDate(currentDate);
-
-        List<Authority> authorityList = new ArrayList<Authority>();
-        authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
-
-        requestor.setAuthorities(authorityList);
-
-        userRepository.save(requestor);
-        
-        final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(requestor), device);
-
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.created(location).body(result);
     }
 
     /*
