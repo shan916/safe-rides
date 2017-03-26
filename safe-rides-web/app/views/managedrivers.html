@@ -1,5 +1,5 @@
-<!-- <div class="container"> -->
 <div class="container-fluid">
+<!-- <div class="container"> -->
   <div clas="row">
     <span us-spinner ng-show="ctrl.loadingActiveDrivers || ctrl.loadingInactiveDrivers"></span>
     <div class="col-sm-12">
@@ -11,32 +11,29 @@
             <div class="panel-heading">
               <h3 class="panel-title">Active Drivers</h3>
             </div>
-
             <div class="panel-body">
               <div style="max-height:450px; overflow: auto;">
-                <!-- </div> -->
-                <!-- <table class="table"> -->
                 <table class="table table-responsive">
                   <thead>
-                    <th>Name</th>
-                    <th>Phone #</th>
-                    <th>CSUS ID</th>
-                    <th>DL State</th>
-                    <th>DL Number</th>
-                    <th>Gender</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th width="14%">Name</th>
+                    <th width="14%">Phone #</th>
+                    <th width="14%">CSUS ID</th>
+                    <th width="8%">DL State</th>
+                    <th width="13%">DL Number</th>
+                    <th width="8%">Gender</th>
+                    <th width="9%">Status</th>
+                    <th width="20%">Actions</th>
 
                     <tbody>
                       <tr ng-repeat="driver in ctrl.activeDrivers">
-                        <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
-                        <td>{{driver.phoneNumber | phone}}</td>
-                        <td>{{driver.csusId}}</td>
-                        <td>{{driver.dlState}}</td>
-                        <td>{{driver.dlNumber}}</td>
-                        <td>{{driver.gender}}</td>
-                        <td>{{driver.status}}</td>
-                        <td>
+                        <td width="14%">{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                        <td width="14%">{{driver.phoneNumber | phone}}</td>
+                        <td width="14%">{{driver.csusId}}</td>
+                        <td width="8%">{{driver.dlState}}</td>
+                        <td width="13%">{{driver.dlNumber}}</td>
+                        <td width="8%">{{driver.gender}}</td>
+                        <td width="9%">{{driver.status}}</td>
+                        <td width="20%">
                           <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                           <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Delete</button>
                           <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Deactivate</button>
@@ -62,7 +59,6 @@
             <div class="panel-body">
               <!-- Start of Filter/Search -->
                 <div class="row form-group">
-                  <!-- <div class="col-md-12"> -->
                     <div class="col-md-4">
                     <!-- <div class="form-inline" style="padding-left: 5px"> -->
                     <!-- <div class="form-inline"> -->
@@ -81,23 +77,22 @@
                     <div class="col-sm-12">
                       <table class="table table-responsive">
                         <thead>
-                          <th>Name</th>
-                          <th>Phone #</th>
-                          <th>CSUS ID</th>
-                          <th>DL State</th>
-                          <th>DL Number</th>
-                          <th>Gender</th>
-                          <th style="padding-left: 140px">Actions</th>
-
+                          <th width="14%">Name</th>
+                          <th width="14%">Phone #</th>
+                          <th width="14%">CSUS ID</th>
+                          <th width="8%">DL State</th>
+                          <th width="13%">DL Number</th>
+                          <th width="17%">Gender</th>
+                          <th width="20%">Actions</th>
                           <tbody>
                             <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
-                              <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
-                              <td>{{driver.phoneNumber | phone}}</td>
-                              <td>{{driver.csusId}}</td>
-                              <td>{{driver.dlState}}</td>
-                              <td>{{driver.dlNumber}}</td>
-                              <td>{{driver.gender}}</td>
-                              <td style="padding-left: 140px">
+                              <td width="14%">{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                              <td width="14%">{{driver.phoneNumber | phone}}</td>
+                              <td width="14%">{{driver.csusId}}</td>
+                              <td width="8%">{{driver.dlState}}</td>
+                              <td width="13%">{{driver.dlNumber}}</td>
+                              <td width="17%">{{driver.gender}}</td>
+                              <td width="20%">
                                 <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                                 <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
                                 <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate</button>
