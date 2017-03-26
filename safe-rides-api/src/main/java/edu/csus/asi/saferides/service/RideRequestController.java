@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Date;
 
 /*
  * @author Ryan Long
@@ -85,7 +84,6 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
-        rideRequest.setDate(new Date());    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         RideRequest result = rideRequestRepository.save(rideRequest);

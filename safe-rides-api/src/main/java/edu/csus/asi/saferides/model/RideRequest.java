@@ -75,15 +75,15 @@ public class RideRequest {
 	protected RideRequest() {
 	}
 
-	public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
-			String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity, String pickupZip,
+	public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
+			String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity, String pickupZip,
 			String dropoffLine1, String dropoffCity, String dropoffZip) {
 		super();
-		this.oneCardId = requestorId;
+		this.oneCardId = oneCardId;
 		this.requestDate = new Date();
 		this.requestorFirstName = requestorFirstName;
 		this.requestorLastName = requestorLastName;
-		this.requestorPhoneNumber = requestorContactNumber;
+		this.requestorPhoneNumber = requestorPhoneNumber;
 		this.numPassengers = numPassengers;
 		this.pickupLine1 = pickupLine1;
 		this.pickupCity = pickupCity;
@@ -94,20 +94,13 @@ public class RideRequest {
 		this.status = RideRequestStatus.UNASSIGNED;
 	}
 
-	public String getEstimatedTime() {
-		return estimatedTime;
-	}
 
-	public void setEstimatedTime(String estimatedTime) {
-		this.estimatedTime = estimatedTime;
-	}
-
-	public String getMessageToDriver() {
-		return messageToDriver;
-	}
-
-	public void setMessageToDriver(String messageToDriver) {
-		this.messageToDriver = messageToDriver;
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		if (requestDate == null) {
+			requestDate = new Date();
+		}
 	}
 
 	public Driver getDriver() {
@@ -126,20 +119,20 @@ public class RideRequest {
 		this.id = id;
 	}
 
-	public int getRequestorId() {
+	public String getOneCardId() {
 		return oneCardId;
 	}
 
-	public void setRequestorId(int requestorId) {
-		this.oneCardId = requestorId;
+	public void setOneCardId(String oneCardId) {
+		this.oneCardId = oneCardId;
 	}
 
-	public Date getDate() {
+	public Date getRequestDate() {
 		return requestDate;
 	}
 
-	public void setDate(Date date) {
-		this.requestDate = date;
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
 	}
 
 	public String getRequestorFirstName() {
@@ -158,12 +151,12 @@ public class RideRequest {
 		this.requestorLastName = requestorLastName;
 	}
 
-	public String getRequestorContactNumber() {
+	public String getRequestorPhoneNumber() {
 		return requestorPhoneNumber;
 	}
 
-	public void setRequestorContactNumber(String requestorContactNumber) {
-		this.requestorPhoneNumber = requestorContactNumber;
+	public void setRequestorPhoneNumber(String requestorPhoneNumber) {
+		this.requestorPhoneNumber = requestorPhoneNumber;
 	}
 
 	public int getNumPassengers() {
@@ -270,12 +263,20 @@ public class RideRequest {
 		this.cancelMessage = cancelMessage;
 	}
 
-	@PreUpdate
-	@PrePersist
-	public void updateTimeStamps() {
-		if (requestDate == null) {
-			requestDate = new Date();
-		}
+	public String getMessageToDriver() {
+		return messageToDriver;
+	}
+
+	public void setMessageToDriver(String messageToDriver) {
+		this.messageToDriver = messageToDriver;
+	}
+
+	public String getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(String estimatedTime) {
+		this.estimatedTime = estimatedTime;
 	}
 
 	@Override

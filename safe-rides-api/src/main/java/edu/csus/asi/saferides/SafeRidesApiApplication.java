@@ -67,19 +67,19 @@ public class SafeRidesApiApplication {
             driver5.setVehicle(vehicle5);
             driver6.setVehicle(vehicle6);
 
-            RideRequest rideRequest1 = new RideRequest(123456, "Zeeshan", "Khaliq", "9161231234", 4, "123 Main St.", "Sacramento",
+            RideRequest rideRequest1 = new RideRequest("123456", "Zeeshan", "Khaliq", "9161231234", 4, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest2 = new RideRequest(23456, "Nik", "Sorvari", "9161231234", 2, "123 Main St.", "Sacramento",
+            RideRequest rideRequest2 = new RideRequest("23456", "Nik", "Sorvari", "9161231234", 2, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest3 = new RideRequest(3456, "Justin", "Mendiguarin", "9161231234", 8, "123 Main St.", "Sacramento",
+            RideRequest rideRequest3 = new RideRequest("3456", "Justin", "Mendiguarin", "9161231234", 8, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest4 = new RideRequest(456, "Ryan", "Long", "9161231234", 2, "123 Main St.", "Sacramento",
+            RideRequest rideRequest4 = new RideRequest("456", "Ryan", "Long", "9161231234", 2, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest5 = new RideRequest(56, "Edward", "Ozeruga", "9161231234", 4, "123 Main St.", "Sacramento",
+            RideRequest rideRequest5 = new RideRequest("56", "Edward", "Ozeruga", "9161231234", 4, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest6 = new RideRequest(6, "Bryce", "Hairabedian", "9161231234", 1, "123 Main St.", "Sacramento",
+            RideRequest rideRequest6 = new RideRequest("6", "Bryce", "Hairabedian", "9161231234", 1, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest7 = new RideRequest(7, "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
+            RideRequest rideRequest7 = new RideRequest("7", "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
 
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
