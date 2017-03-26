@@ -43,15 +43,15 @@ public class SafeRidesApiApplication {
         return (args) -> {
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", "Female", true, "Farmers", true);
-            Driver driver1 = new Driver("000000001", "Jayne", "Jayne", "9166675866", "CA", "E1111111", "Female", true, "Farmers", false);
+            Driver driver1 = new Driver("000000001", "Jayne", "Jayne", "9166675866", "CA", "E1111111", "Female", true, "Farmers", true);
             Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", "Female", true, "Farmers", true);
-            Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", "Male", true, "Farmers", false);
+            Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", "Male", true, "Farmers", true);
             Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", "Male", true, "Farmers", true);
-            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", "Male", true, "Farmers", false);
-            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", "Female", true, "Farmers", false);
-            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", "Male", true, "Farmers", false);
-            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", "Male", true, "Farmers", false);
-            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", "Male", true, "Farmers", false);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", "Male", true, "Farmers", true);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", "Female", true, "Farmers", true);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", "Male", true, "Farmers", true);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", "Male", true, "Farmers", true);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", "Male", true, "Farmers", true);
 
             Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
             Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);
@@ -194,7 +194,7 @@ public class SafeRidesApiApplication {
                     "8071 La Riviera Dr",
                     "Sacramento",
                     "95826",
-                    "345 Main St.",
+                    "345 Main Ave.",
                     "Sacramento",
                     "95818");
             RideRequest rideRequest10 = new RideRequest(
@@ -287,21 +287,21 @@ public class SafeRidesApiApplication {
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
-            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest8.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest9.setDriver(driver3);
-            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest10.setDriver(driver4);
-            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest10.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest11.setDriver(driver5);
-            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest12.setDriver(driver6);
-            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest12.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest13.setDriver(driver7);
-            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest13.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest14.setDriver(driver8);
-            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest14.setStatus(RideRequestStatus.INPROGRESS);
             rideRequest15.setDriver(driver9);
-            rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest15.setStatus(RideRequestStatus.ASSIGNED);
 
             util.setCoordinates(rideRequest0);
             util.setCoordinates(rideRequest1);
