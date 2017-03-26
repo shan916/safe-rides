@@ -335,22 +335,22 @@ public class SafeRidesApiApplication {
             rideRequest15.setDriver(driver9);
             rideRequest15.setStatus(RideRequestStatus.ASSIGNED);
 
-            //util.setCoordinates(rideRequest0);
-            //util.setCoordinates(rideRequest1);
-            //util.setCoordinates(rideRequest2);
-            //util.setCoordinates(rideRequest3);
-            //util.setCoordinates(rideRequest4);
-            //util.setCoordinates(rideRequest5);
-            //util.setCoordinates(rideRequest6);
-            //util.setCoordinates(rideRequest7);
-            //util.setCoordinates(rideRequest8);
-            //util.setCoordinates(rideRequest9);
-            //util.setCoordinates(rideRequest10);
-            //util.setCoordinates(rideRequest11);
-            //util.setCoordinates(rideRequest12);
-            //util.setCoordinates(rideRequest13);
-            //util.setCoordinates(rideRequest14);
-            //util.setCoordinates(rideRequest15);
+            util.setCoordinates(rideRequest0);
+            util.setCoordinates(rideRequest1);
+            util.setCoordinates(rideRequest2);
+            util.setCoordinates(rideRequest3);
+            util.setCoordinates(rideRequest4);
+            util.setCoordinates(rideRequest5);
+            util.setCoordinates(rideRequest6);
+            util.setCoordinates(rideRequest7);
+            util.setCoordinates(rideRequest8);
+            util.setCoordinates(rideRequest9);
+            util.setCoordinates(rideRequest10);
+            util.setCoordinates(rideRequest11);
+            util.setCoordinates(rideRequest12);
+            util.setCoordinates(rideRequest13);
+            util.setCoordinates(rideRequest14);
+            util.setCoordinates(rideRequest15);
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
