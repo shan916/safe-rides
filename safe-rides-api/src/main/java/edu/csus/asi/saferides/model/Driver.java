@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
 
 /*
  * @author Zeeshan Khaliq
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Driver {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -60,27 +61,31 @@ public class Driver {
 
 	@Column(nullable = false)
 	private Boolean insuranceChecked;
-	
+
 	@Column(nullable = false)
 	@Size(min = 3)
 	private String insuranceCompany;
 
 	@Column(nullable = false)
 	private Boolean active;
-	
+
 	@Transient
 	DriverStatus status;
-	
+
 	@JsonIgnore
 	@Column(updatable = false)
 	private Date createdDate;
-	
+
 	@JsonIgnore
 	private Date modifiedDate;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
-	
+
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private User user;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
 	private Set<RideRequest> rides;
@@ -89,7 +94,7 @@ public class Driver {
 	}
 
 	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-			String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+				  String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;
@@ -101,6 +106,7 @@ public class Driver {
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
+		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "email@email.email");
 	}
 
 	public Vehicle getVehicle() {
@@ -212,10 +218,10 @@ public class Driver {
 				return DriverStatus.AVAILABLE;
 			}
 		}
-		
+
 		return DriverStatus.AVAILABLE;
 	}
-	
+
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -223,13 +229,21 @@ public class Driver {
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}
-	
+
 	public String getInsuranceCompany() {
 		return insuranceCompany;
 	}
 
 	public void setInsuranceCompany(String insuranceCompany) {
 		this.insuranceCompany = insuranceCompany;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@PreUpdate
@@ -243,11 +257,24 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", csusId=" + csusId + ", driverFirstName=" + driverFirstName + ", driverLastName="
-				+ driverLastName + ", phoneNumber=" + phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber
-				+ ", gender=" + gender + ", insuranceChecked=" + insuranceChecked + ", insuranceCompany="
-				+ insuranceCompany + ", active=" + active + ", status=" + status + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", vehicle=" + vehicle + ", rides=" + rides + "]";
+		return "Driver{" +
+				"id=" + id +
+				", csusId='" + csusId + '\'' +
+				", driverFirstName='" + driverFirstName + '\'' +
+				", driverLastName='" + driverLastName + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", dlState='" + dlState + '\'' +
+				", dlNumber='" + dlNumber + '\'' +
+				", gender='" + gender + '\'' +
+				", insuranceChecked=" + insuranceChecked +
+				", insuranceCompany='" + insuranceCompany + '\'' +
+				", active=" + active +
+				", status=" + status +
+				", createdDate=" + createdDate +
+				", modifiedDate=" + modifiedDate +
+				", vehicle=" + vehicle +
+				", user=" + user +
+				", rides=" + rides +
+				'}';
 	}
-
 }
