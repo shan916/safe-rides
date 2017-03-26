@@ -37,8 +37,20 @@ angular
         'angularSpinner'
     ])
 
-    .run(function($rootScope) {
+    .run(function($rootScope, $window, $cookies, $state) {
         $rootScope.$on("$stateChangeError", console.log.bind(console));
+
+        $rootScope.$on('$stateChangeSuccess', function() {
+          $rootScope.currentState = $state.current.name;
+        });
+
+        $rootScope.globalLogout = function() {
+            $window.localStorage.removeItem('safeRidesToken');
+            $cookies.remove('safeRidesToken');
+            $state.go('/');
+        };
+
+
     })
 
     .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
