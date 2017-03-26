@@ -51,7 +51,7 @@ var app = angular.module('safeRidesWebApp')
                         console.log('got driver\'s rides:' + ridesResponse);
                     }, function(ridesError) {
                         console.log('error getting driver\'s rides:' + ridesError);
-                    })
+                    });
 
                     drivers[index] = driver;
                 });
