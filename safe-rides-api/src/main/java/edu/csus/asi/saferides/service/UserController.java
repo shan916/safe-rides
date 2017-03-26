@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.JwtAuthenticationRequest;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUser;
@@ -59,7 +60,7 @@ public class UserController {
 	* */
 
 	/*
-	 * GET "/users"
+     * GET "/users"
 	 *
 	 * @return JwtUser object of the current authenticated user
 	 */
@@ -71,7 +72,7 @@ public class UserController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
     }
-	
+
 	/*
 	 * GET "/users/{id} 
 	 * 
@@ -145,20 +146,24 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value = "/auth")
     public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
         // Perform the security
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Reload password post-security so we can generate token
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails, device);
+            // Reload password post-security so we can generate token
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            final String token = jwtTokenUtil.generateToken(userDetails, device);
 
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+            // Return the token
+            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        } catch (AuthenticationException exception) {
+            return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
+        }
     }
 
 

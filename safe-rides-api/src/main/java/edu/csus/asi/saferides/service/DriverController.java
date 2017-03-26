@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.net.URI;
 import java.util.Set;
 
@@ -26,6 +26,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/drivers")
+@PreAuthorize("hasRole('COORDINATOR')")
 public class DriverController {
 
     // this creates a singleton for DriverRepository
@@ -148,6 +149,7 @@ public class DriverController {
      * GET /drivers/{id}/rides
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/rides")
+    @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to a driver with the given id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
