@@ -1,14 +1,6 @@
 package edu.csus.asi.saferides.model;
 
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.errors.ApiException;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
-import edu.csus.asi.saferides.utility.Util;
-
 import javax.persistence.*;
-import java.io.IOException;
 import java.util.Date;
 
 @Entity
@@ -112,58 +104,6 @@ public class RideRequest {
         this.dropoffCity = dropoffCity;
         this.dropoffZip = dropoffZip;
         this.status = RideRequestStatus.UNASSIGNED;
-
-        GeoApiContext ctx = new GeoApiContext();
-        ctx.setApiKey("AIzaSyBsvQDgFRvtFyInVOv0U_HrDaNsrnCuLhc");
-        try {
-            try {
-                try {
-                    GeocodingResult[] results = GeocodingApi.newRequest(ctx)
-                            .address(Util.formatAddress(getPickupLine1(), getPickupLine2(), getPickupCity(), getPickupZip()))
-                            .await();
-                    if (results.length > 0) {
-                        LatLng coords = results[0].geometry.location;
-                        this.pickupLatitude = coords.lat;
-                        this.pickupLongitude = coords.lng;
-                    }
-
-                } catch (ApiException apiException) {
-                    // 'handle' exception
-                    System.out.println(apiException.getMessage());
-                }
-            } catch (InterruptedException interruptedException) {
-                // 'handle' exception
-                System.out.println(interruptedException.getMessage());
-            }
-        } catch (IOException ioException) {
-            // 'handle' exception
-            System.out.println(ioException.getMessage());
-        }
-
-        try {
-            try {
-                try {
-                    GeocodingResult[] results = GeocodingApi.newRequest(ctx)
-                            .address(Util.formatAddress(getDropoffLine1(), getDropoffLine2(), getDropoffCity(), getDropoffZip()))
-                            .await();
-                    if (results.length > 0) {
-                        LatLng coords = results[0].geometry.location;
-                        this.dropoffLatitude = coords.lat;
-                        this.dropoffLongitude = coords.lng;
-                    }
-
-                } catch (ApiException apiException) {
-                    // 'handle' exception
-                    System.out.println(apiException.getMessage());
-                }
-            } catch (InterruptedException interruptedException) {
-                // 'handle' exception
-                System.out.println(interruptedException.getMessage());
-            }
-        } catch (IOException ioException) {
-            // 'handle' exception
-            System.out.println(ioException.getMessage());
-        }
     }
 
     public String getEstimatedTime() {

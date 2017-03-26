@@ -11,6 +11,8 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.utility.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,6 +29,9 @@ import java.util.List;
 @SpringBootApplication
 @EnableSwagger2
 public class SafeRidesApiApplication {
+
+    @Autowired
+    Util util;
 
     public static void main(String[] args) {
         SpringApplication.run(SafeRidesApiApplication.class, args);
@@ -298,6 +303,22 @@ public class SafeRidesApiApplication {
             rideRequest15.setDriver(driver9);
             rideRequest6.setStatus(RideRequestStatus.ASSIGNED);
 
+            util.setCoordinates(rideRequest0);
+            util.setCoordinates(rideRequest1);
+            util.setCoordinates(rideRequest2);
+            util.setCoordinates(rideRequest3);
+            util.setCoordinates(rideRequest4);
+            util.setCoordinates(rideRequest5);
+            util.setCoordinates(rideRequest6);
+            util.setCoordinates(rideRequest7);
+            util.setCoordinates(rideRequest8);
+            util.setCoordinates(rideRequest9);
+            util.setCoordinates(rideRequest10);
+            util.setCoordinates(rideRequest11);
+            util.setCoordinates(rideRequest12);
+            util.setCoordinates(rideRequest13);
+            util.setCoordinates(rideRequest14);
+            util.setCoordinates(rideRequest15);
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
