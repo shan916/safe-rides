@@ -348,14 +348,10 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest14);
             rideRequestRepository.save(rideRequest15);
 
-            Authority authAdmin = new Authority();
-            authAdmin.setName(AuthorityName.ROLE_ADMIN);
-            Authority authCoordinator = new Authority();
-            authCoordinator.setName(AuthorityName.ROLE_COORDINATOR);
-            Authority authDriver = new Authority();
-            authDriver.setName(AuthorityName.ROLE_DRIVER);
-            Authority authRider = new Authority();
-            authRider.setName(AuthorityName.ROLE_RIDER);
+            Authority authAdmin = new Authority(AuthorityName.ROLE_ADMIN);
+            Authority authCoordinator = new Authority(AuthorityName.ROLE_COORDINATOR);
+            Authority authDriver = new Authority(AuthorityName.ROLE_DRIVER);
+            Authority authRider = new Authority(AuthorityName.ROLE_RIDER);
             authorityRepository.save(authAdmin);
             authorityRepository.save(authCoordinator);
             authorityRepository.save(authDriver);
