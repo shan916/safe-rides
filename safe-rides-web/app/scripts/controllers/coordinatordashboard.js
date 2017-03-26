@@ -78,8 +78,13 @@ var app = angular.module('safeRidesWebApp')
 
         getRideRequests();
 
-        vm.mapPinClick = function(test){
-            console.log(test);
+        vm.mapPinClick = function(evt, rideRequestId){
+            vm.rideRequests.forEach(function(element) {
+                if(rideRequestId == element.id){
+                    vm.showRequestDetails(element);
+                    return;
+                }
+            })
         }
 
         vm.requestAgeInMinutes = function(start) {
