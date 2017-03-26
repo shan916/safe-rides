@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
 
 /*
  * @author Zeeshan Khaliq
@@ -80,6 +81,10 @@ public class Driver {
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
+
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private User user;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
@@ -101,6 +106,7 @@ public class Driver {
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
+		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "email@email.email");
 	}
 
 	public Vehicle getVehicle() {
@@ -232,6 +238,14 @@ public class Driver {
 		this.insuranceCompany = insuranceCompany;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@PreUpdate
 	@PrePersist
 	public void updateTimeStamps() {
@@ -243,11 +257,24 @@ public class Driver {
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", csusId=" + csusId + ", driverFirstName=" + driverFirstName + ", driverLastName="
-				+ driverLastName + ", phoneNumber=" + phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber
-				+ ", gender=" + gender + ", insuranceChecked=" + insuranceChecked + ", insuranceCompany="
-				+ insuranceCompany + ", active=" + active + ", status=" + status + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", vehicle=" + vehicle + ", rides=" + rides + "]";
+		return "Driver{" +
+				"id=" + id +
+				", csusId='" + csusId + '\'' +
+				", driverFirstName='" + driverFirstName + '\'' +
+				", driverLastName='" + driverLastName + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", dlState='" + dlState + '\'' +
+				", dlNumber='" + dlNumber + '\'' +
+				", gender='" + gender + '\'' +
+				", insuranceChecked=" + insuranceChecked +
+				", insuranceCompany='" + insuranceCompany + '\'' +
+				", active=" + active +
+				", status=" + status +
+				", createdDate=" + createdDate +
+				", modifiedDate=" + modifiedDate +
+				", vehicle=" + vehicle +
+				", user=" + user +
+				", rides=" + rides +
+				'}';
 	}
-
 }
