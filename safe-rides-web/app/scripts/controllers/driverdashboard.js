@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function($scope, DriverRidesService, RideRequest) {
+    .controller('DriverdashboardCtrl', function($scope, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver) {
         var vm = this;
         vm.loadingRideRequest = true;
         vm.ride = undefined;
@@ -19,6 +19,29 @@ angular.module('safeRidesWebApp')
         vm.getPickupDirections = undefined;
         vm.dropoffAddress = undefined;
         //vm.driver = driver;
+
+        // START EXAMPLE - GET LIST OF (ASSIGNED) RIDES
+
+        vm.assignedRideRequests = undefined;
+
+        function getCurrentRideRequests() {
+            CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
+                vm.assignedRideRequests = response;
+
+                vm.assignedRideRequests.forEach(function(element, index, assignedRideRequests) {
+                    var rideRequest = new RideRequest(element);
+                    assignedRideRequests[index] = rideRequest;
+                });
+
+                console.log('got currently assigned ride requests:', response);
+            }, function(error) {
+                console.log('error getting currently assigned ride requests:', error);
+            });
+        }
+
+        vm.assignedRideRequests = getCurrentRideRequests();
+
+        // END EXAMPLE - GET LIST OF (ASSIGNED) RIDES
 
         function getRideRequests() {
         vm.loadingRideRequests = true;
