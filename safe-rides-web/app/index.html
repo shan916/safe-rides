@@ -27,16 +27,15 @@
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
         <div class="navbar navbar-default" role="navigation">
+          <button ng-hide="currentState === 'login' || currentState === 'riderdashboard' || currentState === '/'" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
             <div class="container">
                 <div class="navbar-header">
-
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-
                     <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
                 </div>
 
@@ -46,7 +45,6 @@
                         <li ng-repeat="route in header.routes" ng-class="{active: header.activeRoute === route}">
                             <a ng-href="{{route.path}}" ng-click="header.setActive(route)">{{route.text}}</a>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -130,6 +128,9 @@
     <script src="scripts/controllers/confirmdeletedrivermodal.js"></script>
     <script src="scripts/controllers/confirmchangedriveractivemodal.js"></script>
     <script src="scripts/services/apiinterceptor.js"></script>
+    <script src="scripts/services/user-service.js"></script>
+    <script src="scripts/services/user-registration-service.js"></script>
+    <script src="scripts/services/user.js"></script>
     <!-- endbuild -->
 </body>
 
