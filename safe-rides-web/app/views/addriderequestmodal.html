@@ -10,11 +10,7 @@
         <!-- Row 1 -->
         <div class="row">
             <div class="form-group col-md-2">
-<<<<<<< HEAD
                 <label for="requestorId">OneCard ID</label>
-=======
-                <label for="requestorId">Sac State ID</label>
->>>>>>> 5dc43600edb472b7147033df81416c51d45c68e1
                 <input id="requestorId" name="requestorId" type="text" class="form-control" required ng-model="ctrl.riderequest.requestorId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="-" placeholder="9 digit ID">
                 <div ng-messages="addriderequestForm.requestorId.$dirty && addriderequestForm.requestorId.$error">
                     <div class="input-error" ng-message="required">* required</div>
@@ -49,65 +45,73 @@
             <!-- Pickup Address column -->
             <div class="col-md-5">
                 <h3>Pickup Address</h3>
-                <div class="form-group">
-                    <label for="pickupLine1">Line 1</label>
-                    <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required placeholder="Pickup Line 1" ng-model="ctrl.riderequest.pickupLine1">
-                    <div ng-messages="addriderequestForm.pickupLine1.$dirty && addriderequestForm.pickupLine1.$error">
-                        <div class="input-error" ng-message="required">* required</div>
+                <div class ="row">
+                  <div class="form-group col-sm-12">
+                      <label for="pickupLine1">Line 1</label>
+                      <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required placeholder="Pickup Line 1" ng-model="ctrl.riderequest.pickupLine1">
+                      <div ng-messages="addriderequestForm.pickupLine1.$dirty && addriderequestForm.pickupLine1.$error">
+                          <div class="input-error" ng-message="required">* required</div>
+                      </div>
+                  </div>
+                </div>
+                <div class = "row">
+                  <div class="form-group col-sm-12">
+                      <label for="pickupLine2">Line 2</label>
+                      <input id="pickupLine2" name="pickupLine2" type="text" class="form-control" placeholder="Pickup Line 2" ng-model="ctrl.riderequest.pickupLine2">
+                  </div>
+                </div>
+                <div class = "form-group row">
+                    <div class="form-group col-sm-6">
+                        <label for="pickupCity">City</label>
+                        <input id="pickupCity" name="pickupCity" type="text" class="form-control" required placeholder="Pickup City" ng-model="ctrl.riderequest.pickupCity">
+                        <div ng-messages="addriderequestForm.pickupCity.$dirty && addriderequestForm.pickupCity.$error">
+                            <div class="input-error" ng-message="required">* required</div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="pickupLine2">Line 2</label>
-                    <input id="pickupLine2" name="pickupLine2" type="text" class="form-control" placeholder="Pickup Line 2" ng-model="ctrl.riderequest.pickupLine2">
-                </div>
-                <div class="form-group">
-                    <label for="pickupCity">City</label>
-                    <input id="pickupCity" name="pickupCity" type="text" class="form-control" required placeholder="Pickup City" ng-model="ctrl.riderequest.pickupCity">
-                    <div ng-messages="addriderequestForm.pickupCity.$dirty && addriderequestForm.pickupCity.$error">
-                        <div class="input-error" ng-message="required">* required</div>
+                    <div class="form-group col-sm-6">
+                        <label for="pickupZip">Zip</label>
+                        <input id="pickupZip" name="pickupZip" type="text" class="form-control" required ng-model="ctrl.riderequest.pickupZip" ui-mask="99999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Pickup Zip Code">
+                        <div ng-messages="addriderequestForm.pickupZip.$dirty && addriderequestForm.pickupZip.$error">
+                            <div class="input-error" ng-message="required">* required</div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="pickupZip">Zip</label>
-                    <input id="pickupZip" name="pickupZip" type="text" class="form-control" required placeholder="Pickup Zip Code" ng-model="ctrl.riderequest.pickupZip" ng-minlength="5" ng-maxlength="5">
-                    <div ng-messages="addriderequestForm.pickupZip.$dirty && addriderequestForm.pickupZip.$error">
-                        <div class="input-error" ng-message="required">* required</div>
-                        <div class="input-error" ng-message="minlength">* must be 5 digits</div>
-                        <div class="input-error" ng-message="maxlength">* must be 5 digits</div>
-                    </div>
-                </div>
+              </div>
             </div>
             <!-- end Pickup Address -->
 
             <!-- Drop Off Address column -->
             <div class="col-md-5">
                 <h3>Drop-off Address</h3>
-                <div class="form-group">
-                    <label for="dropoffLine1">Line 1</label>
-                    <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required placeholder="Drop-off Line 1" ng-model="ctrl.riderequest.dropoffLine1">
-                    <div ng-messages="addriderequestForm.dropoffLine1.$dirty && addriderequestForm.dropoffLine1.$error">
-                        <div class="input-error" ng-message="required">* required</div>
-                    </div>
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                      <label for="dropoffLine1">Line 1</label>
+                      <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required placeholder="Drop-off Line 1" ng-model="ctrl.riderequest.dropoffLine1">
+                      <div ng-messages="addriderequestForm.dropoffLine1.$dirty && addriderequestForm.dropoffLine1.$error">
+                          <div class="input-error" ng-message="required">* required</div>
+                      </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label for="dropoffLine2">Line 2</label>
-                    <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control" placeholder="Drop-off Line 2" ng-model="ctrl.riderequest.dropoffLine2">
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                      <label for="dropoffLine2">Line 2</label>
+                      <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control" placeholder="Drop-off Line 2" ng-model="ctrl.riderequest.dropoffLine2">
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label for="dropoffCity">City</label>
-                    <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required placeholder="Drop-off City" ng-model="ctrl.riderequest.dropoffCity">
-                    <div ng-messages="addriderequestForm.dropoffCity.$dirty && addriderequestForm.dropoffCity.$error">
-                        <div class="input-error" ng-message="required">* required</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="dropoffZip">Zip</label>
-                    <input id="dropoffZip" name="dropoffZip" type="text" class="form-control" required placeholder="Drop-off Zip Code" ng-model="ctrl.riderequest.dropoffZip" ng-maxlength="5" ng-minlength="5">
-                    <div ng-messages="addriderequestForm.dropoffZip.$dirty && addriderequestForm.dropoffZip.$error">
-                        <div class="input-error" ng-message="required">* required</div>
-                        <div class="input-error" ng-message="minlength">* must be 5 digits</div>
-                        <div class="input-error" ng-message="maxlength">* must be 5 digits</div>
-                    </div>
+                <div class="form-group row">
+                  <div class="form-group col-sm-6">
+                      <label for="dropoffCity">City</label>
+                      <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required placeholder="Drop-off City" ng-model="ctrl.riderequest.dropoffCity">
+                      <div ng-messages="addriderequestForm.dropoffCity.$dirty && addriderequestForm.dropoffCity.$error">
+                          <div class="input-error" ng-message="required">* required</div>
+                      </div>
+                  </div>
+                  <div class="form-group col-sm-6">
+                      <label for="dropoffZip">Zip</label>
+                      <input id="dropoffZip" name="dropoffZip" type="text" class="form-control" required ng-model="ctrl.riderequest.dropoffZip" ui-mask="99999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Drop-off Zip Code">
+                      <div ng-messages="addriderequestForm.dropoffZip.$dirty && addriderequestForm.dropoffZip.$error">
+                          <div class="input-error" ng-message="required">* required</div>
+                      </div>
+                  </div>
                 </div>
             </div>
             <!-- end dropoff Address -->
