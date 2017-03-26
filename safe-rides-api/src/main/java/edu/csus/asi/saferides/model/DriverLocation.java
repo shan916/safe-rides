@@ -20,8 +20,7 @@ public class DriverLocation {
     @JsonIgnore
     @Column(updatable = false)
     private Date createdDate;
-
-    @JsonIgnore
+    
     @ManyToOne
     private Driver driver;
 

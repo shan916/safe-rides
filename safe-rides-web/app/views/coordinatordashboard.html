@@ -17,6 +17,7 @@
                                 <marker icon="{url: 'images/red-dot.png'}" on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'UNASSIGNED'}" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
                                 <marker icon="{url: 'images/green-dot.png'}" on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'INPROGRESS'}" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
                                 <marker icon="{url: 'images/yellow-dot.png'}" on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'ASSIGNED'}" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
+                                <marker icon="{url: 'images/blue-dot.png'}" on-click='ctrl.mapDriverPinClick({{d.driver.id}})' ng-repeat="d in ctrl.driversLocation" position="{{d.latitude +','+ d.longitude}}"></marker>
                             </ng-map>
                         </div>
                     </div>

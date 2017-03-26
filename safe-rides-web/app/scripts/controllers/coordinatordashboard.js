@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, UserService, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -43,6 +43,7 @@ var app = angular.module('safeRidesWebApp')
                 vm.loadingCoordinatorDrivers = false;
 
                 console.log('got drivers:', response);
+                getDriversLocation();
             }, function(error) {
                 vm.loadingCoordinatorDrivers = false;
                 console.log('error getting drivers:', error);
@@ -68,6 +69,21 @@ var app = angular.module('safeRidesWebApp')
             });
         }
 
+        function getDriversLocation() {
+            vm.drivers.forEach(function(element) {
+                DriverLocationService.get({
+                    id: element.id
+                }).$promise.then(function(response) {
+                    if (response.id !== undefined) {
+                        vm.driversLocation.push(response);
+                        console.log('got drivers location:', response);
+                    }
+                }, function(error) {
+                    console.log('error getting drivers location:', error);
+                });
+            });
+        }
+
         vm.DANGER_ZONE = 30;
 
         vm.drivers = [];
@@ -78,10 +94,21 @@ var app = angular.module('safeRidesWebApp')
 
         getRideRequests();
 
+        vm.driversLocation = [];
+
         vm.mapPinClick = function(evt, rideRequestId){
             vm.rideRequests.forEach(function(element) {
                 if(rideRequestId == element.id){
                     vm.showRequestDetails(element);
+                    return;
+                }
+            })
+        }
+
+        vm.mapDriverPinClick = function(evt, driverId){
+            vm.drivers.forEach(function(element) {
+                if(driverId == element.id){
+                    vm.showDriverDetails(element);
                     return;
                 }
             })

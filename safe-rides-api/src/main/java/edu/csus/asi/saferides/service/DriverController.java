@@ -260,7 +260,9 @@ public class DriverController {
     public ResponseEntity<?> getDriverLocation(@PathVariable Long id) {
         Driver driver = driverRepository.findOne(id);
         DriverLocation loc = driverLocationRepository.findTop1ByDriverOrderByCreatedDateDesc(driver);
-
+        if (loc == null) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(loc);
     }
 }
