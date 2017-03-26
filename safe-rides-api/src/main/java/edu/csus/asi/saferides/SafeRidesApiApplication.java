@@ -1,9 +1,7 @@
 package edu.csus.asi.saferides;
 
-import edu.csus.asi.saferides.model.Driver;
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.RideRequestStatus;
-import edu.csus.asi.saferides.model.Vehicle;
+import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.model.Authority;
@@ -24,7 +22,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -39,7 +39,7 @@ public class SafeRidesApiApplication {
 
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository) {
+                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
         return (args) -> {
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", "Female", true, "Farmers", true);
@@ -64,7 +64,6 @@ public class SafeRidesApiApplication {
             Vehicle vehicle8 = new Vehicle(driver8, "Nissan", "Almera", "2003", "IIIIIII", "Black", 2);
             Vehicle vehicle9 = new Vehicle(driver9, "Ginetta", "G33", "1998", "JJJJJJJ", "White", 4);
 
-
             driver0.setVehicle(vehicle0);
             driver1.setVehicle(vehicle1);
             driver2.setVehicle(vehicle2);
@@ -76,6 +75,39 @@ public class SafeRidesApiApplication {
             driver8.setVehicle(vehicle8);
             driver9.setVehicle(vehicle9);
 
+            DriverLocation loc0 = new DriverLocation(38.5617341, -121.4309151);
+            DriverLocation loc1 = new DriverLocation(38.5604605, -121.430052);
+            DriverLocation loc2 = new DriverLocation(38.5583356, -121.4284198);
+            DriverLocation loc3 = new DriverLocation(38.5536317, -121.4248821);
+
+            loc0.setDriver(driver0);
+            loc1.setDriver(driver0);
+            loc2.setDriver(driver0);
+            loc3.setDriver(driver0);
+
+            List<Authority> driverAuthorityList = new ArrayList<Authority>();
+
+            Authority authAdmin = new Authority(AuthorityName.ROLE_ADMIN);
+            Authority authCoordinator = new Authority(AuthorityName.ROLE_COORDINATOR);
+            Authority authDriver = new Authority(AuthorityName.ROLE_DRIVER);
+            Authority authRider = new Authority(AuthorityName.ROLE_RIDER);
+            authorityRepository.save(authAdmin);
+            authorityRepository.save(authCoordinator);
+            authorityRepository.save(authDriver);
+            authorityRepository.save(authRider);
+
+            driverAuthorityList.add(authRider);
+            driverAuthorityList.add(authDriver);
+            driver0.getUser().setAuthorities(driverAuthorityList);
+            driver1.getUser().setAuthorities(driverAuthorityList);
+            driver2.getUser().setAuthorities(driverAuthorityList);
+            driver3.getUser().setAuthorities(driverAuthorityList);
+            driver4.getUser().setAuthorities(driverAuthorityList);
+            driver5.getUser().setAuthorities(driverAuthorityList);
+            driver6.getUser().setAuthorities(driverAuthorityList);
+            driver7.getUser().setAuthorities(driverAuthorityList);
+            driver8.getUser().setAuthorities(driverAuthorityList);
+            driver9.getUser().setAuthorities(driverAuthorityList);
 
             RideRequest rideRequest0 = new RideRequest(
                     146978572,
@@ -303,22 +335,22 @@ public class SafeRidesApiApplication {
             rideRequest15.setDriver(driver9);
             rideRequest15.setStatus(RideRequestStatus.ASSIGNED);
 
-            util.setCoordinates(rideRequest0);
-            util.setCoordinates(rideRequest1);
-            util.setCoordinates(rideRequest2);
-            util.setCoordinates(rideRequest3);
-            util.setCoordinates(rideRequest4);
-            util.setCoordinates(rideRequest5);
-            util.setCoordinates(rideRequest6);
-            util.setCoordinates(rideRequest7);
-            util.setCoordinates(rideRequest8);
-            util.setCoordinates(rideRequest9);
-            util.setCoordinates(rideRequest10);
-            util.setCoordinates(rideRequest11);
-            util.setCoordinates(rideRequest12);
-            util.setCoordinates(rideRequest13);
-            util.setCoordinates(rideRequest14);
-            util.setCoordinates(rideRequest15);
+            //util.setCoordinates(rideRequest0);
+            //util.setCoordinates(rideRequest1);
+            //util.setCoordinates(rideRequest2);
+            //util.setCoordinates(rideRequest3);
+            //util.setCoordinates(rideRequest4);
+            //util.setCoordinates(rideRequest5);
+            //util.setCoordinates(rideRequest6);
+            //util.setCoordinates(rideRequest7);
+            //util.setCoordinates(rideRequest8);
+            //util.setCoordinates(rideRequest9);
+            //util.setCoordinates(rideRequest10);
+            //util.setCoordinates(rideRequest11);
+            //util.setCoordinates(rideRequest12);
+            //util.setCoordinates(rideRequest13);
+            //util.setCoordinates(rideRequest14);
+            //util.setCoordinates(rideRequest15);
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
@@ -330,6 +362,11 @@ public class SafeRidesApiApplication {
             driverRepository.save(driver7);
             driverRepository.save(driver8);
             driverRepository.save(driver9);
+
+            driverLocationRepository.save(loc0);
+            driverLocationRepository.save(loc1);
+            driverLocationRepository.save(loc2);
+            driverLocationRepository.save(loc3);
 
             rideRequestRepository.save(rideRequest0);
             rideRequestRepository.save(rideRequest1);
@@ -347,15 +384,6 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest13);
             rideRequestRepository.save(rideRequest14);
             rideRequestRepository.save(rideRequest15);
-
-            Authority authAdmin = new Authority(AuthorityName.ROLE_ADMIN);
-            Authority authCoordinator = new Authority(AuthorityName.ROLE_COORDINATOR);
-            Authority authDriver = new Authority(AuthorityName.ROLE_DRIVER);
-            Authority authRider = new Authority(AuthorityName.ROLE_RIDER);
-            authorityRepository.save(authAdmin);
-            authorityRepository.save(authCoordinator);
-            authorityRepository.save(authDriver);
-            authorityRepository.save(authRider);
 
             User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
             User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");

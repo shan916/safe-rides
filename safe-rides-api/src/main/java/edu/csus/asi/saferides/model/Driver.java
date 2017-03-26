@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
 
 /*
  * @author Zeeshan Khaliq
@@ -28,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Driver {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -85,6 +85,23 @@ public class Driver {
 	@OneToMany(mappedBy = "driver")
 	private Set<RideRequest> rides;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "driver")
+	private Set<DriverLocation> locations;
+
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private User user;
+
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		modifiedDate = new Date();
+		if (createdDate == null) {
+			createdDate = new Date();
+		}
+	}
+
 	protected Driver() {
 	}
 
@@ -101,14 +118,7 @@ public class Driver {
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
-	}
-
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
-
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
+		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "email@email.email");
 	}
 
 	public Long getId() {
@@ -127,20 +137,20 @@ public class Driver {
 		this.csusId = csusId;
 	}
 
-	public String getdriverFirstName() {
+	public String getDriverFirstName() {
 		return driverFirstName;
 	}
 
-	public void setdriverFirstName(String name) {
-		this.driverFirstName = name;
+	public void setDriverFirstName(String driverFirstName) {
+		this.driverFirstName = driverFirstName;
 	}
 
-	public String getdriverLastName() {
+	public String getDriverLastName() {
 		return driverLastName;
 	}
 
-	public void setdriverLastName(String name) {
-		this.driverLastName = name;
+	public void setDriverLastName(String driverLastName) {
+		this.driverLastName = driverLastName;
 	}
 
 	public String getPhoneNumber() {
@@ -175,7 +185,7 @@ public class Driver {
 		this.gender = gender;
 	}
 
-	public Boolean isInsuranceChecked() {
+	public Boolean getInsuranceChecked() {
 		return insuranceChecked;
 	}
 
@@ -183,7 +193,15 @@ public class Driver {
 		this.insuranceChecked = insuranceChecked;
 	}
 
-	public Boolean isActive() {
+	public String getInsuranceCompany() {
+		return insuranceCompany;
+	}
+
+	public void setInsuranceCompany(String insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
+	}
+
+	public Boolean getActive() {
 		return active;
 	}
 
@@ -191,15 +209,39 @@ public class Driver {
 		this.active = active;
 	}
 
+	public void setStatus(DriverStatus status) {
+		this.status = status;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
+
 	public Set<RideRequest> getRides() {
 		if (this.rides == null) {
 			return new HashSet<RideRequest>();
 		}
 		return rides;
-	}
-
-	public void setRides(Set<RideRequest> rides) {
-		this.rides = rides;
 	}
 
 	public DriverStatus getStatus() {
@@ -217,39 +259,44 @@ public class Driver {
 			return DriverStatus.AVAILABLE;
 		}
 	}
-	
-	public Date getCreatedDate() {
-		return createdDate;
+
+	public Set<DriverLocation> getLocations() {
+		return locations;
 	}
 
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-	
-	public String getInsuranceCompany() {
-		return insuranceCompany;
+	public void setLocations(Set<DriverLocation> locations) {
+		this.locations = locations;
 	}
 
-	public void setInsuranceCompany(String insuranceCompany) {
-		this.insuranceCompany = insuranceCompany;
+	public User getUser() {
+		return user;
 	}
 
-	@PreUpdate
-	@PrePersist
-	public void updateTimeStamps() {
-		modifiedDate = new Date();
-		if (createdDate == null) {
-			createdDate = new Date();
-		}
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
 	public String toString() {
-		return "Driver [id=" + id + ", csusId=" + csusId + ", driverFirstName=" + driverFirstName + ", driverLastName="
-				+ driverLastName + ", phoneNumber=" + phoneNumber + ", dlState=" + dlState + ", dlNumber=" + dlNumber
-				+ ", gender=" + gender + ", insuranceChecked=" + insuranceChecked + ", insuranceCompany="
-				+ insuranceCompany + ", active=" + active + ", status=" + status + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", vehicle=" + vehicle + ", rides=" + rides + "]";
+		return "Driver{" +
+				"id=" + id +
+				", csusId='" + csusId + '\'' +
+				", driverFirstName='" + driverFirstName + '\'' +
+				", driverLastName='" + driverLastName + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", dlState='" + dlState + '\'' +
+				", dlNumber='" + dlNumber + '\'' +
+				", gender='" + gender + '\'' +
+				", insuranceChecked=" + insuranceChecked +
+				", insuranceCompany='" + insuranceCompany + '\'' +
+				", active=" + active +
+				", status=" + status +
+				", createdDate=" + createdDate +
+				", modifiedDate=" + modifiedDate +
+				", vehicle=" + vehicle +
+				", rides=" + rides +
+				", locations=" + locations +
+				", user=" + user +
+				'}';
 	}
-
 }
