@@ -14,7 +14,8 @@
                             <ng-map center="38.56,-121.41" zoom="11" style="height:650px;" scrollwheel="false">
                                 <shape name="circle" stroke-color="#FFFF00" stroke-opacity="0.8" stroke-weight="2" fill-color="#FFFF00" fill-opacity="0.35" center="38.559146,-121.4234905" radius="16093.44">
                                 </shape>
-                                <marker ng-repeat="p in ctrl.positions" position="{{p}}"></marker>
+                                <marker icon="{url: 'images/red-dot.png'}" on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'UNASSIGNED'}" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
+                                <marker icon="{url: 'images/green-dot.png'}" on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'ASSIGNED'}" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
                             </ng-map>
                         </div>
                     </div>

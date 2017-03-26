@@ -21,22 +21,6 @@ var app = angular.module('safeRidesWebApp')
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
 
-        vm.positions = [
-            [38.55, -121.45],
-            [38.54, -121.44],
-            [38.53, -121.43],
-            [38.52, -121.42]
-        ];
-        $interval(function() {
-            var numMarkers = 4;
-            vm.positions = [];
-            for (var i = 0; i < numMarkers; i++) {
-                var lat = 38.55 + (Math.random() / 100);
-                var lng = -121.45 + (Math.random() / 100);
-                vm.positions.push([lat, lng]);
-            }
-        }, 15000);
-
         function getDrivers() {
             vm.loadingCoordinatorDrivers = true;
             DriverService.query({active: true}).$promise.then(function(response) {
@@ -93,6 +77,10 @@ var app = angular.module('safeRidesWebApp')
         vm.rideRequests = [];
 
         getRideRequests();
+
+        vm.mapPinClick = function(test){
+            console.log(test);
+        }
 
         vm.requestAgeInMinutes = function(start) {
             return moment.duration(moment().diff(moment(start))).asMinutes();
