@@ -77,9 +77,9 @@ public class SafeRidesApiApplication {
                     "95818", "345 Main St.", "Sacramento", "95818");
             RideRequest rideRequest5 = new RideRequest("56", "Edward", "Ozeruga", "9161231234", 4, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest6 = new RideRequest("6", "Bryce", "Hairabedian", "9161231234", 1, "123 Main St.", "Sacramento",
+            RideRequest rideRequest6 = new RideRequest("60", "Bryce", "Hairabedian", "9161231234", 1, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
-            RideRequest rideRequest7 = new RideRequest("7", "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
+            RideRequest rideRequest7 = new RideRequest("70", "Bill", "Mitchell", "9161231234", 1, "123 Main St.", "Sacramento",
                     "95818", "345 Main St.", "Sacramento", "95818");
 
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
@@ -118,7 +118,31 @@ public class SafeRidesApiApplication {
 
             List<Authority> authorityList = new ArrayList<Authority>();
 
+            User requestor0 = new User("r_123456", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor1 = new User("r_23456", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor2 = new User("r_3456", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor3 = new User("r_456", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor4 = new User("r_56", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor5 = new User("r_60", "anon_fname", "anon_lnam", "pass", "null@null.null");
+            User requestor6 = new User("r_70", "anon_fname", "anon_lnam", "pass", "null@null.null");
+
             authorityList.add(authRider);
+
+            requestor0.setAuthorities(authorityList);
+            requestor1.setAuthorities(authorityList);
+            requestor2.setAuthorities(authorityList);
+            requestor3.setAuthorities(authorityList);
+            requestor4.setAuthorities(authorityList);
+            requestor5.setAuthorities(authorityList);
+            requestor6.setAuthorities(authorityList);
+            userRepository.save(requestor0);
+            userRepository.save(requestor1);
+            userRepository.save(requestor2);
+            userRepository.save(requestor3);
+            userRepository.save(requestor4);
+            userRepository.save(requestor5);
+            userRepository.save(requestor6);
+
             authorityList.add(authDriver);
             driver.setAuthorities(authorityList);
             userRepository.save(driver);

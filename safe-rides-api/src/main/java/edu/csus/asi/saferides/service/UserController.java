@@ -191,12 +191,12 @@ public class UserController {
     	// Perform the security
     	UserDetails userDetails;
 		try {
-			userDetails = userDetailsService.loadUserByUsername(riderAuthenticationRequest.getOneCardId());
+			userDetails = userDetailsService.loadUserByUsername("r_" + riderAuthenticationRequest.getOneCardId());
 		} catch (UsernameNotFoundException e) {
 			// TODO Auto-generated catch block
 			Date currentDate = new Date();
 
-            User requestor = new User("" + riderAuthenticationRequest.getOneCardId(),
+            User requestor = new User("r_" + riderAuthenticationRequest.getOneCardId(),
                     "anon_fname", "anon_lname", currentDate.toString(), "null@null.null");
 
             requestor.setLastPasswordResetDate(currentDate);
