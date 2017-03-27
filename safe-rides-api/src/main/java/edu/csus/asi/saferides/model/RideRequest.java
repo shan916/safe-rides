@@ -1,5 +1,8 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -84,6 +87,10 @@ public class RideRequest {
     @Column(precision = 10, scale = 2)
     private Double dropoffLongitude;
 
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY)
+    private User user;
+
     protected RideRequest() {
     }
 
@@ -104,6 +111,7 @@ public class RideRequest {
         this.dropoffCity = dropoffCity;
         this.dropoffZip = dropoffZip;
         this.status = RideRequestStatus.UNASSIGNED;
+        this.user = new User("" + requestorId, requestorFirstName, requestorLastName, "pass", "rider@null.null");
     }
 
     public String getEstimatedTime() {
@@ -314,6 +322,14 @@ public class RideRequest {
         this.dropoffLongitude = getPickupLongitude;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "RideRequest{" +
@@ -339,10 +355,11 @@ public class RideRequest {
                 ", cancelMessage='" + cancelMessage + '\'' +
                 ", messageToDriver='" + messageToDriver + '\'' +
                 ", estimatedTime='" + estimatedTime + '\'' +
-                ", pickupLatitude='" + pickupLatitude + '\'' +
-                ", pickupLongitude='" + pickupLongitude + '\'' +
-                ", dropoffLatitude='" + dropoffLatitude + '\'' +
-                ", dropoffLongitude='" + dropoffLongitude + '\'' +
+                ", pickupLatitude=" + pickupLatitude +
+                ", pickupLongitude=" + pickupLongitude +
+                ", dropoffLatitude=" + dropoffLatitude +
+                ", dropoffLongitude=" + dropoffLongitude +
+                ", user=" + user +
                 '}';
     }
 }
