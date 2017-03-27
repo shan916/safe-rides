@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -15,12 +16,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 import java.util.ArrayList;
@@ -51,6 +54,10 @@ public class RideRequestController {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
 
     /*
      * GET /rides
@@ -143,6 +150,34 @@ public class RideRequestController {
         } else {
             rideRequestRepository.delete(id);
             return ResponseEntity.noContent().build();
+        }
+    }
+
+    /*
+     * GET /rides/mine
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/mine")
+    @PreAuthorize("hasRole('RIDER')")
+    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns currently authenticated user's current ride request...")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> retrieveMyRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
+
+        if (rideRequest == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("You do not have a current ride request"));
+        } else {
+            // TODO this can return a ride request that is old. (but will be the latest)
+            // ALSO TODO change the response to a DTO rather than the full ride request
+            return ResponseEntity.ok(rideRequest);
         }
     }
 }

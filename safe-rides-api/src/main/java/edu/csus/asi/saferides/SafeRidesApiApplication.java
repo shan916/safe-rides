@@ -84,21 +84,6 @@ public class SafeRidesApiApplication {
 
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
 
-            driverRepository.save(driver1);
-            driverRepository.save(driver2);
-            driverRepository.save(driver3);
-            driverRepository.save(driver4);
-            driverRepository.save(driver5);
-            driverRepository.save(driver6);
-
-            rideRequestRepository.save(rideRequest1);
-            rideRequestRepository.save(rideRequest2);
-            rideRequestRepository.save(rideRequest3);
-            rideRequestRepository.save(rideRequest4);
-            rideRequestRepository.save(rideRequest5);
-            rideRequestRepository.save(rideRequest6);
-            rideRequestRepository.save(rideRequest7);
-
             Authority authAdmin = new Authority();
             authAdmin.setName(AuthorityName.ROLE_ADMIN);
             Authority authCoordinator = new Authority();
@@ -126,6 +111,13 @@ public class SafeRidesApiApplication {
             User requestor5 = new User("r_60", "anon_fname", "anon_lnam", "pass", "null@null.null");
             User requestor6 = new User("r_70", "anon_fname", "anon_lnam", "pass", "null@null.null");
 
+            User user_driver0 = new User("000000000", "Zeeshan", "Khaliq", "pass", "null@null.null");
+            User user_driver1 = new User("000000001", "Ryan", "Long", "pass", "null@null.null");
+            User user_driver2 = new User("000000002", "Bryce", "Hairabedian", "pass", "null@null.null");
+            User user_driver3 = new User("000000003", "Edward", "Ozeruga", "pass", "null@null.null");
+            User user_driver4 = new User("000000004", "Justin", "Mendiguarin", "pass", "null@null.null");
+            User user_driver5 = new User("000000005", "Nik", "Sorvari", "pass", "null@null.null");
+
             authorityList.add(authRider);
 
             requestor0.setAuthorities(authorityList);
@@ -135,6 +127,7 @@ public class SafeRidesApiApplication {
             requestor4.setAuthorities(authorityList);
             requestor5.setAuthorities(authorityList);
             requestor6.setAuthorities(authorityList);
+
             userRepository.save(requestor0);
             userRepository.save(requestor1);
             userRepository.save(requestor2);
@@ -143,15 +136,60 @@ public class SafeRidesApiApplication {
             userRepository.save(requestor5);
             userRepository.save(requestor6);
 
+            rideRequest1.setUser(requestor0);
+            rideRequest2.setUser(requestor1);
+            rideRequest3.setUser(requestor2);
+            rideRequest4.setUser(requestor3);
+            rideRequest5.setUser(requestor4);
+            rideRequest6.setUser(requestor5);
+            rideRequest7.setUser(requestor6);
+
             authorityList.add(authDriver);
             driver.setAuthorities(authorityList);
+            user_driver0.setAuthorities(authorityList);
+            user_driver1.setAuthorities(authorityList);
+            user_driver2.setAuthorities(authorityList);
+            user_driver3.setAuthorities(authorityList);
+            user_driver4.setAuthorities(authorityList);
+            user_driver5.setAuthorities(authorityList);
+
             userRepository.save(driver);
+            userRepository.save(user_driver0);
+            userRepository.save(user_driver1);
+            userRepository.save(user_driver2);
+            userRepository.save(user_driver3);
+            userRepository.save(user_driver4);
+            userRepository.save(user_driver5);
+
             authorityList.add(authCoordinator);
             coordinator.setAuthorities(authorityList);
             userRepository.save(coordinator);
+
             authorityList.add(authAdmin);
             admin.setAuthorities(authorityList);
             userRepository.save(admin);
+
+            driver1.setUser(user_driver0);
+            driver2.setUser(user_driver1);
+            driver3.setUser(user_driver2);
+            driver4.setUser(user_driver3);
+            driver5.setUser(user_driver4);
+            driver6.setUser(user_driver5);
+
+            driverRepository.save(driver1);
+            driverRepository.save(driver2);
+            driverRepository.save(driver3);
+            driverRepository.save(driver4);
+            driverRepository.save(driver5);
+            driverRepository.save(driver6);
+
+            rideRequestRepository.save(rideRequest1);
+            rideRequestRepository.save(rideRequest2);
+            rideRequestRepository.save(rideRequest3);
+            rideRequestRepository.save(rideRequest4);
+            rideRequestRepository.save(rideRequest5);
+            rideRequestRepository.save(rideRequest6);
+            rideRequestRepository.save(rideRequest7);
         };
     }
 

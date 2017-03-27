@@ -1,5 +1,8 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -71,6 +74,10 @@ public class RideRequest {
 
 	@Column(nullable = true)
 	private String estimatedTime;
+
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	private User user;
 
 	protected RideRequest() {
 	}
@@ -279,6 +286,14 @@ public class RideRequest {
 		this.estimatedTime = estimatedTime;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return "RideRequest [driver=" + driver + ", id=" + id + ", oneCardId=" + oneCardId + ", requestDate="
@@ -288,6 +303,6 @@ public class RideRequest {
 				+ pickupLine1 + ", pickupLine2=" + pickupLine2 + ", pickupCity=" + pickupCity + ", pickupZip="
 				+ pickupZip + ", dropoffLine1=" + dropoffLine1 + ", dropoffLine2=" + dropoffLine2 + ", dropoffCity="
 				+ dropoffCity + ", dropoffZip=" + dropoffZip + ", status=" + status + ", cancelMessage=" + cancelMessage
-				+ ", messageToDriver=" + messageToDriver + ", estimatedTime=" + estimatedTime + "]";
+				+ ", messageToDriver=" + messageToDriver + ", estimatedTime=" + estimatedTime + "user=" + user + "]";
 	}
 }
