@@ -111,6 +111,8 @@ public class RideRequestController {
 
         if (username.startsWith("r_")) {
             rideRequest.setOneCardId(username.substring(2));
+            User user = userRepository.findByUsername(username);
+            rideRequest.setUser(user);
         }
 
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status

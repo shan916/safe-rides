@@ -21,7 +21,7 @@ angular.module('safeRidesWebApp')
         UserService.get().$promise.then(function(response) {
             vm.loading = false;
             vm.loggedIn = true;
-            return response.data;
+            getRide();
         }, function(error) {
             vm.loading = false;
             vm.loggedIn = false;
