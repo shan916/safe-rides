@@ -19,25 +19,30 @@ angular.module('safeRidesWebApp')
         vm.getPickupDirections = undefined;
         vm.dropoffAddress = undefined;
         vm.assignedRideRequest = undefined;
+        vm.isRideAssigned = false;
+        vm.showNoRequestView = false;
 
         function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
                 vm.assignedRideRequest = response;
+                vm.isRideAssigned = false;
 
                 vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
                     var rideRequest = new RideRequest(element);
                     assignedRideRequest[index] = rideRequest;
                     if(rideRequest.status === 'ASSIGNED'){
                       //return rideRequest;
+                      vm.isRideAssigned=true;
+                      vm.isStartOdoEntered = false;
                       vm.assignedRide = rideRequest;
                       console.log("got Assigned Ride");
                       }
                 });
 
 
-                console.log('got currently assigned ride requests:', response);
+                console.log('getCurrentRideRequest() called API success:', response);
             }, function(error) {
-                console.log('error getting currently assigned ride requests:', error);
+                console.log('error in getCurrentRideRequest():', error);
             });
         };
 
@@ -48,7 +53,6 @@ angular.module('safeRidesWebApp')
             vm.pickupAddress = "https://www.google.com/maps/place/"+vm.assignedRide.pickupLine1
             +", "+vm.assignedRide.pickupCity+ ", CA, "
             +vm.assignedRide.pickupZip;
-            console.log("got buttons built");
             if(vm.assignedRide.pickupLine2 !== undefined){
               vm.pickupAddress += ", "+vm.assignedRide.pickupLine2
             }
@@ -57,7 +61,7 @@ angular.module('safeRidesWebApp')
             vm.dropoffAddress = "https://www.google.com/maps/place/"+vm.assignedRide.dropoffLine1
             +", "+vm.assignedRide.dropoffCity+ ", CA, "
             +vm.assignedRide.dropoffZip;
-            console.log("got buttons built");
+            console.log("buttons built");
             if(vm.assignedRide.dropoffLine2 !== undefined){
               vm.dropoffAddress += ", "+vm.assignedRide.dropoffLine2
             }
@@ -70,6 +74,9 @@ angular.module('safeRidesWebApp')
             buildDirectionButtons();
             vm.assignedRide.startOdometer = vm.startOdo;
             vm.assignedRide.status = 'INPROGRESS';
+            vm.isRideAssigned = true;
+            vm.isStartOdoEntered = true;
+
             //TODO notify rider, Ride on the way
 
             /**********************************
@@ -81,19 +88,27 @@ angular.module('safeRidesWebApp')
                 console.log('Driver, error saving riderequest:', error);
             }); */
 
-                vm.isStartOdoEntered = true;
+
                 //Ride Request -> Accepted by driver
 
             }
-
-            vm.endRide = function(){
-              //TODO save current rideRequest COMPLETE
-              vm.isStartOdoEntered = false;
-              //get new ride request
-              getCurrentRideRequest();
-            }
-
       };
+
+      vm.endRide = function(){
+        //TODO save current rideRequest COMPLETE
+        vm.assignedRide.status = 'COMPLETE';
+        vm.isStartOdoEntered = false;
+        vm.isRideAssigned = false;
+        //get new ride request
+        //TODO uncomment below when able to save ride request
+        //getCurrentRideRequest();
+      };
+
+      vm.refresh = function(){
+        getCurrentRideRequest();
+      }
+
+
 
 
 

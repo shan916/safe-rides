@@ -1,19 +1,22 @@
 <div class="container">
-    <div ng-hide="true" class="alert alert-info alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+
+  <!-- No Ride View -->
+  <div ng-show="ctrl.isRideAssigned === false && ctrl.isStartOdoEntered === false">
+    <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
         <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
     </div>
+      <div class="text-center">
+        <button class="btn btn-default btn-info" type="button"
+                ng-click="ctrl.refresh()">
+          Refresh
+        </button>
+      </div>
+  </div><!-- end No Ride View -->
 
-    <div ng-hide="true" class="alert alert-info alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-        <strong>Incoming Ride Requests</strong> There is a ride requests assigned to you.
-    </div>
-
-    <div class="panel panel-success" ng-hide="ctrl.isStartOdoEntered">
+    <!-- New Ride Available -->
+    <!--div class="panel panel-success" ng-hide="ctrl.isStartOdoEntered"-->
+    <!-- ng-show="User=='admin' || User=='teacher'" -->
+    <div class="panel panel-success" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === false">
       <div class="panel-heading text-center">
           <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
       </div>
@@ -47,12 +50,13 @@
           </div>
         </div>
       </div>
-    </div><!-- end New Ride Assigned Request -->
-  </div>
+    </div><!-- end panel body -->
+  </div><!-- end New Ride Assigned Request -->
 
 
-    <!-- start Incoming Ride Request panel-->
-    <div class="panel panel-primary" ng-show="ctrl.isStartOdoEntered"><!--ng-repeat="ride in ctrl.rideRequests"-->
+    <!-- Currrent Ride Request-->
+    <!--div class="panel panel-primary" ng-show="ctrl.isStartOdoEntered"-->
+    <div class="panel panel-primary" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === true">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>
         </div>
@@ -192,7 +196,7 @@
 
     <div class="panel panel-default" ng-hide="true">
         <div class="panel-heading">
-            <h3 class="panel-title">Report Issue</h3>
+            <h3 class="panel-title">NO Current Rides</h3>
         </div>
         <div class="panel-body">
             Report an issue to the coordinator either by phone call or by a message
