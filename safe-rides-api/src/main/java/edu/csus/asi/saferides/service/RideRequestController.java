@@ -105,7 +105,14 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
 
-    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device) {
+    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device, HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        if (username.startsWith("r_")) {
+            rideRequest.setOneCardId(username.substring(2));
+        }
+
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         RideRequest result = rideRequestRepository.save(rideRequest);
@@ -173,7 +180,7 @@ public class RideRequestController {
         RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
 
         if (rideRequest == null) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("You do not have a current ride request"));
+            return ResponseEntity.noContent().build();
         } else {
             // TODO this can return a ride request that is old. (but will be the latest)
             // ALSO TODO change the response to a DTO rather than the full ride request
