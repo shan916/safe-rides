@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function($scope, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver) {
+    .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver) {
         var vm = this;
         vm.loadingRideRequest = true;
         vm.ride = undefined;
@@ -18,109 +18,84 @@ angular.module('safeRidesWebApp')
         vm.isStartOdoEntered = false;
         vm.getPickupDirections = undefined;
         vm.dropoffAddress = undefined;
-        //vm.driver = driver;
+        vm.assignedRideRequest = undefined;
 
-        // START EXAMPLE - GET LIST OF (ASSIGNED) RIDES
-
-        vm.assignedRideRequests = undefined;
-
-        function getCurrentRideRequests() {
+        function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
-                vm.assignedRideRequests = response;
+                vm.assignedRideRequest = response;
 
-                vm.assignedRideRequests.forEach(function(element, index, assignedRideRequests) {
+                vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
                     var rideRequest = new RideRequest(element);
-                    assignedRideRequests[index] = rideRequest;
+                    assignedRideRequest[index] = rideRequest;
+                    if(rideRequest.status === 'ASSIGNED'){
+                      //return rideRequest;
+                      vm.assignedRide = rideRequest;
+                      console.log("got Assigned Ride");
+                      }
                 });
+
 
                 console.log('got currently assigned ride requests:', response);
             }, function(error) {
                 console.log('error getting currently assigned ride requests:', error);
             });
+        };
+
+        getCurrentRideRequest();
+
+      function buildDirectionButtons(){
+        if(vm.assignedRide.pickupLine1 !== undefined){
+            vm.pickupAddress = "https://www.google.com/maps/place/"+vm.assignedRide.pickupLine1
+            +", "+vm.assignedRide.pickupCity+ ", CA, "
+            +vm.assignedRide.pickupZip;
+            console.log("got buttons built");
+            if(vm.assignedRide.pickupLine2 !== undefined){
+              vm.pickupAddress += ", "+vm.assignedRide.pickupLine2
+            }
         }
-
-        vm.assignedRideRequests = getCurrentRideRequests();
-
-        // END EXAMPLE - GET LIST OF (ASSIGNED) RIDES
-
-        function getRideRequests() {
-        vm.loadingRideRequests = true;
-        DriverRidesService.get({
-            id: '1'
-        }).$promise.then(function(response) {
-            vm.rideRequests = response;
-
-            vm.rideRequests.forEach(function(element, index, rideRequests) {
-                var rideRequest = new RideRequest(element);
-                rideRequests[index] = rideRequest;
-                if(rideRequests[index].status === 'ASSIGNED'){
-                  vm.assignedRide = rideRequests[index];
-                  //todo generate addresses
-                  if(vm.assignedRide.dropoffLine2 !== undefined){
-                    vm.dropoffAddress ="https://www.google.com/maps/place/"+ vm.assignedRide.dropoffLine1
-                    +", "+vm.assignedRide.dropoffCity+ ", CA, "
-                    +vm.assignedRide.dropoffZip;
-                  }else if(vm.assignedRide.dropoffLine1 !== undefined){
-                    vm.dropoffAddress = "https://www.google.com/maps/place/"+vm.assignedRide.dropoffLine1
-                    +", "+vm.assignedRide.dropoffCity+ ", CA, "
-                    +vm.assignedRide.dropoffZip+", "+vm.assignedRide.dropoffLine2;
-                  }
-                  console.log("for each: added: "+rideRequests[index].status);
-                }else{
-                  console.log("for each: added NON-ASSIGNED: "+rideRequests[index].status);
-                }
-            });
-
-
-            vm.loadingRideRequests = false;
-
-            console.log('got driver-ride request:', response);
-
-        }, function(error) {
-            vm.loadingRideRequests = false;
-            console.log('error getting-ride request:', error);
-        });
-      }
-
-      /*function getAssignedRequests(){
-        console.log("Getting assinged requests");
-        for(var i=0;i<vm.rideRequests.length;i++){
-          console.log("in for");
-          if(vm.rideRequests[i].status === "ASSIGNED"){
-            console.log("ASSIGNED ride Request in vm.assignedRide");
-            vm.assignedRide = vm.rideRequests[i];
-            //console.log("assignedRide startOdo: "+vm.rideRequests[1].startOdo);
-          }
+        if(vm.assignedRide.dropoffLine1 !== undefined){
+            vm.dropoffAddress = "https://www.google.com/maps/place/"+vm.assignedRide.dropoffLine1
+            +", "+vm.assignedRide.dropoffCity+ ", CA, "
+            +vm.assignedRide.dropoffZip;
+            console.log("got buttons built");
+            if(vm.assignedRide.dropoffLine2 !== undefined){
+              vm.dropoffAddress += ", "+vm.assignedRide.dropoffLine2
+            }
         }
-      }*/
-      getRideRequests();
+      };
+      //getRideRequests();
+
       vm.viewRide = function() {
           if(vm.startOdo !== undefined){
-                vm.assignedRide.startOdometer = vm.startOdo;
+            buildDirectionButtons();
+            vm.assignedRide.startOdometer = vm.startOdo;
+            vm.assignedRide.status = 'INPROGRESS';
+            //TODO notify rider, Ride on the way
+
+            /**********************************
+            ************ NOT Working **********/
+            /*RideRequestService.save(vm.assignedRide).$promise.then(function(response) {
+                console.log('Driver, saved riderequest:', response);
+                $uibModalInstance.dismiss();
+            }, function(error) {
+                console.log('Driver, error saving riderequest:', error);
+            }); */
+
                 vm.isStartOdoEntered = true;
-                //todo Save the Ride Request -> Accepted by driver
-                console.log("got assignedRide");
-          }
+                //Ride Request -> Accepted by driver
+
+            }
+
+            vm.endRide = function(){
+              //TODO save current rideRequest COMPLETE
+              vm.isStartOdoEntered = false;
+              //get new ride request
+              getCurrentRideRequest();
+            }
+
       };
 
 
-        // TODO: Move this to an environment file
-        //$scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE";
 
 
-
-
-
-    /*    if(vm.assignedRide === undefined){
-          vm.dropoffAddress = vm.assignedRide.dropoffLine1
-          +", "+vm.assignedRide.dropoffCity+ ", CA, "
-          +vm.assignedRide.dropoffZip;
-        }else if(vm.assignedRide.dropoffLine2 !== undefined){
-          //add line 2
-          vm.dropOffAddress = vm.assignedRide.pickupLine1
-          +", "+vm.pickupLine2+", "+vm.assignedRide.pickupCity+ ", CA, "
-          +vm.assignedRide.pickupZip;
-        }
-        */
-
-    });
+    });//end Controller

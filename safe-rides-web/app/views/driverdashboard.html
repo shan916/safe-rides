@@ -20,9 +20,9 @@
       <div class="panel-body">
         <div class="row">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-md-4">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4">
 
                   <form name="odoStartRideForm" class="my-form form-vertical">
                     <label for="odoStartRide">Enter ODO in miles to View Ride: </label>
@@ -34,16 +34,16 @@
                     </div>
                   </form>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4">
             </div>
         </div>
         <div class="row"  style="padding-top:5px;">
-          <div class="col-sm-3">
+          <div class="col-md-3">
           </div>
-          <div class="col-sm-6">
+          <div class="col-md-6">
             <button class="btn btn-success btn-block" ng-disabled="odoStartRideForm.$invalid" ng-click="ctrl.viewRide()">View Ride</button>
           </div>
-          <div class="col-sm-3">
+          <div class="col-md-3">
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="panel-body">
           <div class="row" ><!-- ng-repeat="ride in ctrl.rideRequests" -->
-            <div class="col-sm-4"><!-- rider info -->
+            <div class="col-md-4"><!-- rider info -->
               <!--h4>Rider</h4-->
               <dl class="dl-horizontal"><!-- class="dl-horizontal"-->
                 <dt>Name:</dt>
@@ -71,7 +71,7 @@
                 <dd ng-if="ctrl.assignedRide.messageToDriver">{{ctrl.assignedRide.messageToDriver}}</dd>
               </dl>
             </div>
-            <div class="col-sm-4"><!--pickup -->
+            <div class="col-md-4"><!--pickup -->
               <!--h4>Pickup Address</h4-->
               <dl class="dl-horizontal"><!-- class="dl-horizontal"-->
                 <dt>Pickup Address:</dt>
@@ -82,7 +82,7 @@
                   ng-href="{{ctrl.pickupAddress}}" target="_blank">Directions</a></dd>
               </dl>
             </div>
-            <div class="col-sm-4"><!-- dropoff -->
+            <div class="col-md-4"><!-- dropoff -->
               <!--h4>Drop-off Address</h4-->
               <dl class="dl-horizontal">
                 <dt>Drop-off Address:</dt>
@@ -98,7 +98,7 @@
             <div class=" col-md-6">
                   <button class="btn btn-default btn-block btn-success">Arrived / Notify Rider</button>
                   <button class="btn btn-default btn-block btn-warning">Report Issue / Contact SafeRides</button>
-                  <button class="btn btn-default btn-block btn-danger">End Ride / Drop-Off</button>
+                  <button class="btn btn-default btn-block btn-danger" ng-click="ctrl.endRide()">End Ride / Drop-Off</button>
                 </div>
                 <div class="col-md-3"></div>
           </div>
@@ -111,7 +111,7 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <dl class="dl-horizontal">
                         <dt>Name</dt>
                         <dd>Jane Smith</dd>
@@ -122,7 +122,7 @@
                     </dl>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <dl class="dl-horizontal">
                         <dt>OneCard ID</dt>
                         <dd>123456789</dd>
@@ -133,21 +133,21 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <button class="btn btn-default btn-block">Directions</button>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <button class="btn btn-default btn-block">Notify Rider</button>
                 </div>
             </div>
 
             <div class="row margin-top-15">
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <button class="btn btn-default btn-block">Report Issue</button>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     <button class="btn btn-default btn-block">Dropoff</button>
                 </div>
             </div>
@@ -160,7 +160,7 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
                         <ng-map center="current-location">
                             <directions draggable="true" panel="directions-panel" travel-mode="DRIVING" origin="current-location" destination="6000 J St, Sacramento, CA 95819">
@@ -180,7 +180,7 @@
         <div class="panel-body">
             Would you like to notify the rider that you arrived at the pickup location?
             <div class="row margin-top-15">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div class="pull-right">
                         <button class="btn btn-default">No</button>
                         <button class="btn btn-primary">Yes</button>
@@ -198,7 +198,7 @@
             Report an issue to the coordinator either by phone call or by a message
 
             <div class="row margin-top-15">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <dl class="dl-horizontal">
                         <dt>Safe Rides Office Phone</dt>
                         <dd>916-000-0000</dd>
@@ -209,7 +209,7 @@
             </div>
 
             <div class="row margin-top-15">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="message">Message</label>
                         <textarea id="message" name="message" class="form-control" placeholder="Enter your message"></textarea>
@@ -218,7 +218,7 @@
             </div>
 
             <div class="row margin-top-15">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div class="pull-right">
                         <button class="btn btn-default">Cancel</button>
                         <button class="btn btn-primary">Submit</button>
@@ -236,7 +236,7 @@
             Would you like to complete this ride request?
 
             <div class="row margin-top-15">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <div class="pull-right">
                         <button class="btn btn-default">No</button>
                         <button class="btn btn-primary">Yes</button>
