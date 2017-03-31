@@ -9,6 +9,7 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +32,7 @@ import java.util.Set;
 public class SafeRidesApiApplication {
 
     @Autowired
-    Util util;
+    GeocodingService geocodingService;
 
     public static void main(String[] args) {
         SpringApplication.run(SafeRidesApiApplication.class, args);
@@ -353,26 +354,26 @@ public class SafeRidesApiApplication {
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.INPROGRESS);
 
-            util.setCoordinates(rideRequest0);
-            util.setCoordinates(rideRequest1);
-            util.setCoordinates(rideRequest2);
-            util.setCoordinates(rideRequest3);
-            util.setCoordinates(rideRequest4);
-            util.setCoordinates(rideRequest5);
-            util.setCoordinates(rideRequest6);
-            util.setCoordinates(rideRequest7);
-            util.setCoordinates(rideRequest8);
-            util.setCoordinates(rideRequest9);
-            util.setCoordinates(rideRequest10);
-            util.setCoordinates(rideRequest11);
-            util.setCoordinates(rideRequest12);
-            util.setCoordinates(rideRequest13);
-            util.setCoordinates(rideRequest14);
-            util.setCoordinates(rideRequest15);
-            util.setCoordinates(rideRequest16);
-            util.setCoordinates(rideRequest17);
-            util.setCoordinates(rideRequest18);
-            util.setCoordinates(rideRequest19);
+            geocodingService.setCoordinates(rideRequest0);
+            geocodingService.setCoordinates(rideRequest1);
+            geocodingService.setCoordinates(rideRequest2);
+            geocodingService.setCoordinates(rideRequest3);
+            geocodingService.setCoordinates(rideRequest4);
+            geocodingService.setCoordinates(rideRequest5);
+            geocodingService.setCoordinates(rideRequest6);
+            geocodingService.setCoordinates(rideRequest7);
+            geocodingService.setCoordinates(rideRequest8);
+            geocodingService.setCoordinates(rideRequest9);
+            geocodingService.setCoordinates(rideRequest10);
+            geocodingService.setCoordinates(rideRequest11);
+            geocodingService.setCoordinates(rideRequest12);
+            geocodingService.setCoordinates(rideRequest13);
+            geocodingService.setCoordinates(rideRequest14);
+            geocodingService.setCoordinates(rideRequest15);
+            geocodingService.setCoordinates(rideRequest16);
+            geocodingService.setCoordinates(rideRequest17);
+            geocodingService.setCoordinates(rideRequest18);
+            geocodingService.setCoordinates(rideRequest19);
 
             User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
             User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
