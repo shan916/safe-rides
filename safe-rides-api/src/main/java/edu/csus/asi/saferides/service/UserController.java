@@ -207,7 +207,7 @@ public class UserController {
             requestor.setAuthorities(authorityList);
 
             userRepository.save(requestor);
-            userDetails = userDetailsService.loadUserByUsername(riderAuthenticationRequest.getOneCardId());
+            userDetails = userDetailsService.loadUserByUsername("r_" + riderAuthenticationRequest.getOneCardId());
 		}
  
         final String token = jwtTokenUtil.generateToken(userDetails, device);
