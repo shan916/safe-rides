@@ -79,17 +79,14 @@ angular.module('safeRidesWebApp')
 
             //TODO notify rider, Ride on the way
 
-            /**********************************
-            ************ NOT Working **********/
-            /*RideRequestService.save(vm.assignedRide).$promise.then(function(response) {
+            RideRequestService.update(vm.assignedRide).$promise.then(function(response) {
                 console.log('Driver, saved riderequest:', response);
-                $uibModalInstance.dismiss();
             }, function(error) {
                 console.log('Driver, error saving riderequest:', error);
-            }); */
+            });
 
 
-                //Ride Request -> Accepted by driver
+            //Ride Request -> Accepted by driver
 
             }
       };

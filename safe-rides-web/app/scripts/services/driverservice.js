@@ -36,7 +36,7 @@ angular.module('safeRidesWebApp')
 
 angular.module('safeRidesWebApp')
     .factory('CurrentDriverRidesService', function($resource, ENV) {
-        return $resource(ENV.apiEndpoint + 'drivers/rides/?status:status', {
+        return $resource(ENV.apiEndpoint + 'drivers/rides/?status=:status', {
             status: '@status'
         }, {
             get: {
