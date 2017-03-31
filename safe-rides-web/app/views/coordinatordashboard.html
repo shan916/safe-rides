@@ -16,7 +16,7 @@
                                 <marker icon="{url: 'images/orange-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'ASSIGNED'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
                                 <marker icon="{url: 'images/yellow-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'INPROGRESS'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
                                 <marker icon="{url: 'images/green-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'PICKEDUP'} : true" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
-                                <marker icon="{url: 'images/blue-dot.png'}" title='{{d.driver.driverFirstName}} {{d.driverLastName}}' on-click='ctrl.mapDriverPinClick({{d.driver.id}})' ng-repeat="d in ctrl.driversLocation" position="{{d.latitude +','+ d.longitude}}"></marker>
+                                <marker icon="{url: 'images/blue-dot.png'}" title='{{d.driver.driverFirstName}} {{d.driver.driverLastName}}' on-click='ctrl.mapDriverPinClick({{d.driver.id}})' ng-repeat="d in ctrl.driversLocation" position="{{d.latitude +','+ d.longitude}}"></marker>
                             </ng-map>
                         </div>
                     </div>
