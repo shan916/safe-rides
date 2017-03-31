@@ -4,18 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +18,6 @@ import edu.csus.asi.saferides.security.model.User;
 
 @Entity
 public class Driver {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -83,12 +71,25 @@ public class Driver {
 	private Vehicle vehicle;
 
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private User user;
+	@OneToMany(mappedBy = "driver")
+	private Set<RideRequest> rides;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
-	private Set<RideRequest> rides;
+	private Set<DriverLocation> locations;
+
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	private User user;
+
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		modifiedDate = new Date();
+		if (createdDate == null) {
+			createdDate = new Date();
+		}
+	}
 
 	protected Driver() {
 	}
@@ -106,15 +107,7 @@ public class Driver {
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
-		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "email@email.email");
-	}
-
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
-
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
+		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
 	}
 
 	public Long getId() {
@@ -133,20 +126,20 @@ public class Driver {
 		this.csusId = csusId;
 	}
 
-	public String getdriverFirstName() {
+	public String getDriverFirstName() {
 		return driverFirstName;
 	}
 
-	public void setdriverFirstName(String name) {
-		this.driverFirstName = name;
+	public void setDriverFirstName(String driverFirstName) {
+		this.driverFirstName = driverFirstName;
 	}
 
-	public String getdriverLastName() {
+	public String getDriverLastName() {
 		return driverLastName;
 	}
 
-	public void setdriverLastName(String name) {
-		this.driverLastName = name;
+	public void setDriverLastName(String driverLastName) {
+		this.driverLastName = driverLastName;
 	}
 
 	public String getPhoneNumber() {
@@ -181,53 +174,12 @@ public class Driver {
 		this.gender = gender;
 	}
 
-	public Boolean isInsuranceChecked() {
+	public Boolean getInsuranceChecked() {
 		return insuranceChecked;
 	}
 
 	public void setInsuranceChecked(Boolean insuranceChecked) {
 		this.insuranceChecked = insuranceChecked;
-	}
-
-	public Boolean isActive() {
-		return active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-
-	public Set<RideRequest> getRides() {
-		if (this.rides == null) {
-			return new HashSet<RideRequest>();
-		}
-		return rides;
-	}
-
-	public void setRides(Set<RideRequest> rides) {
-		this.rides = rides;
-	}
-
-	public DriverStatus getStatus() {
-		for (RideRequest ride : getRides()) {
-			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
-				return DriverStatus.ASSIGNED;
-			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
-				return DriverStatus.INPROGRESS;
-			} else {
-				return DriverStatus.AVAILABLE;
-			}
-		}
-
-		return DriverStatus.AVAILABLE;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public Date getModifiedDate() {
-		return modifiedDate;
 	}
 
 	public String getInsuranceCompany() {
@@ -238,21 +190,79 @@ public class Driver {
 		this.insuranceCompany = insuranceCompany;
 	}
 
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public void setStatus(DriverStatus status) {
+		this.status = status;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public Set<RideRequest> getRides() {
+		if (this.rides == null) {
+			return new HashSet<RideRequest>();
+		}
+		return rides;
+	}
+
+	public DriverStatus getStatus() {
+		boolean inprogress = false;
+		for (RideRequest ride : getRides()) {
+			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
+				return DriverStatus.ASSIGNED;
+			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
+				inprogress = true;
+			}
+		}
+		if (inprogress) {
+			return DriverStatus.INPROGRESS;
+		} else {
+			return DriverStatus.AVAILABLE;
+		}
+	}
+
+	public Set<DriverLocation> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(Set<DriverLocation> locations) {
+		this.locations = locations;
+	}
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	@PreUpdate
-	@PrePersist
-	public void updateTimeStamps() {
-		modifiedDate = new Date();
-		if (createdDate == null) {
-			createdDate = new Date();
-		}
 	}
 
 	@Override
@@ -273,8 +283,9 @@ public class Driver {
 				", createdDate=" + createdDate +
 				", modifiedDate=" + modifiedDate +
 				", vehicle=" + vehicle +
-				", user=" + user +
 				", rides=" + rides +
+				", locations=" + locations +
+				", user=" + user +
 				'}';
 	}
 }

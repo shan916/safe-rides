@@ -31,6 +31,10 @@ angular.module('safeRidesWebApp')
             this.estimatedTime = undefined;
             this.startOdometer = undefined;
             this.endOdometer = undefined;
+            this.pickupLatitude = undefined;
+            this.pickupLongitude = undefined;
+            this.dropoffLatitude = undefined;
+            this.dropoffLongitude = undefined;
 
             if (data) {
                 angular.extend(this, data);

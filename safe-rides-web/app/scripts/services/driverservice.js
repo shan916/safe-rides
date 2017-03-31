@@ -33,6 +33,7 @@ angular.module('safeRidesWebApp')
         });
 
     });
+
 angular.module('safeRidesWebApp')
     .factory('CurrentDriverRidesService', function($resource, ENV) {
         return $resource(ENV.apiEndpoint + 'drivers/rides/?status:status', {
@@ -42,5 +43,13 @@ angular.module('safeRidesWebApp')
                 method: 'GET',
                 isArray: true
             }
+        });
+    });
+
+angular.module('safeRidesWebApp')
+    .factory('DriverLocationService', function($resource, ENV) {
+
+        return $resource(ENV.apiEndpoint + 'drivers/:id/location', {
+            id: '@id'
         });
     });
