@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,6 +57,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "myUserInfo", nickname = "My User Information", notes = "Returns the authenticated user's information")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = JwtUser.class),
@@ -92,6 +94,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
@@ -166,6 +169,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "refreshToken", nickname = "Refresh Token", notes = "Refreshes a token - extends the expiration date. Returns a JWT")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
@@ -186,6 +190,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "updateUser", nickname = "Update User", notes = "Updates a user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
