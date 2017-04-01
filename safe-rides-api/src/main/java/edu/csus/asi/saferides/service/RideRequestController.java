@@ -16,7 +16,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -95,7 +94,7 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device) {
+    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest) {
         rideRequest.setDate(new Date());    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
@@ -122,7 +121,7 @@ public class RideRequestController {
 
         userRepository.save(requestor);
 
-        final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(requestor), device);
+        final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(requestor));
 
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));

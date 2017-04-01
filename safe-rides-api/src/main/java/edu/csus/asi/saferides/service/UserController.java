@@ -10,7 +10,6 @@ import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -144,7 +143,7 @@ public class UserController {
      *
      * */
     @RequestMapping(method = RequestMethod.POST, value = "/auth")
-    public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
+    public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         // Perform the security
         try {
             final Authentication authentication = authenticationManager.authenticate(
@@ -157,7 +156,7 @@ public class UserController {
 
             // Reload password post-security so we can generate token
             final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails, device);
+            final String token = jwtTokenUtil.generateToken(userDetails);
 
             // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
