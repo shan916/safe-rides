@@ -168,27 +168,6 @@ public class UserController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
-    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('RIDER')")
-    @ApiOperation(value = "refreshToken", nickname = "Refresh Token", notes = "Refreshes a token - extends the expiration date. Returns a JWT")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        String token = request.getHeader(tokenHeader);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
-
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
     @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "updateUser", nickname = "Update User", notes = "Updates a user")
@@ -198,6 +177,10 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
+        if(userRepository.findByUsername(username).getUsername() != user.getUsername()){
+            return ResponseEntity.badRequest().body(new ResponseMessage("Username mismatch"));
+        }
+
         User result = userRepository.save(user);
 
         return ResponseEntity.ok(result);
