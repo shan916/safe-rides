@@ -66,6 +66,13 @@ public class User {
         enabled = true;
     }
 
+    public User(String username, String firstName, String lastName) {
+        this.username = username;
+        this.firstname = firstName;
+        this.lastname = lastName;
+        enabled = true;
+    }
+
     public Long getId() {
         return id;
     }

@@ -14,5 +14,6 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
 	 * Spring Data JPA will automagically create an implementation on the fly.
 	 * */
 	List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
-	
+
+    RideRequest findTop1ByRequestorIdOrderByDateDesc(String onecard);
 }

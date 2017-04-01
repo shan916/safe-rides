@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.security;
 
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,18 +9,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    static final String CLAIM_KEY_USERNAME = "sub";
-    static final String CLAIM_KEY_CREATED = "created";
-    static final String CLAIM_KEY_AUTHORITIES = "authorities";
+    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_CREATED = "created";
+    private static final String CLAIM_KEY_AUTHORITIES = "authorities";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -36,6 +35,23 @@ public class JwtTokenUtil implements Serializable {
             username = null;
         }
         return username;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<AuthorityName> getAuthoritiesFromToken(String token) {
+        ArrayList<AuthorityName> authorityNames = new ArrayList<AuthorityName>();
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            // cast claims to ArrayList
+            ArrayList authorityClaimsArray = (ArrayList) claims.get(CLAIM_KEY_AUTHORITIES);
+            // get authority item and add it to the authorityNames arraylist
+            for (Object el : authorityClaimsArray) {
+                authorityNames.add(Enum.valueOf(AuthorityName.class, ((LinkedHashMap<String, String>) el).get("authority")));
+            }
+        } catch (Exception e) {
+            authorityNames = null;
+        }
+        return authorityNames;
     }
 
     public Date getCreatedDateFromToken(String token) {
@@ -105,7 +121,7 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
-        return isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(created, lastPasswordReset) ;
+        return isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(created, lastPasswordReset);
     }
 
     public String refreshToken(String token) {

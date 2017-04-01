@@ -1,12 +1,14 @@
 package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.ResponseMessage;
-import edu.csus.asi.saferides.security.JwtAuthenticationRequest;
-import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUser;
+import edu.csus.asi.saferides.security.*;
+import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
+import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.ArrayList;
 
 /*
  * Rest API controller for the User resource 
@@ -41,11 +43,15 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private JwtUserDetailsServiceImpl userDetailsService;
 
     // this creates a singleton for UserRepository
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
 
 	/*
      * GET "/users"
@@ -68,12 +74,34 @@ public class UserController {
     public JwtUser getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        ArrayList<AuthorityName> authoritiesFromToken = jwtTokenUtil.getAuthoritiesFromToken(token);
+
+        JwtUser user;
+
+        // if rider
+        if (authoritiesFromToken.size() == 1 && authoritiesFromToken.get(0).equals(AuthorityName.ROLE_RIDER)) {
+            try {
+                // try to load from riderequests
+                user = (JwtUser) userDetailsService.loadRiderByOnecard(username);
+            } catch (Exception e) {
+                // else create a new 'user'
+                User riderUser = new User(username, "anon_fname", "anon_lname");
+
+                ArrayList<Authority> authorityList = new ArrayList<Authority>();
+                authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
+                riderUser.setAuthorities(authorityList);
+
+                user = JwtUserFactory.create(riderUser);
+            }
+        } else {
+            user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        }
+
         return user;
     }
 
 	/*
-	 * GET "/users/{id} 
+     * GET "/users/{id}
 	 * 
 	 * @param id - the id of the user to find
 	 * 
@@ -90,9 +118,9 @@ public class UserController {
 		}
 	}
 	* */
-	
+
 	/*
-	 * GET "/users/byUsername/{username} 
+     * GET "/users/byUsername/{username}
 	 * 
 	 * @param username - the username of the user to find
 	 * 
@@ -163,6 +191,35 @@ public class UserController {
         } catch (AuthenticationException exception) {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
+    }
+
+    /*
+     * POST "/users/authrider"
+     *
+     * Authenticates the rider
+     *
+     * @param authenticationRequest - the rider's onecard to be authenticated
+     *
+     * */
+    @RequestMapping(method = RequestMethod.POST, value = "/authrider")
+    public ResponseEntity<?> authenticateRider(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest) throws AuthenticationException {
+        // validate onecard (not null)
+        if (riderAuthenticationRequest.getOneCardId() == null) {
+            return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
+        }
+
+        User riderUser = new User("" + riderAuthenticationRequest.getOneCardId(), "anon_fname", "anon_lname");
+
+        ArrayList<Authority> authorityList = new ArrayList<Authority>();
+        authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
+        riderUser.setAuthorities(authorityList);
+
+        UserDetails userDetails = JwtUserFactory.create(riderUser);
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        // Return the token
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
 
