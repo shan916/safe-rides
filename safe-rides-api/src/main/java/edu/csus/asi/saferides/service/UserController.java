@@ -9,6 +9,9 @@ import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -37,41 +40,29 @@ public class UserController {
     private String tokenHeader;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private JwtUserDetailsServiceImpl userDetailsService;
-
-    // this creates a singleton for UserRepository
-    @Autowired
-    private UserRepository userRepository;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    @Autowired
+    private JwtUserDetailsServiceImpl userDetailsService;
 
-	/*
-     * GET "/users"
-	 * 
-	 * @return list users
-	 
-	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<User> retrieveAll() {
-			return userRepository.findAll();
-	}
-	* */
+    @Autowired
+    private UserRepository userRepository;
 
-	/*
-     * GET "/users"
-	 *
-	 * @return JwtUser object of the current authenticated user
-	 */
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public JwtUser getAuthenticatedUser(HttpServletRequest request) {
+    @ApiOperation(value = "myUserInfo", nickname = "My User Information", notes = "Returns the authenticated user's information")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = JwtUser.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public JwtUser myUserInfo(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         ArrayList<AuthorityName> authoritiesFromToken = jwtTokenUtil.getAuthoritiesFromToken(token);
@@ -100,57 +91,14 @@ public class UserController {
         return user;
     }
 
-	/*
-     * GET "/users/{id}
-	 * 
-	 * @param id - the id of the user to find
-	 * 
-	 * @return user with specified id else not found
-	 
-	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	public ResponseEntity<?> retrieve(@PathVariable Long id) {
-		User result = userRepository.findOne(id);
-		
-		if (result == null) {
-			return ResponseEntity.notFound().build();
-		} else {
-			return ResponseEntity.ok(result);
-		}
-	}
-	* */
-
-	/*
-     * GET "/users/byUsername/{username}
-	 * 
-	 * @param username - the username of the user to find
-	 * 
-	 * @return user with specified username else not found
-	 
-	@RequestMapping(method = RequestMethod.GET, value="/byUsername/{username}")
-	public ResponseEntity<?> retrieve(@PathVariable String username) {
-		User result = userRepository.findByUsername(username);
-		
-		if (result == null) {
-			return ResponseEntity.notFound().build();
-		} else {
-			return ResponseEntity.ok(result);
-		}
-	}
-	* */
-
-
-    /*
-     * POST "/users"
-     *
-     * Creates the given user
-     *
-     * @param user - the user to be created in the database
-     *
-     * @return HTTP response containing saved entity with status of "created"
-     *  	   and the location header set to location of the entity
-     * */
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> save(@RequestBody User user) {
+    @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         User result = userRepository.save(user);
 
         // create URI of where the user was created
@@ -161,16 +109,13 @@ public class UserController {
         return ResponseEntity.created(location).body(result);
     }
 
-
-    /*
-     * POST "/users/auth"
-     *
-     * Authenticates the given user
-     *
-     * @param user - the user to be authenticated in the database
-     *
-     * */
     @RequestMapping(method = RequestMethod.POST, value = "/auth")
+    @ApiOperation(value = "authenticate", nickname = "Authenticate", notes = "User's authentication - Admin, Coordinator, Driver. Returns a JWT")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         // Perform the security
         try {
@@ -193,15 +138,13 @@ public class UserController {
         }
     }
 
-    /*
-     * POST "/users/authrider"
-     *
-     * Authenticates the rider
-     *
-     * @param authenticationRequest - the rider's onecard to be authenticated
-     *
-     * */
     @RequestMapping(method = RequestMethod.POST, value = "/authrider")
+    @ApiOperation(value = "authenticateRider", nickname = "Authenticate Rider", notes = "User's authentication - Rider. Returns a JWT")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> authenticateRider(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest) throws AuthenticationException {
         // validate onecard (not null)
         if (riderAuthenticationRequest.getOneCardId() == null) {
@@ -222,9 +165,14 @@ public class UserController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
-
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
+    @ApiOperation(value = "refreshToken", nickname = "Refresh Token", notes = "Refreshes a token - extends the expiration date. Returns a JWT")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
@@ -237,39 +185,16 @@ public class UserController {
         }
     }
 
-    /*
-     * PUT "/users/{id}"
-     *
-     * Updates the given user
-     *
-     * @param user - the user to be updated in the database
-     *
-     * @return HTTP response containing saved entity with status of "ok"
-     * */
     @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
-    public ResponseEntity<?> save(@PathVariable String username, @RequestBody User user) {
+    @ApiOperation(value = "updateUser", nickname = "Update User", notes = "Updates a user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
         User result = userRepository.save(user);
 
         return ResponseEntity.ok(result);
     }
-	
-	
-	/*
-	 * DELETE "/users/{id} 
-	 * 
-	 * @param id - the id of the user to delete
-	 * 
-	 * @return HTTP response with status of "no content" if deleted successfully
-	 * 		   else response with status of "not found"
-	 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		if (userRepository.findOne(id) == null) {
-			return ResponseEntity.notFound().build();
-		} else {
-			userRepository.delete(id);
-			return ResponseEntity.noContent().build();
-		}
-	}
-	* */
 }
