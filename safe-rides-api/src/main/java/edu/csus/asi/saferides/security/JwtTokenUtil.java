@@ -19,6 +19,7 @@ public class JwtTokenUtil implements Serializable {
 
     static final String CLAIM_KEY_USERNAME = "sub";
     static final String CLAIM_KEY_CREATED = "created";
+    static final String CLAIM_KEY_AUTHORITIES = "authorities";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -89,6 +90,7 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_AUTHORITIES, userDetails.getAuthorities());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
