@@ -2,6 +2,8 @@ jwt:
   header: Authorization
   secret: secretKeyGoesHere
   expiration: 43200
+api-keys:
+  geocoding: AIzaSyBsvQDgFRvtFyInVOv0U_HrDaNsrnCuLhc
 
 ---
 spring:
