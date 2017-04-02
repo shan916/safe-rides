@@ -46,7 +46,7 @@ angular.module('safeRidesWebApp')
         function getStatusFromReason(){
           switch (vm.reasonForCancellation) {
             case 'Rider':
-              return 'CANCELEDBYREQUESTOR';
+              return 'CANCELEDBYRIDER';
             case 'Coordinator':
               return 'CANCELEDBYCOORDINATOR';
             case 'Other':
