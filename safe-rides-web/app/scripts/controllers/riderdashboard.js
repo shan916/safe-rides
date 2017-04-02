@@ -10,7 +10,7 @@
 angular.module('safeRidesWebApp')
 .controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService) {
     var vm = this;
-    vm.maxRidersCount = [1, 2, 3, 4, 5, 6, 7, 8];
+    vm.maxRidersCount = [1, 2, 3];
     vm.loading = true;
     vm.loggedIn = false;
     vm.oneCardId = undefined;
@@ -19,10 +19,12 @@ angular.module('safeRidesWebApp')
 
     function checkLogin() {
         UserService.get().$promise.then(function(response) {
+            console.log(response);
             vm.loading = false;
             vm.loggedIn = true;
             getRide();
         }, function(error) {
+            console.log(error);
             vm.loading = false;
             vm.loggedIn = false;
         });

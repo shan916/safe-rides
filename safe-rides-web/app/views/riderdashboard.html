@@ -95,13 +95,6 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="pickupZip">Zip</label>
-                            <input id="pickupZip" name="pickupZip" type="text" class="form-control" required ng-model="ctrl.rideRequest.pickupZip" ui-mask="99999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Pickup Zip Code">
-                            <div ng-messages="rideRequestForm.pickupZip.$dirty && rideRequestForm.pickupZip.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
                     </div>
                     <!-- end Pickup Address -->
 
@@ -126,13 +119,6 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="dropoffZip">Zip</label>
-                            <input id="dropoffZip" name="dropoffZip" type="text" class="form-control" required ng-model="ctrl.rideRequest.dropoffZip" ui-mask="99999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Drop-off Zip Code">
-                            <div ng-messages="rideRequestForm.dropoffZip.$dirty && rideRequestForm.dropoffZip.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
                     </div>
                     <!-- end dropoff Address -->
                     <!-- People Count -->
@@ -144,33 +130,32 @@
         </div>
     </div>
 
-    <div class="panel panel-default" ng-show="ctrl.existingRide">
+    <div class="panel panel-info" ng-show="ctrl.existingRide">
         <div class="panel-heading">
-            <h3 class="panel-title">Ride Request Pending</h3>
+            <h3 class="panel-title">Ride Status</h3>
         </div>
         <div class="panel-body">
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <span class="glyphicon glyphicon-repeat normal-right-spinner" style="font-size:96px"></span>
-                    <h4>Request Pending</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
                 </div>
             </div>
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-default">Cancel Ride</button>
+                    <button class="btn btn-danger">Cancel Ride</button>
                 </div>
             </div>
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    Do you have any questions? Call the Safe Rides office and talk to a representative.
+                    Do you have questions? Call the Safe Rides office and talk to a representative.
                 </div>
             </div>
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <a href="tel:9162788294" class="btn btn-default">Call ASI Office</a>
+                    <a href="tel:9160000000" class="btn btn-default">Call Safe Rides</a>
                 </div>
             </div>
             <pre>{{ctrl.existingRide | json}}</pre>
