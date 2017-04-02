@@ -45,9 +45,6 @@ public class Driver {
 	private String dlNumber;
 
 	@Column(nullable = false)
-	private String gender;
-
-	@Column(nullable = false)
 	private Boolean insuranceChecked;
 	
 	@Column(nullable = false)
@@ -95,7 +92,7 @@ public class Driver {
 	}
 
 	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-			String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+			String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;
@@ -103,7 +100,6 @@ public class Driver {
 		this.phoneNumber = phoneNumber;
 		this.dlState = dlState;
 		this.dlNumber = dlNumber;
-		this.gender = gender;
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
@@ -164,14 +160,6 @@ public class Driver {
 
 	public void setDlNumber(String dlNumber) {
 		this.dlNumber = dlNumber;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public Boolean getInsuranceChecked() {
@@ -275,7 +263,6 @@ public class Driver {
 				", phoneNumber='" + phoneNumber + '\'' +
 				", dlState='" + dlState + '\'' +
 				", dlNumber='" + dlNumber + '\'' +
-				", gender='" + gender + '\'' +
 				", insuranceChecked=" + insuranceChecked +
 				", insuranceCompany='" + insuranceCompany + '\'' +
 				", active=" + active +
