@@ -39,9 +39,8 @@ angular.module('safeRidesWebApp')
                             redirect: redirect
                         });
                         break;
-                    default:
-                        return $q.reject(rejection);
                 }
+                return $q.reject(rejection);
             }
         };
     });
