@@ -27,10 +27,10 @@
             </div>
             <div class="col-md-4">
 
-                  <form name="odoStartRideForm" class="my-form form-vertical">
+                  <form name="odoStartRideForm" class="form-vertical">
                     <label for="odoStartRide">Enter ODO in miles to View Ride: </label>
                     <input id="odoStartRide" name="odoStartRide" type="number" class="form-control" required
-                    placeholder="ex: 120,045" ng-model="ctrl.startOdo"
+                    placeholder="ex: 120405" ng-model="ctrl.startOdo"
                     ng-maxlength="6" ng-minlength="3" ng-min="100">
                     <div ng-messages="odoStartRideForm.odoStartRide.$dirty && odoStartRideForm.odoStartRide.$error">
                         <div class="input-error" ng-message="required">* required to begin newly assigned ride</div>
@@ -88,7 +88,12 @@
             </div>
             <div class="col-md-4"><!-- dropoff -->
               <!--h4>Drop-off Address</h4-->
-              <dl class="dl-horizontal">
+              <dl class="dl-horizontal" ng-hide="ctrl.pickedUpButtonPressed">
+                <dt>Drop-off Address:</dt>
+                <dd>Please signify you have picked up the rider to reveal Drop-off Address</dd>
+                <dd><button class="btn btn-warning btn-block" ng-click="ctrl.pickedUp()">Picked Up Rider</button></dd>
+              </dl>
+              <dl class="dl-horizontal" ng-show="ctrl.pickedUpButtonPressed">
                 <dt>Drop-off Address:</dt>
                 <dd>{{ctrl.assignedRide.dropoffLine1}}</dd>
                 <dd ng-if="ride.dropoffLine2">{{ctrl.assignedRide.dropoffLine2}}</dd>
@@ -97,156 +102,31 @@
               </dl>
             </div><!-- end dropoff-->
           </div><!-- end row -->
-          <div class="row margin-top-10">
+          <div class="row margin-top-20">
             <div class="col-md-3"></div>
-            <div class=" col-md-6">
+            <div class="col-md-6">
                   <button class="btn btn-default btn-block btn-success">Arrived / Notify Rider</button>
                   <button class="btn btn-default btn-block btn-warning">Report Issue / Contact SafeRides</button>
-                  <button class="btn btn-default btn-block btn-danger" ng-click="ctrl.endRide()">End Ride / Drop-Off</button>
+                  <div ng-show="ctrl.pickedUpButtonPressed">
+                  <form name="odoEndRideForm" class="form-vertical">
+                    <label for="odoEndRideForm">Enter ODO in miles to End Ride: </label>
+                    <input id="odoEndRide" name="odoEndRide" type="number" class="form-control" required
+                    placeholder="ex: 120455" ng-model="ctrl.endOdo"
+                    ng-maxlength="6" ng-minlength="3" ng-min="100">
+                    <div ng-messages="odoEndRideForm.odoEndRide.$dirty && odoEndRideForm.odoEndRide.$error">
+                        <div class="input-error" ng-message="required">* required to end assigned ride</div>
+                    </div>
+                  </form>
+
+                  <button class="btn btn-default btn-block btn-danger"
+                          ng-disabled="odoEndRideForm.$invalid" ng-click="ctrl.endRide()">
+                          End Ride / Drop-Off
+                  </button>
                 </div>
-                <div class="col-md-3"></div>
+            </div>
+            <div class="col-md-3"></div>
           </div>
         </div><!--panel body-->
-    </div><!-- end Incoming Ride Request panel-->
+    </div><!-- end Current Ride Request panel-->
 
-    <div class="panel panel-default" ng-hide="true">
-        <div class="panel-heading">
-            <h3 class="panel-title">Current Ride Request</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        <dt>Name</dt>
-                        <dd>Jane Smith</dd>
-                        <dt>Pickup Address</dt>
-                        <dd>123 Main St.</dd>
-                        <dt>Other Information</dt>
-                        <dd>Near the giant oak tree</dd>
-                    </dl>
-                </div>
-
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        <dt>OneCard ID</dt>
-                        <dd>123456789</dd>
-                        <dt>Dropoff Address</dt>
-                        <dd>456 Main St.</dd>
-                    </dl>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <button class="btn btn-default btn-block">Directions</button>
-                </div>
-
-                <div class="col-md-6">
-                    <button class="btn btn-default btn-block">Notify Rider</button>
-                </div>
-            </div>
-
-            <div class="row margin-top-15">
-                <div class="col-md-6">
-                    <button class="btn btn-default btn-block">Report Issue</button>
-                </div>
-
-                <div class="col-md-6">
-                    <button class="btn btn-default btn-block">Dropoff</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default"  ng-hide="true">
-        <div class="panel-heading">
-            <h3 class="panel-title">Directions</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
-                        <ng-map center="current-location">
-                            <directions draggable="true" panel="directions-panel" travel-mode="DRIVING" origin="current-location" destination="6000 J St, Sacramento, CA 95819">
-                            </directions>
-                        </ng-map>
-                    </div>
-                    <div id="directions-panel"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default" ng-hide="true">
-        <div class="panel-heading">
-            <h3 class="panel-title">Notify Rider</h3>
-        </div>
-        <div class="panel-body">
-            Would you like to notify the rider that you arrived at the pickup location?
-            <div class="row margin-top-15">
-                <div class="col-md-12">
-                    <div class="pull-right">
-                        <button class="btn btn-default">No</button>
-                        <button class="btn btn-primary">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default" ng-hide="true">
-        <div class="panel-heading">
-            <h3 class="panel-title">NO Current Rides</h3>
-        </div>
-        <div class="panel-body">
-            Report an issue to the coordinator either by phone call or by a message
-
-            <div class="row margin-top-15">
-                <div class="col-md-12">
-                    <dl class="dl-horizontal">
-                        <dt>Safe Rides Office Phone</dt>
-                        <dd>916-000-0000</dd>
-                        <dt>Emergency Phone</dt>
-                        <dd>911</dd>
-                    </dl>
-                </div>
-            </div>
-
-            <div class="row margin-top-15">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" class="form-control" placeholder="Enter your message"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row margin-top-15">
-                <div class="col-md-12">
-                    <div class="pull-right">
-                        <button class="btn btn-default">Cancel</button>
-                        <button class="btn btn-primary">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default" ng-hide="true">
-        <div class="panel-heading">
-            <h3 class="panel-title">Dropoff</h3>
-        </div>
-        <div class="panel-body">
-            Would you like to complete this ride request?
-
-            <div class="row margin-top-15">
-                <div class="col-md-12">
-                    <div class="pull-right">
-                        <button class="btn btn-default">No</button>
-                        <button class="btn btn-primary">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</div><!-- end driverdashboard.html -->
