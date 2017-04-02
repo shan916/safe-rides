@@ -138,7 +138,8 @@ angular
                 controller: 'CoordinatordashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -148,7 +149,8 @@ angular
                 controller: 'CoordinatorreportCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -158,7 +160,8 @@ angular
                 controller: 'EditdriverCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -168,7 +171,8 @@ angular
                 controller: 'DriverdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -185,7 +189,8 @@ angular
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
     });
