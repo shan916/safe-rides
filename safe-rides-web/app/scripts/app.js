@@ -34,10 +34,18 @@ angular
         'ui.select',
         'ngMessages',
         'ui.mask',
-        'angularSpinner'
+        'angularSpinner',
+        'angular-jwt'
     ])
 
-    .run(function($rootScope, $window, $cookies, $state) {
+    .run(function($rootScope, $window, $cookies, $state, authManager) {
+        authManager.checkAuthOnRefresh();
+        authManager.redirectWhenUnauthenticated();
+
+        $rootScope.$on('tokenHasExpired', function() {
+            console.log('Your session has expired!');
+        });
+
         $rootScope.$on("$stateChangeError", console.log.bind(console));
 
         $rootScope.$on('$stateChangeSuccess', function() {
@@ -48,13 +56,37 @@ angular
             $window.localStorage.removeItem('safeRidesToken');
             $cookies.remove('safeRidesToken');
             $state.go('/');
+            // update the user authentication state right away
+            // angular-jwt uses $rootScope.isAuthenticated
+            $rootScope.isAuthenticated = false;
         };
 
 
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-        $httpProvider.interceptors.push('APIInterceptor');
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+        jwtOptionsProvider.config({
+            authPrefix: '',
+            whiteListedDomains: ['localhost', 'codeteam6.io'],
+            unauthenticatedRedirectPath: '/login',
+            tokenGetter: ['options', '$window', '$cookies', function(options, $window, $cookies) {
+                // Skip authentication for any requests ending in .html
+                if (options && options.url.substr(options.url.length - 5) === '.html') {
+                    return null;
+                }
+                if ($window.localStorage.safeRidesToken) {
+                    return $window.localStorage.safeRidesToken;
+                } else if ($cookies.get('safeRidesToken')) {
+                    return $cookies.get('safeRidesToken');
+                } else {
+                    return null;
+                }
+            }]
+        });
+        $httpProvider.interceptors.push('jwtInterceptor');
+
+        //$httpProvider.interceptors.push('APIInterceptor');
+
         $urlRouterProvider.otherwise('/');
 
         $stateProvider

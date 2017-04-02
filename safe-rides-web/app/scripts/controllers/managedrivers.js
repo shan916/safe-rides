@@ -8,7 +8,12 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function(DriverService, $uibModal) {
+    .controller('ManagedriversCtrl', function(DriverService, $uibModal, authManager, $state) {
+        if(!authManager.isAuthenticated()){
+            $state.go('login');
+            return;
+        }
+
         var vm = this;
 
         vm.activeDrivers = [];

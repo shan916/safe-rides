@@ -8,17 +8,16 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('LoginCtrl', function($http, $window, $cookies, $stateParams, $state, UserService) {
+    .controller('LoginCtrl', function($http, $window, $cookies, $stateParams, $state, UserService, authManager) {
+        if(authManager.isAuthenticated()){
+            $state.go('/');
+            return;
+        }
+
         var vm = this;
         vm.username = undefined;
         vm.password = undefined;
         vm.message = undefined;
-
-        UserService.getAuthUserInfo().then(function(response) {
-            $state.go('/');
-        }, function(error) {
-            console.log('Not logged in');
-        });
 
         vm.login = function() {
             var credentials = {
