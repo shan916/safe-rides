@@ -1,20 +1,24 @@
 package edu.csus.asi.saferides.service;
 
-import edu.csus.asi.saferides.model.Driver;
-import edu.csus.asi.saferides.model.DriverStatus;
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Set;
 
@@ -36,6 +40,18 @@ public class DriverController {
     // this creates a singleton for RideRequestRepository
     @Autowired
     private RideRequestRepository rideRequestRepository;
+
+    @Autowired
+    private DriverLocationRepository driverLocationRepository;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     /*
@@ -115,7 +131,7 @@ public class DriverController {
         if (driver.getId() != null && driver.getId() == id) {
             Driver result = driverRepository.findOne(id);
 
-            if (!driver.isActive() && result.getStatus() != DriverStatus.AVAILABLE) {
+            if (!driver.getActive() && result.getStatus() != DriverStatus.AVAILABLE) {
                 return ResponseEntity.badRequest().body("The driver must not have any in progress rides");
             }
 
@@ -200,5 +216,53 @@ public class DriverController {
                 .buildAndExpand(driver.getId()).toUri();
 
         return ResponseEntity.ok(location);
+    }
+
+    /*
+    * POST /drivers/location
+    */
+    @RequestMapping(method = RequestMethod.POST, value = "/location")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "setDriverLocation", nickname = "setDriverLocation", notes = "Authenticated driver updates their latest/current location.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> setDriverLocation(HttpServletRequest request, @RequestBody DriverLocation driverLocation) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+
+        if (driver == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("You cannot update your location as you are not a driver."));
+        } else {
+            driverLocation.setDriver(driver);
+            driverLocationRepository.save(driverLocation);
+
+            return ResponseEntity.ok(driverLocation);
+        }
+    }
+
+    /*
+     * GET /drivers/{id}/location
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
+    @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> getDriverLocation(@PathVariable Long id) {
+        Driver driver = driverRepository.findOne(id);
+        DriverLocation loc = driverLocationRepository.findTop1ByDriverOrderByCreatedDateDesc(driver);
+        if (loc == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(loc);
     }
 }
