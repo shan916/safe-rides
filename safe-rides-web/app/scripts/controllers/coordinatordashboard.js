@@ -8,34 +8,16 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, UserService, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
-
-
 
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
 
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
-
-        vm.positions = [
-            [38.55, -121.45],
-            [38.54, -121.44],
-            [38.53, -121.43],
-            [38.52, -121.42]
-        ];
-        $interval(function() {
-            var numMarkers = 4;
-            vm.positions = [];
-            for (var i = 0; i < numMarkers; i++) {
-                var lat = 38.55 + (Math.random() / 100);
-                var lng = -121.45 + (Math.random() / 100);
-                vm.positions.push([lat, lng]);
-            }
-        }, 15000);
 
         function getDrivers() {
             vm.loadingCoordinatorDrivers = true;
@@ -48,9 +30,9 @@ var app = angular.module('safeRidesWebApp')
                         id: driver.id
                     }).$promise.then(function(ridesResponse) {
                         driver.rides = ridesResponse;
-                        console.log('got driver\'s rides:' + ridesResponse);
+                        console.log('got driver\'s rides:', ridesResponse);
                     }, function(ridesError) {
-                        console.log('error getting driver\'s rides:' + ridesError);
+                        console.log('error getting driver\'s rides:', ridesError);
                     });
 
                     drivers[index] = driver;
@@ -59,6 +41,7 @@ var app = angular.module('safeRidesWebApp')
                 vm.loadingCoordinatorDrivers = false;
 
                 console.log('got drivers:', response);
+                getDriversLocation();
             }, function(error) {
                 vm.loadingCoordinatorDrivers = false;
                 console.log('error getting drivers:', error);
@@ -84,6 +67,21 @@ var app = angular.module('safeRidesWebApp')
             });
         }
 
+        function getDriversLocation() {
+            vm.drivers.forEach(function(element) {
+                DriverLocationService.get({
+                    id: element.id
+                }).$promise.then(function(response) {
+                    if (response.id !== undefined) {
+                        vm.driversLocation.push(response);
+                        console.log('got drivers location:', response);
+                    }
+                }, function(error) {
+                    console.log('error getting drivers location:', error);
+                });
+            });
+        }
+
         vm.DANGER_ZONE = 30;
 
         vm.drivers = [];
@@ -93,6 +91,26 @@ var app = angular.module('safeRidesWebApp')
         vm.rideRequests = [];
 
         getRideRequests();
+
+        vm.driversLocation = [];
+
+        vm.mapPinClick = function(evt, rideRequestId){
+            vm.rideRequests.forEach(function(element) {
+                if(rideRequestId == element.id){
+                    vm.showRequestDetails(element);
+                    return;
+                }
+            })
+        }
+
+        vm.mapDriverPinClick = function(evt, driverId){
+            vm.drivers.forEach(function(element) {
+                if(driverId == element.id){
+                    vm.showDriverDetails(element);
+                    return;
+                }
+            })
+        }
 
         vm.requestAgeInMinutes = function(start) {
             return moment.duration(moment().diff(moment(start))).asMinutes();
@@ -237,13 +255,15 @@ app.filter('FriendlyStatusName', function() {
                 return 'Unassigned';
             case 'ASSIGNED':
                 return 'Assigned';
-            case 'INPROGRESS':
-                return 'In Progress';
+            case 'PICKINGUP':
+                return 'Driving to pickup';
+            case 'DROPPINGOFF':
+                return 'Driving to dropoff'
             case 'COMPLETE':
                 return 'Complete';
             case 'CANCELEDBYCOORDINATOR':
                 return 'Canceled by Coordinator';
-            case 'CANCELEDBYREQUESTOR':
+            case 'CANCELEDBYRIDER':
                 return 'Canceled by Rider';
             case 'AVAILABLE':
                 return 'Available';

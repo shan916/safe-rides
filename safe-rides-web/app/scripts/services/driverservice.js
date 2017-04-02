@@ -28,3 +28,12 @@ angular.module('safeRidesWebApp')
         });
 
     });
+
+angular.module('safeRidesWebApp')
+    .factory('DriverLocationService', function($resource, ENV) {
+
+        return $resource(ENV.apiEndpoint + 'drivers/:id/location', {
+            id: '@id'
+        });
+
+    });

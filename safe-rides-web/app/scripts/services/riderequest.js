@@ -32,6 +32,10 @@ angular.module('safeRidesWebApp')
             this.cancelMessage = undefined;
             this.messageToDriver = undefined;
             this.estimatedTime = undefined;
+            this.pickupLatitude = undefined;
+            this.pickupLongitude = undefined;
+            this.dropoffLatitude = undefined;
+            this.dropoffLongitude = undefined;
 
             if (data) {
                 angular.extend(this, data);
@@ -44,18 +48,18 @@ angular.module('safeRidesWebApp')
                     return 0;
                 case 'ASSIGNED':
                     return 1;
-                case 'INPROGRESS':
+                case 'PICKINGUP':
                     return 2;
-                case 'COMPLETE':
+                case 'DROPPINGOFF':
                     return 3;
-                case 'CANCELEDBYCOORDINATOR':
+                case 'COMPLETE':
                     return 4;
-                case 'CANCELEDBYREQUESTOR':
+                case 'CANCELEDBYCOORDINATOR':
                     return 5;
-                case 'CANCELEDBYDRIVER':
+                case 'CANCELEDBYRIDER':
                     return 6;
-                    case 'CANCELEDBYCOORDINATOR':
-                        return 4;
+                case 'CANCELEDOTHER':
+                    return 7;
             }
         };
 
