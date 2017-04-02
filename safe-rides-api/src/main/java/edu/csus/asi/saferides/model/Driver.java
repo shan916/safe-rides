@@ -18,225 +18,212 @@ import edu.csus.asi.saferides.security.model.User;
 
 @Entity
 public class Driver {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @Column(nullable = false, unique = true, length = 9)
-    @Size(min = 9, max = 9)
-    private String csusId;
+	@Column(nullable = false, unique = true, length = 9)
+	@Size(min = 9, max = 9)
+	private String csusId;
 
-    @Column(nullable = false)
-    @Size(min = 2, max = 30)
-    private String driverFirstName;
+	@Column(nullable = false)
+	@Size(min = 2, max = 30)
+	private String driverFirstName;
 
-    @Column(nullable = false)
-    @Size(min = 2, max = 30)
-    private String driverLastName;
+	@Column(nullable = false)
+	@Size(min = 2, max = 30)
+	private String driverLastName;
 
-    @Column(nullable = false, length = 10)
-    @Size(min = 10, max = 10)
-    private String phoneNumber;
+	@Column(nullable = false, length = 10)
+	@Size(min = 10, max = 10)
+	private String phoneNumber;
 
-    @Column(nullable = false, length = 2)
-    private String dlState;
+	@Column(nullable = false, length = 2)
+	private String dlState;
 
-    @Column(nullable = false, unique = true)
-    private String dlNumber;
+	@Column(nullable = false, unique = true)
+	private String dlNumber;
 
-    @Column(nullable = false)
-    private String gender;
+	@Column(nullable = false)
+	private Boolean insuranceChecked;
+	
+	@Column(nullable = false)
+	@Size(min = 3)
+	private String insuranceCompany;
 
-    @Column(nullable = false)
-    private Boolean insuranceChecked;
+	@Column(nullable = false)
+	private Boolean active;
+	
+	@Transient
+	DriverStatus status;
+	
+	@JsonIgnore
+	@Column(updatable = false)
+	private Date createdDate;
+	
+	@JsonIgnore
+	private Date modifiedDate;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Vehicle vehicle;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "driver")
+	private Set<RideRequest> rides;
 
-    @Column(nullable = false)
-    @Size(min = 3)
-    private String insuranceCompany;
+	@JsonIgnore
+	@OneToMany(mappedBy = "driver")
+	private Set<DriverLocation> locations;
 
-    @Column(nullable = false)
-    private Boolean active;
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	private User user;
 
-    @Transient
-    DriverStatus status;
+	@PreUpdate
+	@PrePersist
+	public void updateTimeStamps() {
+		modifiedDate = new Date();
+		if (createdDate == null) {
+			createdDate = new Date();
+		}
+	}
 
-    @JsonIgnore
-    @Column(updatable = false)
-    private Date createdDate;
+	protected Driver() {
+	}
 
-    @JsonIgnore
-    private Date modifiedDate;
+	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
+			String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+		super();
+		this.csusId = csusId;
+		this.driverFirstName = driverFirstName;
+		this.driverLastName = driverLastName;
+		this.phoneNumber = phoneNumber;
+		this.dlState = dlState;
+		this.dlNumber = dlNumber;
+		this.insuranceChecked = insuranceChecked;
+		this.insuranceCompany = insuranceCompany;
+		this.active = active;
+		this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
+	}
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Vehicle vehicle;
+	public Long getId() {
+		return id;
+	}
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "driver")
-    private Set<RideRequest> rides;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "driver")
-    private Set<DriverLocation> locations;
+	public String getCsusId() {
+		return csusId;
+	}
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+	public void setCsusId(String csusId) {
+		this.csusId = csusId;
+	}
 
-    @PreUpdate
-    @PrePersist
-    public void updateTimeStamps() {
-        modifiedDate = new Date();
-        if (createdDate == null) {
-            createdDate = new Date();
-        }
-    }
+	public String getDriverFirstName() {
+		return driverFirstName;
+	}
 
-    protected Driver() {
-    }
+	public void setDriverFirstName(String driverFirstName) {
+		this.driverFirstName = driverFirstName;
+	}
 
-    public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-                  String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
-        super();
-        this.csusId = csusId;
-        this.driverFirstName = driverFirstName;
-        this.driverLastName = driverLastName;
-        this.phoneNumber = phoneNumber;
-        this.dlState = dlState;
-        this.dlNumber = dlNumber;
-        this.gender = gender;
-        this.insuranceChecked = insuranceChecked;
-        this.insuranceCompany = insuranceCompany;
-        this.active = active;
-        this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
-    }
+	public String getDriverLastName() {
+		return driverLastName;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setDriverLastName(String driverLastName) {
+		this.driverLastName = driverLastName;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    public String getCsusId() {
-        return csusId;
-    }
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
-    public void setCsusId(String csusId) {
-        this.csusId = csusId;
-    }
+	public String getDlState() {
+		return dlState;
+	}
 
-    public String getDriverFirstName() {
-        return driverFirstName;
-    }
+	public void setDlState(String dlState) {
+		this.dlState = dlState;
+	}
 
-    public void setDriverFirstName(String driverFirstName) {
-        this.driverFirstName = driverFirstName;
-    }
+	public String getDlNumber() {
+		return dlNumber;
+	}
 
-    public String getDriverLastName() {
-        return driverLastName;
-    }
+	public void setDlNumber(String dlNumber) {
+		this.dlNumber = dlNumber;
+	}
 
-    public void setDriverLastName(String driverLastName) {
-        this.driverLastName = driverLastName;
-    }
+	public Boolean getInsuranceChecked() {
+		return insuranceChecked;
+	}
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+	public void setInsuranceChecked(Boolean insuranceChecked) {
+		this.insuranceChecked = insuranceChecked;
+	}
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+	public String getInsuranceCompany() {
+		return insuranceCompany;
+	}
 
-    public String getDlState() {
-        return dlState;
-    }
+	public void setInsuranceCompany(String insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
+	}
 
-    public void setDlState(String dlState) {
-        this.dlState = dlState;
-    }
+	public Boolean getActive() {
+		return active;
+	}
 
-    public String getDlNumber() {
-        return dlNumber;
-    }
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 
-    public void setDlNumber(String dlNumber) {
-        this.dlNumber = dlNumber;
-    }
+	public void setStatus(DriverStatus status) {
+		this.status = status;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    public Boolean getInsuranceChecked() {
-        return insuranceChecked;
-    }
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
 
-    public void setInsuranceChecked(Boolean insuranceChecked) {
-        this.insuranceChecked = insuranceChecked;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    public String getInsuranceCompany() {
-        return insuranceCompany;
-    }
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
 
-    public void setInsuranceCompany(String insuranceCompany) {
-        this.insuranceCompany = insuranceCompany;
-    }
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
 
-    public Boolean getActive() {
-        return active;
-    }
+	public Set<RideRequest> getRides() {
+		if (this.rides == null) {
+			return new HashSet<RideRequest>();
+		}
+		return rides;
+	}
 
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public void setStatus(DriverStatus status) {
-        this.status = status;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public Set<RideRequest> getRides() {
-        if (this.rides == null) {
-            return new HashSet<RideRequest>();
-        }
-        return rides;
-    }
-
-    public DriverStatus getStatus() {
+	public DriverStatus getStatus() {
         boolean assigned = false;
         boolean pickingUp = false;
-
 
         for (RideRequest ride : getRides()) {
             RideRequestStatus rideStatus = ride.getStatus();
@@ -253,7 +240,6 @@ public class Driver {
                 default:
                     break;
             }
-
         }
 
         if (pickingUp) {
@@ -263,45 +249,44 @@ public class Driver {
         } else {
             return DriverStatus.AVAILABLE;
         }
-    }
+  }
 
-    public Set<DriverLocation> getLocations() {
-        return locations;
-    }
+	public Set<DriverLocation> getLocations() {
+		return locations;
+	}
 
-    public void setLocations(Set<DriverLocation> locations) {
-        this.locations = locations;
-    }
+	public void setLocations(Set<DriverLocation> locations) {
+		this.locations = locations;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    @Override
-    public String toString() {
-        return "Driver{" +
-                "id=" + id +
-                ", csusId='" + csusId + '\'' +
-                ", driverFirstName='" + driverFirstName + '\'' +
-                ", driverLastName='" + driverLastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", dlState='" + dlState + '\'' +
-                ", dlNumber='" + dlNumber + '\'' +
-                ", gender='" + gender + '\'' +
-                ", insuranceChecked=" + insuranceChecked +
-                ", insuranceCompany='" + insuranceCompany + '\'' +
-                ", active=" + active +
-                ", status=" + status +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                ", vehicle=" + vehicle +
-                ", rides=" + rides +
-                ", locations=" + locations +
-                ", user=" + user +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Driver{" +
+				"id=" + id +
+				", csusId='" + csusId + '\'' +
+				", driverFirstName='" + driverFirstName + '\'' +
+				", driverLastName='" + driverLastName + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", dlState='" + dlState + '\'' +
+				", dlNumber='" + dlNumber + '\'' +
+				", insuranceChecked=" + insuranceChecked +
+				", insuranceCompany='" + insuranceCompany + '\'' +
+				", active=" + active +
+				", status=" + status +
+				", createdDate=" + createdDate +
+				", modifiedDate=" + modifiedDate +
+				", vehicle=" + vehicle +
+				", rides=" + rides +
+				", locations=" + locations +
+				", user=" + user +
+				'}';
+	}
 }
