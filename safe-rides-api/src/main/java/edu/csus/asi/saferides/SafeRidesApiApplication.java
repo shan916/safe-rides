@@ -10,7 +10,6 @@ import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.service.GeocodingService;
-import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,9 +22,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -340,19 +336,19 @@ public class SafeRidesApiApplication {
             rideRequest5.setDriver(driver1);
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
-            rideRequest6.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
-            rideRequest8.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest10.setDriver(driver4);
-            rideRequest10.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest12.setDriver(driver6);
-            rideRequest12.setStatus(RideRequestStatus.INPROGRESS);
+            rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
 
             geocodingService.setCoordinates(rideRequest0);
             geocodingService.setCoordinates(rideRequest1);

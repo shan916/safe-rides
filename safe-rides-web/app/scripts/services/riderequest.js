@@ -45,18 +45,18 @@ angular.module('safeRidesWebApp')
                     return 0;
                 case 'ASSIGNED':
                     return 1;
-                case 'INPROGRESS':
+                case 'PICKINGUP':
                     return 2;
-                case 'COMPLETE':
+                case 'DROPPINGOFF':
                     return 3;
-                case 'CANCELEDBYCOORDINATOR':
+                case 'COMPLETE':
                     return 4;
-                case 'CANCELEDBYREQUESTOR':
+                case 'CANCELEDBYCOORDINATOR':
                     return 5;
-                case 'CANCELEDBYDRIVER':
+                case 'CANCELEDBYRIDER':
                     return 6;
-                    case 'CANCELEDBYCOORDINATOR':
-                        return 4;
+                case 'CANCELEDOTHER':
+                    return 7;
             }
         };
 

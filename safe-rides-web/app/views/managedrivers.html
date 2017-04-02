@@ -31,8 +31,8 @@
                                     <td>{{driver.status}}</td>
                                     <td>
                                         <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                        <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Delete</button>
-                                        <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Deactivate</button>
+                                        <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Delete</button>
+                                        <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Deactivate</button>
                                     </td>
                                 </tr>
                             </tbody>
