@@ -1,17 +1,14 @@
 package edu.csus.asi.saferides.service;
 
-import edu.csus.asi.saferides.model.ResponseMessage;
+import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -25,10 +22,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 /*
@@ -57,6 +50,9 @@ public class RideRequestController {
 
     @Autowired
     private GeocodingService geocodingService;
+
+    @Autowired
+    private RideRequestMapper rideRequestMapper;
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -192,7 +188,8 @@ public class RideRequestController {
         } else {
             // TODO this can return a ride request that is old. (but will be the latest)
             // ALSO TODO change the response to a DTO rather than the full ride request
-            return ResponseEntity.ok(rideRequest);
+            RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
+            return ResponseEntity.ok(dto);
         }
     }
 }

@@ -56,6 +56,12 @@ angular.module('safeRidesWebApp')
         });
     };
 
+    vm.getVehicleDescription = function() {
+        if (vm.existingRide) {
+            return vm.existingRide.vehicleColor + ' ' + vm.existingRide.vehicleYear + ' ' + vm.existingRide.vehicleMake + ' ' + vm.existingRide.vehicleModel;
+        }
+    };
+
     function saveToken(token) {
         var expirationDate = new Date();
         expirationDate.setTime(expirationDate.getTime() + 6 * 60 * 60 * 1000);
@@ -68,7 +74,7 @@ angular.module('safeRidesWebApp')
     function getRide() {
         $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
             if (response.data && response.data !== '') {
-                vm.existingRide = new RideRequest(response.data);
+                vm.existingRide = response.data;
             }
 
             console.log(response.data);
