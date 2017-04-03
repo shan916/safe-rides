@@ -9,7 +9,7 @@
                 <dt>Name:</dt>
                 <dd>{{ctrl.request.requestorFirstName}} {{ctrl.request.requestorLastName}}</dd>
                 <dt>OneCard ID:</dt>
-                <dd>{{ctrl.request.requestorId}}</dd>
+                <dd>{{ctrl.request.oneCardId}}</dd>
                 <dt>Riders:</dt>
                 <dd>{{ctrl.request.numPassengers}}</dd>
                 <dt>Pickup Location:</dt>
@@ -19,7 +19,7 @@
                 <dd>{{ctrl.request.dropoffLine1}} <br /> {{ctrl.request.dropoffLine2.value || "" }} {{ctrl.request.dropoffCity + ' ' + ctrl.request.dropoffZip}}
                 </dd>
                 <dt>Request Time:</dt>
-                <dd>{{ctrl.request.date | date:'MMM dd, yyyy h:mma'}}</dd>
+                <dd>{{ctrl.request.requestDate | date:'MMM dd, yyyy h:mma'}}</dd>
                 <dt>Status:</dt>
                 <dd>{{ctrl.request.status | FriendlyStatusName}}</dd>
             </dl>

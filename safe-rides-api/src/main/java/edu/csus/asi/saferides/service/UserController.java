@@ -2,9 +2,13 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.JwtAuthenticationRequest;
+import edu.csus.asi.saferides.security.JwtRiderAuthenticationRequest;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUser;
+import edu.csus.asi.saferides.security.model.Authority;
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +22,15 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /*
  * Rest API controller for the User resource 
@@ -47,6 +55,9 @@ public class UserController {
     // this creates a singleton for UserRepository
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
 	/*
      * GET "/users"
@@ -166,6 +177,43 @@ public class UserController {
         }
     }
 
+    
+    /*
+     * POST "/users/authByID"
+     *
+     * Authenticates the given user
+     *
+     * @param user - the user to be authenticated in the database
+     *
+     * */
+    @RequestMapping(method = RequestMethod.POST, value = "/authByID")
+    public ResponseEntity<?> authenticate(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest, Device device) {
+    	// Perform the security
+    	UserDetails userDetails;
+		try {
+			userDetails = userDetailsService.loadUserByUsername("r_" + riderAuthenticationRequest.getOneCardId());
+		} catch (UsernameNotFoundException e) {
+			// TODO Auto-generated catch block
+			Date currentDate = new Date();
+
+            User requestor = new User("r_" + riderAuthenticationRequest.getOneCardId(),
+                    "anon_fname", "anon_lname", currentDate.toString(), "null@null.null");
+
+            requestor.setLastPasswordResetDate(currentDate);
+
+            List<Authority> authorityList = new ArrayList<Authority>();
+            authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
+
+            requestor.setAuthorities(authorityList);
+
+            userRepository.save(requestor);
+            userDetails = userDetailsService.loadUserByUsername("r_" + riderAuthenticationRequest.getOneCardId());
+		}
+ 
+        final String token = jwtTokenUtil.generateToken(userDetails, device);
+
+        // Return the token
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));    }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {

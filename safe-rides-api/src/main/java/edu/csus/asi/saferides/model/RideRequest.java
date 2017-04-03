@@ -15,11 +15,11 @@ public class RideRequest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private int requestorId;
+	@Column(nullable = false)
+	private String oneCardId;
 
-    @Column(nullable = false)
-    private Date date;
+	@Column(updatable = false)
+	private Date requestDate;
 
     @Column(nullable = false)
     private String requestorFirstName;
@@ -27,8 +27,8 @@ public class RideRequest {
     @Column(nullable = false)
     private String requestorLastName;
 
-    @Column(nullable = false)
-    private String requestorContactNumber;
+	@Column(nullable = false)
+	private String requestorPhoneNumber;
 
     @Column(nullable = false)
     private int numPassengers;
@@ -49,9 +49,6 @@ public class RideRequest {
     private String pickupCity;
 
     @Column(nullable = false)
-    private String pickupZip;
-
-    @Column(nullable = false)
     private String dropoffLine1;
 
     @Column
@@ -59,9 +56,6 @@ public class RideRequest {
 
     @Column(nullable = false)
     private String dropoffCity;
-
-    @Column(nullable = false)
-    private String dropoffZip;
 
     @Enumerated(EnumType.STRING)
     private RideRequestStatus status;
@@ -94,40 +88,30 @@ public class RideRequest {
     protected RideRequest() {
     }
 
-    public RideRequest(int requestorId, String requestorFirstName, String requestorLastName,
-                       String requestorContactNumber, int numPassengers, String pickupLine1, String pickupCity,
-                       String pickupZip, String dropoffLine1, String dropoffCity, String dropoffZip) {
-        super();
-        this.requestorId = requestorId;
-        this.date = new Date();
-        this.requestorFirstName = requestorFirstName;
-        this.requestorLastName = requestorLastName;
-        this.requestorContactNumber = requestorContactNumber;
-        this.numPassengers = numPassengers;
-        this.pickupLine1 = pickupLine1;
-        this.pickupCity = pickupCity;
-        this.pickupZip = pickupZip;
-        this.dropoffLine1 = dropoffLine1;
-        this.dropoffCity = dropoffCity;
-        this.dropoffZip = dropoffZip;
-        this.status = RideRequestStatus.UNASSIGNED;
-        this.user = new User("" + requestorId, requestorFirstName, requestorLastName, "pass", "rider@null.null");
-    }
+	public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
+			String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity,
+			String dropoffLine1, String dropoffCity) {
+		super();
+		this.oneCardId = oneCardId;
+		this.requestDate = new Date();
+		this.requestorFirstName = requestorFirstName;
+		this.requestorLastName = requestorLastName;
+		this.requestorPhoneNumber = requestorPhoneNumber;
+		this.numPassengers = numPassengers;
+		this.pickupLine1 = pickupLine1;
+		this.pickupCity = pickupCity;
+		this.dropoffLine1 = dropoffLine1;
+		this.dropoffCity = dropoffCity;
+		this.status = RideRequestStatus.UNASSIGNED;
+        this.user = new User(oneCardId, requestorFirstName, requestorLastName, "pass", "rider@null.null");
+	}
 
-    public String getEstimatedTime() {
-        return estimatedTime;
-    }
-
-    public void setEstimatedTime(String estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
-    public String getMessageToDriver() {
-        return messageToDriver;
-    }
-
-    public void setMessageToDriver(String messageToDriver) {
-        this.messageToDriver = messageToDriver;
+    @PreUpdate
+    @PrePersist
+    public void updateTimeStamps() {
+        if (requestDate == null) {
+            requestDate = new Date();
+        }
     }
 
     public Driver getDriver() {
@@ -138,6 +122,14 @@ public class RideRequest {
         this.driver = driver;
     }
 
+    public String getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
     public Long getId() {
         return id;
     }
@@ -146,21 +138,21 @@ public class RideRequest {
         this.id = id;
     }
 
-    public int getRequestorId() {
-        return requestorId;
-    }
+	public String getOneCardId() {
+		return oneCardId;
+	}
 
-    public void setRequestorId(int requestorId) {
-        this.requestorId = requestorId;
-    }
+	public void setOneCardId(String oneCardId) {
+		this.oneCardId = oneCardId;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getRequestDate() {
+		return requestDate;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
 
     public String getRequestorFirstName() {
         return requestorFirstName;
@@ -178,13 +170,13 @@ public class RideRequest {
         this.requestorLastName = requestorLastName;
     }
 
-    public String getRequestorContactNumber() {
-        return requestorContactNumber;
-    }
+	public String getRequestorPhoneNumber() {
+		return requestorPhoneNumber;
+	}
 
-    public void setRequestorContactNumber(String requestorContactNumber) {
-        this.requestorContactNumber = requestorContactNumber;
-    }
+	public void setRequestorPhoneNumber(String requestorPhoneNumber) {
+		this.requestorPhoneNumber = requestorPhoneNumber;
+	}
 
     public int getNumPassengers() {
         return numPassengers;
@@ -234,14 +226,6 @@ public class RideRequest {
         this.pickupCity = pickupCity;
     }
 
-    public String getPickupZip() {
-        return pickupZip;
-    }
-
-    public void setPickupZip(String pickupZip) {
-        this.pickupZip = pickupZip;
-    }
-
     public String getDropoffLine1() {
         return dropoffLine1;
     }
@@ -266,14 +250,6 @@ public class RideRequest {
         this.dropoffCity = dropoffCity;
     }
 
-    public String getDropoffZip() {
-        return dropoffZip;
-    }
-
-    public void setDropoffZip(String dropoffZip) {
-        this.dropoffZip = dropoffZip;
-    }
-
     public RideRequestStatus getStatus() {
         return status;
     }
@@ -288,6 +264,14 @@ public class RideRequest {
 
     public void setCancelMessage(String cancelMessage) {
         this.cancelMessage = cancelMessage;
+    }
+
+    public String getMessageToDriver() {
+        return messageToDriver;
+    }
+
+    public void setMessageToDriver(String messageToDriver) {
+        this.messageToDriver = messageToDriver;
     }
 
     public Double getPickupLatitude() {
@@ -335,22 +319,20 @@ public class RideRequest {
         return "RideRequest{" +
                 "driver=" + driver +
                 ", id=" + id +
-                ", requestorId=" + requestorId +
-                ", date=" + date +
+                ", oneCardId=" + oneCardId +
+                ", requestDate=" + requestDate +
                 ", requestorFirstName='" + requestorFirstName + '\'' +
                 ", requestorLastName='" + requestorLastName + '\'' +
-                ", requestorContactNumber='" + requestorContactNumber + '\'' +
+                ", requestorPhoneNumber='" + requestorPhoneNumber + '\'' +
                 ", numPassengers=" + numPassengers +
                 ", startOdometer=" + startOdometer +
                 ", endOdometer=" + endOdometer +
                 ", pickupLine1='" + pickupLine1 + '\'' +
                 ", pickupLine2='" + pickupLine2 + '\'' +
                 ", pickupCity='" + pickupCity + '\'' +
-                ", pickupZip='" + pickupZip + '\'' +
                 ", dropoffLine1='" + dropoffLine1 + '\'' +
                 ", dropoffLine2='" + dropoffLine2 + '\'' +
                 ", dropoffCity='" + dropoffCity + '\'' +
-                ", dropoffZip='" + dropoffZip + '\'' +
                 ", status=" + status +
                 ", cancelMessage='" + cancelMessage + '\'' +
                 ", messageToDriver='" + messageToDriver + '\'' +

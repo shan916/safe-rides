@@ -8,22 +8,23 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('RideRequest', function(Driver) {
+    .factory('RideRequest', function() {
         function RideRequest(data) {
-            this.requestorId = undefined;
-            this.date = undefined;
-            this.requestorContactNumber = undefined;
+            this.id = undefined;
+            this.oneCardId = undefined;
+            this.requestDate = undefined;
             this.requestorFirstName = undefined;
             this.requestorLastName = undefined;
+            this.requestorPhoneNumber = undefined;
+            this.numPassengers = undefined;
+            this.startOdometer = undefined;
+            this.endOdometer = undefined;
             this.pickupLine1 = undefined;
             this.pickupLine2 = undefined;
             this.pickupCity = undefined;
-            this.pickupZip = undefined;
             this.dropoffLine1 = undefined;
             this.dropoffLine2 = undefined;
             this.dropoffCity = undefined;
-            this.dropoffZip = undefined;
-            this.numPassengers = undefined;
             this.driver = undefined;
             this.status = undefined;
             this.cancelMessage = undefined;
@@ -60,6 +61,10 @@ angular.module('safeRidesWebApp')
                 case 'CANCELEDOTHER':
                     return 7;
             }
+        };
+
+        RideRequest.prototype.getVehicleDescription = function() {
+            return this.driver.vehicle.color + ' ' + this.driver.vehicle.year + ' ' + this.driver.vehicle.make + ' ' + this.driver.vehicle.model;
         };
 
         return RideRequest;

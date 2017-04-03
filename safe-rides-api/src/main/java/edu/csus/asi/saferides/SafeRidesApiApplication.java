@@ -83,245 +83,205 @@ public class SafeRidesApiApplication {
             loc3.setDriver(driver0);
 
             RideRequest rideRequest0 = new RideRequest(
-                    146978572,
+                    "146978572",
                     "Kevin",
                     "Winters",
                     "9162601900",
                     1,
                     "8535 La Riviera Dr",
                     "Sacramento",
-                    "95826",
                     "3109 Occidental Dr",
-                    "Sacramento",
-                    "95826");
+                    "Sacramento");
             RideRequest rideRequest1 = new RideRequest(
-                    380256637,
+                    "380256637",
                     "Peter",
                     "Skaggs",
                     "9165129630",
                     2,
                     "4041 C St",
                     "Sacramento",
-                    "95819",
                     "6325 14th Ave",
-                    "Sacramento",
-                    "95820");
+                    "Sacramento");
             RideRequest rideRequest2 = new RideRequest(
-                    017150500,
+                    "017150500",
                     "Kevin",
                     "Winters",
                     "9162601900",
                     3,
                     "4350 J St",
                     "Sacramento",
-                    "95819",
                     "1900 22nd St",
-                    "Sacramento",
-                    "95816");
+                    "Sacramento");
             RideRequest rideRequest3 = new RideRequest(
-                    353488787,
+                    "353488787",
                     "Jack",
                     "Bonner",
                     "9167033428",
                     4,
                     "5540 Spilman Ave",
                     "Sacramento",
-                    "95819",
                     "8671 Everglade Dr",
-                    "Sacramento",
-                    "95826");
+                    "Sacramento");
             RideRequest rideRequest4 = new RideRequest(
-                    454397082,
+                    "454397082",
                     "Daniel",
                     "Reaves",
                     "9164321498",
                     1,
                     "9409 Mira Del Rio Dr",
                     "Sacramento",
-                    "95827",
                     "9065 Canberra Dr",
-                    "Sacramento",
-                    "95826");
+                    "Sacramento");
             RideRequest rideRequest5 = new RideRequest(
-                    124796316,
+                    "124796316",
                     "James",
                     "Miner",
                     "9169553182",
                     1,
                     "8213 Lake Forest Dr",
                     "Sacramento",
-                    "95826",
                     "3115 Sierra Oaks Dr",
-                    "Sacramento",
-                    "95864");
+                    "Sacramento");
             RideRequest rideRequest6 = new RideRequest(
-                    012644411,
+                    "012644411",
                     "Jennifer",
                     "Alexander",
                     "9165338593",
                     2,
                     "4631 Nickles Way",
                     "Sacramento",
-                    "95864",
                     "1961 Howe Ave",
-                    "Sacramento",
-                    "95825");
+                    "Sacramento");
             RideRequest rideRequest7 = new RideRequest(
-                    507271867,
+                    "507271867",
                     "Charlene",
                     "Thomas",
                     "9162820006",
                     2,
                     "3805 Becerra Way",
                     "Sacramento",
-                    "95821",
                     "2025 W El Camino Ave",
-                    "Sacramento",
-                    "95833");
+                    "Sacramento");
             RideRequest rideRequest8 = new RideRequest(
-                    653902142,
+                    "653902142",
                     "Rolanda",
                     "James",
                     "9167739687",
                     3,
                     "3340 Soda Way",
                     "Sacramento",
-                    "95834",
                     "1235 Pebblewood Dr",
-                    "Sacramento",
-                    "95834");
+                    "Sacramento");
             RideRequest rideRequest9 = new RideRequest(
-                    393465734,
+                    "393465734",
                     "Debra",
                     "Lang",
                     "9164712820",
                     1,
                     "8071 La Riviera Dr",
                     "Sacramento",
-                    "95826",
                     "345 Main Ave.",
-                    "Sacramento",
-                    "95818");
+                    "Sacramento");
             RideRequest rideRequest10 = new RideRequest(
-                    227299993,
+                    "227299993",
                     "Sue",
                     "Grantham",
                     "9164375577",
                     1,
                     "2780 Millcreek Dr",
                     "Sacramento",
-                    "95833",
                     "2441 Seamist Dr",
-                    "Sacramento",
-                    "95833");
+                    "Sacramento");
             RideRequest rideRequest11 = new RideRequest(
-                    060116327,
+                    "060116327",
                     "Noemi",
                     "Cox",
                     "9162422785",
                     1,
                     "505 10th St",
                     "Sacramento",
-                    "95814",
                     "7901 La Riviera Dr",
-                    "Sacramento",
-                    "95826");
+                    "Sacramento");
             RideRequest rideRequest12 = new RideRequest(
-                    645735866,
+                    "645735866",
                     "Joy",
                     "Pence",
                     "9163505114",
                     4,
                     "2349 Fruitridge Rd",
                     "Sacramento",
-                    "95822",
                     "4900 10th Ave",
-                    "Sacramento",
-                    "95820");
+                    "Sacramento");
             RideRequest rideRequest13 = new RideRequest(
-                    314246498,
+                    "314246498",
                     "Rochelle",
                     "Rowell",
                     "9164639941",
                     2,
                     "4617 12th Ave",
                     "Sacramento",
-                    "95820",
                     "2498 24th St",
-                    "Sacramento",
-                    "95818");
+                    "Sacramento");
             RideRequest rideRequest14 = new RideRequest(
-                    536200095,
+                    "536200095",
                     "Charles",
                     "Tuttle",
                     "9166348237",
                     1,
                     "1403 V St",
                     "Sacramento",
-                    "95818",
                     "1126 T St",
-                    "Sacramento",
-                    "95811");
+                    "Sacramento");
             RideRequest rideRequest15 = new RideRequest(
-                    737128850,
+                    "737128850",
                     "Mario",
                     "Tutt",
                     "9162213034",
                     3,
                     "455 Richards Blvd",
                     "Sacramento",
-                    "95811",
                     "534 Hartnell Pl",
-                    "Sacramento",
-                    "95825");
+                    "Sacramento");
             RideRequest rideRequest16 = new RideRequest(
-                    748528850,
+                    "748528850",
                     "Wanda",
                     "Scruggs",
                     "9162768046",
                     3,
                     "6141 Hall Ln",
                     "Sacramento",
-                    "95608",
                     "4786 Garfield Ave",
-                    "Sacramento",
-                    "95608");
+                    "Sacramento");
             RideRequest rideRequest17 = new RideRequest(
-                    737159820,
+                    "737159820",
                     "Mercy",
                     "Butler",
                     "9165360504",
                     3,
                     "5630 Roseville Rd",
                     "Sacramento",
-                    "95842",
                     "2121 Moonstone Way",
-                    "Sacramento",
-                    "95835");
+                    "Sacramento");
             RideRequest rideRequest18 = new RideRequest(
-                    127128850,
+                    "127128850",
                     "Dennis",
                     "Lopez",
                     "9168732659",
                     3,
                     "1570 Edgemore Ave",
                     "Sacramento",
-                    "95835",
                     "7235 Pritchard Rd",
-                    "Sacramento",
-                    "95828");
+                    "Sacramento");
             RideRequest rideRequest19 = new RideRequest(
-                    257129650,
+                    "257129650",
                     "David",
                     "Meyer",
                     "9167646255",
                     3,
                     "7300 Frasinetti Rd",
                     "Sacramento",
-                    "95828",
                     "8637 Oakbank Way",
-                    "Sacramento",
-                    "95828");
+                    "Sacramento");
 
             rideRequest0.setDriver(driver0);
             rideRequest0.setStatus(RideRequestStatus.COMPLETE);
