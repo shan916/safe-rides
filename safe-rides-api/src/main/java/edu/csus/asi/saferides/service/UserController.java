@@ -102,6 +102,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> createUser(@RequestBody User user) {
+        user.setUsername(user.getUsername().toLowerCase());
         User result = userRepository.save(user);
 
         // create URI of where the user was created
@@ -124,14 +125,14 @@ public class UserController {
         try {
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getUsername(),
+                            authenticationRequest.getUsername().toLowerCase(),
                             authenticationRequest.getPassword()
                     )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Reload password post-security so we can generate token
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername().toLowerCase());
             final String token = jwtTokenUtil.generateToken(userDetails);
 
             // Return the token
@@ -154,7 +155,7 @@ public class UserController {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
 
-        User riderUser = new User(riderAuthenticationRequest.getOneCardId(), "anon_fname", "anon_lname");
+        User riderUser = new User(riderAuthenticationRequest.getOneCardId().toLowerCase(), "anon_fname", "anon_lname");
 
         ArrayList<Authority> authorityList = new ArrayList<Authority>();
         authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
@@ -177,10 +178,10 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
-        if(userRepository.findByUsername(username).getUsername() != user.getUsername()){
+        if(userRepository.findByUsername(username.toLowerCase()).getUsername() != user.getUsername().toLowerCase()){
             return ResponseEntity.badRequest().body(new ResponseMessage("Username mismatch"));
         }
-
+        user.setUsername(user.getUsername().toLowerCase());
         User result = userRepository.save(user);
 
         return ResponseEntity.ok(result);

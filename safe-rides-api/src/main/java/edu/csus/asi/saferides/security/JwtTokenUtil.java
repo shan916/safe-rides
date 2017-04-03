@@ -34,7 +34,7 @@ public class JwtTokenUtil implements Serializable {
         } catch (Exception e) {
             username = null;
         }
-        return username;
+        return username.toLowerCase();
     }
 
     @SuppressWarnings("unchecked")
