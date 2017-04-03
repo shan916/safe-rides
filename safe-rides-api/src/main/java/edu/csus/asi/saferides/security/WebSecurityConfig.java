@@ -69,10 +69,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .authorizeRequests()
+
                 // allow POST to /users/auth
                 .antMatchers(HttpMethod.POST, "/users/auth/**", "/users/authrider/**", "/rides").permitAll()
+
                 // allow OPTIONS to /rides
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 .antMatchers("/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 // all other request need a JWT
                 .anyRequest().authenticated();

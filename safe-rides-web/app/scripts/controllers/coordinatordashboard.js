@@ -269,13 +269,15 @@ app.filter('FriendlyStatusName', function() {
                 return 'Unassigned';
             case 'ASSIGNED':
                 return 'Assigned';
-            case 'INPROGRESS':
-                return 'In Progress';
+            case 'PICKINGUP':
+                return 'Driving to pickup';
+            case 'DROPPINGOFF':
+                return 'Driving to dropoff'
             case 'COMPLETE':
                 return 'Complete';
             case 'CANCELEDBYCOORDINATOR':
                 return 'Canceled by Coordinator';
-            case 'CANCELEDBYREQUESTOR':
+            case 'CANCELEDBYRIDER':
                 return 'Canceled by Rider';
             case 'AVAILABLE':
                 return 'Available';

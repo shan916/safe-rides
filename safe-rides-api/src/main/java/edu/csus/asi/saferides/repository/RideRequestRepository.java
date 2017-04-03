@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.repository;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 
+import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
 	 * */
 	List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 
-    RideRequest findTop1ByRequestorIdOrderByDateDesc(String onecard);
+    RideRequest findTop1ByOneCardIdOrderByRequestDateDesc(String onecard);
 }

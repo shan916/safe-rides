@@ -41,13 +41,13 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     public UserDetails loadRiderByOnecard(String onecard) throws UsernameNotFoundException {
         // find user in rides table
-        RideRequest rideRequest = rideRequestRepository.findTop1ByRequestorIdOrderByDateDesc(onecard);
+        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(onecard);
 
         if (rideRequest == null) {
             throw new UsernameNotFoundException(String.format("No rider found with OneCard '%s'.", onecard));
         } else {
             // return user with the requestor name and rider role
-            User riderUser = new User("" + rideRequest.getRequestorId(), rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName());
+            User riderUser = new User(rideRequest.getOneCardId(), rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName());
 
             ArrayList<Authority> authorityList = new ArrayList<Authority>();
             authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));

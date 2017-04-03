@@ -29,13 +29,12 @@ angular.module('safeRidesWebApp')
           //RideRequestService.save({id: request.requestorId}, request.reasonForCancellation).$promise.then(function(response){
             vm.request.status = getStatusFromReason();
             //if other set the cancelMessage to what was entered
-            if(vm.cancelMessage != undefined){
+            if(vm.cancelMessage !== undefined){
               vm.request.cancelMessage = vm.cancelMessage;
             }
 
-            request.deleted = true;
             console.log('Request cancelled by: '+vm.reasonForCancellation+'  status: '+vm.request.status);
-            RideRequestService.update({id: vm.request.requestorId}, vm.request).$promise.then(function(response){
+            RideRequestService.update({id: vm.request.id}, vm.request).$promise.then(function(response){
               console.log('updated reasonForCancellation AND status: ', response);
               $uibModalInstance.close();
             }, function(error){
@@ -46,7 +45,7 @@ angular.module('safeRidesWebApp')
         function getStatusFromReason(){
           switch (vm.reasonForCancellation) {
             case 'Rider':
-              return 'CANCELEDBYREQUESTOR';
+              return 'CANCELEDBYRIDER';
             case 'Coordinator':
               return 'CANCELEDBYCOORDINATOR';
             case 'Other':

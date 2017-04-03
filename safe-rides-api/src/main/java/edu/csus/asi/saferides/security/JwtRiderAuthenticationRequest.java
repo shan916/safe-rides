@@ -24,3 +24,4 @@ public class JwtRiderAuthenticationRequest implements Serializable {
         this.oneCardId = oneCardId;
     }
 }
+

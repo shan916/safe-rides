@@ -47,13 +47,13 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
@@ -154,7 +154,7 @@ public class UserController {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
 
-        User riderUser = new User("" + riderAuthenticationRequest.getOneCardId(), "anon_fname", "anon_lname");
+        User riderUser = new User(riderAuthenticationRequest.getOneCardId(), "anon_fname", "anon_lname");
 
         ArrayList<Authority> authorityList = new ArrayList<Authority>();
         authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));

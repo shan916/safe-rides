@@ -8,27 +8,30 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('RideRequest', function(Driver) {
+    .factory('RideRequest', function() {
         function RideRequest(data) {
-            this.requestorId = undefined;
-            this.date = undefined;
-            this.requestorContactNumber = undefined;
+            this.id = undefined;
+            this.oneCardId = undefined;
+            this.requestDate = undefined;
             this.requestorFirstName = undefined;
             this.requestorLastName = undefined;
+            this.requestorPhoneNumber = undefined;
+            this.numPassengers = undefined;
+            this.startOdometer = undefined;
+            this.endOdometer = undefined;
             this.pickupLine1 = undefined;
             this.pickupLine2 = undefined;
             this.pickupCity = undefined;
-            this.pickupZip = undefined;
             this.dropoffLine1 = undefined;
             this.dropoffLine2 = undefined;
             this.dropoffCity = undefined;
-            this.dropoffZip = undefined;
-            this.numPassengers = undefined;
             this.driver = undefined;
             this.status = undefined;
             this.cancelMessage = undefined;
             this.messageToDriver = undefined;
             this.estimatedTime = undefined;
+            this.startOdometer = undefined;
+            this.endOdometer = undefined;
             this.pickupLatitude = undefined;
             this.pickupLongitude = undefined;
             this.dropoffLatitude = undefined;
@@ -45,19 +48,23 @@ angular.module('safeRidesWebApp')
                     return 0;
                 case 'ASSIGNED':
                     return 1;
-                case 'INPROGRESS':
+                case 'PICKINGUP':
                     return 2;
-                case 'COMPLETE':
+                case 'DROPPINGOFF':
                     return 3;
-                case 'CANCELEDBYCOORDINATOR':
+                case 'COMPLETE':
                     return 4;
-                case 'CANCELEDBYREQUESTOR':
+                case 'CANCELEDBYCOORDINATOR':
                     return 5;
-                case 'CANCELEDBYDRIVER':
+                case 'CANCELEDBYRIDER':
                     return 6;
-                    case 'CANCELEDBYCOORDINATOR':
-                        return 4;
+                case 'CANCELEDOTHER':
+                    return 7;
             }
+        };
+
+        RideRequest.prototype.getVehicleDescription = function() {
+            return this.driver.vehicle.color + ' ' + this.driver.vehicle.year + ' ' + this.driver.vehicle.make + ' ' + this.driver.vehicle.model;
         };
 
         return RideRequest;
