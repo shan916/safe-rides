@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('LoginCtrl', function($http, $window, $cookies, $stateParams, $state, UserService, authManager) {
+    .controller('LoginCtrl', function($http, $window, $cookies, $stateParams, $state, UserService, authManager, AuthTokenService) {
         if(authManager.isAuthenticated()){
             $state.go('/');
             return;
@@ -27,13 +27,8 @@ angular.module('safeRidesWebApp')
 
             UserService.userAuthentication(credentials).then(function(response) {
                     console.log(response.data.token);
-                    var expirationDate = new Date();
-                    expirationDate.setTime(expirationDate.getTime() + 6 * 60 * 60 * 1000);
-                    $window.localStorage.safeRidesToken = response.data.token;
-                    $cookies.put('safeRidesToken', response.data.token, {
-                        expires: expirationDate
-                    });
-
+                    AuthTokenService.setToken(response.data.token);
+                    
                     if ($stateParams.redirect) {
                         $state.go($stateParams.redirect);
                     } else {

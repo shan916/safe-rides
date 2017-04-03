@@ -69,17 +69,12 @@ angular
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
             unauthenticatedRedirectPath: '/login',
-            tokenGetter: ['options', '$window', '$cookies', function(options, $window, $cookies) {
+            tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
                 if (options && options.url.substr(options.url.length - 5) === '.html') {
                     return null;
-                }
-                if ($window.localStorage.safeRidesToken) {
-                    return $window.localStorage.safeRidesToken;
-                } else if ($cookies.get('safeRidesToken')) {
-                    return $cookies.get('safeRidesToken');
                 } else {
-                    return null;
+                    return AuthTokenService.getToken();
                 }
             }]
         });

@@ -8,17 +8,24 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService) {
+        // kick user out if not authenticated
         if(!authManager.isAuthenticated()){
             $state.go('login');
+            console.log('Not authenticated');
+            return;
+        }
+
+        // kick user out if not coordinator
+        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
+            $state.go('/');
+            console.log('Not a coordinator');
             return;
         }
 
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
-
-
 
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -107,8 +114,8 @@ var app = angular.module('safeRidesWebApp')
                     vm.showRequestDetails(element);
                     return;
                 }
-            })
-        }
+            });
+        };
 
         vm.mapDriverPinClick = function(evt, driverId){
             vm.drivers.forEach(function(element) {
@@ -116,8 +123,8 @@ var app = angular.module('safeRidesWebApp')
                     vm.showDriverDetails(element);
                     return;
                 }
-            })
-        }
+            });
+        };
 
         vm.requestAgeInMinutes = function(start) {
             return moment.duration(moment().diff(moment(start))).asMinutes();
