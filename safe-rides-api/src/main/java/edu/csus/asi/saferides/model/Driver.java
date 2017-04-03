@@ -1,18 +1,17 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
-
 /*
  * @author Zeeshan Khaliq
- * 
+ *
  * Model object for Driver Entity
  * */
 
@@ -46,27 +45,27 @@ public class Driver {
 
 	@Column(nullable = false)
 	private Boolean insuranceChecked;
-	
+
 	@Column(nullable = false)
 	@Size(min = 3)
 	private String insuranceCompany;
 
 	@Column(nullable = false)
 	private Boolean active;
-	
+
 	@Transient
 	DriverStatus status;
-	
+
 	@JsonIgnore
 	@Column(updatable = false)
 	private Date createdDate;
-	
+
 	@JsonIgnore
 	private Date modifiedDate;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
 	private Set<RideRequest> rides;
@@ -92,7 +91,7 @@ public class Driver {
 	}
 
 	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-			String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+				  String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;

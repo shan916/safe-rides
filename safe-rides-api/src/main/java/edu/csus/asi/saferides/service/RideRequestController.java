@@ -132,6 +132,7 @@ public class RideRequestController {
      * PUT /rides/{id}
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates the given ride request")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
