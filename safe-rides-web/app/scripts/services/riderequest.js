@@ -22,11 +22,9 @@ angular.module('safeRidesWebApp')
             this.pickupLine1 = undefined;
             this.pickupLine2 = undefined;
             this.pickupCity = undefined;
-            this.pickupZip = undefined;
             this.dropoffLine1 = undefined;
             this.dropoffLine2 = undefined;
             this.dropoffCity = undefined;
-            this.dropoffZip = undefined;
             this.driver = undefined;
             this.status = undefined;
             this.cancelMessage = undefined;
@@ -61,6 +59,10 @@ angular.module('safeRidesWebApp')
                 case 'CANCELEDOTHER':
                     return 7;
             }
+        };
+
+        RideRequest.prototype.getVehicleDescription = function() {
+            return this.driver.vehicle.color + ' ' + this.driver.vehicle.year + ' ' + this.driver.vehicle.make + ' ' + this.driver.vehicle.model;
         };
 
         return RideRequest;

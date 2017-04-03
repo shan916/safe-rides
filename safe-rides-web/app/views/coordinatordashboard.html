@@ -115,7 +115,7 @@
                                             <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
                                             <td>{{req.status | FriendlyStatusName}}</td>
                                             <td>{{req.numPassengers}}</td>
-                                            <td>{{req.date | date:'h:mma'}}</td>
+                                            <td>{{req.requestDate | date:'h:mma'}}</td>
                                             <td>
                                                 <button ng-show="req.status === 'UNASSIGNED'" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
                                                 <button ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>

@@ -8,18 +8,18 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService) {
+.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest) {
     var vm = this;
     vm.maxRidersCount = [1, 2, 3];
     vm.loading = true;
     vm.loggedIn = false;
     vm.oneCardId = undefined;
-    vm.rideRequest = undefined;
+    vm.rideRequest = new RideRequest();
     vm.existingRide = undefined;
 
     function checkLogin() {
         UserService.get().$promise.then(function(response) {
-            console.log(response);
+            console.log(response.data);
             vm.loading = false;
             vm.loggedIn = true;
             getRide();
@@ -35,7 +35,7 @@ angular.module('safeRidesWebApp')
         $http.post(ENV.apiEndpoint + 'users/authByID', {
             oneCardId: vm.oneCardId
         }).then(function(response) {
-            console.log(response);
+            console.log(response.data);
             vm.loggedIn = true;
             saveToken(response.data.token);
             getRide();
@@ -48,7 +48,7 @@ angular.module('safeRidesWebApp')
     vm.submitRideRequest = function() {
         vm.loading = true;
         RideRequestService.save(vm.rideRequest).$promise.then(function(response) {
-            console.log('ride saved:', response);
+            console.log('ride saved:', response.data);
             getRide();
         }, function(error) {
             console.log('error saving ride:', error);
@@ -68,10 +68,10 @@ angular.module('safeRidesWebApp')
     function getRide() {
         $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
             if (response.data && response.data !== '') {
-                vm.existingRide = response.data;
+                vm.existingRide = new RideRequest(response.data);
             }
 
-            console.log(response);
+            console.log(response.data);
             vm.loading = false;
         }, function (error) {
             console.log(error);

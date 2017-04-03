@@ -55,6 +55,9 @@ public class RideRequestController {
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    @Autowired
+    private GeocodingService geocodingService;
+
     @Value("${jwt.header}")
     private String tokenHeader;
 
@@ -115,6 +118,7 @@ public class RideRequestController {
             rideRequest.setUser(user);
         }
 
+        geocodingService.setCoordinates(rideRequest);
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         RideRequest result = rideRequestRepository.save(rideRequest);
@@ -137,6 +141,7 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+        geocodingService.setCoordinates(rideRequest);
         RideRequest result = rideRequestRepository.save(rideRequest);
 
         return ResponseEntity.ok(result);

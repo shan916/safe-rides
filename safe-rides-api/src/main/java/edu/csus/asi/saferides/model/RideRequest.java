@@ -49,9 +49,6 @@ public class RideRequest {
     private String pickupCity;
 
     @Column(nullable = false)
-    private String pickupZip;
-
-    @Column(nullable = false)
     private String dropoffLine1;
 
     @Column
@@ -59,9 +56,6 @@ public class RideRequest {
 
     @Column(nullable = false)
     private String dropoffCity;
-
-    @Column(nullable = false)
-    private String dropoffZip;
 
     @Enumerated(EnumType.STRING)
     private RideRequestStatus status;
@@ -95,8 +89,8 @@ public class RideRequest {
     }
 
 	public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
-			String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity, String pickupZip,
-			String dropoffLine1, String dropoffCity, String dropoffZip) {
+			String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity,
+			String dropoffLine1, String dropoffCity) {
 		super();
 		this.oneCardId = oneCardId;
 		this.requestDate = new Date();
@@ -106,10 +100,8 @@ public class RideRequest {
 		this.numPassengers = numPassengers;
 		this.pickupLine1 = pickupLine1;
 		this.pickupCity = pickupCity;
-		this.pickupZip = pickupZip;
 		this.dropoffLine1 = dropoffLine1;
 		this.dropoffCity = dropoffCity;
-		this.dropoffZip = dropoffZip;
 		this.status = RideRequestStatus.UNASSIGNED;
         this.user = new User(oneCardId, requestorFirstName, requestorLastName, "pass", "rider@null.null");
 	}
@@ -234,14 +226,6 @@ public class RideRequest {
         this.pickupCity = pickupCity;
     }
 
-    public String getPickupZip() {
-        return pickupZip;
-    }
-
-    public void setPickupZip(String pickupZip) {
-        this.pickupZip = pickupZip;
-    }
-
     public String getDropoffLine1() {
         return dropoffLine1;
     }
@@ -264,14 +248,6 @@ public class RideRequest {
 
     public void setDropoffCity(String dropoffCity) {
         this.dropoffCity = dropoffCity;
-    }
-
-    public String getDropoffZip() {
-        return dropoffZip;
-    }
-
-    public void setDropoffZip(String dropoffZip) {
-        this.dropoffZip = dropoffZip;
     }
 
     public RideRequestStatus getStatus() {
@@ -354,11 +330,9 @@ public class RideRequest {
                 ", pickupLine1='" + pickupLine1 + '\'' +
                 ", pickupLine2='" + pickupLine2 + '\'' +
                 ", pickupCity='" + pickupCity + '\'' +
-                ", pickupZip='" + pickupZip + '\'' +
                 ", dropoffLine1='" + dropoffLine1 + '\'' +
                 ", dropoffLine2='" + dropoffLine2 + '\'' +
                 ", dropoffCity='" + dropoffCity + '\'' +
-                ", dropoffZip='" + dropoffZip + '\'' +
                 ", status=" + status +
                 ", cancelMessage='" + cancelMessage + '\'' +
                 ", messageToDriver='" + messageToDriver + '\'' +

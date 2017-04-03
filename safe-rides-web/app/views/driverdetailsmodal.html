@@ -32,7 +32,7 @@
                         <dd>{{currentRide.dropoffLine1}} <br /> {{currentRide.dropoffLine2.value || "" }} {{currentRide.dropoffCity + ' ' + currentRide.dropoffZip}}
                         </dd>
                         <dt>Request Time:</dt>
-                        <dd>{{currentRide.date | date:'MMM dd, yyyy h:mma'}}</dd>
+                        <dd>{{currentRide.requestDate | date:'MMM dd, yyyy h:mma'}}</dd>
                         <dt>Status:</dt>
                         <dd>{{currentRide.status | FriendlyStatusName}}</dd>
                     </div>

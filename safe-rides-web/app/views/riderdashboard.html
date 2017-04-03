@@ -138,6 +138,10 @@
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
                         <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">Your driver has picked up you up</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your driver has dropped you off at your destination</h4>
                 </div>
             </div>
 
@@ -155,10 +159,25 @@
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <a href="tel:9160000000" class="btn btn-default">Call Safe Rides</a>
+                    <a href="tel:9160000000" class="btn btn-primary">Call Safe Rides</a>
                 </div>
             </div>
-            <pre>{{ctrl.existingRide | json}}</pre>
+        </div>
+    </div>
+
+    <div class="panel panel-success" ng-show="ctrl.existingRide.status !== 'UNASSIGNED'">
+        <div class="panel-heading">
+            <h3 class="panel-title">Driver Information</h3>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Driver Name</dt>
+                <dd>{{ctrl.existingRide.driver.driverFirstName}}</dd>
+                <dt>Vehicle Description</dt>
+                <dd>{{ctrl.existingRide.getVehicleDescription()}}</dd>
+                <dt>Vehicle License Plate</dt>
+                <dd>{{ctrl.existingRide.driver.vehicle.licensePlate}}</dd>
+            </dl>
         </div>
     </div>
 
