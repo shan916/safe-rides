@@ -14,8 +14,8 @@
                                 </shape>
                                 <marker icon="{url: 'images/red-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'UNASSIGNED'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
                                 <marker icon="{url: 'images/orange-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'ASSIGNED'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
-                                <marker icon="{url: 'images/yellow-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'INPROGRESS'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
-                                <marker icon="{url: 'images/green-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'PICKEDUP'} : true" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
+                                <marker icon="{url: 'images/yellow-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'PICKINGUP'} : true" position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
+                                <marker icon="{url: 'images/green-dot.png'}" title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}' on-click='ctrl.mapPinClick({{r.id}})' ng-repeat="r in ctrl.rideRequests | filter: {status: 'DROPPINGOFF'} : true" position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
                                 <marker icon="{url: 'images/blue-dot.png'}" title='{{d.driver.driverFirstName}} {{d.driver.driverLastName}}' on-click='ctrl.mapDriverPinClick({{d.driver.id}})' ng-repeat="d in ctrl.driversLocation" position="{{d.latitude +','+ d.longitude}}"></marker>
                             </ng-map>
                         </div>
@@ -110,15 +110,15 @@
                                     <tbody>
                                         <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: req.status === 'UNASSIGNED' && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
                                   warning: req.status === 'UNASSIGNED',
-                                  info: req.status === 'ASSIGNED' || req.status === 'INPROGRESS',
+                                  info: req.status === 'ASSIGNED' || req.status === 'PICKINGUP' || req.status === 'DROPPINGOFF',
                                   success: req.status === 'COMPLETE'}">
                                             <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
                                             <td>{{req.status | FriendlyStatusName}}</td>
                                             <td>{{req.numPassengers}}</td>
                                             <td>{{req.date | date:'h:mma'}}</td>
                                             <td>
-                                                <button ng-if="req.status === 'UNASSIGNED'" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
-                                                <button ng-if="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'INPROGRESS'" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
+                                                <button ng-show="req.status === 'UNASSIGNED'" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
+                                                <button ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -151,12 +151,12 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-click="ctrl.showDriverDetails(driver)" ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' " ng-class="{success: driver.status === 'AVAILABLE',
-                                                info: driver.status === 'INPROGRESS' || driver.status === 'ASSIGNED'}">
+                                                info: driver.status === 'PICKINGUP' || driver.status === 'DROPPINGOFF' || driver.status === 'ASSIGNED'}">
                                             <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
                                             <td>{{driver.status | FriendlyStatusName}}</td>
                                             <td>{{driver.vehicle.seats}}</td>
                                             <td>
-                                                <button ng-if="driver.status === 'AVAILABLE'" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
+                                                <button ng-show="driver.status === 'AVAILABLE'" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
                                             </td>
                                         </tr>
                                     </tbody>

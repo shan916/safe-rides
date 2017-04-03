@@ -1,14 +1,13 @@
 package edu.csus.asi.saferides.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /*
  * @author Zeeshan Khaliq
@@ -222,20 +221,34 @@ public class Driver {
 	}
 
 	public DriverStatus getStatus() {
-		boolean inprogress = false;
-		for (RideRequest ride : getRides()) {
-			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
-				return DriverStatus.ASSIGNED;
-			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
-				inprogress = true;
-			}
-		}
-		if (inprogress) {
-			return DriverStatus.INPROGRESS;
-		} else {
-			return DriverStatus.AVAILABLE;
-		}
-	}
+        boolean assigned = false;
+        boolean pickingUp = false;
+
+        for (RideRequest ride : getRides()) {
+            RideRequestStatus rideStatus = ride.getStatus();
+
+            switch (rideStatus) {
+                case DROPPINGOFF:
+                    return DriverStatus.DROPPINGOFF;
+                case PICKINGUP:
+                    pickingUp = true;
+                    break;
+                case ASSIGNED:
+                    assigned = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (pickingUp) {
+            return DriverStatus.PICKINGUP;
+        } else if (assigned) {
+            return DriverStatus.ASSIGNED;
+        } else {
+            return DriverStatus.AVAILABLE;
+        }
+  }
 
 	public Set<DriverLocation> getLocations() {
 		return locations;
