@@ -142,8 +142,33 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
-        geocodingService.setCoordinates(rideRequest);
-        RideRequest result = rideRequestRepository.save(rideRequest);
+        RideRequest databaseVersion = rideRequestRepository.findOne(rideRequest.getId());
+        // temp fix
+        databaseVersion.setDriver(rideRequest.getDriver());
+        databaseVersion.setEstimatedTime(rideRequest.getEstimatedTime());
+        databaseVersion.setOneCardId(rideRequest.getOneCardId());
+        databaseVersion.setRequestDate(rideRequest.getRequestDate());
+        databaseVersion.setRequestorFirstName(rideRequest.getRequestorFirstName());
+        databaseVersion.setRequestorLastName(rideRequest.getRequestorLastName());
+        databaseVersion.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
+        databaseVersion.setNumPassengers(rideRequest.getNumPassengers());
+        databaseVersion.setStartOdometer(rideRequest.getStartOdometer());
+        databaseVersion.setEndOdometer(rideRequest.getEndOdometer());
+        databaseVersion.setPickupLine1(rideRequest.getPickupLine1());
+        databaseVersion.setPickupLine2(rideRequest.getPickupLine2());
+        databaseVersion.setPickupCity(rideRequest.getPickupCity());
+        databaseVersion.setDropoffLine1(rideRequest.getDropoffLine1());
+        databaseVersion.setDropoffLine2(rideRequest.getDropoffLine2());
+        databaseVersion.setDropoffCity(rideRequest.getDropoffCity());
+        databaseVersion.setStatus(rideRequest.getStatus());
+        databaseVersion.setCancelMessage(rideRequest.getCancelMessage());
+        databaseVersion.setMessageToDriver(rideRequest.getMessageToDriver());
+        databaseVersion.setPickupLatitude(rideRequest.getPickupLatitude());
+        databaseVersion.setPickupLongitude(rideRequest.getPickupLongitude());
+        databaseVersion.setDropoffLatitude(rideRequest.getDropoffLatitude());
+        databaseVersion.setDropoffLongitude(rideRequest.getDropoffLongitude());
+        geocodingService.setCoordinates(databaseVersion);
+        RideRequest result = rideRequestRepository.save(databaseVersion);
 
         return ResponseEntity.ok(result);
     }
