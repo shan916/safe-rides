@@ -28,7 +28,6 @@
     <div class="header" ng-controller="HeaderCtrl as header">
         <div class="navbar navbar-default" role="navigation">
           <button ng-show="isAuthenticated" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
-          <a ng-show="!isAuthenticated" href="/#!/login" class="btn btn-primary pull-right">Login</a>
             <div class="container">
                 <div class="navbar-header">
                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
@@ -54,11 +53,12 @@
 
     <div ui-view=""></div>
 
-    <!-- <div class="footer">
-        <div class="container">
-            <p><span class="glyphicon glyphicon-heart"></span> from the Code Team 6 developers</p>
+    <div class="footer">
+        <div class="container" ng-show="!isAuthenticated">
+            <a href="/#!/coordinatordashboard">Coordinator Login</a> |
+            <a href="/#!/driverdashboard">Driver Login</a>
         </div>
-    </div> -->
+    </div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
