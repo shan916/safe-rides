@@ -30,6 +30,8 @@ angular.module('safeRidesWebApp')
             this.cancelMessage = undefined;
             this.messageToDriver = undefined;
             this.estimatedTime = undefined;
+            this.startOdometer = undefined;
+            this.endOdometer = undefined;
             this.pickupLatitude = undefined;
             this.pickupLongitude = undefined;
             this.dropoffLatitude = undefined;
