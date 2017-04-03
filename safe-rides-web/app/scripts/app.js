@@ -68,7 +68,9 @@ angular
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirectPath: '/login',
+            unauthenticatedRedirector: ['$state', function($state) {
+                $state.go('login');
+            }],
             tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
                 if (options && options.url.substr(options.url.length - 5) === '.html') {
