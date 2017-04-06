@@ -17,6 +17,10 @@ angular.module('safeRidesWebApp')
     vm.rideRequest = new RideRequest();
     vm.existingRide = undefined;
 
+    var callback = function() {
+      vm.login();
+    }
+
     function checkLogin() {
         UserService.get().$promise.then(function(response) {
             console.log(response.data);
