@@ -38,11 +38,12 @@ angular
         'angular-jwt'
     ])
 
-    .run(function($rootScope, $window, $cookies, $state, authManager) {
+    .run(function($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
         $rootScope.$on('tokenHasExpired', function() {
+            AuthTokenService.removeToken();
             console.log('Your session has expired!');
         });
 
@@ -53,8 +54,7 @@ angular
         });
 
         $rootScope.globalLogout = function() {
-            $window.localStorage.removeItem('safeRidesToken');
-            $cookies.remove('safeRidesToken');
+            AuthTokenService.removeToken();
             $state.go('/');
             // update the user authentication state right away
             // angular-jwt uses $rootScope.isAuthenticated

@@ -10,8 +10,8 @@
 angular.module('safeRidesWebApp')
     .service('AuthTokenService', function($window, $cookies, jwtHelper) {
         this.getToken = function() {
-            if ($window.localStorage.safeRidesToken) {
-                return $window.localStorage.safeRidesToken;
+            if ($window.localStorage.getItem('safeRidesToken')) {
+                return $window.localStorage.getItem('safeRidesToken');
             } else if ($cookies.get('safeRidesToken')) {
                 return $cookies.get('safeRidesToken');
             } else {
@@ -20,7 +20,7 @@ angular.module('safeRidesWebApp')
         };
 
         this.setToken = function(token) {
-            $window.localStorage.safeRidesToken = token;
+            $window.localStorage.setItem('safeRidesToken', token);
 
             var expirationDate = new Date();
             expirationDate.setTime(expirationDate.getTime() + 6 * 60 * 60 * 1000);
@@ -28,6 +28,16 @@ angular.module('safeRidesWebApp')
                 expires: expirationDate
             });
         };
+
+        this.removeToken = function() {
+            if ($window.localStorage.getItem('safeRidesToken')) {
+                $window.localStorage.removeItem('safeRidesToken');
+            }
+
+            if ($cookies.get('safeRidesToken')) {
+                return $cookies.remove('safeRidesToken');
+            }
+        }
 
         /**
          * roleName options: ['ROLE_ADMIN','ROLE_COORDINATOR','ROLE_DRIVER','ROLE_RIDER']
