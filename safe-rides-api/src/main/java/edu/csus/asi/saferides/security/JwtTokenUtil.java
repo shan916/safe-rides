@@ -30,11 +30,11 @@ public class JwtTokenUtil implements Serializable {
         String username;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            username = claims.getSubject().toLowerCase();
         } catch (Exception e) {
             username = null;
         }
-        return username.toLowerCase();
+        return username;
     }
 
     @SuppressWarnings("unchecked")
