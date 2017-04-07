@@ -1,4 +1,22 @@
 <div class="container-fluid">
+    <!-- Start of Refresh Drop Down list -->
+    <div class="row">
+        <div class="col-sm-2 pull-right">
+          <div class="row">
+              <div class="panel-body">
+                <!-- <h4>Refresh Tables</h4> -->
+                <label for="refreshTables">Refresh Rate?</label>
+                <select name="refreshTables" class="form-control" ng-options="option for option in listOfOptions" ng-model="selectedItem" ng-change="selectedItemChange(this.option)">
+                  <div>
+                      <div class="input-error" ng-message="required">* required</div>
+                  </div>
+                </select>
+              </div>
+          </div>
+        </div>
+    </div>
+    <!-- End of Refresh Drop Down list -->
+
     <div class="row">
         <div class="col-sm-7">
             <!-- Start of Google Map API -->
@@ -108,11 +126,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: req.status === 'UNASSIGNED' && ctrl.requestAgeInMinutes(req.time) > ctrl.DANGER_ZONE,
+                                        <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: req.status === 'UNASSIGNED' || req.requestAgeInMinutes(req.date) >= ctrl.DANGER_ZONE,
                                   warning: req.status === 'UNASSIGNED',
                                   info: req.status === 'ASSIGNED' || req.status === 'INPROGRESS',
-                                  success: req.status === 'COMPLETE',
-                                  danger: req.requestAgeInMinutes(req.date) >= ctrl.DANGER_ZONE}"}">
+                                  success: req.status === 'COMPLETE'}">
                                             <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
                                             <td>{{req.status | FriendlyStatusName}}</td>
                                             <td>{{req.numPassengers}}</td>
@@ -173,7 +190,7 @@
 
     <!-- the addriderequestmodal has been moved to own file
   addriderequestmodal.html
-  see also addriderequestmodal.js
--->
+  see also addriderequestmodal.js -->
+
 
 </div>

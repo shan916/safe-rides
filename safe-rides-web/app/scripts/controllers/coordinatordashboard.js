@@ -8,11 +8,10 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
-
 
 
         vm.loadingRideRequests = true;
@@ -20,6 +19,50 @@ var app = angular.module('safeRidesWebApp')
 
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
+
+        // vm.listOfOptions = [10, 20, 30, 4, 5, 10, 15];
+        $scope.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec']; //Working using $scope
+
+        /* START of refresh rate function */
+        /* Working but somehow I shouldn't be using $scope */
+        var timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate
+        $scope.selectedItemChange = function(){
+          $interval.cancel(timeInterval);
+          timeInterval = $interval(callDriversAndRideRequests, getRefreshRate($scope.selectedItem));
+        }
+
+        // vm.timeInterval;
+        // vm.selectedItemChange = function(option){
+        //   // I need to make my own selectedItemChange function!
+        //   var x = option;
+        //   $interval.cancel(timeInterval);
+        //   timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(x));
+        // }
+
+        /* END of refresh rate function */
+
+        function getRefreshRate(selectedRefreshRate){
+          var time = selectedRefreshRate;
+          switch (time) {
+              case '10 sec':
+                  return 10000;
+              case '20 sec':
+                  return 20000;
+              case '30 sec':
+                  return 30000;
+              case '40 sec':
+                  return 40000;
+              case '50 sec':
+                  return 50000;
+              case '60 sec':
+                  return 60000;
+          }
+        }
+
+        function callDriversAndRideRequests(){
+          getDrivers();
+          getRideRequests();
+        }
 
         function getDrivers() {
             vm.loadingCoordinatorDrivers = true;
@@ -85,6 +128,7 @@ var app = angular.module('safeRidesWebApp')
         }
 
         vm.DANGER_ZONE = 30;
+        // vm.DANGER_ZONE = 1;
 
         vm.drivers = [];
 
