@@ -9,6 +9,23 @@
  */
 angular.module('safeRidesWebApp')
     .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService, $state, $interval, GeolocationService, CurrentDriverLocationService) {
+        var vm = this;
+        vm.loadingRideRequest = true;
+        vm.ride = undefined;
+        vm.rideRequests = [];
+        vm.startOdo = undefined;
+        vm.endOdo = undefined;
+        vm.assignedRide = undefined;
+        vm.isStartOdoEntered = false;
+        vm.getPickupDirections = undefined;
+        vm.dropoffAddress = undefined;
+        vm.assignedRideRequest = undefined;
+        vm.isRideAssigned = false;
+        vm.showNoRequestView = false;
+        vm.pickedUpButtonPressed = false;
+        vm.inprogressFlag = false;
+        vm.lastCoords = undefined;
+
         // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
         if (authManager.isAuthenticated()) {
             if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
@@ -27,23 +44,6 @@ angular.module('safeRidesWebApp')
             console.log('Not authenticated');
             return;
         }
-
-        var vm = this;
-        vm.loadingRideRequest = true;
-        vm.ride = undefined;
-        vm.rideRequests = [];
-        vm.startOdo = undefined;
-        vm.endOdo = undefined;
-        vm.assignedRide = undefined;
-        vm.isStartOdoEntered = false;
-        vm.getPickupDirections = undefined;
-        vm.dropoffAddress = undefined;
-        vm.assignedRideRequest = undefined;
-        vm.isRideAssigned = false;
-        vm.showNoRequestView = false;
-        vm.pickedUpButtonPressed = false;
-        vm.inprogressFlag = false;
-        vm.lastCoords = undefined;
 
         function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
