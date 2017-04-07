@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver) {
+    .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, $interval, GeolocationService, CurrentDriverLocationService) {
         var vm = this;
         vm.loadingRideRequest = true;
         vm.ride = undefined;
@@ -24,6 +24,7 @@ angular.module('safeRidesWebApp')
         vm.showNoRequestView = false;
         vm.pickedUpButtonPressed = false;
         vm.inprogressFlag = false;
+        vm.lastCoords = undefined;
 
         function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
@@ -170,5 +171,54 @@ angular.module('safeRidesWebApp')
         getCurrentRideRequest();
       };
 
+
+      var updateLocation = function() {
+          GeolocationService.getCurrentPosition().then(function(location) {
+              var coords = {
+                  'latitude': location.coords.latitude,
+                  'longitude': location.coords.longitude
+              }
+
+              if (!vm.lastCoords || calcCrow(vm.lastCoords.latitude, vm.lastCoords.longitude, coords.latitude, coords.longitude) > 75) {
+                  CurrentDriverLocationService.save(coords).$promise.then(function(response) {
+                      console.log('saved driver\'s location:', response);
+                  }, function(error) {
+                      console.log('error saving driver\'s location:', error);
+                  });
+              } else {
+                  console.log("Distance is not long enough to update the api.")
+              }
+
+              vm.lastCoords = coords;
+          });
+      };
+
+      var locationUpdater = $interval(updateLocation, 1000);
+
+      // destroy interval on exit
+      $scope.$on('$destroy', function() {
+          $interval.cancel(locationUpdater);
+      });
+
+      // helpers for calculating coord distance
+      // http://stackoverflow.com/a/18883819
+      function calcCrow(lat1, lon1, lat2, lon2) {
+          var R = 6371e3; // meters
+          var dLat = toRad(lat2 - lat1);
+          var dLon = toRad(lon2 - lon1);
+          var lat1 = toRad(lat1);
+          var lat2 = toRad(lat2);
+
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c;
+          return d;
+      }
+
+      // Converts numeric degrees to radians
+      function toRad(Value) {
+          return Value * Math.PI / 180;
+      }
 
     });//end Controller
