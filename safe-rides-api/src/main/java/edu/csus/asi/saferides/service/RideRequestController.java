@@ -110,14 +110,14 @@ public class RideRequestController {
         rideRequest.setRequestDate(new Date());    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
+        geocodingService.setCoordinates(rideRequest);
+
         RideRequest result = rideRequestRepository.save(rideRequest);
 
         // create URI of where the rideRequest was created
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(result.getId()).toUri();
-
-        //return ResponseEntity.created(location).body(result);
 
         return ResponseEntity.created(location).body(result);
     }
