@@ -193,7 +193,7 @@ angular.module('safeRidesWebApp')
           });
       };
 
-      var locationUpdater = $interval(updateLocation, 1000);
+      var locationUpdater = $interval(updateLocation, 15000);
 
       // destroy interval on exit
       $scope.$on('$destroy', function() {
