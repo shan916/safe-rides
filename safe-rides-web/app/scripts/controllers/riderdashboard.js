@@ -9,14 +9,6 @@
 */
 angular.module('safeRidesWebApp')
 .controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state) {
-    var vm = this;
-    vm.maxRidersCount = [1, 2, 3];
-    vm.loading = true;
-    vm.loggedIn = false;
-    vm.oneCardId = undefined;
-    vm.rideRequest = new RideRequest();
-    vm.existingRide = undefined;
-
     // kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
     if (authManager.isAuthenticated()) {
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
@@ -32,6 +24,14 @@ angular.module('safeRidesWebApp')
         vm.loading = false;
         vm.loggedIn = false;
     }
+
+    var vm = this;
+    vm.maxRidersCount = [1, 2, 3];
+    vm.loading = true;
+    vm.loggedIn = false;
+    vm.oneCardId = undefined;
+    vm.rideRequest = new RideRequest();
+    vm.existingRide = undefined;
 
     vm.login = function() {
         vm.loading = true;
