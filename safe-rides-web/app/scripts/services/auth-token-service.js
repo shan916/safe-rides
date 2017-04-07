@@ -37,7 +37,7 @@ angular.module('safeRidesWebApp')
             if ($cookies.get('safeRidesToken')) {
                 return $cookies.remove('safeRidesToken');
             }
-        }
+        };
 
         /**
          * roleName options: ['ROLE_ADMIN','ROLE_COORDINATOR','ROLE_DRIVER','ROLE_RIDER']

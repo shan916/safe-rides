@@ -47,6 +47,11 @@ angular
             console.log('Your session has expired!');
         });
 
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
+            console.log(toState);
+            $rootScope.redirect = toState.name;
+        });
+
         $rootScope.$on("$stateChangeError", console.log.bind(console));
 
         $rootScope.$on('$stateChangeSuccess', function() {
@@ -68,7 +73,7 @@ angular
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: ['$state', function($state) {
+            unauthenticatedRedirector: ['$state', '$rootScope', function($state, $rootScope) {
                 $state.go('login');
             }],
             tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
@@ -102,7 +107,7 @@ angular
             });
         $stateProvider
             .state('login', {
-                url: '/login?redirect',
+                url: '/login',
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 controllerAs: 'ctrl'
