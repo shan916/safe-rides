@@ -26,25 +26,6 @@ angular.module('safeRidesWebApp')
         vm.inprogressFlag = false;
         vm.lastCoords = undefined;
 
-        // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
-        if (authManager.isAuthenticated()) {
-            if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
-                $state.go('/');
-                console.log('Not a driver');
-                return;
-            } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
-                $state.go('/');
-                console.log('Not a driver');
-                return;
-            } else {
-                getCurrentRideRequest();
-            }
-        } else {
-            $state.go('login');
-            console.log('Not authenticated');
-            return;
-        }
-
         function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
                 vm.assignedRideRequest = response;
@@ -60,7 +41,7 @@ angular.module('safeRidesWebApp')
                       vm.assignedRide = rideRequest;
                       vm.isRideAssigned=true;
                       vm.isStartOdoEntered = false;
-                      console.log("got Assigned Ride, ASSIGNED");
+                      console.log('got Assigned Ride, ASSIGNED');
                       }
                 });
 
@@ -84,7 +65,7 @@ angular.module('safeRidesWebApp')
                       vm.isStartOdoEntered = true;
                       vm.pickedUpButtonPressed = false;
                       vm.inprogressFlag = true;
-                      console.log("got Assigned Ride, PICKINGUP");
+                      console.log('got Assigned Ride, PICKINGUP');
                     }
                 });
                   console.log('getCurrentRideRequest() returned PICKINGUP:', response);
@@ -103,35 +84,54 @@ angular.module('safeRidesWebApp')
                       vm.isStartOdoEntered = true;
                       vm.pickedUpButtonPressed = true;//different from PICKINGUP
                       vm.inprogressFlag = true;
-                      console.log("got Assigned Ride, DROPPINGOFF");
+                      console.log('got Assigned Ride, DROPPINGOFF');
                     }
                 });
                   console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
               }, function(error) {
                   console.log('error getCurrentRideRequest() DROPPINGOFF', error);
               });//end CurrentDriverRidesService.get DROPPINGOFF
-
             }//if vm.isRideAssigned === false
+        } //end getCurrentRideRequest()
 
-        }; //end getCurrentRideRequest()
+        // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
+        if (authManager.isAuthenticated()) {
+            if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+                $state.go('/');
+                console.log('Not a driver');
+                return;
+            } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
+                $state.go('/');
+                console.log('Not a driver');
+                return;
+            } else {
+                getCurrentRideRequest();
+            }
+        } else {
+            $state.go('login');
+            console.log('Not authenticated');
+            return;
+        }
+
+
 
         function buildDirectionButtons(){
           if(vm.assignedRide.pickupLine1 !== undefined){
-              vm.pickupAddress = "https://www.google.com/maps/place/"+vm.assignedRide.pickupLine1
-              +", "+vm.assignedRide.pickupCity+ ", CA";
+              vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
+              ', ' + vm.assignedRide.pickupCity + ', CA';
               if(vm.assignedRide.pickupLine2 !== undefined){
-                vm.pickupAddress += ", "+vm.assignedRide.pickupLine2
+                vm.pickupAddress += ', ' + vm.assignedRide.pickupLine2;
               }
           }
           if(vm.assignedRide.dropoffLine1 !== undefined){
-              vm.dropoffAddress = "https://www.google.com/maps/place/"+vm.assignedRide.dropoffLine1
-              +", "+vm.assignedRide.dropoffCity+ ", CA";
-              console.log("buttons built");
+              vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
+              ', ' + vm.assignedRide.dropoffCity + ', CA';
+              console.log('buttons built');
               if(vm.assignedRide.dropoffLine2 !== undefined){
-                vm.dropoffAddress += ", "+vm.assignedRide.dropoffLine2
+                vm.dropoffAddress += ', ' + vm.assignedRide.dropoffLine2;
               }
           }
-        };
+        }
 
         function updateRideRequest(){
           RideRequestService.update(vm.assignedRide).$promise.then(function(response) {
@@ -139,7 +139,7 @@ angular.module('safeRidesWebApp')
           }, function(error) {
               console.log('Driver, error saving riderequest:', error);
           });
-        };
+        }
 
       //enter odometer and view newly assigned ride
       vm.viewRide = function() {
@@ -192,7 +192,7 @@ angular.module('safeRidesWebApp')
               var coords = {
                   'latitude': location.coords.latitude,
                   'longitude': location.coords.longitude
-              }
+              };
 
               if (!vm.lastCoords || calcCrow(vm.lastCoords.latitude, vm.lastCoords.longitude, coords.latitude, coords.longitude) > 75) {
                   CurrentDriverLocationService.save(coords).$promise.then(function(response) {
@@ -201,7 +201,7 @@ angular.module('safeRidesWebApp')
                       console.log('error saving driver\'s location:', error);
                   });
               } else {
-                  console.log("Distance is not long enough to update the api.")
+                  console.log('Distance is not long enough to update the api.');
               }
 
               vm.lastCoords = coords;
@@ -217,12 +217,12 @@ angular.module('safeRidesWebApp')
 
       // helpers for calculating coord distance
       // http://stackoverflow.com/a/18883819
-      function calcCrow(lat1, lon1, lat2, lon2) {
+      function calcCrow(_lat1, _lon1, _lat2, _lon2) {
           var R = 6371e3; // meters
-          var dLat = toRad(lat2 - lat1);
-          var dLon = toRad(lon2 - lon1);
-          var lat1 = toRad(lat1);
-          var lat2 = toRad(lat2);
+          var dLat = toRad(_lat2 - _lat1);
+          var dLon = toRad(_lon2 - _lon1);
+          var lat1 = toRad(_lat1);
+          var lat2 = toRad(_lat2);
 
           var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
               Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);

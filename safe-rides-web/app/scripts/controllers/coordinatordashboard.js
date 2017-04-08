@@ -110,7 +110,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.mapPinClick = function(evt, rideRequestId){
             vm.rideRequests.forEach(function(element) {
-                if(rideRequestId == element.id){
+                if(rideRequestId === element.id){
                     vm.showRequestDetails(element);
                     return;
                 }
@@ -119,7 +119,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.mapDriverPinClick = function(evt, driverId){
             vm.drivers.forEach(function(element) {
-                if(driverId == element.id){
+                if(driverId === element.id){
                     vm.showDriverDetails(element);
                     return;
                 }
@@ -272,7 +272,7 @@ app.filter('FriendlyStatusName', function() {
             case 'PICKINGUP':
                 return 'Driving to pickup';
             case 'DROPPINGOFF':
-                return 'Driving to dropoff'
+                return 'Driving to dropoff';
             case 'COMPLETE':
                 return 'Complete';
             case 'CANCELEDBYCOORDINATOR':

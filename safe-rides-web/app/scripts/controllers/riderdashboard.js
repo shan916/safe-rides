@@ -9,6 +9,22 @@
 */
 angular.module('safeRidesWebApp')
 .controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state) {
+    var vm = this;
+
+    function getRide() {
+        $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
+            if (response.data && response.data !== '') {
+                vm.existingRide = new RideRequest(response.data);
+            }
+
+            console.log(response.data);
+            vm.loading = false;
+        }, function (error) {
+            console.log(error);
+            vm.loading = false;
+        });
+    }
+
     // kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
     if (authManager.isAuthenticated()) {
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
@@ -25,7 +41,7 @@ angular.module('safeRidesWebApp')
         vm.loggedIn = false;
     }
 
-    var vm = this;
+
     vm.maxRidersCount = [1, 2, 3];
     vm.loading = true;
     vm.loggedIn = false;
@@ -65,20 +81,6 @@ angular.module('safeRidesWebApp')
         $window.localStorage.safeRidesToken = token;
         $cookies.put('safeRidesToken', token, {
             expires: expirationDate
-        });
-    }
-
-    function getRide() {
-        $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
-            if (response.data && response.data !== '') {
-                vm.existingRide = new RideRequest(response.data);
-            }
-
-            console.log(response.data);
-            vm.loading = false;
-        }, function (error) {
-            console.log(error);
-            vm.loading = false;
         });
     }
 });

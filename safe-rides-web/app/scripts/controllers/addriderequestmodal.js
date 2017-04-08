@@ -30,6 +30,7 @@ angular.module('safeRidesWebApp')
             });
         }
 
+        /*
         function updateRideRequest() {
             RideRequestService.update({
                 id: vm.riderequest.id
@@ -40,6 +41,7 @@ angular.module('safeRidesWebApp')
                 console.log('error updating riderequest:', error);
             });
         }
+        */
 
         if ($stateParams.requestId) {
             getRideRequest($stateParams.requestId);

@@ -52,7 +52,7 @@ angular
             $rootScope.redirect = toState.name;
         });
 
-        $rootScope.$on("$stateChangeError", console.log.bind(console));
+        $rootScope.$on('$stateChangeError', console.log.bind(console));
 
         $rootScope.$on('$stateChangeSuccess', function() {
           $rootScope.currentState = $state.current.name;
@@ -73,7 +73,7 @@ angular
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: ['$state', '$rootScope', function($state, $rootScope) {
+            unauthenticatedRedirector: ['$state', function($state) {
                 $state.go('login');
             }],
             tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
