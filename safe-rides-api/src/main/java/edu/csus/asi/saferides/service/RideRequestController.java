@@ -81,7 +81,7 @@ public class RideRequestController {
         RideRequest result = rideRequestRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(result);
         }
@@ -156,10 +156,10 @@ public class RideRequestController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (rideRequestRepository.findOne(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             rideRequestRepository.delete(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(new ResponseMessage("Ride Deleted"));
         }
     }
 

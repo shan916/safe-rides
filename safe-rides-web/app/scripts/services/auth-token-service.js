@@ -46,6 +46,11 @@ angular.module('safeRidesWebApp')
         this.isInRole = function(roleName) {
             var tokenPayload = jwtHelper.decodeToken(this.getToken());
             var isInRole = false;
+
+            if (tokenPayload.authorities === undefined){
+                return false;
+            }
+            
             tokenPayload.authorities.forEach(function(element) {
                 if (element.authority === roleName) {
                     isInRole = true;
