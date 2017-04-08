@@ -16,5 +16,6 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
 	 * */
 	List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 
-	RideRequest findTop1ByUserOrderByRequestDateDesc(User user);
+	// Returns the latest ride requested by the requestor's onecard id
+	RideRequest findTop1ByOneCardIdOrderByRequestDateDesc(String onecard);
 }

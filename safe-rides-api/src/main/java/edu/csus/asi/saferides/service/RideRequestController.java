@@ -5,30 +5,21 @@ import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 /*
@@ -107,19 +98,19 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-
-    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device, HttpServletRequest request) {
+    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
         String authToken = request.getHeader(this.tokenHeader);
-        String username = jwtTokenUtil.getUsernameFromToken(authToken);
-
-        if (username.startsWith("r_")) {
-            rideRequest.setOneCardId(username.substring(2));
-            User user = userRepository.findByUsername(username);
-            rideRequest.setUser(user);
+        if (authToken != null) {
+            String username = jwtTokenUtil.getUsernameFromToken(authToken);
+            rideRequest.setOneCardId(username);
         }
+        if (rideRequest.getOneCardId() == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
+        }
+        rideRequest.setRequestDate(new Date());    // default to current datetime
+        rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         geocodingService.setCoordinates(rideRequest);
-        rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         RideRequest result = rideRequestRepository.save(rideRequest);
 
@@ -127,6 +118,7 @@ public class RideRequestController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(result.getId()).toUri();
+
         return ResponseEntity.created(location).body(result);
     }
 
@@ -143,31 +135,9 @@ public class RideRequestController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
         RideRequest databaseVersion = rideRequestRepository.findOne(rideRequest.getId());
-        // temp fix
-        databaseVersion.setDriver(rideRequest.getDriver());
-        databaseVersion.setEstimatedTime(rideRequest.getEstimatedTime());
-        databaseVersion.setOneCardId(rideRequest.getOneCardId());
-        databaseVersion.setRequestDate(rideRequest.getRequestDate());
-        databaseVersion.setRequestorFirstName(rideRequest.getRequestorFirstName());
-        databaseVersion.setRequestorLastName(rideRequest.getRequestorLastName());
-        databaseVersion.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
-        databaseVersion.setNumPassengers(rideRequest.getNumPassengers());
-        databaseVersion.setStartOdometer(rideRequest.getStartOdometer());
-        databaseVersion.setEndOdometer(rideRequest.getEndOdometer());
-        databaseVersion.setPickupLine1(rideRequest.getPickupLine1());
-        databaseVersion.setPickupLine2(rideRequest.getPickupLine2());
-        databaseVersion.setPickupCity(rideRequest.getPickupCity());
-        databaseVersion.setDropoffLine1(rideRequest.getDropoffLine1());
-        databaseVersion.setDropoffLine2(rideRequest.getDropoffLine2());
-        databaseVersion.setDropoffCity(rideRequest.getDropoffCity());
-        databaseVersion.setStatus(rideRequest.getStatus());
-        databaseVersion.setCancelMessage(rideRequest.getCancelMessage());
-        databaseVersion.setMessageToDriver(rideRequest.getMessageToDriver());
-        databaseVersion.setPickupLatitude(rideRequest.getPickupLatitude());
-        databaseVersion.setPickupLongitude(rideRequest.getPickupLongitude());
-        databaseVersion.setDropoffLatitude(rideRequest.getDropoffLatitude());
-        databaseVersion.setDropoffLongitude(rideRequest.getDropoffLongitude());
+
         geocodingService.setCoordinates(databaseVersion);
+
         RideRequest result = rideRequestRepository.save(databaseVersion);
 
         return ResponseEntity.ok(result);
@@ -208,9 +178,7 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
-
-        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
+        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
 
         if (rideRequest == null) {
             return ResponseEntity.noContent().build();

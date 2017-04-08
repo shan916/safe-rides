@@ -1,31 +1,24 @@
 package edu.csus.asi.saferides.security;
 
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    static final String CLAIM_KEY_USERNAME = "sub";
-    static final String CLAIM_KEY_AUDIENCE = "audience";
-    static final String CLAIM_KEY_CREATED = "created";
-
-    private static final String AUDIENCE_UNKNOWN = "unknown";
-    private static final String AUDIENCE_WEB = "web";
-    private static final String AUDIENCE_MOBILE = "mobile";
-    private static final String AUDIENCE_TABLET = "tablet";
+    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_CREATED = "created";
+    private static final String CLAIM_KEY_AUTHORITIES = "authorities";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -37,11 +30,28 @@ public class JwtTokenUtil implements Serializable {
         String username;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            username = claims.getSubject().toLowerCase();
         } catch (Exception e) {
             username = null;
         }
         return username;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<AuthorityName> getAuthoritiesFromToken(String token) {
+        ArrayList<AuthorityName> authorityNames = new ArrayList<AuthorityName>();
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            // cast claims to ArrayList
+            ArrayList authorityClaimsArray = (ArrayList) claims.get(CLAIM_KEY_AUTHORITIES);
+            // get authority item and add it to the authorityNames arraylist
+            for (Object el : authorityClaimsArray) {
+                authorityNames.add(Enum.valueOf(AuthorityName.class, ((LinkedHashMap<String, String>) el).get("authority")));
+            }
+        } catch (Exception e) {
+            authorityNames = null;
+        }
+        return authorityNames;
     }
 
     public Date getCreatedDateFromToken(String token) {
@@ -66,16 +76,6 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
-    public String getAudienceFromToken(String token) {
-        String audience;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            audience = (String) claims.get(CLAIM_KEY_AUDIENCE);
-        } catch (Exception e) {
-            audience = null;
-        }
-        return audience;
-    }
 
     private Claims getClaimsFromToken(String token) {
         Claims claims;
@@ -94,36 +94,19 @@ public class JwtTokenUtil implements Serializable {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
-    private Boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
-    private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
+    private boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
     }
 
-    private String generateAudience(Device device) {
-        String audience = AUDIENCE_UNKNOWN;
-        if (device.isNormal()) {
-            audience = AUDIENCE_WEB;
-        } else if (device.isTablet()) {
-            audience = AUDIENCE_TABLET;
-        } else if (device.isMobile()) {
-            audience = AUDIENCE_MOBILE;
-        }
-        return audience;
-    }
-
-    private Boolean ignoreTokenExpiration(String token) {
-        String audience = getAudienceFromToken(token);
-        return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
-    }
-
-    public String generateToken(UserDetails userDetails, Device device) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_AUDIENCE, generateAudience(device));
+        claims.put(CLAIM_KEY_AUTHORITIES, userDetails.getAuthorities());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
@@ -138,8 +121,7 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
-        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
-                && (!isTokenExpired(token) || ignoreTokenExpiration(token));
+        return isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(created, lastPasswordReset);
     }
 
     public String refreshToken(String token) {
@@ -157,11 +139,7 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
-        return (
-                username.equals(user.getUsername())
-                        && !isTokenExpired(token)
-                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+
+        return (username.equals(user.getUsername()) && !isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(getCreatedDateFromToken(token), user.getLastPasswordResetDate()));
     }
 }

@@ -81,10 +81,6 @@ public class RideRequest {
     @Column(precision = 10, scale = 2)
     private Double dropoffLongitude;
 
-    @JsonIgnore
-    @ManyToOne(fetch=FetchType.LAZY)
-    private User user;
-
     protected RideRequest() {
     }
 
@@ -103,7 +99,6 @@ public class RideRequest {
 		this.dropoffLine1 = dropoffLine1;
 		this.dropoffCity = dropoffCity;
 		this.status = RideRequestStatus.UNASSIGNED;
-        this.user = new User(oneCardId, requestorFirstName, requestorLastName, "pass", "rider@null.null");
 	}
 
     @PreUpdate
@@ -306,14 +301,6 @@ public class RideRequest {
         this.dropoffLongitude = getPickupLongitude;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
         return "RideRequest{" +
@@ -341,7 +328,6 @@ public class RideRequest {
                 ", pickupLongitude=" + pickupLongitude +
                 ", dropoffLatitude=" + dropoffLatitude +
                 ", dropoffLongitude=" + dropoffLongitude +
-                ", user=" + user +
                 '}';
     }
 }

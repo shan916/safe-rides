@@ -8,7 +8,21 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function(DriverService, $uibModal) {
+    .controller('ManagedriversCtrl', function(DriverService, $uibModal, authManager, $state, AuthTokenService) {
+        // kick user out if not authenticated
+        if(!authManager.isAuthenticated()){
+            $state.go('login');
+            console.log('Not authenticated');
+            return;
+        }
+
+        // kick user out if not coordinator
+        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
+            $state.go('/');
+            console.log('Not a coordinator');
+            return;
+        }
+
         var vm = this;
 
         vm.activeDrivers = [];

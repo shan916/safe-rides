@@ -375,27 +375,6 @@ public class SafeRidesApiApplication {
             driver8.getUser().setAuthorities(driverAuthorityList);
             driver9.getUser().setAuthorities(driverAuthorityList);
 
-            rideRequest0.getUser().setAuthorities(riderAuthorityList);
-            rideRequest1.getUser().setAuthorities(riderAuthorityList);
-            rideRequest2.getUser().setAuthorities(riderAuthorityList);
-            rideRequest3.getUser().setAuthorities(riderAuthorityList);
-            rideRequest4.getUser().setAuthorities(riderAuthorityList);
-            rideRequest5.getUser().setAuthorities(riderAuthorityList);
-            rideRequest6.getUser().setAuthorities(riderAuthorityList);
-            rideRequest7.getUser().setAuthorities(riderAuthorityList);
-            rideRequest8.getUser().setAuthorities(riderAuthorityList);
-            rideRequest9.getUser().setAuthorities(riderAuthorityList);
-            rideRequest10.getUser().setAuthorities(riderAuthorityList);
-            rideRequest11.getUser().setAuthorities(riderAuthorityList);
-            rideRequest12.getUser().setAuthorities(riderAuthorityList);
-            rideRequest13.getUser().setAuthorities(riderAuthorityList);
-            rideRequest14.getUser().setAuthorities(riderAuthorityList);
-            rideRequest15.getUser().setAuthorities(riderAuthorityList);
-            rideRequest16.getUser().setAuthorities(riderAuthorityList);
-            rideRequest17.getUser().setAuthorities(riderAuthorityList);
-            rideRequest18.getUser().setAuthorities(riderAuthorityList);
-            rideRequest19.getUser().setAuthorities(riderAuthorityList);
-
             userRepository.save(admin);
             userRepository.save(coordinator);
             userRepository.save(driver);
@@ -410,27 +389,6 @@ public class SafeRidesApiApplication {
             userRepository.save(driver7.getUser());
             userRepository.save(driver8.getUser());
             userRepository.save(driver9.getUser());
-
-            userRepository.save(rideRequest0.getUser());
-            userRepository.save(rideRequest1.getUser());
-            userRepository.save(rideRequest2.getUser());
-            userRepository.save(rideRequest3.getUser());
-            userRepository.save(rideRequest4.getUser());
-            userRepository.save(rideRequest5.getUser());
-            userRepository.save(rideRequest6.getUser());
-            userRepository.save(rideRequest7.getUser());
-            userRepository.save(rideRequest8.getUser());
-            userRepository.save(rideRequest9.getUser());
-            userRepository.save(rideRequest10.getUser());
-            userRepository.save(rideRequest11.getUser());
-            userRepository.save(rideRequest12.getUser());
-            userRepository.save(rideRequest13.getUser());
-            userRepository.save(rideRequest14.getUser());
-            userRepository.save(rideRequest15.getUser());
-            userRepository.save(rideRequest16.getUser());
-            userRepository.save(rideRequest17.getUser());
-            userRepository.save(rideRequest18.getUser());
-            userRepository.save(rideRequest19.getUser());
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);

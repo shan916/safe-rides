@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, $interval, GeolocationService, CurrentDriverLocationService) {
+    .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService, $state, $interval, GeolocationService, CurrentDriverLocationService) {
         var vm = this;
         vm.loadingRideRequest = true;
         vm.ride = undefined;
@@ -25,6 +25,25 @@ angular.module('safeRidesWebApp')
         vm.pickedUpButtonPressed = false;
         vm.inprogressFlag = false;
         vm.lastCoords = undefined;
+
+        // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
+        if (authManager.isAuthenticated()) {
+            if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+                $state.go('/');
+                console.log('Not a driver');
+                return;
+            } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
+                $state.go('/');
+                console.log('Not a driver');
+                return;
+            } else {
+                getCurrentRideRequest();
+            }
+        } else {
+            $state.go('login');
+            console.log('Not authenticated');
+            return;
+        }
 
         function getCurrentRideRequest() {
             CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
@@ -121,10 +140,6 @@ angular.module('safeRidesWebApp')
               console.log('Driver, error saving riderequest:', error);
           });
         };
-
-        getCurrentRideRequest();
-
-
 
       //enter odometer and view newly assigned ride
       vm.viewRide = function() {
