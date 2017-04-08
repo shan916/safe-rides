@@ -20,24 +20,24 @@ var app = angular.module('safeRidesWebApp')
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
 
-        // vm.listOfOptions = [10, 20, 30, 4, 5, 10, 15];
-        $scope.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec']; //Working using $scope
+        vm.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec'];
+        // $scope.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec']; //Working using $scope
 
         /* START of refresh rate function */
         /* Working but somehow I shouldn't be using $scope */
-        var timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate
-        $scope.selectedItemChange = function(){
-          $interval.cancel(timeInterval);
-          timeInterval = $interval(callDriversAndRideRequests, getRefreshRate($scope.selectedItem));
-        }
-
-        // vm.timeInterval;
-        // vm.selectedItemChange = function(option){
-        //   // I need to make my own selectedItemChange function!
-        //   var x = option;
+        // var timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate
+        // $scope.selectedItemChange = function(){
         //   $interval.cancel(timeInterval);
-        //   timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(x));
+        //   timeInterval = $interval(callDriversAndRideRequests, getRefreshRate($scope.selectedItem));
         // }
+
+        vm.timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate;
+        vm.selectedItemChange = function(){
+          // I need to make my own selectedItemChange function!
+          // var x = option;
+          $interval.cancel(vm.timeInterval);
+          vm.timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(vm.selectedItem));
+        }
 
         /* END of refresh rate function */
 

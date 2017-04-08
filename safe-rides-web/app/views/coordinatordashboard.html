@@ -6,7 +6,8 @@
               <div class="panel-body">
                 <!-- <h4>Refresh Tables</h4> -->
                 <label for="refreshTables">Refresh Rate?</label>
-                <select name="refreshTables" class="form-control" ng-options="option for option in listOfOptions" ng-model="selectedItem" ng-change="selectedItemChange(this.option)">
+                <!-- <select name="refreshTables" class="form-control" ng-options="option for option in listOfOptions" ng-model="selectedItem" ng-change="selectedItemChange(this.option)"> -->
+                <select name="refreshTables" class="form-control" ng-options="option for option in ctrl.listOfOptions" ng-model="ctrl.selectedItem" ng-change="ctrl.selectedItemChange(this.option)">
                   <div>
                       <div class="input-error" ng-message="required">* required</div>
                   </div>
