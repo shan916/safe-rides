@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('Driver', function(Vehicle, DriverRidesService) {
+    .factory('Driver', function(Vehicle) {
 
         function Driver(data) {
             this.csusId = undefined;

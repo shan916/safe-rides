@@ -27,7 +27,7 @@
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
         <div class="navbar navbar-default" role="navigation">
-          <button ng-hide="currentState === 'login' || currentState === 'riderdashboard' || currentState === '/'" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
+          <button ng-show="isAuthenticated" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
             <div class="container">
                 <div class="navbar-header">
                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
@@ -53,11 +53,12 @@
 
     <div ui-view=""></div>
 
-    <!-- <div class="footer">
-        <div class="container">
-            <p><span class="glyphicon glyphicon-heart"></span> from the Code Team 6 developers</p>
+    <div class="footer">
+        <div class="container" ng-show="!isAuthenticated">
+            <a href="/#!/coordinatordashboard">Coordinator Login</a> |
+            <a href="/#!/driverdashboard">Driver Login</a>
         </div>
-    </div> -->
+    </div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -93,6 +94,7 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-mask/dist/mask.js"></script>
     <script src="bower_components/angular-spinner/dist/angular-spinner.min.js"></script>
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -131,6 +133,8 @@
     <script src="scripts/services/user-service.js"></script>
     <script src="scripts/services/user-registration-service.js"></script>
     <script src="scripts/services/user.js"></script>
+    <script src="scripts/services/auth-token-service.js"></script>
+    <script src="scripts/services/geolocation-service.js"></script>
     <!-- endbuild -->
 </body>
 

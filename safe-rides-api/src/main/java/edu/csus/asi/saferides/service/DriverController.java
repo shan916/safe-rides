@@ -92,7 +92,7 @@ public class DriverController {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(result);
         }
@@ -155,7 +155,7 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (driverRepository.findOne(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver not specified"));
         } else {
             driverRepository.delete(id);
             return ResponseEntity.noContent().build();
@@ -178,7 +178,7 @@ public class DriverController {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else if (status != null) {
             Set<RideRequest> requests = result.getRides();
             requests.removeIf((RideRequest req) -> req.getStatus() != status);
@@ -211,7 +211,7 @@ public class DriverController {
         Driver driver = driverRepository.findByUser(user);
 
         if (driver == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else if (status != null) {
             Set<RideRequest> requests = driver.getRides();
             requests.removeIf((RideRequest req) -> req.getStatus() != status);

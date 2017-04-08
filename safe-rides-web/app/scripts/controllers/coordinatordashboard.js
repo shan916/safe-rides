@@ -8,7 +8,21 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal) {
+    .controller('CoordinatordashboardCtrl', function(DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService) {
+        // kick user out if not authenticated
+        if(!authManager.isAuthenticated()){
+            $state.go('login');
+            console.log('Not authenticated');
+            return;
+        }
+
+        // kick user out if not coordinator
+        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
+            $state.go('/');
+            console.log('Not a coordinator');
+            return;
+        }
+
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -96,21 +110,21 @@ var app = angular.module('safeRidesWebApp')
 
         vm.mapPinClick = function(evt, rideRequestId){
             vm.rideRequests.forEach(function(element) {
-                if(rideRequestId == element.id){
+                if(rideRequestId === element.id){
                     vm.showRequestDetails(element);
                     return;
                 }
-            })
-        }
+            });
+        };
 
         vm.mapDriverPinClick = function(evt, driverId){
             vm.drivers.forEach(function(element) {
-                if(driverId == element.id){
+                if(driverId === element.id){
                     vm.showDriverDetails(element);
                     return;
                 }
-            })
-        }
+            });
+        };
 
         vm.requestAgeInMinutes = function(start) {
             return moment.duration(moment().diff(moment(start))).asMinutes();
@@ -258,7 +272,7 @@ app.filter('FriendlyStatusName', function() {
             case 'PICKINGUP':
                 return 'Driving to pickup';
             case 'DROPPINGOFF':
-                return 'Driving to dropoff'
+                return 'Driving to dropoff';
             case 'COMPLETE':
                 return 'Complete';
             case 'CANCELEDBYCOORDINATOR':

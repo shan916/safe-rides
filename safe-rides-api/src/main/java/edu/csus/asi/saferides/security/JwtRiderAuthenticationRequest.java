@@ -7,7 +7,7 @@ public class JwtRiderAuthenticationRequest implements Serializable {
     private static final long serialVersionUID = -8445943548965154778L;
 
     private String oneCardId;
-    
+
     public JwtRiderAuthenticationRequest() {
         super();
     }
@@ -16,11 +16,12 @@ public class JwtRiderAuthenticationRequest implements Serializable {
         this.setOneCardId(oneCardId);
     }
 
-	public String getOneCardId() {
-		return oneCardId;
-	}
+    public String getOneCardId() {
+        return oneCardId;
+    }
 
-	public void setOneCardId(String oneCardId) {
-		this.oneCardId = oneCardId;
-	}
+    public void setOneCardId(String oneCardId) {
+        this.oneCardId = oneCardId;
+    }
 }
+
