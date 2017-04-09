@@ -134,11 +134,9 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
-        RideRequest databaseVersion = rideRequestRepository.findOne(rideRequest.getId());
+        geocodingService.setCoordinates(rideRequest);
 
-        geocodingService.setCoordinates(databaseVersion);
-
-        RideRequest result = rideRequestRepository.save(databaseVersion);
+        RideRequest result = rideRequestRepository.save(rideRequest);
 
         return ResponseEntity.ok(result);
     }
