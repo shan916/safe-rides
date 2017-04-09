@@ -41,7 +41,7 @@ public class Driver {
 	@Column(nullable = false, length = 2)
 	private String dlState;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 20)
 	private String dlNumber;
 
 	@Column(nullable = false)
