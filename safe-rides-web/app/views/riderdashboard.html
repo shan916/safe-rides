@@ -1,5 +1,4 @@
 <span us-spinner ng-show="ctrl.loading"></span>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <div class="container" ng-hide="ctrl.loading">
     <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-12">
@@ -14,13 +13,8 @@
                         <div ng-messages="rideRequestForm.oneCardId.$dirty && rideRequestForm.oneCardId.$error">
                             <div class="input-error" ng-message="required">* required</div>
                         </div>
-                        <script>
-                        function callback() {
-                          angular.element(document.getElementById('requestButton')).scope().ctrl.login()
-                        }
-                        </script>
                     </div>
-                    <button id="requestButton" type="button" class="btn g-recaptcha btn-primary pull-right" data-callback="callback" data-sitekey="6LfETxsUAAAAAGE8gafWh998gcVzHgNDPYKrfz3L">Submit</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="ctrl.login()">Submit</button>
                 </div>
             </div>
         </div>
