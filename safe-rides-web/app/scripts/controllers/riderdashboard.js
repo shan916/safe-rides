@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state) {
+.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope) {
     var vm = this;
     vm.maxRidersCount = [1, 2, 3];
     vm.loading = true;
@@ -17,10 +17,22 @@ angular.module('safeRidesWebApp')
     vm.rideRequest = new RideRequest();
     vm.existingRide = undefined;
 
+    var REFRESH_INTERVAL = 30000;
+    var rideRefresher;
+
+    /*
+    * Gets the rider's current ride
+    * */
     function getRide() {
+        vm.loading = true;
         $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
             if (response.data && response.data !== '') {
                 vm.existingRide = new RideRequest(response.data);
+
+                // set refresh interval only if ride has been requested
+                if (!rideRefresher) {
+                    rideRefresher = $interval(getRide, REFRESH_INTERVAL);
+                }
             }
 
             console.log(response.data);
@@ -31,7 +43,18 @@ angular.module('safeRidesWebApp')
         });
     }
 
-    // kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
+    /*
+    * Destroy refresh interval on exit
+    * */
+    $scope.$on('destroy', function() {
+        if (rideRefresher) {
+            $interval.cancel(rideRefresher);
+        }
+    });
+
+    /*
+    * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
+    * */
     if (authManager.isAuthenticated()) {
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
             $state.go('/');
@@ -47,14 +70,14 @@ angular.module('safeRidesWebApp')
         vm.loggedIn = false;
     }
 
+    /*
+    * Login driver after one card id has been entered
+    * */
     vm.login = function() {
         vm.loading = true;
-        $http.post(ENV.apiEndpoint + 'users/authrider', {
-            oneCardId: vm.oneCardId
-        }).then(function(response) {
-            console.log(response.data);
+        UserService.riderAuthentication(vm.oneCardId).then(function(response) {
             vm.loggedIn = true;
-            saveToken(response.data.token);
+            AuthTokenService.setToken(response.data.token);
             getRide();
         }, function(error) {
             console.log(error);
@@ -62,6 +85,9 @@ angular.module('safeRidesWebApp')
         });
     };
 
+    /*
+    * Submit the ride request
+    * */
     vm.submitRideRequest = function() {
         vm.loading = true;
         RideRequestService.save(vm.rideRequest).$promise.then(function(response) {
@@ -79,12 +105,4 @@ angular.module('safeRidesWebApp')
         }
     };
 
-    function saveToken(token) {
-        var expirationDate = new Date();
-        expirationDate.setTime(expirationDate.getTime() + 6 * 60 * 60 * 1000);
-        $window.localStorage.safeRidesToken = token;
-        $cookies.put('safeRidesToken', token, {
-            expires: expirationDate
-        });
-    }
 });

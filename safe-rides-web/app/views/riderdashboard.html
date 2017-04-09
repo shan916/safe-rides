@@ -44,7 +44,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>  <!-- first name -->
+                    </div>  <!-- First name -->
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="requestorLastName">Last Name</label>
@@ -53,7 +53,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div> <!-- last name -->
+                    </div> <!-- Last name -->
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="requestorPhoneNumber">Phone</label>
@@ -62,7 +62,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>  <!-- phone number -->
+                    </div>  <!-- Phone number -->
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="numPassengers">Number of Riders</label>
@@ -73,7 +73,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div> <!-- number of riders -->
+                    </div> <!-- Number of riders -->
                 </div>
 
                 <div class="row">
@@ -99,7 +99,6 @@
                         </div>
                     </div> <!-- Pickup Address -->
 
-                    <!-- Drop Off Address column -->
                     <div class="col-md-6 col-sm-12">
                         <h3>Drop-off Address</h3>
                         <div class="form-group">
@@ -138,10 +137,10 @@
                         <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">Your driver has picked you up</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been pickup by your driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
                         <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
-                            <span class="glyphicon glyphicon-road" style="font-size:96px"></span>
+                            <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
                         </p>
                 </div>
             </div>
@@ -158,15 +157,33 @@
         <div class="panel-heading">
             <h3 class="panel-title">Driver Information</h3>
         </div>
-        <div class="panel-body">
-            <dl class="dl-horizontal">
-                <dt>Driver Name</dt>
-                <dd>{{ctrl.existingRide.driverName}}</dd>
-                <dt>Vehicle Description</dt>
-                <dd>{{ctrl.getVehicleDescription()}}</dd>
-                <dt>Vehicle License Plate</dt>
-                <dd>{{ctrl.existingRide.vehicleLicensePlate}}</dd>
-            </dl>
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th class="col-xs-3">Driver Name</th>
+                    <td>{{ctrl.existingRide.driverName}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Year</th>
+                    <td>{{ctrl.existingRide.vehicleYear}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Color</th>
+                    <td>{{ctrl.existingRide.vehicleColor}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3"> Vehicle Make</th>
+                    <td>{{ctrl.existingRide.vehicleMake}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Model</th>
+                    <td>{{ctrl.existingRide.vehicleModel}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle License Plate</th>
+                    <td>{{ctrl.existingRide.vehicleLicensePlate}}</td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -186,34 +203,4 @@
         </div>
     </div>
 
-
 </div>
-
-<style>
-    .glyphicon.normal-right-spinner {
-        -webkit-animation: glyphicon-spin-r 2s infinite linear;
-        animation: glyphicon-spin-r 2s infinite linear;
-    }
-
-    @-webkit-keyframes glyphicon-spin-r {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-        }
-    }
-
-    @keyframes glyphicon-spin-r {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-        }
-    }
-</style>

@@ -14,6 +14,13 @@ angular.module('safeRidesWebApp')
             return $http.post(ENV.apiEndpoint + 'users/auth', credentials);
         };
 
+        /*
+        * Authenticates a rider with One Card ID
+        * */
+        this.riderAuthentication = function(oneCardId) {
+            return $http.post(ENV.apiEndpoint + 'users/authrider', {oneCardId: oneCardId});
+        };
+
         this.getAuthUserInfo = function() {
             return $http.get(ENV.apiEndpoint + 'users/me');
         };
