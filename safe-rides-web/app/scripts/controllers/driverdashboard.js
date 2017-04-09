@@ -202,6 +202,10 @@ angular.module('safeRidesWebApp')
             vm.pickedUpButtonPressed = false;
             vm.inprogressFlag = false;
             updateRideRequest();
+            if (!rideRefresher) {
+                rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+                console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
+            }
     };
 
     vm.notifyRider = function(){
