@@ -10,6 +10,12 @@
 angular.module('safeRidesWebApp')
 .controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state) {
     var vm = this;
+    vm.maxRidersCount = [1, 2, 3];
+    vm.loading = true;
+    vm.loggedIn = false;
+    vm.oneCardId = undefined;
+    vm.rideRequest = new RideRequest();
+    vm.existingRide = undefined;
 
     function getRide() {
         $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
@@ -40,14 +46,6 @@ angular.module('safeRidesWebApp')
         vm.loading = false;
         vm.loggedIn = false;
     }
-
-
-    vm.maxRidersCount = [1, 2, 3];
-    vm.loading = true;
-    vm.loggedIn = false;
-    vm.oneCardId = undefined;
-    vm.rideRequest = new RideRequest();
-    vm.existingRide = undefined;
 
     vm.login = function() {
         vm.loading = true;
