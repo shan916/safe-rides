@@ -17,6 +17,20 @@ angular.module('safeRidesWebApp')
     vm.rideRequest = new RideRequest();
     vm.existingRide = undefined;
 
+    function getRide() {
+        $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
+            if (response.data && response.data !== '') {
+                vm.existingRide = new RideRequest(response.data);
+            }
+
+            console.log(response.data);
+            vm.loading = false;
+        }, function (error) {
+            console.log(error);
+            vm.loading = false;
+        });
+    }
+
     // kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
     if (authManager.isAuthenticated()) {
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
@@ -31,20 +45,6 @@ angular.module('safeRidesWebApp')
     } else {
         vm.loading = false;
         vm.loggedIn = false;
-    }
-
-    function getRide() {
-        $http.get(ENV.apiEndpoint + 'rides/mine').then(function(response) {
-            if (response.data && response.data !== '') {
-                vm.existingRide = new RideRequest(response.data);
-            }
-
-            console.log(response.data);
-            vm.loading = false;
-        }, function (error) {
-            console.log(error);
-            vm.loading = false;
-        });
     }
 
     vm.login = function() {
