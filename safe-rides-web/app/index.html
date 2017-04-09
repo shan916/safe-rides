@@ -27,15 +27,14 @@
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
         <div class="navbar navbar-default" role="navigation">
-          <button ng-show="isAuthenticated" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
             <div class="container">
                 <div class="navbar-header">
                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
                     <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
                 </div>
 
@@ -46,7 +45,10 @@
                             <a ng-href="{{route.path}}" ng-click="header.setActive(route)">{{route.text}}</a>
                         </li>
                     </ul>
+
+                    <button ng-show="isAuthenticated && redirect !== 'riderdashboard' && redirect !== '/'" ng-click="globalLogout()" class="btn btn-danger navbar-btn navbar-right">Logout</button>
                 </div>
+
             </div>
         </div>
     </div>
