@@ -26,10 +26,12 @@
                         <dt>Riders:</dt>
                         <dd>{{currentRide.numPassengers}}</dd>
                         <dt>Pickup Location:</dt>
-                        <dd>{{currentRide.pickupLine1}} <br /> {{currentRide.pickupLine2.value || "" }} {{currentRide.pickupCity + ' ' + currentRide.pickupZip}}
+                        <dd>{{currentRide.pickupLine1}} <br/> {{currentRide.pickupLine2.value || "" }}
+                            {{currentRide.pickupCity}}
                         </dd>
                         <dt>Dropoff Location:</dt>
-                        <dd>{{currentRide.dropoffLine1}} <br /> {{currentRide.dropoffLine2.value || "" }} {{currentRide.dropoffCity + ' ' + currentRide.dropoffZip}}
+                        <dd>{{currentRide.dropoffLine1}} <br/> {{currentRide.dropoffLine2.value || "" }}
+                            {{currentRide.dropoffCity}}
                         </dd>
                         <dt>Request Time:</dt>
                         <dd>{{currentRide.requestDate | date:'MMM dd, yyyy h:mma'}}</dd>
