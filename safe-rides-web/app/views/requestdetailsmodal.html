@@ -13,10 +13,12 @@
                 <dt>Riders:</dt>
                 <dd>{{ctrl.request.numPassengers}}</dd>
                 <dt>Pickup Location:</dt>
-                <dd>{{ctrl.request.pickupLine1}} <br /> {{ctrl.request.pickupLine2.value || "" }} {{ctrl.request.pickupCity + ' ' + ctrl.request.pickupZip}}
+                <dd>{{ctrl.request.pickupLine1}} <br/> {{ctrl.request.pickupLine2.value || "" }}
+                    {{ctrl.request.pickupCity}}
                 </dd>
                 <dt>Dropoff Location:</dt>
-                <dd>{{ctrl.request.dropoffLine1}} <br /> {{ctrl.request.dropoffLine2.value || "" }} {{ctrl.request.dropoffCity + ' ' + ctrl.request.dropoffZip}}
+                <dd>{{ctrl.request.dropoffLine1}} <br/> {{ctrl.request.dropoffLine2.value || "" }}
+                    {{ctrl.request.dropoffCity}}
                 </dd>
                 <dt>Request Time:</dt>
                 <dd>{{ctrl.request.requestDate | date:'MMM dd, yyyy h:mma'}}</dd>
