@@ -19,5 +19,12 @@ spring:
 server:
   context-path: /api
   port: 8081
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: create-drop
+spring.datasource:
+  url: jdbc:mysql://codeteam6.io:3306/SafeRides
+  username: safeRidesAdmin
+  password: D<)y$FuTecG].Q_YY._~'u?;
 spring.h2.console.enabled: false
 ac.alloworigin: https://codeteam6.io
