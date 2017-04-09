@@ -244,11 +244,6 @@ angular.module('safeRidesWebApp')
 
     var locationUpdater = $interval(updateLocation, 15000);
 
-    // destroy interval on exit
-    $scope.$on('$destroy', function() {
-        $interval.cancel(locationUpdater);
-    });
-
     // helpers for calculating coord distance
     // http://stackoverflow.com/a/18883819
     function calcCrow(_lat1, _lon1, _lat2, _lon2) {
@@ -276,6 +271,13 @@ angular.module('safeRidesWebApp')
     $scope.$on('$destroy', function() {
         if (rideRefresher) {
             $interval.cancel(rideRefresher);
+        }
+    });
+
+    // destroy interval on exit
+    $scope.$on('$destroy', function() {
+        if (locationUpdater) {
+            $interval.cancel(locationUpdater);
         }
     });
 
