@@ -202,6 +202,10 @@ angular.module('safeRidesWebApp')
             vm.pickedUpButtonPressed = false;
             vm.inprogressFlag = false;
             updateRideRequest();
+            if (!rideRefresher) {
+                rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+                console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
+            }
     };
 
     vm.notifyRider = function(){
@@ -269,7 +273,7 @@ angular.module('safeRidesWebApp')
     /*
     * Destroy refresh interval on exit
     * */
-    $scope.$on('destroy', function() {
+    $scope.$on('$destroy', function() {
         if (rideRefresher) {
             $interval.cancel(rideRefresher);
         }
