@@ -13,7 +13,6 @@ var app = angular.module('safeRidesWebApp')
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
 
-
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
 
@@ -24,21 +23,18 @@ var app = angular.module('safeRidesWebApp')
         // $scope.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec']; //Working using $scope
 
         /* START of refresh rate function */
-        /* Working but somehow I shouldn't be using $scope */
-        // var timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate
-        // $scope.selectedItemChange = function(){
-        //   $interval.cancel(timeInterval);
-        //   timeInterval = $interval(callDriversAndRideRequests, getRefreshRate($scope.selectedItem));
-        // }
+        /* default refresh rate */
+        vm.timeInterval = $interval(callDriversAndRideRequests, 60000);
+        vm.selectedItem = '60 sec';
 
-        vm.timeInterval = $interval(callDriversAndRideRequests, 60000); //default refresh rate;
         vm.selectedItemChange = function(){
-          // I need to make my own selectedItemChange function!
-          // var x = option;
           $interval.cancel(vm.timeInterval);
           vm.timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(vm.selectedItem));
         }
-
+        // destroy interval on exit
+        $scope.$on('$destroy', function() {
+            $interval.cancel(vm.timeInterval);
+        });
         /* END of refresh rate function */
 
         function getRefreshRate(selectedRefreshRate){
