@@ -31,9 +31,9 @@ angular.module('safeRidesWebApp')
     var rideRefresher;
 
     UserService.getAuthUserInfo().then(function(response){
-            vm.driver = response.data;
+        vm.driver = response.data;
     }, function(error){
-        console.log('error getting the driver name', error)
+        console.log('error getting the driver name', error);
     });
 
     function getCurrentRideRequest() {
@@ -113,7 +113,7 @@ angular.module('safeRidesWebApp')
 
         //if there is no ride assigned check if "picking up or dropping off"
 
-    }; //end getCurrentRideRequest()
+    } //end getCurrentRideRequest()
 
     // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
     if (authManager.isAuthenticated()) {
@@ -210,7 +210,7 @@ angular.module('safeRidesWebApp')
 
     vm.notifyRider = function(){
 
-    }
+    };
 
     vm.refresh = function(){
         getCurrentRideRequest();
