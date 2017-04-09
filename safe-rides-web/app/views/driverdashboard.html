@@ -1,5 +1,11 @@
 <div class="container">
 
+    <div class="row margin-top-20 margin-bottom-20">
+        <h3>
+                Driver: {{ctrl.driver.driverFirstName}}
+        </h3>
+    </div>
+
   <!-- No Ride View -->
   <div ng-show="ctrl.isRideAssigned === false && ctrl.isStartOdoEntered === false">
     <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
@@ -14,18 +20,14 @@
   </div><!-- end No Ride View -->
 
     <!-- New Ride Available -->
-    <!--div class="panel panel-success" ng-hide="ctrl.isStartOdoEntered"-->
-    <!-- ng-show="User=='admin' || User=='teacher'" -->
     <div class="panel panel-success" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === false">
       <div class="panel-heading text-center">
           <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
       </div>
       <div class="panel-body">
-        <div class="row">
-          <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
+            <div class="row margin-top-20">
+              <div class="col-md-3"></div>
+            <div class="col-md-6">
 
                   <form name="odoStartRideForm" class="form-vertical">
                     <label for="odoStartRide">Enter ODO in miles to View Ride: </label>
@@ -37,19 +39,20 @@
                     </div>
                   </form>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
             </div>
         </div>
         <div class="row"  style="padding-top:5px;">
           <div class="col-md-3">
           </div>
           <div class="col-md-6">
-            <button class="btn btn-success btn-block" ng-disabled="odoStartRideForm.$invalid" ng-click="ctrl.viewRide()">View Ride</button>
+            <button class="btn btn-success btn-block" ng-disabled="odoStartRideForm.$invalid"
+                    ng-click="ctrl.viewRide()">View Ride</button>
           </div>
           <div class="col-md-3">
           </div>
         </div>
-      </div>
+
     </div><!-- end panel body -->
   </div><!-- end New Ride Assigned Request -->
 
@@ -105,10 +108,14 @@
           <div class="row margin-top-20">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                  <button class="btn btn-default btn-block btn-success">Arrived / Notify Rider</button>
-                  <button class="btn btn-default btn-block btn-warning">Report Issue / Contact SafeRides</button>
+                  <button class="btn btn-default btn-block btn-success">
+                      Arrived / Notify Rider
+                  </button>
+                  <button class="btn btn-default btn-block btn-warning">
+                      Report Issue / Contact SafeRides
+                  </button>
                   <div ng-show="ctrl.pickedUpButtonPressed">
-                  <form name="odoEndRideForm" class="form-vertical">
+                  <form name="odoEndRideForm" class="form-vertical margin-top-20">
                     <label for="odoEndRideForm">Enter ODO in miles to End Ride: </label>
                     <input id="odoEndRide" name="odoEndRide" type="number" class="form-control" required
                     placeholder="ex: 120455" ng-model="ctrl.endOdo"
