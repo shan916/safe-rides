@@ -133,7 +133,7 @@ angular.module('safeRidesWebApp')
         }
 
         function updateRideRequest(){
-          RideRequestService.update(vm.assignedRide).$promise.then(function(response) {
+          RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function(response) {
               console.log('Driver, saved riderequest:', response);
           }, function(error) {
               console.log('Driver, error saving riderequest:', error);

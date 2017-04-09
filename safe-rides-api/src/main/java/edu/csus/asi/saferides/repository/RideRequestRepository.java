@@ -2,8 +2,6 @@ package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
-
-import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

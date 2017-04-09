@@ -48,7 +48,6 @@ angular
         });
 
         $rootScope.$on('$stateChangeStart', function(event, toState) {
-            console.log(toState);
             $rootScope.redirect = toState.name;
         });
 

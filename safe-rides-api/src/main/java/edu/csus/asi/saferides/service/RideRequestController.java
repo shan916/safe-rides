@@ -1,8 +1,10 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
@@ -48,6 +50,9 @@ public class RideRequestController {
 
     @Autowired
     private GeocodingService geocodingService;
+
+    @Autowired
+    private RideRequestMapper rideRequestMapper;
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -183,7 +188,9 @@ public class RideRequestController {
         } else {
             // TODO this can return a ride request that is old. (but will be the latest)
             // ALSO TODO change the response to a DTO rather than the full ride request
-            return ResponseEntity.ok(rideRequest);
+            RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
+            return ResponseEntity.ok(dto);
         }
     }
+
 }
