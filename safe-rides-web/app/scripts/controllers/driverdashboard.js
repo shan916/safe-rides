@@ -273,7 +273,7 @@ angular.module('safeRidesWebApp')
     /*
     * Destroy refresh interval on exit
     * */
-    $scope.$on('destroy', function() {
+    $scope.$on('$destroy', function() {
         if (rideRefresher) {
             $interval.cancel(rideRefresher);
         }
