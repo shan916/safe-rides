@@ -194,4 +194,5 @@ public class RideRequestController {
             return ResponseEntity.ok(dto);
         }
     }
+
 }
