@@ -20,7 +20,6 @@ var app = angular.module('safeRidesWebApp')
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
 
         vm.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec'];
-        // $scope.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec']; //Working using $scope
 
         /* START of refresh rate function */
         /* default refresh rate */
@@ -124,7 +123,6 @@ var app = angular.module('safeRidesWebApp')
         }
 
         vm.DANGER_ZONE = 30;
-        // vm.DANGER_ZONE = 1;
 
         vm.drivers = [];
 
