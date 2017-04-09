@@ -52,10 +52,59 @@ angular.module('safeRidesWebApp')
                     vm.isRideAssigned=true;
                     vm.isStartOdoEntered = false;
                     console.log('got Assigned Ride, ASSIGNED');
+                    buildDirectionButtons();
+                    return;
                 }
+
             });
 
+            if(vm.isRideAssigned === false){
+                CurrentDriverRidesService.get({status: 'PICKINGUP'}).$promise.then(function(response) {
+                    vm.assignedRideRequest = response;
+                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
+                        var rideRequest = new RideRequest(element);
+                        assignedRideRequest[index] = rideRequest;
+                        if(rideRequest.status === 'PICKINGUP') {
+                            vm.assignedRide = rideRequest;
+                            vm.isRideAssigned = true;
+                            vm.isStartOdoEntered = true;
+                            vm.pickedUpButtonPressed = false;
+                            vm.inprogressFlag = true;
+                            console.log('got Assigned Ride, PICKINGUP');
+                            buildDirectionButtons();
+                            return;
+                        }
+                    });
+                    //console.log('getCurrentRideRequest() returned PICKINGUP:', response);
+                }, function(error) {
+                    console.log('error getCurrentRideRequest() PICKINGUP', error);
+                });//end CurrentDriverRidesService.get PICKINGUP
+
+                CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
+                    vm.assignedRideRequest = response;
+                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
+                        var rideRequest = new RideRequest(element);
+                        assignedRideRequest[index] = rideRequest;
+                        if(rideRequest.status === 'DROPPINGOFF'){
+                            vm.assignedRide = rideRequest;
+                            vm.isRideAssigned = true;
+                            vm.isStartOdoEntered = true;
+                            vm.pickedUpButtonPressed = true;//different from PICKINGUP
+                            vm.inprogressFlag = true;
+                            console.log('got Assigned Ride, DROPPINGOFF');
+                            buildDirectionButtons();
+                            return;
+                        }
+                    });
+                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
+                }, function(error) {
+                    console.log('error getCurrentRideRequest() DROPPINGOFF', error);
+                });//end CurrentDriverRidesService.get DROPPINGOFF
+            }// end if vm.isRideAssigned === false
+
             console.log('getCurrentRideRequest() called API success:', response);
+
+
         }, function(error) {
 
             console.log('getCurrentRideRequest() returned no ASSIGNED rides:', error);
@@ -63,46 +112,8 @@ angular.module('safeRidesWebApp')
         });//end CurrentDriverRidesService.get ASSIGNED
 
         //if there is no ride assigned check if "picking up or dropping off"
-        if(vm.isRideAssigned === false){
-            CurrentDriverRidesService.get({status: 'PICKINGUP'}).$promise.then(function(response) {
-                vm.assignedRideRequest = response;
-                vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                    var rideRequest = new RideRequest(element);
-                    assignedRideRequest[index] = rideRequest;
-                    if(rideRequest.status === 'PICKINGUP') {
-                        vm.assignedRide = rideRequest;
-                        vm.isRideAssigned = true;
-                        vm.isStartOdoEntered = true;
-                        vm.pickedUpButtonPressed = false;
-                        vm.inprogressFlag = true;
-                        console.log('got Assigned Ride, PICKINGUP');
-                    }
-                });
-                //console.log('getCurrentRideRequest() returned PICKINGUP:', response);
-            }, function(error) {
-                console.log('error getCurrentRideRequest() PICKINGUP', error);
-            });//end CurrentDriverRidesService.get PICKINGUP
 
-            CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
-                vm.assignedRideRequest = response;
-                vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                    var rideRequest = new RideRequest(element);
-                    assignedRideRequest[index] = rideRequest;
-                    if(rideRequest.status === 'DROPPINGOFF'){
-                        vm.assignedRide = rideRequest;
-                        vm.isRideAssigned = true;
-                        vm.isStartOdoEntered = true;
-                        vm.pickedUpButtonPressed = true;//different from PICKINGUP
-                        vm.inprogressFlag = true;
-                        console.log('got Assigned Ride, DROPPINGOFF');
-                    }
-                });
-                //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-            }, function(error) {
-                console.log('error getCurrentRideRequest() DROPPINGOFF', error);
-            });//end CurrentDriverRidesService.get DROPPINGOFF
-        }// end if vm.isRideAssigned === false
-    } //end getCurrentRideRequest()
+    }; //end getCurrentRideRequest()
 
     // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
     if (authManager.isAuthenticated()) {
