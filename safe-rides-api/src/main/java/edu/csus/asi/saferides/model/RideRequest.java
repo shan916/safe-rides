@@ -1,9 +1,8 @@
 package edu.csus.asi.saferides.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
-
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Entity
@@ -31,6 +30,8 @@ public class RideRequest {
 	private String requestorPhoneNumber;
 
     @Column(nullable = false)
+    @Min(1)
+    @Max(3)
     private int numPassengers;
 
     @Column

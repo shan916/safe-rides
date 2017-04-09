@@ -32,7 +32,6 @@
         </div>
         <div class="panel-body">
             <form name="rideRequestForm">
-                <!-- Row 1 -->
                 <div class="row">
                     <div class="col-sm-12">
                         <h3>Rider Info</h3>
@@ -45,7 +44,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
+                    </div>  <!-- First name -->
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="requestorLastName">Last Name</label>
@@ -54,7 +53,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- Last name -->
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="requestorPhoneNumber">Phone</label>
@@ -63,7 +62,7 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
+                    </div>  <!-- Phone number -->
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="numPassengers">Number of Riders</label>
@@ -74,13 +73,10 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- Number of riders -->
                 </div>
-                <!-- end top row of form -->
 
-                <!-- Row 2-->
                 <div class="row">
-                    <!-- Pickup Address column -->
                     <div class="col-md-6 col-sm-12">
                         <h3>Pickup Address</h3>
                         <div class="form-group">
@@ -101,10 +97,8 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
-                    <!-- end Pickup Address -->
+                    </div> <!-- Pickup Address -->
 
-                    <!-- Drop Off Address column -->
                     <div class="col-md-6 col-sm-12">
                         <h3>Drop-off Address</h3>
                         <div class="form-group">
@@ -125,16 +119,13 @@
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
-                    </div>
-                    <!-- end dropoff Address -->
-                    <!-- People Count -->
+                    </div> <!-- Dropoff Address -->
                 </div>
-                <!--end row 2 -->
             </form>
 
             <button class="btn btn-primary btn-block" ng-disabled="rideRequestForm.$invalid" ng-click="ctrl.submitRideRequest()">Request Ride</button>
         </div>
-    </div>
+    </div> <!-- Ride Request panel-->
 
     <div class="panel panel-info" ng-show="ctrl.existingRide">
         <div class="panel-heading">
@@ -146,26 +137,17 @@
                         <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">Your driver has picked up you up</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your driver has dropped you off at your destination</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been pickup by your driver</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
+                        <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
+                            <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
+                        </p>
                 </div>
             </div>
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-danger">Cancel Ride</button>
-                </div>
-            </div>
-
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    Do you have questions? Call the Safe Rides office and talk to a representative.
-                </div>
-            </div>
-
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    <a href="tel:9160000000" class="btn btn-primary">Call Safe Rides</a>
+                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE'">Cancel Ride</button>
                 </div>
             </div>
         </div>
@@ -175,89 +157,50 @@
         <div class="panel-heading">
             <h3 class="panel-title">Driver Information</h3>
         </div>
-        <div class="panel-body">
-            <dl class="dl-horizontal">
-                <dt>Driver Name</dt>
-                <dd>{{ctrl.existingRide.driver.driverFirstName}}</dd>
-                <dt>Vehicle Description</dt>
-                <dd>{{ctrl.existingRide.getVehicleDescription()}}</dd>
-                <dt>Vehicle License Plate</dt>
-                <dd>{{ctrl.existingRide.driver.vehicle.licensePlate}}</dd>
-            </dl>
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th class="col-xs-3">Driver Name</th>
+                    <td>{{ctrl.existingRide.driverName}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Year</th>
+                    <td>{{ctrl.existingRide.vehicleYear}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Color</th>
+                    <td>{{ctrl.existingRide.vehicleColor}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3"> Vehicle Make</th>
+                    <td>{{ctrl.existingRide.vehicleMake}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Model</th>
+                    <td>{{ctrl.existingRide.vehicleModel}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle License Plate</th>
+                    <td>{{ctrl.existingRide.vehicleLicensePlate}}</td>
+                </tr>
+            </table>
         </div>
     </div>
 
-    <!-- <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Your ride is on its way!</h3>
+    <div class="footer">
+        <div class="row margin-bottom-15">
+            <div class="col-sm-12 text-center">
+                Questions? Call the Safe Rides office and talk to a representative.
+            </div>
         </div>
-        <div class="panel-body">
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    <h4>*Estimated* time of arrival: 5 minutes</h4>
-                </div>
-            </div>
 
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    <span class="glyphicon glyphicon-road" style="font-size:96px"></span>
-                </div>
+        <div class="row margin-bottom-15">
+            <div class="col-sm-12 text-center">
+                <a href="tel:9160000000" class="btn btn-success">
+                    <span class="glyphicon glyphicon-earphone"></span> Call
+                </a>
             </div>
-
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    <button class="btn btn-default">Cancel SafeRides</button>
-                </div>
-            </div>
-
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    Do you have any questions? Call the Safe Rides office and talk to a representative.
-                </div>
-            </div>
-
-            <div class="row margin-bottom-15">
-                <div class="col-sm-12 text-center">
-                    <a href="tel:9160000000" class="btn btn-default">Call Safe Rides office</a>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <div class="alert alert-info alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>Your driver is here!</strong><br/> Your driver has arrived. Look for a <em>black <b>Toyota Corolla</b></em> with the license plates: <em><b>123ABCD</b></em>
-    </div>
-</div> -->
-
-<style>
-    .glyphicon.normal-right-spinner {
-        -webkit-animation: glyphicon-spin-r 2s infinite linear;
-        animation: glyphicon-spin-r 2s infinite linear;
-    }
-
-    @-webkit-keyframes glyphicon-spin-r {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-        }
-    }
-
-    @keyframes glyphicon-spin-r {
-        0% {
-            -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-        }
-        100% {
-            -webkit-transform: rotate(359deg);
-            transform: rotate(359deg);
-        }
-    }
-</style>
+</div>

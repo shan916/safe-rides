@@ -178,7 +178,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
-        if(userRepository.findByUsername(username.toLowerCase()).getUsername() != user.getUsername().toLowerCase()){
+        if (userRepository.findByUsername(username.toLowerCase()).getUsername() != user.getUsername().toLowerCase()) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username mismatch"));
         }
         user.setUsername(user.getUsername().toLowerCase());
