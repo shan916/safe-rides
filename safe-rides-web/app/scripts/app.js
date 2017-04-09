@@ -35,7 +35,8 @@ angular
         'ngMessages',
         'ui.mask',
         'angularSpinner',
-        'angular-jwt'
+        'angular-jwt',
+        'ui-notification'
     ])
 
     .run(function($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
