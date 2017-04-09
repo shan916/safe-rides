@@ -37,7 +37,6 @@ angular.module('safeRidesWebApp')
                     assignedRideRequest[index] = rideRequest;
                     //if not in progress
                     if(!vm.inprogressFlag && rideRequest.status === 'ASSIGNED'){
-                      //return rideRequest;
                       vm.assignedRide = rideRequest;
                       vm.isRideAssigned=true;
                       vm.isStartOdoEntered = false;
@@ -91,7 +90,7 @@ angular.module('safeRidesWebApp')
               }, function(error) {
                   console.log('error getCurrentRideRequest() DROPPINGOFF', error);
               });//end CurrentDriverRidesService.get DROPPINGOFF
-            }//if vm.isRideAssigned === false
+            }// end if vm.isRideAssigned === false
         } //end getCurrentRideRequest()
 
         // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
@@ -147,7 +146,6 @@ angular.module('safeRidesWebApp')
             buildDirectionButtons();
             vm.assignedRide.startOdometer = vm.startOdo;
             vm.assignedRide.status = 'PICKINGUP';
-//            vm.assignedRide.status = 'INPROGRESS';
             vm.inprogressFlag = true;
             vm.isRideAssigned = true;
             vm.isStartOdoEntered = true;
@@ -162,7 +160,6 @@ angular.module('safeRidesWebApp')
 
       vm.pickedUp = function(){
         vm.assignedRide.status = 'DROPPINGOFF';
-//        vm.assignedRide.status = 'INPROGRESS';
         vm.pickedUpButtonPressed = true;
         vm.inprogressFlag = true;
         updateRideRequest();
