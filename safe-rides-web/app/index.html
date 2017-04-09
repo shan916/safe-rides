@@ -26,7 +26,7 @@
 
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
-        <div class="navbar navbar-default" role="navigation">
+        <div ng-cloak class="navbar navbar-default" role="navigation">
           <button ng-show="isAuthenticated" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
             <div class="container">
                 <div class="navbar-header">
