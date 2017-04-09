@@ -8,7 +8,8 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService, $state, $interval, GeolocationService, CurrentDriverLocationService) {
+.controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
+                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService) {
     var vm = this;
     vm.loadingRideRequest = true;
     vm.ride = undefined;
@@ -25,11 +26,15 @@ angular.module('safeRidesWebApp')
     vm.pickedUpButtonPressed = false;
     vm.inprogressFlag = false;
     vm.lastCoords = undefined;
-
+    vm.driver = undefined;
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
 
-    vm.driver = Driver;
+    UserService.getAuthUserInfo().then(function(response){
+            vm.driver = response.data;
+    }, function(error){
+        console.log('error getting the driver name', error)
+    });
 
     function getCurrentRideRequest() {
 
@@ -131,10 +136,11 @@ angular.module('safeRidesWebApp')
         if(vm.assignedRide.dropoffLine1 !== undefined){
             vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
             ', ' + vm.assignedRide.dropoffCity + ', CA';
-            console.log('buttons built');
+
             if(vm.assignedRide.dropoffLine2 !== undefined){
                 vm.dropoffAddress += ', ' + vm.assignedRide.dropoffLine2;
             }
+            console.log('buttons built');
         }
     }
 
@@ -178,13 +184,18 @@ angular.module('safeRidesWebApp')
 
     vm.endRide = function(){
         vm.assignedRide.status = 'COMPLETE';
-        vm.assignedRide.endOdometer = vm.endOdo;
-        vm.isStartOdoEntered = false;
-        vm.isRideAssigned = false;
-        vm.pickedUpButtonPressed = false;
-        vm.inprogressFlag = false;
-        updateRideRequest();
+        //if(vm.assignedRide.startOdo > vm.endOdo){}
+            vm.assignedRide.endOdometer = vm.endOdo;
+            vm.isStartOdoEntered = false;
+            vm.isRideAssigned = false;
+            vm.pickedUpButtonPressed = false;
+            vm.inprogressFlag = false;
+            updateRideRequest();
     };
+
+    vm.notifyRider = function(){
+
+    }
 
     vm.refresh = function(){
         getCurrentRideRequest();
