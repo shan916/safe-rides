@@ -33,7 +33,7 @@ var app = angular.module('safeRidesWebApp')
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
 
-        vm.listOfOptions = ['10 sec', '20 sec', '30 sec', '40 sec', '50 sec', '60 sec'];
+        vm.listOfOptions = ['15 sec', '30 sec', '45 sec', '60 sec'];
 
         /* START of refresh rate function */
         /* default refresh rate */
@@ -53,16 +53,12 @@ var app = angular.module('safeRidesWebApp')
         function getRefreshRate(selectedRefreshRate){
           var time = selectedRefreshRate;
           switch (time) {
-              case '10 sec':
-                  return 10000;
-              case '20 sec':
-                  return 20000;
+              case '15 sec':
+                  return 15000;
               case '30 sec':
                   return 30000;
-              case '40 sec':
-                  return 40000;
-              case '50 sec':
-                  return 50000;
+              case '45 sec':
+                  return 45000;
               case '60 sec':
                   return 60000;
           }
