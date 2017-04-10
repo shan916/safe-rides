@@ -53,7 +53,6 @@ public class DriverController {
     @Autowired
     private UserRepository userRepository;
 
-
     /*
      * GET /drivers
      */
@@ -91,7 +90,7 @@ public class DriverController {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(result);
         }
@@ -154,7 +153,7 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (driverRepository.findOne(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver not specified"));
         } else {
             driverRepository.delete(id);
             return ResponseEntity.noContent().build();
@@ -177,7 +176,7 @@ public class DriverController {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else if (status != null) {
             Set<RideRequest> requests = result.getRides();
             requests.removeIf((RideRequest req) -> req.getStatus() != status);
@@ -186,6 +185,39 @@ public class DriverController {
 
         } else {
             return ResponseEntity.ok(result.getRides());
+        }
+    }
+
+    /*
+     * GET /drivers/{id}/rides
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/rides")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> retrieveRides(HttpServletRequest request,
+                                           @RequestParam(value = "status", required = false) RideRequestStatus status) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+
+        if (driver == null) {
+            return ResponseEntity.noContent().build();
+        } else if (status != null) {
+            Set<RideRequest> requests = driver.getRides();
+            requests.removeIf((RideRequest req) -> req.getStatus() != status);
+
+            return ResponseEntity.ok(requests);
+
+        } else {
+            return ResponseEntity.ok(driver.getRides());
         }
     }
 

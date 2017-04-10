@@ -34,27 +34,61 @@ angular
         'ui.select',
         'ngMessages',
         'ui.mask',
-        'angularSpinner'
+        'angularSpinner',
+        'angular-jwt',
+        'ui-notification'
     ])
 
-    .run(function($rootScope, $window, $cookies, $state) {
-        $rootScope.$on("$stateChangeError", console.log.bind(console));
+    .run(function($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
+        authManager.checkAuthOnRefresh();
+        authManager.redirectWhenUnauthenticated();
+
+        $rootScope.$on('tokenHasExpired', function() {
+            AuthTokenService.removeToken();
+            console.log('Your session has expired!');
+        });
+
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
+            $rootScope.redirect = toState.name;
+        });
+
+        $rootScope.$on('$stateChangeError', console.log.bind(console));
 
         $rootScope.$on('$stateChangeSuccess', function() {
           $rootScope.currentState = $state.current.name;
         });
 
         $rootScope.globalLogout = function() {
-            $window.localStorage.removeItem('safeRidesToken');
-            $cookies.remove('safeRidesToken');
+            AuthTokenService.removeToken();
             $state.go('/');
+            // update the user authentication state right away
+            // angular-jwt uses $rootScope.isAuthenticated
+            $rootScope.isAuthenticated = false;
         };
 
 
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-        $httpProvider.interceptors.push('APIInterceptor');
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+        jwtOptionsProvider.config({
+            authPrefix: '',
+            whiteListedDomains: ['localhost', 'codeteam6.io'],
+            unauthenticatedRedirector: ['$state', function($state) {
+                $state.go('login');
+            }],
+            tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
+                // Skip authentication for any requests ending in .html
+                if (options && options.url.substr(options.url.length - 5) === '.html') {
+                    return null;
+                } else {
+                    return AuthTokenService.getToken();
+                }
+            }]
+        });
+        $httpProvider.interceptors.push('jwtInterceptor');
+
+        //$httpProvider.interceptors.push('APIInterceptor');
+
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
@@ -73,7 +107,7 @@ angular
             });
         $stateProvider
             .state('login', {
-                url: '/login?redirect',
+                url: '/login',
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 controllerAs: 'ctrl'
@@ -106,7 +140,8 @@ angular
                 controller: 'CoordinatordashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -116,7 +151,8 @@ angular
                 controller: 'CoordinatorreportCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -126,7 +162,8 @@ angular
                 controller: 'EditdriverCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -136,7 +173,8 @@ angular
                 controller: 'DriverdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
         $stateProvider
@@ -153,7 +191,8 @@ angular
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true
+                    requireLogin: true,
+                    requiresLogin: true
                 }
             });
     });

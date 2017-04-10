@@ -78,19 +78,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="gender">Gender</label>
-                            <select name="gender" id="gender" class="form-control" ng-model="ctrl.driver.gender" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                            <div ng-messages="driverForm.gender.$dirty && driverForm.gender.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row" ng-hide="ctrl.driver.insuranceChecked">

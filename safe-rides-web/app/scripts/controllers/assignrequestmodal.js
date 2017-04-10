@@ -28,8 +28,8 @@ angular.module('safeRidesWebApp')
             AssignRideService.save({
                 id: vm.driver.id
             }, vm.selectedRequest).$promise.then(function(response) {
-                console.log(vm.driver.driverFirstName+' was assigned to '+vm.selectedRequest.requestorFirstName
-                            +' with message '+vm.selectedRequest.messageToDriver);
+                console.log(vm.driver.driverFirstName + ' was assigned to ' + vm.selectedRequest.requestorFirstName +
+                            ' with message '+vm.selectedRequest.messageToDriver);
                 console.log('asssigned request to driver:', response);
                 $uibModalInstance.close();
             }, function(error) {

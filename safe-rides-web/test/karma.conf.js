@@ -38,6 +38,8 @@ module.exports = function(config) {
             'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/angular-ui-mask/dist/mask.js',
             'bower_components/angular-spinner/dist/angular-spinner.min.js',
+            'bower_components/angular-jwt/dist/angular-jwt.js',
+            'bower_components/angular-ui-notification/dist/angular-ui-notification.js',
             'bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'app/scripts/**/*.js',
