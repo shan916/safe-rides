@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope) {
+.controller('RiderdashboardCtrl', function(UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification) {
     var vm = this;
     vm.maxRidersCount = [1, 2, 3];
     vm.loading = true;
@@ -82,6 +82,10 @@ angular.module('safeRidesWebApp')
         }, function(error) {
             console.log(error);
             vm.loading = false;
+
+            if (error.status === 429) {
+                Notification.error({message: 'Too many requests, please try again after 1 minute.', positionX: 'center', delay: 60000, closeOnClick: false, replaceMessage: true});
+            }
         });
     };
 
