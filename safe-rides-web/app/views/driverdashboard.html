@@ -1,7 +1,7 @@
 <div class="container">
 
     <div class="row margin-top-20 margin-bottom-20">
-        <div class="col-md-12">
+        <div class="col-md-12" align="center">
             <h3>
                     {{ctrl.driver.firstname}}&nbsp;{{ctrl.driver.lastname}}
             </h3>
@@ -9,20 +9,31 @@
     </div>
 
   <!-- No Ride View -->
-  <div ng-show="ctrl.isRideAssigned === false && ctrl.isStartOdoEntered === false">
+  <div ng-show="ctrl.isRideAssigned === false">
     <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
         <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
     </div>
-      <div class="text-center">
-        <button class="btn btn-default btn-info" type="button"
-                ng-click="ctrl.refresh()">
-          Refresh
-        </button>
-      </div>
+    <div class="col-md-12 text-center">
+        <div class="row text-center">
+            <button class="btn btn-default btn-success" type="button"
+                    ng-click="ctrl.refresh()">
+              Refresh
+            </button>
+
+        </div>
+        <div class="row text-center">
+            <button class="col-md-12 btn btn-default btn-info" type="button">
+              Call ASI
+            </button>
+        </div>
+    </div>
+      <!--div class="col-md-12 text-center"-->
   </div><!-- end No Ride View -->
 
     <!-- New Ride Available -->
-    <div class="panel panel-success" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === false">
+    <!--div class="panel panel-success" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === false"-->
+    <!-- ctrl.isRideAssigned === true -->
+    <div class="panel panel-success" ng-show="ctrl.assignedRide.status === 'ASSIGNED'">
       <div class="panel-heading text-center">
           <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
       </div>
@@ -61,7 +72,8 @@
 
     <!-- Currrent Ride Request-->
     <!--div class="panel panel-primary" ng-show="ctrl.isStartOdoEntered"-->
-    <div class="panel panel-primary" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === true">
+    <!--div class="panel panel-primary" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === true"-->
+    <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' ">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>
         </div>
@@ -110,31 +122,37 @@
           <div class="row margin-top-20">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                  <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider">
-                      Arrived / Notify Rider
-                  </button>
-                  <button class="btn btn-default btn-block btn-warning">
-                      Report Issue / Contact SafeRides
-                  </button>
-                  <div ng-show="ctrl.pickedUpButtonPressed">
-                  <form name="odoEndRideForm" class="form-vertical margin-top-20">
-                    <label for="odoEndRideForm">Enter ODO in miles to End Ride: </label>
-                    <input id="odoEndRide" name="odoEndRide" type="number" class="form-control" required
-                    placeholder="ex: 120455" ng-model="ctrl.endOdo"
-                    ng-maxlength="6" ng-minlength="3" ng-min="100">
-                    <div ng-messages="odoEndRideForm.odoEndRide.$dirty && odoEndRideForm.odoEndRide.$error">
-                        <div class="input-error" ng-message="required">* required to end assigned ride</div>
-                    </div>
-                  </form>
-
-                  <button class="btn btn-default btn-block btn-danger"
-                          ng-disabled="odoEndRideForm.$invalid" ng-click="ctrl.endRide()">
-                          End Ride / Drop-Off
-                  </button>
+                <div class="col-md-6 row margin-top-20">
+                    <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider"
+                    ng-show="ctrl.assignedRide.status === 'PICKINGUP'">
+                        Arrived / Notify Rider
+                    </button>
                 </div>
+                <div class="col-md-6 row margin-top-20">
+                    <button class="btn btn-default btn-block btn-warning">
+                        Report Issue / Contact SafeRides
+                    </button>
+                </div>
+                <div class="col-md-6 row margin-top-20" ng-show="ctrl.pickedUpButtonPressed">
+                    <form name="odoEndRideForm" class="form-vertical">
+                      <label for="odoEndRideForm">Enter ODO in miles to End Ride: </label>
+                      <input id="odoEndRide" name="odoEndRide" type="number" class="form-control" required
+                      placeholder="ex: 120455" ng-model="ctrl.endOdo"
+                      ng-maxlength="6" ng-minlength="3" ng-min="100">
+                      <div ng-messages="odoEndRideForm.odoEndRide.$dirty && odoEndRideForm.odoEndRide.$error">
+                          <div class="input-error" ng-message="required">* required to end assigned ride</div>
+                      </div>
+                    </form>
+
+                    <button class="btn btn-default btn-block btn-danger"
+                            ng-disabled="odoEndRideForm.$invalid" ng-click="ctrl.endRide()">
+                            End Ride / Drop-Off
+                    </button>
+                </div>
+
             </div>
             <div class="col-md-3"></div>
-          </div>
+        </div><!--end div row-->
       </div><!-- end panel body-->
     </div><!-- end Current Ride Request panel-->
 

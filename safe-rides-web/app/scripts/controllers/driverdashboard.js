@@ -134,8 +134,6 @@ angular.module('safeRidesWebApp')
         return;
     }
 
-
-
     function buildDirectionButtons(){
         if(vm.assignedRide.pickupLine1 !== undefined){
             vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
@@ -212,6 +210,10 @@ angular.module('safeRidesWebApp')
 
     };
 
+    /**
+    *   Driver can manually refresh to see if they
+    *   have a ride assigned to them
+    */
     vm.refresh = function(){
         getCurrentRideRequest();
         if (!rideRefresher) {
