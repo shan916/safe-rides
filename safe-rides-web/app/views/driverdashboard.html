@@ -31,8 +31,6 @@
   </div><!-- end No Ride View -->
 
     <!-- New Ride Available -->
-    <!--div class="panel panel-success" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === false"-->
-    <!-- ctrl.isRideAssigned === true -->
     <div class="panel panel-success" ng-show="ctrl.assignedRide.status === 'ASSIGNED'">
       <div class="panel-heading text-center">
           <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
@@ -71,8 +69,6 @@
 
 
     <!-- Currrent Ride Request-->
-    <!--div class="panel panel-primary" ng-show="ctrl.isStartOdoEntered"-->
-    <!--div class="panel panel-primary" ng-show="ctrl.isRideAssigned === true && ctrl.isStartOdoEntered === true"-->
     <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' ">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>

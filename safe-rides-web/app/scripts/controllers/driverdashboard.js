@@ -17,14 +17,11 @@ angular.module('safeRidesWebApp')
     vm.startOdo = undefined;
     vm.endOdo = undefined;
     vm.assignedRide = undefined;
-    vm.isStartOdoEntered = false;
     vm.getPickupDirections = undefined;
     vm.dropoffAddress = undefined;
     vm.assignedRideRequest = undefined;
     vm.isRideAssigned = false;
-    vm.showNoRequestView = false;
     vm.pickedUpButtonPressed = false;
-    vm.inprogressFlag = false;
     vm.lastCoords = undefined;
     vm.driver = undefined;
     var REFRESH_INTERVAL = 30000;
@@ -50,7 +47,6 @@ angular.module('safeRidesWebApp')
                 if(!vm.inprogressFlag && rideRequest.status === 'ASSIGNED'){
                     vm.assignedRide = rideRequest;
                     vm.isRideAssigned=true;
-                    vm.isStartOdoEntered = false;
                     console.log('got Assigned Ride, ASSIGNED');
                     buildDirectionButtons();
                     return;
@@ -67,9 +63,7 @@ angular.module('safeRidesWebApp')
                         if(rideRequest.status === 'PICKINGUP') {
                             vm.assignedRide = rideRequest;
                             vm.isRideAssigned = true;
-                            vm.isStartOdoEntered = true;
                             vm.pickedUpButtonPressed = false;
-                            vm.inprogressFlag = true;
                             console.log('got Assigned Ride, PICKINGUP');
                             buildDirectionButtons();
                             return;
@@ -88,9 +82,7 @@ angular.module('safeRidesWebApp')
                         if(rideRequest.status === 'DROPPINGOFF'){
                             vm.assignedRide = rideRequest;
                             vm.isRideAssigned = true;
-                            vm.isStartOdoEntered = true;
                             vm.pickedUpButtonPressed = true;//different from PICKINGUP
-                            vm.inprogressFlag = true;
                             console.log('got Assigned Ride, DROPPINGOFF');
                             buildDirectionButtons();
                             return;
@@ -111,7 +103,13 @@ angular.module('safeRidesWebApp')
 
         });//end CurrentDriverRidesService.get ASSIGNED
 
-        //if there is no ride assigned check if "picking up or dropping off"
+        //Set refresh interval if not already set
+        if (!rideRefresher) {
+            rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+            console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
+        }else {
+            console.log('REFRESH_INTERVAL already ran');
+        }
 
     } //end getCurrentRideRequest()
 
@@ -172,9 +170,7 @@ angular.module('safeRidesWebApp')
             buildDirectionButtons();
             vm.assignedRide.startOdometer = vm.startOdo;
             vm.assignedRide.status = 'PICKINGUP';
-            vm.inprogressFlag = true;
             vm.isRideAssigned = true;
-            vm.isStartOdoEntered = true;
             vm.pickedUpButtonPressed = false;
 
             updateRideRequest();
@@ -186,8 +182,8 @@ angular.module('safeRidesWebApp')
 
     vm.pickedUp = function(){
         vm.assignedRide.status = 'DROPPINGOFF';
+        vm.isRideAssigned = true;
         vm.pickedUpButtonPressed = true;
-        vm.inprogressFlag = true;
         updateRideRequest();
     };
 
@@ -195,10 +191,8 @@ angular.module('safeRidesWebApp')
         vm.assignedRide.status = 'COMPLETE';
         //if(vm.assignedRide.startOdo > vm.endOdo){}
             vm.assignedRide.endOdometer = vm.endOdo;
-            vm.isStartOdoEntered = false;
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
-            vm.inprogressFlag = false;
             updateRideRequest();
             if (!rideRefresher) {
                 rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
@@ -216,10 +210,6 @@ angular.module('safeRidesWebApp')
     */
     vm.refresh = function(){
         getCurrentRideRequest();
-        if (!rideRefresher) {
-            rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-            console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-        }
     };
 
 
