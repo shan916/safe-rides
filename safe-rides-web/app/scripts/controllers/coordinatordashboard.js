@@ -137,6 +137,8 @@ var app = angular.module('safeRidesWebApp')
         }
 
         vm.DANGER_ZONE = 30;
+        // vm.DANGER_ZONE = 70;
+        // vm.DANGER_ZONE = 10;
 
         vm.drivers = [];
 
@@ -166,7 +168,9 @@ var app = angular.module('safeRidesWebApp')
             });
         };
 
+
         vm.requestAgeInMinutes = function(start) {
+            console.log(start);
             return moment.duration(moment().diff(moment(start))).asMinutes();
         };
 

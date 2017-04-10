@@ -125,8 +125,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: req.status === 'UNASSIGNED' || req.requestAgeInMinutes(req.date) >= ctrl.DANGER_ZONE,
-                                  warning: req.status === 'UNASSIGNED',
+                                        <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
+                                  warning: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) < ctrl.DANGER_ZONE)),
                                   info: req.status === 'ASSIGNED' || req.status === 'PICKINGUP' || req.status === 'DROPPINGOFF',
                                   success: req.status === 'COMPLETE'}">
                                             <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
