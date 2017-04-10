@@ -105,10 +105,12 @@ public class RideRequestController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
         String authToken = request.getHeader(this.tokenHeader);
-        if (authToken != null) {
+        // if onecard is null or empty then grab the onecard id from the authToken(if not null)
+        if ((rideRequest.getOneCardId() == null || rideRequest.getOneCardId().length() <= 0) && authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             rideRequest.setOneCardId(username);
         }
+        // onecard id is required
         if (rideRequest.getOneCardId() == null) {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
         }
