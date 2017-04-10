@@ -25,7 +25,7 @@ public class GeocodingService {
                 try {
                     GeocodingResult[] results = GeocodingApi.newRequest(ctx)
                             .address(Util.formatAddress(rideRequest.getPickupLine1(), rideRequest.getPickupLine2(),
-                                    rideRequest.getPickupCity(), rideRequest.getPickupZip())).await();
+                                    rideRequest.getPickupCity())).await();
                     if (results.length > 0) {
                         LatLng coords = results[0].geometry.location;
                         rideRequest.setPickupLatitude(coords.lat);
@@ -51,7 +51,7 @@ public class GeocodingService {
                 try {
                     GeocodingResult[] results = GeocodingApi.newRequest(ctx)
                             .address(Util.formatAddress(rideRequest.getDropoffLine1(), rideRequest.getDropoffLine2(),
-                                    rideRequest.getDropoffCity(), rideRequest.getDropoffZip())).await();
+                                    rideRequest.getDropoffCity())).await();
                     if (results.length > 0) {
                         LatLng coords = results[0].geometry.location;
                         rideRequest.setDropoffLatitude(coords.lat);

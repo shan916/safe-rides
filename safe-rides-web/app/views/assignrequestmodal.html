@@ -38,10 +38,12 @@
                     <dt>Riders:</dt>
                     <dd>{{ctrl.selectedRequest.numPassengers}}</dd>
                     <dt>Pickup Location:</dt>
-                    <dd>{{ctrl.selectedRequest.pickupLine1}} <br /> {{ctrl.selectedRequest.pickupLine2.value || "" }} {{ctrl.selectedRequest.pickupCity + ' ' + ctrl.selectedRequest.pickupZip}}
+                    <dd>{{ctrl.selectedRequest.pickupLine1}} <br/> {{ctrl.selectedRequest.pickupLine2.value || "" }}
+                        {{ctrl.selectedRequest.pickupCity}}
                     </dd>
                     <dt>Dropoff Location:</dt>
-                    <dd>{{ctrl.selectedRequest.dropoffLine1}} <br /> {{ctrl.selectedRequest.dropoffLine2.value || "" }} {{ctrl.selectedRequest.dropoffCity + ' ' + ctrl.selectedRequest.dropoffZip}}
+                    <dd>{{ctrl.selectedRequest.dropoffLine1}} <br/> {{ctrl.selectedRequest.dropoffLine2.value || "" }}
+                        {{ctrl.selectedRequest.dropoffCity}}
                     </dd>
                     <dt>Message To Driver</dt>
                     <dd>

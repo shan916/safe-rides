@@ -8,10 +8,8 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('HeaderCtrl', function($state) {
+    .controller('HeaderCtrl', function() {
         var vm = this;
-        var state = $state.current.name;
-        console.log('current state: ', state);
         vm.routes = [{
                 text: 'Home',
                 path: '#!/'
