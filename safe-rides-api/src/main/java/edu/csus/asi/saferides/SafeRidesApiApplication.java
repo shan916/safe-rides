@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.CoordinatorRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -39,9 +40,21 @@ public class SafeRidesApiApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
+    public CommandLineRunner demo(CoordinatorRepository coordinatorRepository, DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
         return (args) -> {
+        	
+        	Coordinator coordinator0 = new Coordinator("466387289", "George", "Nuggets", "9168453284", true);
+        	Coordinator coordinator1 = new Coordinator("981647327", "Stacy", "Frogger", "9169842364", true);
+        	Coordinator coordinator2 = new Coordinator("658745267", "Corey", "Carlton", "9162796223", true);
+        	Coordinator coordinator3 = new Coordinator("853214885", "Shawn", "Parker", "9164439756", true);
+        	Coordinator coordinator4 = new Coordinator("226487532", "Kyle", "Arenmin", "9165587452", true);
+        	Coordinator coordinator5 = new Coordinator("884562489", "Travis", "Falker", "9165127168", true);
+        	Coordinator coordinator6 = new Coordinator("497562368", "Uthward", "Velmor", "9165548776", true);
+        	Coordinator coordinator7 = new Coordinator("557448953", "Gracie", "Letmod", "9165223987", true);
+        	Coordinator coordinator8 = new Coordinator("144821864", "Harry", "Keggen", "9165522354", true);
+        	Coordinator coordinator9 = new Coordinator("448795324", "Yanelie", "Bunson", "9165782264", true);
+        	
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", "Female", true, "Farmers", true);
             Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", "CA", "E1111111", "Female", true, "Farmers", true);
@@ -418,6 +431,17 @@ public class SafeRidesApiApplication {
             driver7.getUser().setAuthorities(driverAuthorityList);
             driver8.getUser().setAuthorities(driverAuthorityList);
             driver9.getUser().setAuthorities(driverAuthorityList);
+            
+            coordinator0.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator1.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator2.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator3.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator4.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator5.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator6.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator7.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator8.getUser().setAuthorities(coordinatorAuthorityList);
+            coordinator9.getUser().setAuthorities(coordinatorAuthorityList);
 
             rideRequest0.getUser().setAuthorities(riderAuthorityList);
             rideRequest1.getUser().setAuthorities(riderAuthorityList);
@@ -454,6 +478,28 @@ public class SafeRidesApiApplication {
             userRepository.save(driver7.getUser());
             userRepository.save(driver8.getUser());
             userRepository.save(driver9.getUser());
+            
+            userRepository.save(driver0.getUser());
+            userRepository.save(driver1.getUser());
+            userRepository.save(driver2.getUser());
+            userRepository.save(driver3.getUser());
+            userRepository.save(driver4.getUser());
+            userRepository.save(driver5.getUser());
+            userRepository.save(driver6.getUser());
+            userRepository.save(driver7.getUser());
+            userRepository.save(driver8.getUser());
+            userRepository.save(driver9.getUser());
+            
+            userRepository.save(coordinator0.getUser());
+            userRepository.save(coordinator1.getUser());
+            userRepository.save(coordinator2.getUser());
+            userRepository.save(coordinator3.getUser());
+            userRepository.save(coordinator4.getUser());
+            userRepository.save(coordinator5.getUser());
+            userRepository.save(coordinator6.getUser());
+            userRepository.save(coordinator7.getUser());
+            userRepository.save(coordinator8.getUser());
+            userRepository.save(coordinator9.getUser());
 
             userRepository.save(rideRequest0.getUser());
             userRepository.save(rideRequest1.getUser());
@@ -476,6 +522,17 @@ public class SafeRidesApiApplication {
             userRepository.save(rideRequest18.getUser());
             userRepository.save(rideRequest19.getUser());
 
+            coordinatorRepository.save(coordinator0);
+            coordinatorRepository.save(coordinator1);
+            coordinatorRepository.save(coordinator2);
+            coordinatorRepository.save(coordinator3);
+            coordinatorRepository.save(coordinator4);
+            coordinatorRepository.save(coordinator5);
+            coordinatorRepository.save(coordinator6);
+            coordinatorRepository.save(coordinator7);
+            coordinatorRepository.save(coordinator8);
+            coordinatorRepository.save(coordinator9);
+            
             driverRepository.save(driver0);
             driverRepository.save(driver1);
             driverRepository.save(driver2);
@@ -486,6 +543,8 @@ public class SafeRidesApiApplication {
             driverRepository.save(driver7);
             driverRepository.save(driver8);
             driverRepository.save(driver9);
+            
+
 
             driverLocationRepository.save(loc0);
             driverLocationRepository.save(loc1);

@@ -146,6 +146,18 @@ angular
                 controller: 'RiderdashboardCtrl',
                 controllerAs: 'ctrl'
             });
+
+            $stateProvider
+                .state('managecoordinators', {
+                    url: '/managecoordinators',
+                    templateUrl: 'views/managecoordinators.html',
+                    controller: 'ManageCoordinatorsCtrl',
+                    controllerAs: 'ctrl',
+                    data: {
+                        requireLogin: true
+                    }
+                });
+
         $stateProvider
             .state('managedrivers', {
                 url: '/managedrivers',
