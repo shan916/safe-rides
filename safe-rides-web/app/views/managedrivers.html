@@ -16,7 +16,6 @@
                             <th class="col-xs-1">OneCard ID</th>
                             <th class="col-xs-1">DL State</th>
                             <th class="col-xs-1">DL Number</th>
-                            <th class="col-xs-1">Gender</th>
                             <th class="col-xs-1">Status</th>
                             <th class="col-xs-3">Actions</th>
 
@@ -27,12 +26,11 @@
                                     <td>{{driver.csusId}}</td>
                                     <td>{{driver.dlState}}</td>
                                     <td>{{driver.dlNumber}}</td>
-                                    <td>{{driver.gender}}</td>
                                     <td>{{driver.status}}</td>
                                     <td>
                                         <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                        <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Delete</button>
-                                        <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status === 'ASSIGNED' || driver.status === 'INPROGRESS'">Deactivate</button>
+                                        <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Delete</button>
+                                        <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Deactivate</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -69,7 +67,6 @@
                                   <th class="col-xs-1">OneCard ID</th>
                                   <th class="col-xs-1">DL State</th>
                                   <th class="col-xs-1">DL Number</th>
-                                  <th class="col-xs-2">Gender</th>
                                   <th class="col-xs-3">Actions</th>
                                     <tbody>
                                         <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
@@ -78,7 +75,6 @@
                                             <td>{{driver.csusId}}</td>
                                             <td>{{driver.dlState}}</td>
                                             <td>{{driver.dlNumber}}</td>
-                                            <td>{{driver.gender}}</td>
                                             <td>
                                                 <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                                                 <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>

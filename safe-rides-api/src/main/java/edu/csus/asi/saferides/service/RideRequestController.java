@@ -1,30 +1,28 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.mapper.RideRequestMapper;
+import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 /*
  * @author Ryan Long
@@ -49,6 +47,16 @@ public class RideRequestController {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private GeocodingService geocodingService;
+
+    @Autowired
+    private RideRequestMapper rideRequestMapper;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
 
     /*
      * GET /rides
@@ -78,7 +86,7 @@ public class RideRequestController {
         RideRequest result = rideRequestRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(result);
         }
@@ -95,9 +103,19 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@RequestBody RideRequest rideRequest, Device device) {
-        rideRequest.setDate(new Date());    // default to current datetime
+    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
+        String authToken = request.getHeader(this.tokenHeader);
+        if (authToken != null) {
+            String username = jwtTokenUtil.getUsernameFromToken(authToken);
+            rideRequest.setOneCardId(username);
+        }
+        if (rideRequest.getOneCardId() == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
+        }
+        rideRequest.setRequestDate(new Date());    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
+
+        geocodingService.setCoordinates(rideRequest);
 
         RideRequest result = rideRequestRepository.save(rideRequest);
 
@@ -106,32 +124,14 @@ public class RideRequestController {
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(result.getId()).toUri();
 
-        //return ResponseEntity.created(location).body(result);
-
-        Date currentDate = new Date();
-
-        User requestor = new User("" + rideRequest.getRequestorId(),
-                rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName(), currentDate.toString(), "null@null.null");
-
-        requestor.setLastPasswordResetDate(currentDate);
-
-        List<Authority> authorityList = new ArrayList<Authority>();
-        authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
-
-        requestor.setAuthorities(authorityList);
-
-        userRepository.save(requestor);
-
-        final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(requestor), device);
-
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.created(location).body(result);
     }
 
     /*
      * PUT /rides/{id}
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates the given ride request")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
@@ -139,6 +139,8 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+        geocodingService.setCoordinates(rideRequest);
+
         RideRequest result = rideRequestRepository.save(rideRequest);
 
         return ResponseEntity.ok(result);
@@ -157,10 +159,38 @@ public class RideRequestController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (rideRequestRepository.findOne(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         } else {
             rideRequestRepository.delete(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(new ResponseMessage("Ride Deleted"));
         }
     }
+
+    /*
+     * GET /rides/mine
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/mine")
+    @PreAuthorize("hasRole('RIDER')")
+    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns currently authenticated user's current ride request...")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> retrieveMyRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+
+        if (rideRequest == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            // TODO this can return a ride request that is old. (but will be the latest)
+            // ALSO TODO change the response to a DTO rather than the full ride request
+            RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
+            return ResponseEntity.ok(dto);
+        }
+    }
+
 }

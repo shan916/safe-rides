@@ -1,23 +1,23 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.model.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
-
 /*
  * @author Zeeshan Khaliq
- * 
+ *
  * Model object for Driver Entity
  * */
 
 @Entity
 public class Driver {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -41,35 +41,32 @@ public class Driver {
 	@Column(nullable = false, length = 2)
 	private String dlState;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 20)
 	private String dlNumber;
 
 	@Column(nullable = false)
-	private String gender;
-
-	@Column(nullable = false)
 	private Boolean insuranceChecked;
-	
+
 	@Column(nullable = false)
 	@Size(min = 3)
 	private String insuranceCompany;
 
 	@Column(nullable = false)
 	private Boolean active;
-	
+
 	@Transient
 	DriverStatus status;
-	
+
 	@JsonIgnore
 	@Column(updatable = false)
 	private Date createdDate;
-	
+
 	@JsonIgnore
 	private Date modifiedDate;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Vehicle vehicle;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "driver")
 	private Set<RideRequest> rides;
@@ -95,7 +92,7 @@ public class Driver {
 	}
 
 	public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-			String dlNumber, String gender, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+				  String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;
@@ -103,7 +100,6 @@ public class Driver {
 		this.phoneNumber = phoneNumber;
 		this.dlState = dlState;
 		this.dlNumber = dlNumber;
-		this.gender = gender;
 		this.insuranceChecked = insuranceChecked;
 		this.insuranceCompany = insuranceCompany;
 		this.active = active;
@@ -166,14 +162,6 @@ public class Driver {
 		this.dlNumber = dlNumber;
 	}
 
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
 	public Boolean getInsuranceChecked() {
 		return insuranceChecked;
 	}
@@ -234,20 +222,34 @@ public class Driver {
 	}
 
 	public DriverStatus getStatus() {
-		boolean inprogress = false;
-		for (RideRequest ride : getRides()) {
-			if (ride.getStatus() == RideRequestStatus.ASSIGNED) {
-				return DriverStatus.ASSIGNED;
-			} else if (ride.getStatus() == RideRequestStatus.INPROGRESS) {
-				inprogress = true;
-			}
-		}
-		if (inprogress) {
-			return DriverStatus.INPROGRESS;
-		} else {
-			return DriverStatus.AVAILABLE;
-		}
-	}
+        boolean assigned = false;
+        boolean pickingUp = false;
+
+        for (RideRequest ride : getRides()) {
+            RideRequestStatus rideStatus = ride.getStatus();
+
+            switch (rideStatus) {
+                case DROPPINGOFF:
+                    return DriverStatus.DROPPINGOFF;
+                case PICKINGUP:
+                    pickingUp = true;
+                    break;
+                case ASSIGNED:
+                    assigned = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (pickingUp) {
+            return DriverStatus.PICKINGUP;
+        } else if (assigned) {
+            return DriverStatus.ASSIGNED;
+        } else {
+            return DriverStatus.AVAILABLE;
+        }
+  }
 
 	public Set<DriverLocation> getLocations() {
 		return locations;
@@ -275,7 +277,6 @@ public class Driver {
 				", phoneNumber='" + phoneNumber + '\'' +
 				", dlState='" + dlState + '\'' +
 				", dlNumber='" + dlNumber + '\'' +
-				", gender='" + gender + '\'' +
 				", insuranceChecked=" + insuranceChecked +
 				", insuranceCompany='" + insuranceCompany + '\'' +
 				", active=" + active +

@@ -28,12 +28,14 @@ angular.module('safeRidesWebApp')
          */
 
         User.prototype.isInRole = function(roleName) {
+            var isInRole = false;
             this.authorities.forEach(function(element) {
                 if (element.authority === roleName) {
-                    return true;
+                    isInRole = true;
+                    return;
                 }
             });
-            return false;
+            return isInRole;
         };
 
         return User;

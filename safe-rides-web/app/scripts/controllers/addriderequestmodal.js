@@ -13,7 +13,7 @@ angular.module('safeRidesWebApp')
         vm.riderequest = new RideRequest();
         vm.NUM_REGEX = '\\d+';
         vm.PHONE_REGEX = '/^[2-9]\d{2}-\d{3}-\d{4}$/';
-        vm.maxPeopleCount = [1, 2, 3, 4, 5, 6, 7, 8];
+        vm.maxPeopleCount = [1, 2, 3];
 
         vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
@@ -30,6 +30,7 @@ angular.module('safeRidesWebApp')
             });
         }
 
+        /*
         function updateRideRequest() {
             RideRequestService.update({
                 id: vm.riderequest.id
@@ -40,6 +41,7 @@ angular.module('safeRidesWebApp')
                 console.log('error updating riderequest:', error);
             });
         }
+        */
 
         if ($stateParams.requestId) {
             getRideRequest($stateParams.requestId);

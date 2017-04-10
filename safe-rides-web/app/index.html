@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.css"/>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -27,15 +28,14 @@
     <!-- Add your site or application content here -->
     <div class="header" ng-controller="HeaderCtrl as header">
         <div class="navbar navbar-default" role="navigation">
-          <button ng-hide="currentState === 'login' || currentState === 'riderdashboard' || currentState === '/'" ng-click="globalLogout()" class="btn btn-danger pull-right">Logout</button>
             <div class="container">
                 <div class="navbar-header">
                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
                     <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
                 </div>
 
@@ -46,18 +46,22 @@
                             <a ng-href="{{route.path}}" ng-click="header.setActive(route)">{{route.text}}</a>
                         </li>
                     </ul>
+
+                    <button ng-show="isAuthenticated && redirect !== 'riderdashboard'" ng-click="globalLogout()" class="btn btn-danger navbar-btn navbar-right">Logout</button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <div ui-view=""></div>
 
-    <!-- <div class="footer">
-        <div class="container">
-            <p><span class="glyphicon glyphicon-heart"></span> from the Code Team 6 developers</p>
+    <div class="footer">
+        <div class="container" ng-show="!isAuthenticated">
+            <a href="/#!/coordinatordashboard">Coordinator Login</a> |
+            <a href="/#!/driverdashboard">Driver Login</a>
         </div>
-    </div> -->
+    </div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -93,6 +97,8 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-mask/dist/mask.js"></script>
     <script src="bower_components/angular-spinner/dist/angular-spinner.min.js"></script>
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
+    <script src="bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -131,6 +137,8 @@
     <script src="scripts/services/user-service.js"></script>
     <script src="scripts/services/user-registration-service.js"></script>
     <script src="scripts/services/user.js"></script>
+    <script src="scripts/services/auth-token-service.js"></script>
+    <script src="scripts/services/geolocation-service.js"></script>
     <!-- endbuild -->
 </body>
 
