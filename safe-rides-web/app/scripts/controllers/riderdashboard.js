@@ -84,7 +84,7 @@ angular.module('safeRidesWebApp')
             vm.loading = false;
 
             if (error.status === 429) {
-                Notification.error({message: 'Too many requests, please try again after 1 minute.'});
+                Notification.error({message: 'Too many requests, please try again after 1 minute.', positionX: 'center', delay: 60000, closeOnClick: false, replaceMessage: true});
             }
         });
     };
