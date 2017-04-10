@@ -164,7 +164,6 @@ var app = angular.module('safeRidesWebApp')
 
 
         vm.requestAgeInMinutes = function(start) {
-            console.log(start);
             return moment.duration(moment().diff(moment(start))).asMinutes();
         };
 
