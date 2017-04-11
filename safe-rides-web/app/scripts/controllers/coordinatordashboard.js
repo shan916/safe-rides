@@ -22,7 +22,7 @@ var app = angular.module('safeRidesWebApp')
         vm.refreshIntervalOptions = ['15 sec', '30 sec', '45 sec', '60 sec'];
         vm.selectedRefreshInterval = '60 sec';
 
-        vm.timeInterval = $interval(refresh, 60000);
+        vm.timeInterval = $interval(loadData, 60000);
 
         vm.DANGER_ZONE = 30;
 
@@ -34,25 +34,26 @@ var app = angular.module('safeRidesWebApp')
         if (!authManager.isAuthenticated()) {
             console.log('Not authenticated');
             $state.go('login');
+        } else {
+            loadData();
         }
 
         // kick user out if not coordinator
         if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
             console.log('Not a coordinator');
             $state.go('/');
+        } else {
+            loadData();
         }
 
-        getDrivers();
-        getRideRequests();
-
-        function refresh() {
+        function loadData() {
             getDrivers();
             getRideRequests();
         }
 
         vm.refreshIntervalChange = function () {
             $interval.cancel(vm.timeInterval);
-            vm.timeInterval = $interval(refresh, getRefreshRate(vm.selectedRefreshInterval));
+            vm.timeInterval = $interval(loadData, getRefreshRate(vm.selectedRefreshInterval));
         };
 
         // destroy interval on exit
