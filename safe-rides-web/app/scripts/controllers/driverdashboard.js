@@ -27,9 +27,12 @@ angular.module('safeRidesWebApp')
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
 
-    // kick user out if authenticated and higher than driver (coordinator, admin,...) or is not a driver
+    /*
+    * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
+    * */
     if (authManager.isAuthenticated()) {
-        if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+        if (AuthTokenService.isInRole('ROLE_COORDINATOR') ||                                            // Coordinator and up
+            (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER'))) {   // Just a rider
             Notification.error({
                 message: 'You must be logged in as a driver to view the driver dashboard.',
                 positionX: 'center',
@@ -38,28 +41,19 @@ angular.module('safeRidesWebApp')
             });
             $state.go('/');
             console.log('Not a driver');
-        } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
-            Notification.error({
-                message: 'You must be logged in as a coordinator to view the coordinator dashboard.',
-                positionX: 'center',
-                delay: 10000,
-                replaceMessage: true
-            });
-            $state.go('/');
-            console.log('Not a driver');
         } else {
+            UserService.getAuthUserInfo().then(function(response){
+                vm.driver = response.data;
+            }, function(error){
+                console.log('error getting the driver name', error);
+            });
+
             getCurrentRideRequest();
         }
     } else {
         $state.go('login');
         console.log('Not authenticated');
     }
-
-    UserService.getAuthUserInfo().then(function(response){
-        vm.driver = response.data;
-    }, function(error){
-        console.log('error getting the driver name', error);
-    });
 
     function getCurrentRideRequest() {
 
