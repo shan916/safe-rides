@@ -2,16 +2,17 @@
     <!-- Start of Refresh Drop Down list -->
     <div class="row">
         <div class="col-sm-2 pull-right">
-          <div class="row">
-              <div class="panel-body">
-                <label for="refreshTables">Refresh Rate?</label>
-                <select name="refreshTables" class="form-control" ng-options="option for option in ctrl.listOfOptions" ng-model="ctrl.selectedItem" ng-change="ctrl.selectedItemChange(this.option)">
-                  <div>
-                      <div class="input-error" ng-message="required">* required</div>
-                  </div>
-                </select>
-              </div>
-          </div>
+            <div class="row">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="refreshTables">Refresh Rate?</label>
+                        <select id="refreshTables" name="refreshTables" class="form-control"
+                                ng-options="option for option in ctrl.refreshIntervalOptions"
+                                ng-model="ctrl.selectedRefreshInterval" ng-change="ctrl.refreshIntervalChange()">
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- End of Refresh Drop Down list -->
@@ -54,44 +55,56 @@
                                     <div class="col-sm-6">
                                         <table>
                                             <tbody>
-                                                <tr>
-                                                    <td class="bg-warning color-key-box"></td>
-                                                    <td class="color-key-text-padding">*Ride request is unassigned.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="bg-info color-key-box"></td>
-                                                    <td class="color-key-text-padding">*Ride request is assigned. Driver is assigned.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="bg-success color-key-box"></td>
-                                                    <td class="color-key-text-padding">*Ride request is complete. Driver is available.</td>
-                                                </tr>
+                                            <tr>
+                                                <td class="bg-warning color-key-box"></td>
+                                                <td class="color-key-text-padding">*Ride request is unassigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">*Ride request is assigned. Driver is
+                                                    assigned.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">*Ride request is complete. Driver is
+                                                    available.
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="col-sm-6">
                                         <table>
                                             <tbody>
-                                                <tr>
-                                                    <td><img src="/images/red-dot.png"></td>
-                                                    <td class="color-key-text-padding">Pickup location of <em>unassigned</em> ride</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><img src="/images/orange-dot.png"></td>
-                                                    <td class="color-key-text-padding">Pickup location of <em>assigned</em> ride</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><img src="/images/yellow-dot.png"></td>
-                                                    <td class="color-key-text-padding">Pickup location of <em>in progress</em> ride</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><img src="/images/green-dot.png"></td>
-                                                    <td class="color-key-text-padding">Dropoff location of <em>picked up</em> ride</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><img src="/images/blue-dot.png"></td>
-                                                    <td class="color-key-text-padding">Last available driver location</td>
-                                                </tr>
+                                            <tr>
+                                                <td><img src="/images/red-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of
+                                                    <em>unassigned</em> ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/orange-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of <em>assigned</em>
+                                                    ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/yellow-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of <em>in
+                                                    progress</em> ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/green-dot.png"></td>
+                                                <td class="color-key-text-padding">Dropoff location of <em>picked
+                                                    up</em> ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/blue-dot.png"></td>
+                                                <td class="color-key-text-padding">Last available driver location</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -116,28 +129,36 @@
                                 <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers"></span>
                                 <table class="table table-responsive" ng-hide="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers">
                                     <thead>
-                                        <tr>
-                                            <th>Rider Name</th>
-                                            <th>Status</th>
-                                            <th>Riders</th>
-                                            <th>Time Requested</th>
-                                            <th>Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Rider Name</th>
+                                        <th>Status</th>
+                                        <th>Riders</th>
+                                        <th>Time Requested</th>
+                                        <th>Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showRequestDetails(req)" ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
+                                    <tr ng-click="ctrl.showRequestDetails(req)"
+                                        ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
                                   warning: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) < ctrl.DANGER_ZONE)),
                                   info: req.status === 'ASSIGNED' || req.status === 'PICKINGUP' || req.status === 'DROPPINGOFF',
                                   success: req.status === 'COMPLETE'}">
-                                            <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
-                                            <td>{{req.status | FriendlyStatusName}}</td>
-                                            <td>{{req.numPassengers}}</td>
-                                            <td>{{req.requestDate | date:'h:mma'}}</td>
-                                            <td>
-                                                <button ng-show="req.status === 'UNASSIGNED'" ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();" class="btn btn-primary">Assign Driver</button>
-                                                <button ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'" ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();" class="btn btn-danger">Cancel</button>
-                                            </td>
-                                        </tr>
+                                        <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
+                                        <td>{{req.status | FriendlyStatusName}}</td>
+                                        <td>{{req.numPassengers}}</td>
+                                        <td>{{req.requestDate | date:'h:mma'}}</td>
+                                        <td>
+                                            <button ng-show="req.status === 'UNASSIGNED'"
+                                                    ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();"
+                                                    class="btn btn-primary">Assign Driver
+                                            </button>
+                                            <button
+                                                ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'"
+                                                ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();"
+                                                class="btn btn-danger">Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -159,23 +180,28 @@
                                 <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests"></span>
                                 <table class="table table-responsive" ng-hide="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests">
                                     <thead>
-                                        <tr>
-                                            <th>Driver Name</th>
-                                            <th>Status</th>
-                                            <th>Seats Available</th>
-                                            <th>Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Driver Name</th>
+                                        <th>Status</th>
+                                        <th>Seats Available</th>
+                                        <th>Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-click="ctrl.showDriverDetails(driver)" ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' " ng-class="{success: driver.status === 'AVAILABLE',
+                                    <tr ng-click="ctrl.showDriverDetails(driver)"
+                                        ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
+                                        ng-class="{success: driver.status === 'AVAILABLE',
                                                 info: driver.status === 'PICKINGUP' || driver.status === 'DROPPINGOFF' || driver.status === 'ASSIGNED'}">
-                                            <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
-                                            <td>{{driver.status | FriendlyStatusName}}</td>
-                                            <td>{{driver.vehicle.seats}}</td>
-                                            <td>
-                                                <button ng-show="driver.status === 'AVAILABLE'" ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();" class="btn btn-primary">Assign Request</button>
-                                            </td>
-                                        </tr>
+                                        <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
+                                        <td>{{driver.status | FriendlyStatusName}}</td>
+                                        <td>{{driver.vehicle.seats}}</td>
+                                        <td>
+                                            <button ng-show="driver.status === 'AVAILABLE'"
+                                                    ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();"
+                                                    class="btn btn-primary">Assign Request
+                                            </button>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

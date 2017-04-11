@@ -33,40 +33,49 @@ var app = angular.module('safeRidesWebApp')
         // TODO: Move this to an environment file
         vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
 
-        vm.listOfOptions = ['15 sec', '30 sec', '45 sec', '60 sec'];
+        vm.refreshIntervalOptions = ['15 sec', '30 sec', '45 sec', '60 sec'];
+        vm.selectedRefreshInterval = '60 sec';
 
-        /* START of refresh rate function */
-        /* default refresh rate */
         vm.timeInterval = $interval(callDriversAndRideRequests, 60000);
-        vm.selectedItem = '60 sec';
 
-        vm.selectedItemChange = function(){
-          $interval.cancel(vm.timeInterval);
-          vm.timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(vm.selectedItem));
-        }
+        vm.DANGER_ZONE = 30;
+
+        vm.drivers = [];
+
+        vm.rideRequests = [];
+
+        vm.driversLocation = [];
+
+        getDrivers();
+        getRideRequests();
+
+        vm.refreshIntervalChange = function () {
+            $interval.cancel(vm.timeInterval);
+            vm.timeInterval = $interval(callDriversAndRideRequests, getRefreshRate(vm.selectedRefreshInterval));
+        };
+
         // destroy interval on exit
         $scope.$on('$destroy', function() {
             $interval.cancel(vm.timeInterval);
         });
-        /* END of refresh rate function */
 
         function getRefreshRate(selectedRefreshRate){
-          var time = selectedRefreshRate;
-          switch (time) {
-              case '15 sec':
-                  return 15000;
-              case '30 sec':
-                  return 30000;
-              case '45 sec':
-                  return 45000;
-              case '60 sec':
-                  return 60000;
-          }
+            var time = selectedRefreshRate;
+            switch (time) {
+                case '15 sec':
+                    return 15000;
+                case '30 sec':
+                    return 30000;
+                case '45 sec':
+                    return 45000;
+                case '60 sec':
+                    return 60000;
+            }
         }
 
         function callDriversAndRideRequests(){
-          getDrivers();
-          getRideRequests();
+            getDrivers();
+            getRideRequests();
         }
 
         function getDrivers() {
@@ -131,18 +140,6 @@ var app = angular.module('safeRidesWebApp')
                 });
             });
         }
-
-        vm.DANGER_ZONE = 30;
-
-        vm.drivers = [];
-
-        getDrivers();
-
-        vm.rideRequests = [];
-
-        getRideRequests();
-
-        vm.driversLocation = [];
 
         vm.mapPinClick = function(evt, rideRequestId){
             vm.rideRequests.forEach(function(element) {
