@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -40,6 +40,12 @@ var app = angular.module('safeRidesWebApp')
 
         // kick user out if not coordinator
         if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+            Notification.error({
+                message: 'You must be logged in as a coordinator to view the coordinator dashboard.',
+                positionX: 'center',
+                delay: 10000,
+                replaceMessage: true
+            });
             console.log('Not a coordinator');
             $state.go('/');
         } else {

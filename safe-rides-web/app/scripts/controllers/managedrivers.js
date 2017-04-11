@@ -8,21 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function(DriverService, $uibModal, authManager, $state, AuthTokenService) {
-        // kick user out if not authenticated
-        if(!authManager.isAuthenticated()){
-            $state.go('login');
-            console.log('Not authenticated');
-            return;
-        }
-
-        // kick user out if not coordinator
-        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
-            $state.go('/');
-            console.log('Not a coordinator');
-            return;
-        }
-
+    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification) {
         var vm = this;
 
         vm.activeDrivers = [];
@@ -31,6 +17,27 @@ angular.module('safeRidesWebApp')
 
         vm.loadingActiveDrivers = true;
         vm.loadingInactiveDrivers = true;
+
+        // kick user out if not authenticated
+        if(!authManager.isAuthenticated()){
+            $state.go('login');
+            console.log('Not authenticated');
+        } else {
+            getDrivers();
+        }
+
+        // kick user out if not coordinator
+        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
+            Notification.error({
+                message: 'You must be logged in as a coordinator to manage drivers.',
+                positionX: 'center',
+                delay: 10000
+            });
+            $state.go('/');
+            console.log('Not a coordinator');
+        } else {
+            getDrivers();
+        }
 
         function getDrivers() {
             vm.loadingActiveDrivers = true;
@@ -54,8 +61,6 @@ angular.module('safeRidesWebApp')
                 console.log('error getting inactive drivers:', error);
             });
         }
-
-        getDrivers();
 
         vm.openConfirmDeleteModal = function(driver) {
             var modalInstance = $uibModal.open({
@@ -104,7 +109,6 @@ angular.module('safeRidesWebApp')
         };
 
         function deleteDriver(driver) {
-            console.log(driver);
             DriverService.remove({
                 id: driver.id
             }).$promise.then(function(response) {
