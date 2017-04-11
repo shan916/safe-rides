@@ -21,6 +21,25 @@ angular.module('safeRidesWebApp')
     var rideRefresher;
 
     /*
+     * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
+     * */
+    if (authManager.isAuthenticated()) {
+        // TODO: also check if role is coordinator. Should display a notification asking user to be logged out?
+        if (AuthTokenService.isInRole('ROLE_DRIVER')) {
+            $state.go('/');
+            console.log('Not a requestor');
+            return;
+        } else {
+            vm.loading = false;
+            vm.loggedIn = true;
+            getRide();
+        }
+    } else {
+        vm.loading = false;
+        vm.loggedIn = false;
+    }
+
+    /*
     * Gets the rider's current ride
     * */
     function getRide() {
@@ -51,24 +70,6 @@ angular.module('safeRidesWebApp')
             $interval.cancel(rideRefresher);
         }
     });
-
-    /*
-    * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
-    * */
-    if (authManager.isAuthenticated()) {
-        if (AuthTokenService.isInRole('ROLE_DRIVER')) {
-            $state.go('/');
-            console.log('Not a requestor');
-            return;
-        } else {
-            vm.loading = false;
-            vm.loggedIn = true;
-            getRide();
-        }
-    } else {
-        vm.loading = false;
-        vm.loggedIn = false;
-    }
 
     /*
     * Login driver after one card id has been entered

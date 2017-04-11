@@ -9,7 +9,7 @@
 */
 angular.module('safeRidesWebApp')
 .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService) {
+                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService, Notification) {
     var vm = this;
     vm.loadingRideRequest = true;
     vm.ride = undefined;
@@ -26,6 +26,34 @@ angular.module('safeRidesWebApp')
     vm.driver = undefined;
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
+
+    // kick user out if authenticated and higher than driver (coordinator, admin,...) or is not a driver
+    if (authManager.isAuthenticated()) {
+        if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+            Notification.error({
+                message: 'You must be logged in as a driver to view the driver dashboard.',
+                positionX: 'center',
+                delay: 10000,
+                replaceMessage: true
+            });
+            $state.go('/');
+            console.log('Not a driver');
+        } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
+            Notification.error({
+                message: 'You must be logged in as a coordinator to view the coordinator dashboard.',
+                positionX: 'center',
+                delay: 10000,
+                replaceMessage: true
+            });
+            $state.go('/');
+            console.log('Not a driver');
+        } else {
+            getCurrentRideRequest();
+        }
+    } else {
+        $state.go('login');
+        console.log('Not authenticated');
+    }
 
     UserService.getAuthUserInfo().then(function(response){
         vm.driver = response.data;
@@ -112,25 +140,6 @@ angular.module('safeRidesWebApp')
         }
 
     } //end getCurrentRideRequest()
-
-    // kick user out if authenticated and higher than driver (coordinator, admin,...) ot is not a driver
-    if (authManager.isAuthenticated()) {
-        if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
-            $state.go('/');
-            console.log('Not a driver');
-            return;
-        } else if (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER')) {
-            $state.go('/');
-            console.log('Not a driver');
-            return;
-        } else {
-            getCurrentRideRequest();
-        }
-    } else {
-        $state.go('login');
-        console.log('Not authenticated');
-        return;
-    }
 
     function buildDirectionButtons(){
         if(vm.assignedRide.pickupLine1 !== undefined){
