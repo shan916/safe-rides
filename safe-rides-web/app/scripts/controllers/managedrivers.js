@@ -18,25 +18,24 @@ angular.module('safeRidesWebApp')
         vm.loadingActiveDrivers = true;
         vm.loadingInactiveDrivers = true;
 
-        // kick user out if not authenticated
-        if(!authManager.isAuthenticated()){
+        /*
+         * Kick user out if not authenticated or if not a coordinator
+         * */
+        if (authManager.isAuthenticated()) {
+            if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+                Notification.error({
+                    message: 'You must be logged in as a coordinator to manage drivers.',
+                    positionX: 'center',
+                    delay: 10000
+                });
+                $state.go('/');
+                console.log('Not a coordinator');
+            } else {
+                getDrivers();
+            }
+        } else {
             $state.go('login');
             console.log('Not authenticated');
-        } else {
-            getDrivers();
-        }
-
-        // kick user out if not coordinator
-        if(!AuthTokenService.isInRole('ROLE_COORDINATOR')){
-            Notification.error({
-                message: 'You must be logged in as a coordinator to manage drivers.',
-                positionX: 'center',
-                delay: 10000
-            });
-            $state.go('/');
-            console.log('Not a coordinator');
-        } else {
-            getDrivers();
         }
 
         function getDrivers() {

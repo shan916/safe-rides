@@ -30,26 +30,25 @@ var app = angular.module('safeRidesWebApp')
         vm.rideRequests = [];
         vm.driversLocation = [];
 
-        // kick user out if not authenticated
-        if (!authManager.isAuthenticated()) {
-            console.log('Not authenticated');
+        /*
+        * Kick user out if not authenticated or if not a coordinator
+        * */
+        if (authManager.isAuthenticated()) {
+            if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
+                Notification.error({
+                    message: 'You must be logged in as a coordinator to view the coordinator dashboard.',
+                    positionX: 'center',
+                    delay: 10000,
+                    replaceMessage: true
+                });
+                $state.go('/');
+                console.log('Not a coordinator');
+            } else {
+                loadData();
+            }
+        } else {
             $state.go('login');
-        } else {
-            loadData();
-        }
-
-        // kick user out if not coordinator
-        if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
-            Notification.error({
-                message: 'You must be logged in as a coordinator to view the coordinator dashboard.',
-                positionX: 'center',
-                delay: 10000,
-                replaceMessage: true
-            });
-            console.log('Not a coordinator');
-            $state.go('/');
-        } else {
-            loadData();
+            console.log('Not authenticated');
         }
 
         function loadData() {
