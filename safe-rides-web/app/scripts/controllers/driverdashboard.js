@@ -16,6 +16,7 @@ angular.module('safeRidesWebApp')
     vm.rideRequests = [];
     vm.startOdo = undefined;
     vm.endOdo = undefined;
+    vm.endNightOdo = undefined;
     vm.assignedRide = undefined;
     vm.getPickupDirections = undefined;
     vm.dropoffAddress = undefined;
@@ -26,6 +27,7 @@ angular.module('safeRidesWebApp')
     vm.driver = undefined;
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
+    vm.endNightPressed = false;
 
     /*
     * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -162,7 +164,6 @@ angular.module('safeRidesWebApp')
         if(vm.assignedRide.dropoffLine1 !== undefined){
             vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
             ', ' + vm.assignedRide.dropoffCity + ', CA';
-
             console.log('buttons built');
         }
     }
@@ -226,6 +227,17 @@ angular.module('safeRidesWebApp')
                 replaceMessage: true
             });
     };
+
+    vm.endNight = function() {
+        vm.endNightPressed = true;
+    }
+    vm.submitEndNightOdo = function(){
+        //TODO save driver's last odo recording to driver on api
+        //driver.endNightOdo = vm.endNightOdo;
+    }
+    vm.cancelEndNight = function(){
+        vm.endNightPressed = false;
+    }
 
     /**
     *   Driver can manually refresh to see if they
