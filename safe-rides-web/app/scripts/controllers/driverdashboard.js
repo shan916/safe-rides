@@ -158,17 +158,11 @@ angular.module('safeRidesWebApp')
         if(vm.assignedRide.pickupLine1 !== undefined){
             vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
             ', ' + vm.assignedRide.pickupCity + ', CA';
-            if(vm.assignedRide.pickupLine2 !== undefined){
-                vm.pickupAddress += ', ' + vm.assignedRide.pickupLine2;
-            }
         }
         if(vm.assignedRide.dropoffLine1 !== undefined){
             vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
             ', ' + vm.assignedRide.dropoffCity + ', CA';
 
-            if(vm.assignedRide.dropoffLine2 !== undefined){
-                vm.dropoffAddress += ', ' + vm.assignedRide.dropoffLine2;
-            }
             console.log('buttons built');
         }
     }
