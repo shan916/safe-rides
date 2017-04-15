@@ -24,7 +24,7 @@ angular.module('safeRidesWebApp')
     vm.pickedUpButtonPressed = false;
     vm.lastCoords = undefined;
     vm.driver = undefined;
-    var REFRESH_INTERVAL = 30000;
+    var REFRESH_INTERVAL = 3000;
     var rideRefresher;
 
     /*
@@ -66,7 +66,7 @@ angular.module('safeRidesWebApp')
                 var rideRequest = new RideRequest(element);
                 assignedRideRequest[index] = rideRequest;
                 //if not in progress
-                if(!vm.inprogressFlag && rideRequest.status === 'ASSIGNED'){
+                if(rideRequest.status === 'ASSIGNED'){
                     vm.assignedRide = rideRequest;
                     vm.isRideAssigned=true;
                     console.log('got Assigned Ride, ASSIGNED');
@@ -95,6 +95,25 @@ angular.module('safeRidesWebApp')
                 }, function(error) {
                     console.log('error getCurrentRideRequest() PICKINGUP', error);
                 });//end CurrentDriverRidesService.get PICKINGUP
+
+                CurrentDriverRidesService.get({status: 'ATPICKUPLOCATION'}).$promise.then(function(response) {
+                    vm.assignedRideRequest = response;
+                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
+                        var rideRequest = new RideRequest(element);
+                        assignedRideRequest[index] = rideRequest;
+                        if(rideRequest.status === 'ATPICKUPLOCATION'){
+                            vm.assignedRide = rideRequest;
+                            vm.isRideAssigned = true;
+                            vm.pickedUpButtonPressed = false;//different from PICKINGUP
+                            console.log('got Assigned Ride, ATPICKUPLOCATION');
+                            buildDirectionButtons();
+                            return;
+                        }
+                    });
+                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
+                }, function(error) {
+                    console.log('error getCurrentRideRequest() ATPICKUPLOCATION', error);
+                });//end CurrentDriverRidesService.get ATPICKUPLOCATION
 
                 CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
                     vm.assignedRideRequest = response;
@@ -177,9 +196,6 @@ angular.module('safeRidesWebApp')
             vm.pickedUpButtonPressed = false;
 
             updateRideRequest();
-
-            //TODO notify rider, Ride on the way
-
         }
     };
 
@@ -197,14 +213,14 @@ angular.module('safeRidesWebApp')
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
             updateRideRequest();
-            if (!rideRefresher) {
-                rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-                console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-            }
+            $interval(getCurrentRideRequest, REFRESH_INTERVAL);
     };
 
     vm.notifyRider = function(){
-
+        vm.assignedRide.status = 'ATPICKUPLOCATION';
+            vm.isRideAssigned = true;
+            vm.pickedUpButtonPressed = false;
+            updateRideRequest();
     };
 
     /**
@@ -231,6 +247,7 @@ angular.module('safeRidesWebApp')
                 });
             } else {
                 console.log('Distance is not long enough to update the api.');
+//                getCurrentRideRequest();
             }
 
             vm.lastCoords = coords;

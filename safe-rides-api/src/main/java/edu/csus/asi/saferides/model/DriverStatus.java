@@ -4,5 +4,6 @@ public enum DriverStatus {
 	AVAILABLE,
 	ASSIGNED,
 	PICKINGUP,
+	ATPICKUPLOCATION,
 	DROPPINGOFF
 }

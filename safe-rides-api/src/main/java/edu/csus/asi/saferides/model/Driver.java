@@ -79,6 +79,9 @@ public class Driver {
 	@ManyToOne(fetch=FetchType.LAZY)
 	private User user;
 
+	@Column(nullable = false)
+	private long endOfNightOdo;
+
 	@PreUpdate
 	@PrePersist
 	public void updateTimeStamps() {
@@ -214,6 +217,14 @@ public class Driver {
 		this.vehicle = vehicle;
 	}
 
+	public long getEndOfNightOdo() {
+		return endOfNightOdo;
+	}
+
+	public void setEndOfNightOdo(long endOfNightOdo) {
+		this.endOfNightOdo = endOfNightOdo;
+	}
+
 	public Set<RideRequest> getRides() {
 		if (this.rides == null) {
 			return new HashSet<RideRequest>();
@@ -234,6 +245,8 @@ public class Driver {
                 case PICKINGUP:
                     pickingUp = true;
                     break;
+				case ATPICKUPLOCATION:
+					return DriverStatus.ATPICKUPLOCATION;
                 case ASSIGNED:
                     assigned = true;
                     break;
@@ -287,6 +300,7 @@ public class Driver {
 				", rides=" + rides +
 				", locations=" + locations +
 				", user=" + user +
+//				", endOfNightOdometer=" + endOfNightOdometer +
 				'}';
 	}
 }

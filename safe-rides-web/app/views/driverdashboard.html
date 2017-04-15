@@ -69,7 +69,7 @@
 
 
     <!-- Currrent Ride Request-->
-    <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' ">
+    <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' || ctrl.assignedRide.status === 'ATPICKUPLOCATION'">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>
         </div>
@@ -119,8 +119,8 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="col-md-6 row margin-top-20">
-                    <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider"
-                    ng-show="ctrl.assignedRide.status === 'PICKINGUP'">
+                    <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider()"
+                    ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'ATPICKUPLOCATION'">
                         Arrived / Notify Rider
                     </button>
                 </div>

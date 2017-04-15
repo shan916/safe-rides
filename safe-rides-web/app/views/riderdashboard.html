@@ -131,7 +131,8 @@
                         <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">You driver has arrived</h4>
+                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
                         <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
                             <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
@@ -141,7 +142,7 @@
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE'">Cancel Ride</button>
+                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE' && ctrl.existingRide.status !== 'ATPICKUPLOCATION'">Cancel Ride</button>
                 </div>
             </div>
         </div>

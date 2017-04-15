@@ -37,15 +37,17 @@ angular.module('safeRidesWebApp')
                     return 1;
                 case 'PICKINGUP':
                     return 2;
-                case 'DROPPINGOFF':
+                case 'ATPICKUPLOCATION':
                     return 3;
+                case 'DROPPINGOFF':
+                    return 4;
             }
         };
 
         // returns the first assigned or inprogress ride
         Driver.prototype.currentRide = function() {
             for (var i = 0; i < this.rides.length; i++) {
-                if (this.rides[i].status === 'ASSIGNED' || this.rides[i].status === 'PICKINGUP' || this.rides[i].status === 'DROPPINGOFF') {
+                if (this.rides[i].status === 'ASSIGNED' || this.rides[i].status === 'PICKINGUP' || this.rides[i].status === 'DROPPINGOFF'|| this.rides[i].status === 'ATPICKUPLOCATION') {
                     return this.rides[i];
                 }
             }
