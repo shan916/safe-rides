@@ -24,7 +24,7 @@ angular.module('safeRidesWebApp')
     vm.pickedUpButtonPressed = false;
     vm.lastCoords = undefined;
     vm.driver = undefined;
-    var REFRESH_INTERVAL = 3000;
+    var REFRESH_INTERVAL = 30000;
     var rideRefresher;
 
     /*
@@ -206,7 +206,7 @@ angular.module('safeRidesWebApp')
         updateRideRequest();
     };
 
-    vm.endRide = function(){
+    vm.endRide = function() {
         vm.assignedRide.status = 'COMPLETE';
         //if(vm.assignedRide.startOdo > vm.endOdo){}
             vm.assignedRide.endOdometer = vm.endOdo;
@@ -216,11 +216,21 @@ angular.module('safeRidesWebApp')
             $interval(getCurrentRideRequest, REFRESH_INTERVAL);
     };
 
-    vm.notifyRider = function(){
-        vm.assignedRide.status = 'ATPICKUPLOCATION';
+    vm.notifyRider = function() {
+        if(vm.assignedRide.status !== 'ATPICKUPLOCATION'){
+            vm.assignedRide.status = 'ATPICKUPLOCATION';
+            updateRideRequest();
+        }else{
+            console.log("Already notified rider");
+        }
             vm.isRideAssigned = true;
             vm.pickedUpButtonPressed = false;
-            updateRideRequest();
+            Notification.success({
+                message: vm.assignedRide.requestorFirstName+'&nbsp;'+vm.assignedRide.requestorLastName+' has been notified.',
+                positionX: 'center',
+                delay: 4000,
+                replaceMessage: true
+            });
     };
 
     /**
@@ -292,5 +302,6 @@ angular.module('safeRidesWebApp')
             $interval.cancel(locationUpdater);
         }
     });
+
 
 });//end Controller
