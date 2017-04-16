@@ -20,6 +20,12 @@ public class RideRequest {
 	@Column(updatable = false)
 	private Date requestDate;
 
+    @Column
+    private Date lastModified;
+
+    @Column
+    private Date assignedDate;
+
     @Column(nullable = false)
     private String requestorFirstName;
 
@@ -105,6 +111,12 @@ public class RideRequest {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
+        lastModified = new Date();
+
+        if (status == RideRequestStatus.ASSIGNED) {
+            assignedDate = new Date();
+        }
+
         if (requestDate == null) {
             requestDate = new Date();
         }
@@ -149,6 +161,14 @@ public class RideRequest {
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
 	}
+
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
 
     public String getRequestorFirstName() {
         return requestorFirstName;
@@ -302,13 +322,23 @@ public class RideRequest {
         this.dropoffLongitude = getPickupLongitude;
     }
 
+    public Date getAssignedDate() {
+        return assignedDate;
+    }
+
+    public void setAssignedDate(Date assignedDate) {
+        this.assignedDate = assignedDate;
+    }
+
     @Override
     public String toString() {
         return "RideRequest{" +
                 "driver=" + driver +
                 ", id=" + id +
-                ", oneCardId=" + oneCardId +
+                ", oneCardId='" + oneCardId + '\'' +
                 ", requestDate=" + requestDate +
+                ", lastModified=" + lastModified +
+                ", assignedDate=" + assignedDate +
                 ", requestorFirstName='" + requestorFirstName + '\'' +
                 ", requestorLastName='" + requestorLastName + '\'' +
                 ", requestorPhoneNumber='" + requestorPhoneNumber + '\'' +

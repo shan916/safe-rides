@@ -8,6 +8,8 @@ package edu.csus.asi.saferides.model.dto;
 
 import edu.csus.asi.saferides.model.RideRequestStatus;
 
+import java.util.Date;
+
 public class RideRequestDto {
 
     private String requestorFirstName;
@@ -17,6 +19,10 @@ public class RideRequestDto {
     private RideRequestStatus status;
 
     private String estimatedTime;
+
+    private Date lastModified;
+
+    private Date assignedDate;
 
     private String driverName;
 
@@ -30,11 +36,12 @@ public class RideRequestDto {
 
     private String vehicleLicensePlate;
 
-    public RideRequestDto(String requestorFirstName, String requestorLastName, RideRequestStatus status, String estimatedTime, String driverName, String vehicleColor, String vehicleYear, String vehicleMake, String vehicleModel, String vehicleLicensePlate) {
+    public RideRequestDto(String requestorFirstName, String requestorLastName, RideRequestStatus status, String estimatedTime, Date lastModified, String driverName, String vehicleColor, String vehicleYear, String vehicleMake, String vehicleModel, String vehicleLicensePlate) {
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.status = status;
         this.estimatedTime = estimatedTime;
+        this.lastModified = lastModified;
         this.driverName = driverName;
         this.vehicleColor = vehicleColor;
         this.vehicleYear = vehicleYear;
@@ -123,6 +130,22 @@ public class RideRequestDto {
         this.vehicleLicensePlate = vehicleLicensePlate;
     }
 
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public Date getAssignedDate() {
+        return assignedDate;
+    }
+
+    public void setAssignedDate(Date assignedDate) {
+        this.assignedDate = assignedDate;
+    }
+
     @Override
     public String toString() {
         return "RideRequestDto{" +
@@ -130,8 +153,11 @@ public class RideRequestDto {
                 ", requestorLastName='" + requestorLastName + '\'' +
                 ", status=" + status +
                 ", estimatedTime='" + estimatedTime + '\'' +
+                ", lastModified=" + lastModified +
+                ", assignedDate=" + assignedDate +
                 ", driverName='" + driverName + '\'' +
                 ", vehicleColor='" + vehicleColor + '\'' +
+                ", vehicleYear='" + vehicleYear + '\'' +
                 ", vehicleMake='" + vehicleMake + '\'' +
                 ", vehicleModel='" + vehicleModel + '\'' +
                 ", vehicleLicensePlate='" + vehicleLicensePlate + '\'' +

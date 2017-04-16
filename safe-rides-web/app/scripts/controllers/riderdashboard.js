@@ -115,4 +115,16 @@ angular.module('safeRidesWebApp')
         }
     };
 
+    vm.getEstimatedTime = function () {
+        if (!vm.existingRide) {
+            return;
+        }
+
+        if (vm.existingRide.estimatedTime === '1 hour' || vm.existingRide.estimatedTime === '> 1 hour') {
+            return vm.existingRide.estimatedTime;
+        } else {
+            return vm.existingRide.estimatedTime + ' minutes';
+        }
+    };
+
 });
