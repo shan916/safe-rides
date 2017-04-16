@@ -235,6 +235,7 @@ public class Driver {
 	public DriverStatus getStatus() {
         boolean assigned = false;
         boolean pickingUp = false;
+		boolean atPickupLocation = false;
 
         for (RideRequest ride : getRides()) {
             RideRequestStatus rideStatus = ride.getStatus();
@@ -246,7 +247,8 @@ public class Driver {
                     pickingUp = true;
                     break;
 				case ATPICKUPLOCATION:
-					return DriverStatus.ATPICKUPLOCATION;
+					atPickupLocation = true;
+					break;
                 case ASSIGNED:
                     assigned = true;
                     break;
@@ -257,7 +259,9 @@ public class Driver {
 
         if (pickingUp) {
             return DriverStatus.PICKINGUP;
-        } else if (assigned) {
+        } else if(atPickupLocation){
+        	return DriverStatus.ATPICKUPLOCATION;
+		} else if (assigned) {
             return DriverStatus.ASSIGNED;
         } else {
             return DriverStatus.AVAILABLE;
