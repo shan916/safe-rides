@@ -37,6 +37,7 @@ angular.module('safeRidesWebApp')
         } else {
             vm.loading = false;
             vm.loggedIn = true;
+            vm.oneCardId = AuthTokenService.getUsername();
             getRide();
         }
     } else {

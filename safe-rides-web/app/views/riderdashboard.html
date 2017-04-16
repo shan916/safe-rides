@@ -1,6 +1,12 @@
 <span us-spinner ng-show="ctrl.loading"></span>
 <div class="container" ng-hide="ctrl.loading">
     <div class="row">
+        <div class="col-sm-12">
+            <h4 ng-show="ctrl.loggedIn">One Card ID: {{ctrl.oneCardId}}</h4>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-12">
             <div class="panel panel-default" ng-show="!ctrl.loggedIn">
                 <div class="panel-heading">
