@@ -50,7 +50,7 @@ angular.module('safeRidesWebApp')
             if (tokenPayload.authorities === undefined){
                 return false;
             }
-            
+
             tokenPayload.authorities.forEach(function(element) {
                 if (element.authority === roleName) {
                     isInRole = true;
@@ -59,4 +59,12 @@ angular.module('safeRidesWebApp')
             });
             return isInRole;
         };
+
+        /**
+         * returns username of logged in user
+         */
+        this.getUsername = function () {
+            return jwtHelper.decodeToken(this.getToken()).sub;
+        };
+
     });
