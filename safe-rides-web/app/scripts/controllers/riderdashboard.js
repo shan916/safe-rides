@@ -24,7 +24,6 @@ angular.module('safeRidesWebApp')
      * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
      * */
     if (authManager.isAuthenticated()) {
-        // TODO: also check if role is coordinator. Should display a notification asking user to be logged out?
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
             Notification.error({
                 message: 'You must be a ride requestor to request a ride.',
@@ -37,6 +36,7 @@ angular.module('safeRidesWebApp')
         } else {
             vm.loading = false;
             vm.loggedIn = true;
+            vm.oneCardId = AuthTokenService.getUsername();
             getRide();
         }
     } else {
@@ -112,6 +112,18 @@ angular.module('safeRidesWebApp')
     vm.getVehicleDescription = function() {
         if (vm.existingRide) {
             return vm.existingRide.vehicleColor + ' ' + vm.existingRide.vehicleYear + ' ' + vm.existingRide.vehicleMake + ' ' + vm.existingRide.vehicleModel;
+        }
+    };
+
+    vm.getEstimatedTime = function () {
+        if (!vm.existingRide) {
+            return;
+        }
+
+        if (vm.existingRide.estimatedTime === '1 hour' || vm.existingRide.estimatedTime === '> 1 hour') {
+            return vm.existingRide.estimatedTime;
+        } else {
+            return vm.existingRide.estimatedTime + ' minutes';
         }
     };
 

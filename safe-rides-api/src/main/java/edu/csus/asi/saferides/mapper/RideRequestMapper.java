@@ -19,6 +19,8 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("requestorLastName", "requestorLastName")
                 .field("status", "status")
                 .field("estimatedTime", "estimatedTime")
+                .field("lastModified", "lastModified")
+                .field("assignedDate", "assignedDate")
                 .field("driver.driverFirstName", "driverName")
                 .field("driver.vehicle.color", "vehicleColor")
                 .field("driver.vehicle.year", "vehicleYear")

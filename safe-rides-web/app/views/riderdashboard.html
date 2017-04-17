@@ -1,6 +1,12 @@
 <span us-spinner ng-show="ctrl.loading"></span>
 <div class="container" ng-hide="ctrl.loading">
     <div class="row">
+        <div class="col-sm-12">
+            <h4 ng-show="ctrl.loggedIn">OneCard ID: {{ctrl.oneCardId}}</h4>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-12">
             <div class="panel panel-default" ng-show="!ctrl.loggedIn">
                 <div class="panel-heading">
@@ -131,11 +137,17 @@
                         <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup
+                        location</h4>
                     <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
                         <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
                         <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
                             <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
                         </p>
+                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED' || ctrl.existingRide.status === 'PICKINGUP'">
+                        Your driver should arrive in approximately {{ctrl.getEstimatedTime()}}
+                        <small>(as of {{ctrl.existingRide.assignedDate | date: 'shortTime'}})</small>
+                    </h4>
                 </div>
             </div>
 
