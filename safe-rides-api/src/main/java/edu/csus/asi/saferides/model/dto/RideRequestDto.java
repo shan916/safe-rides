@@ -36,12 +36,13 @@ public class RideRequestDto {
 
     private String vehicleLicensePlate;
 
-    public RideRequestDto(String requestorFirstName, String requestorLastName, RideRequestStatus status, String estimatedTime, Date lastModified, String driverName, String vehicleColor, String vehicleYear, String vehicleMake, String vehicleModel, String vehicleLicensePlate) {
+    public RideRequestDto(String requestorFirstName, String requestorLastName, RideRequestStatus status, String estimatedTime, Date lastModified, Date assignedDate, String driverName, String vehicleColor, String vehicleYear, String vehicleMake, String vehicleModel, String vehicleLicensePlate) {
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.status = status;
         this.estimatedTime = estimatedTime;
         this.lastModified = lastModified;
+        this.assignedDate = assignedDate;
         this.driverName = driverName;
         this.vehicleColor = vehicleColor;
         this.vehicleYear = vehicleYear;
