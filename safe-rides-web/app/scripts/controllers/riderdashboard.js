@@ -24,7 +24,6 @@ angular.module('safeRidesWebApp')
      * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
      * */
     if (authManager.isAuthenticated()) {
-        // TODO: also check if role is coordinator. Should display a notification asking user to be logged out?
         if (AuthTokenService.isInRole('ROLE_DRIVER')) {
             Notification.error({
                 message: 'You must be a ride requestor to request a ride.',
