@@ -15,18 +15,46 @@
     </div>
     <div class="col-md-12 text-center">
         <div class="row text-center">
-            <button class="btn btn-default btn-success" type="button"
+            <button class="btn btn-default btn-info" type="button"
                     ng-click="ctrl.refresh()">
               Refresh
             </button>
-
         </div>
         <div class="row text-center">
-            <button class="col-md-12 btn btn-default btn-info" type="button">
-              Call ASI
-            </button>
+            <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.endNight()" ng-show="!ctrl.endNightPressed">
+              End Night
+          </button>
+      </div>
+      <div class="col-md-3">
+
+      </div>
+        <div class="row text-center col-md-6">
+            <div class="col-md-3"></div>
+            <div class="col-md-6" ng-show="ctrl.endNightPressed">
+                <form name="odoEndNightForm" class="form-vertical">
+                  <label for="odoEndNightForm">Enter ODO to complete ASI Safe Rides Night: </label>
+                  <input id="odoEndNight" name="odoEndNight" type="number" class="form-control" required
+                  placeholder="ex: 120405" ng-model="ctrl.endNightOdo"
+                  ng-maxlength="6" ng-minlength="3" ng-min="100">
+                  <div ng-messages="odoEndNightForm.odoStartRide.$dirty && odoEndNightForm.odoStartRide.$error">
+                      <div class="input-error" ng-message="required">* required to complete Safe Rides Night</div>
+                  </div>
+                </form>
+                <button class="btn btn-default btn-success" type="button" ng-click="ctrl.submitEndNightOdo()" ng-disabled="odoEndNightForm.$invalid">
+                  Submit
+                </button>
+                <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.cancelEndNight()">
+                  Cancel
+                </button>
+            </div>
+            <div class="col-md-3"></div>
         </div>
+        <div class="col-md-3"></div>
     </div>
+    <div class="row text-center">
+        <strong>Call ASI: (916) 278-8294</strong>
+    </div>
+
       <!--div class="col-md-12 text-center"-->
   </div><!-- end No Ride View -->
 
@@ -69,7 +97,7 @@
 
 
     <!-- Currrent Ride Request-->
-    <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' ">
+    <div class="panel panel-primary" ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'DROPPINGOFF' || ctrl.assignedRide.status === 'ATPICKUPLOCATION'">
         <div class="panel-heading">
             <h3 class="panel-title">Current Ride Request</h3>
         </div>
@@ -98,6 +126,12 @@
                 <dd><a class="btn btn-info btn-block"
                   ng-href="{{ctrl.pickupAddress}}" target="_blank">Directions</a></dd>
               </dl>
+
+                  <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider()"
+                  ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'ATPICKUPLOCATION'">
+                      Arrived / Notify Rider
+                  </button>
+              
             </div>
             <div class="col-md-4"><!-- dropoff -->
               <!--h4>Drop-off Address</h4-->
@@ -118,12 +152,7 @@
           <div class="row margin-top-20">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <div class="col-md-6 row margin-top-20">
-                    <button class="btn btn-default btn-block btn-success" ng-click="ctrl.notifyRider"
-                    ng-show="ctrl.assignedRide.status === 'PICKINGUP'">
-                        Arrived / Notify Rider
-                    </button>
-                </div>
+
                 <div class="col-md-6 row margin-top-20">
                     <button class="btn btn-default btn-block btn-warning">
                         Report Issue / Contact SafeRides
