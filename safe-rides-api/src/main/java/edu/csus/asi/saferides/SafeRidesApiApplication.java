@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -21,6 +22,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,7 +40,7 @@ public class SafeRidesApiApplication {
 
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
+                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository, ConfigurationRepository configurationRepository) {
         return (args) -> {
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", true, "Farmers", true);
@@ -45,11 +48,11 @@ public class SafeRidesApiApplication {
             Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", true, "Farmers", true);
             Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", true, "Farmers", true);
             Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", true, "Farmers", true);
-            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", true, "Farmers", true);
-            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", true, "Farmers", true);
-            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", true, "Farmers", true);
-            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", true, "Farmers", true);
-            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", true, "Farmers", true);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157", "CA", "E5555555", true, "Farmers", true);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579", "CA", "E6666666", true, "Farmers", true);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650", "CA", "E7777777", true, "Farmers", true);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110", "CA", "E8888888", true, "Farmers", true);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066", "CA", "E9999999", true, "Farmers", true);
 
             Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
             Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);
@@ -441,6 +444,17 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest17);
             rideRequestRepository.save(rideRequest18);
             rideRequestRepository.save(rideRequest19);
+
+            LocalTime startTime = LocalTime.of(20, 00, 0);
+            LocalTime endTime = LocalTime.of(02, 00, 0);
+            Configuration newConfig = new Configuration(startTime, endTime);
+            ArrayList<DayOfWeek> dayOfWeeks = new ArrayList<DayOfWeek>();
+            dayOfWeeks.add(DayOfWeek.WEDNESDAY);
+            dayOfWeeks.add(DayOfWeek.THURSDAY);
+            dayOfWeeks.add(DayOfWeek.FRIDAY);
+            dayOfWeeks.add(DayOfWeek.SATURDAY);
+            newConfig.setDaysOfWeek(dayOfWeeks);
+            configurationRepository.save(newConfig);
         };
     }
 

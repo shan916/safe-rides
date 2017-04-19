@@ -73,7 +73,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow POST to /users/auth
                 .antMatchers(HttpMethod.POST, "/users/auth/**", "/users/authrider/**", "/rides").permitAll()
 
-                // allow OPTIONS to /rides
+                // allow GET to /config/isLive
+                .antMatchers(HttpMethod.GET, "/config/isLive").permitAll()
+
+                // allow OPTIONS to All
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                 .antMatchers("/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
