@@ -22,27 +22,41 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The 'interceptor' for all requests that receive an authentication challenge (401)
+ */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
+    // the output to logging should be removed later on
     private final Log logger = LogFactory.getLog(this.getClass());
 
+    // dependency injection
     @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
-
     @Autowired
     private AuthorityRepository authorityRepository;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    // set name of the response key that stores the JWT
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    /**
+     * Invoked once per request. Checks and validates the authentication token.
+     * Also differentiates between checking for rider authentication and application user authentication
+     * Rider authentication is less strict. It allows any valid onecard id; however, the only role that is allowed for
+     * a rider is rider. The application user validates the user details (without the password).
+     *
+     * @param request
+     * @param response
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = request.getHeader(this.tokenHeader);
-        // authToken.startsWith("Bearer ")
-        // String authToken = header.substring(7);
 
         // Set SecurityContext / validate token if authToken is not null
         if (authToken != null) {

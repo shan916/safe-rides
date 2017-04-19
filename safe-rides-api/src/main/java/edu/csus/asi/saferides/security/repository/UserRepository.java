@@ -5,14 +5,24 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Datastore interface for application users.
+ */
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    /*
-     * Other query methods can be defined by simply declaring the method signature.
-     * Spring Data JPA will automagically create an implementation on the fly.
-     * */
+    /**
+     * Get all users
+     *
+     * @return all users
+     */
     List<User> findAll();
 
+    /**
+     * Get a user
+     *
+     * @param username of the user
+     * @return user
+     */
     User findByUsername(String username);
 
 }

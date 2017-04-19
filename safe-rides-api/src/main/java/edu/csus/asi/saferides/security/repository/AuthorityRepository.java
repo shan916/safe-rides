@@ -6,14 +6,24 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Datastore interface for authorities (roles).
+ */
 public interface AuthorityRepository extends CrudRepository<Authority, Long> {
 
-    /*
-     * Other query methods can be defined by simply declaring the method signature.
-     * Spring Data JPA will automagically create an implementation on the fly.
-     * */
+    /**
+     * Get all authorities
+     *
+     * @return all authorities
+     */
     List<Authority> findAll();
 
+    /**
+     * Get an authority
+     *
+     * @param name of the authority
+     * @return authority
+     */
     Authority findByName(AuthorityName name);
 
 }
