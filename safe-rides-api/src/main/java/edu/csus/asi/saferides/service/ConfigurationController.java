@@ -2,6 +2,7 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -47,40 +48,7 @@ public class ConfigurationController {
         List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
 
         LocalDateTime currentDateTime = LocalDateTime.now();
-        DayOfWeek currentDOW = currentDateTime.getDayOfWeek();
-        LocalTime currentTime = currentDateTime.toLocalTime();
-        LocalDateTime startDateTime, endDateTime;
 
-        boolean valid = false;
-
-        // if the startDate and the endDate spans two days
-        if (startTime.compareTo(endTime) > 0) { // startTime > endTime (meaning the start time is before midnight and the endTime is after midnight)
-            if (currentTime.compareTo(startTime) < 0) {
-                // current time is on the second day
-                // set the start date to yesterday and the end date to today
-                startDateTime = currentDateTime.toLocalDate().minusDays(1).atTime(startTime);
-                endDateTime = currentDateTime.toLocalDate().atTime(endTime);
-
-                // check if yesterday was an active day
-                valid = dayOfWeeks.contains(currentDOW.minus(1));
-            } else {
-                // current time is on first day
-                // set the start date to today and the end date to tomorrow
-                startDateTime = currentDateTime.toLocalDate().atTime(startTime);
-                endDateTime = currentDateTime.toLocalDate().plusDays(1).atTime(endTime);
-
-                // check if today is active day
-                valid = dayOfWeeks.contains(currentDOW);
-            }
-        } else {
-            // set start date and end date to today.
-            startDateTime = currentDateTime.toLocalDate().atTime(startTime);
-            endDateTime = currentDateTime.toLocalDate().atTime(endTime);
-
-            // check if today is active date
-            valid = dayOfWeeks.contains(currentDOW);
-        }
-
-        return valid && currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
+        return Util.validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
 }
