@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.*;
 import edu.csus.asi.saferides.security.model.Authority;
@@ -55,6 +56,37 @@ public class UserController {
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    
+    @RequestMapping(method = RequestMethod.GET)
+    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = Driver.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public Iterable<User> retrieveAll(@RequestParam(value = "active", required = false) Boolean active, 
+    									@RequestParam(value = "role", required = false) AuthorityName role) {
+    	List<User> users;
+    	
+        if (active != null) {
+            if (active) {
+                users = userRepository.findByActiveTrue();
+            } else {
+            	users = userRepository.findByActiveFalse();
+            }
+        }
+        else { users = userRepository.findAllByOrderByModifiedDateDesc(); }
+        
+        if (role != null) {
+        	if (role == AuthorityName.ROLE_COORDINATOR) {
+        		users = userRepository.findAllByOrderByModifiedDateDesc();
+        	}
+        		
+        }
+        
+        return users;
+   
+    }
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     @PreAuthorize("hasRole('RIDER')")

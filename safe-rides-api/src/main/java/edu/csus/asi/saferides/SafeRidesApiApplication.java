@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.*;
-import edu.csus.asi.saferides.repository.CoordinatorRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -36,20 +35,9 @@ public class SafeRidesApiApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(CoordinatorRepository coordinatorRepository, DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
+    public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
         return (args) -> {
-        	
-        	Coordinator coordinator0 = new Coordinator("466387289", "George", "Nuggets", "9168453284", true);
-        	Coordinator coordinator1 = new Coordinator("981647327", "Stacy", "Frogger", "9169842364", true);
-        	Coordinator coordinator2 = new Coordinator("658745267", "Corey", "Carlton", "9162796223", true);
-        	Coordinator coordinator3 = new Coordinator("853214885", "Shawn", "Parker", "9164439756", true);
-        	Coordinator coordinator4 = new Coordinator("226487532", "Kyle", "Arenmin", "9165587452", true);
-        	Coordinator coordinator5 = new Coordinator("884562489", "Travis", "Falker", "9165127168", true);
-        	Coordinator coordinator6 = new Coordinator("497562368", "Uthward", "Velmor", "9165548776", true);
-        	Coordinator coordinator7 = new Coordinator("557448953", "Gracie", "Letmod", "9165223987", true);
-        	Coordinator coordinator8 = new Coordinator("144821864", "Harry", "Keggen", "9165522354", true);
-        	Coordinator coordinator9 = new Coordinator("448795324", "Yanelie", "Bunson", "9165782264", true);
         	
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", true, "Farmers", true);
@@ -388,16 +376,6 @@ public class SafeRidesApiApplication {
             driver8.getUser().setAuthorities(driverAuthorityList);
             driver9.getUser().setAuthorities(driverAuthorityList);
             
-            coordinator0.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator1.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator2.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator3.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator4.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator5.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator6.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator7.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator8.getUser().setAuthorities(coordinatorAuthorityList);
-            coordinator9.getUser().setAuthorities(coordinatorAuthorityList);
 
             userRepository.save(admin);
             userRepository.save(coordinator);
@@ -425,52 +403,8 @@ public class SafeRidesApiApplication {
             userRepository.save(driver8.getUser());
             userRepository.save(driver9.getUser());
             
-            userRepository.save(coordinator0.getUser());
-            userRepository.save(coordinator1.getUser());
-            userRepository.save(coordinator2.getUser());
-            userRepository.save(coordinator3.getUser());
-            userRepository.save(coordinator4.getUser());
-            userRepository.save(coordinator5.getUser());
-            userRepository.save(coordinator6.getUser());
-            userRepository.save(coordinator7.getUser());
-            userRepository.save(coordinator8.getUser());
-            userRepository.save(coordinator9.getUser());
+ 
 
-<<<<<<< HEAD
-            userRepository.save(rideRequest0.getUser());
-            userRepository.save(rideRequest1.getUser());
-            userRepository.save(rideRequest2.getUser());
-            userRepository.save(rideRequest3.getUser());
-            userRepository.save(rideRequest4.getUser());
-            userRepository.save(rideRequest5.getUser());
-            userRepository.save(rideRequest6.getUser());
-            userRepository.save(rideRequest7.getUser());
-            userRepository.save(rideRequest8.getUser());
-            userRepository.save(rideRequest9.getUser());
-            userRepository.save(rideRequest10.getUser());
-            userRepository.save(rideRequest11.getUser());
-            userRepository.save(rideRequest12.getUser());
-            userRepository.save(rideRequest13.getUser());
-            userRepository.save(rideRequest14.getUser());
-            userRepository.save(rideRequest15.getUser());
-            userRepository.save(rideRequest16.getUser());
-            userRepository.save(rideRequest17.getUser());
-            userRepository.save(rideRequest18.getUser());
-            userRepository.save(rideRequest19.getUser());
-
-            coordinatorRepository.save(coordinator0);
-            coordinatorRepository.save(coordinator1);
-            coordinatorRepository.save(coordinator2);
-            coordinatorRepository.save(coordinator3);
-            coordinatorRepository.save(coordinator4);
-            coordinatorRepository.save(coordinator5);
-            coordinatorRepository.save(coordinator6);
-            coordinatorRepository.save(coordinator7);
-            coordinatorRepository.save(coordinator8);
-            coordinatorRepository.save(coordinator9);
-            
-=======
->>>>>>> 4eb8c184918d4ea55c2190f865324f375c3c786e
             driverRepository.save(driver0);
             driverRepository.save(driver1);
             driverRepository.save(driver2);

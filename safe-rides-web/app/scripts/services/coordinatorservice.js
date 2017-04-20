@@ -9,7 +9,6 @@
  */
 angular.module('safeRidesWebApp')
     .factory('CoordinatorService', function($resource, ENV) {
-
         return $resource(ENV.apiEndpoint + 'coordinators/:id', {
             id: '@id'
         }, {
