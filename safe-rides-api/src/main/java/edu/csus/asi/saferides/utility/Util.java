@@ -1,13 +1,13 @@
 package edu.csus.asi.saferides.utility;
 
 import edu.csus.asi.saferides.model.Configuration;
+import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.security.model.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,7 +70,7 @@ public class Util {
      * @throws IllegalStateException
      */
     public static boolean isAcceptingRideRequests(Configuration configuration) throws IllegalStateException {
-        if(configuration == null){
+        if (configuration == null) {
             throw new IllegalStateException("Configuration is missing");
         }
 
@@ -118,5 +118,42 @@ public class Util {
         }
 
         return new LocalDateTime[]{startDateTime, endDateTime};
+    }
+
+    /**
+     * Filter old ride
+     *
+     * @param ride the ride to check if old
+     * @return null if the ride is old. the ride if current
+     * @throws IllegalStateException
+     */
+    public RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
+        if (configuration != null) {
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
+            if (ride.getRequestDate().after(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant()))) {
+                return ride;
+            } else {
+                throw new IllegalStateException("Configuration is missing");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Filter old rides
+     *
+     * @param rides the rides to check if old
+     * @return null if all rides are old. the rides that are current
+     * @throws IllegalStateException
+     */
+    public Iterable<RideRequest> filterPastRides(Configuration configuration, List<RideRequest> rides) throws IllegalStateException {
+        if (configuration != null) {
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
+            // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date
+            rides.removeIf(r -> r.getRequestDate().before(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())));
+            return rides;
+        } else {
+            throw new IllegalStateException("Configuration is missing");
+        }
     }
 }
