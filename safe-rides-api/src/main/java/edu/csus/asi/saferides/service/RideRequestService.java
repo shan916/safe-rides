@@ -3,7 +3,6 @@ package edu.csus.asi.saferides.service;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,6 @@ import java.util.List;
 public class RideRequestService {
     @Autowired
     ConfigurationRepository configurationRepository;
-    @Autowired
-    RideRequestRepository rideRequestRepository;
 
     /**
      * Filter old ride
