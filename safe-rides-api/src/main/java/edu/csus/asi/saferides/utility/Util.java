@@ -112,9 +112,16 @@ public class Util {
                 endDateTime = currentDateTime.toLocalDate().plusDays(1).atTime(endTime);
             }
         } else {    // start and end time are in the same day
-            // set start date and end date to today.
-            startDateTime = currentDateTime.toLocalDate().atTime(startTime);
-            endDateTime = currentDateTime.toLocalDate().atTime(endTime);
+            // set start date and end date to a recent date.
+            // if current time is prior to start time set to prior day
+            if (currentTime.compareTo(startTime) < 0) {
+                startDateTime = currentDateTime.toLocalDate().minusDays(1).atTime(startTime);
+                endDateTime = currentDateTime.toLocalDate().minusDays(1).atTime(endTime);
+            } else {
+                // set to today
+                startDateTime = currentDateTime.toLocalDate().atTime(startTime);
+                endDateTime = currentDateTime.toLocalDate().atTime(endTime);
+            }
         }
 
         return new LocalDateTime[]{startDateTime, endDateTime};
