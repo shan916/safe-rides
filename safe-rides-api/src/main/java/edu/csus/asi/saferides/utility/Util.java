@@ -61,15 +61,19 @@ public class Util {
         // returns true if the start day is in the list of dayofweeks the application is active
         // and the currentDateTime is between the startDateTime and endDateTime
         return dayOfWeeks.contains(startDateTime.getDayOfWeek()) && currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
-
     }
 
     /**
      * Check if application is accepting new ride requests
      *
      * @return whether the current time is during operating hours
+     * @throws IllegalStateException
      */
-    public static boolean isAcceptingRideRequests(Configuration configuration) {
+    public static boolean isAcceptingRideRequests(Configuration configuration) throws IllegalStateException {
+        if(configuration == null){
+            throw new IllegalStateException("Configuration is missing");
+        }
+
         // if manually set to inactive return false right away
         if (!configuration.isActive()) {
             return false;
