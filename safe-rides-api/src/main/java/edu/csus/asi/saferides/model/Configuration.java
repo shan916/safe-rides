@@ -32,10 +32,15 @@ public class Configuration {
     /**
      * Days of week program is active
      */
-
     @ElementCollection
     @Column(nullable = false)
     private List<DayOfWeek> daysOfWeek;
+
+    /**
+     * active flag for a manual override
+     */
+    @Column(nullable = false)
+    private boolean active;
 
     /**
      * Constructor used by JPA
@@ -52,6 +57,7 @@ public class Configuration {
     public Configuration(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+        active = true;
     }
 
     /**
@@ -124,5 +130,24 @@ public class Configuration {
      */
     public void setDaysOfWeek(List<DayOfWeek> daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
+    }
+
+
+    /**
+     * Check if active
+     *
+     * @return application ride request acceptance status
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Set active flag
+     *
+     * @param active application ride request acceptance status
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

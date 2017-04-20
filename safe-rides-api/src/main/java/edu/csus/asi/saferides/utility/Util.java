@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.utility;
 
+import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.security.model.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,6 +62,26 @@ public class Util {
         // and the currentDateTime is between the startDateTime and endDateTime
         return dayOfWeeks.contains(startDateTime.getDayOfWeek()) && currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
 
+    }
+
+    /**
+     * Check if application is accepting new ride requests
+     *
+     * @return whether the current time is during operating hours
+     */
+    public static boolean isAcceptingRideRequests(Configuration configuration) {
+        // if manually set to inactive return false right away
+        if (!configuration.isActive()) {
+            return false;
+        }
+
+        LocalTime startTime = configuration.getStartTime();
+        LocalTime endTime = configuration.getEndTime();
+        List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        return validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
 
     /**
