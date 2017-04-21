@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.service;
 
-import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.*;
 import edu.csus.asi.saferides.security.model.Authority;
@@ -29,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Rest API controller for the User resource 
@@ -52,40 +52,53 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    
-    @RequestMapping(method = RequestMethod.GET)
-    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
+
+    @RequestMapping(value = "/retrieveAll", method = RequestMethod.GET)
+    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of users...")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Driver.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "Success", response = User.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public Iterable<User> retrieveAll(@RequestParam(value = "active", required = false) Boolean active, 
-    									@RequestParam(value = "role", required = false) AuthorityName role) {
-    	List<User> users;
-    	
+    public List<User> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
+                                  @RequestParam(value = "role", required = false) AuthorityName role) {
+        List<User> users;
+
         if (active != null) {
             if (active) {
-                users = userRepository.findByActiveTrue();
+                users = userRepository.findByEnabled(true);
             } else {
-            	users = userRepository.findByActiveFalse();
+                users = userRepository.findByEnabled(false);
+            }
+        } else {
+            users = userRepository.findAll();
+        }
+
+        if (role != null) {
+            // get all drivers
+            if (role == AuthorityName.ROLE_DRIVER) {
+                // remove anyone not a driver (coordinator and higher)
+                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+                users.removeIf(u -> u.getAuthorities().contains(coord));
+            }   // get all coordinators
+            else if (role == AuthorityName.ROLE_COORDINATOR) {
+                // remove anyone not a coordinator
+                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
+                users.removeIf(u -> !u.getAuthorities().contains(coord) || u.getAuthorities().contains(admin)); // remove if not coord or is admin
+            } // get all admins
+            else if (role == AuthorityName.ROLE_ADMIN) {
+                // remove anyone not an admin
+                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
+                users.removeIf(u -> !u.getAuthorities().contains(admin));
             }
         }
-        else { users = userRepository.findAllByOrderByModifiedDateDesc(); }
-        
-        if (role != null) {
-        	if (role == AuthorityName.ROLE_COORDINATOR) {
-        		users = userRepository.findAllByOrderByModifiedDateDesc();
-        	}
-        		
-        }
-        
+
         return users;
-   
     }
 
     @RequestMapping(value = "/me", method = RequestMethod.GET)

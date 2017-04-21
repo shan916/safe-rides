@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class User {
 
     @Column(nullable = false)
     @Size(min = 161, max = 161)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)

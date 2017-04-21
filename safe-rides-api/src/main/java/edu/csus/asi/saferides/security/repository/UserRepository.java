@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.security.repository;
 
-import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.security.model.User;
 import org.springframework.data.repository.CrudRepository;
 
@@ -16,10 +15,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);
 
-	Iterable<User> findByActiveTrue();
-
-	Iterable<User> findByActiveFalse();
-
-	Iterable<User> findAllByOrderByModifiedDateDesc();
-
+    List<User> findByEnabled(boolean enabled);
 }
