@@ -9,7 +9,7 @@
 */
 angular.module('safeRidesWebApp')
 .controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService, Notification) {
+                                            $state, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
     var vm = this;
     vm.loadingRideRequest = true;
     vm.ride = undefined;
@@ -28,6 +28,7 @@ angular.module('safeRidesWebApp')
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
     vm.endNightPressed = false;
+    vm.currentRideRequest = undefined;
 
     /*
     * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -58,103 +59,42 @@ angular.module('safeRidesWebApp')
     }
 
     function getCurrentRideRequest() {
-
-        CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
-            vm.assignedRideRequest = response;
-            vm.isRideAssigned = false;
-
-            vm.pickedUpButtonPressed = false;
-            vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                var rideRequest = new RideRequest(element);
-                assignedRideRequest[index] = rideRequest;
-                //if not in progress
-                if(rideRequest.status === 'ASSIGNED'){
-                    vm.assignedRide = rideRequest;
+        GetDriverCurrentRideService.get().$promise.then(function(response) {
+            if(response === undefined){
+                console.log('response is undefined');
+                return;
+            } else {
+                vm.assignedRide = new RideRequest(response);
+                if(vm.assignedRide.status === 'ASSIGNED'){
                     vm.isRideAssigned=true;
+                    vm.pickedUpButtonPressed = false;
                     console.log('got Assigned Ride, ASSIGNED');
-                    buildDirectionButtons();
-                    return;
+                } else if (vm.assignedRide.status === 'PICKINGUP') {
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = false;
+                    console.log('got Assigned Ride, PICKINGUP');
+                } else if (vm.assignedRide.status === 'ATPICKUPLOCATION'){
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = false;//different from PICKINGUP
+                    console.log('got Assigned Ride, ATPICKUPLOCATION');
+                } else if (vm.assignedRide.status === 'DROPPINGOFF'){
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = true;//different from PICKINGUP
+                    console.log('got Assigned Ride, DROPPINGOFF');
                 }
+                buildDirectionButtons();
 
-            });
+                if (!rideRefresher) {
+                    rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+                }else {
+                    console.log('REFRESH_INTERVAL already ran');
+                }
+            }
 
-            if(vm.isRideAssigned === false){
-                CurrentDriverRidesService.get({status: 'PICKINGUP'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'PICKINGUP') {
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;
-                            console.log('got Assigned Ride, PICKINGUP');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned PICKINGUP:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() PICKINGUP', error);
-                });//end CurrentDriverRidesService.get PICKINGUP
-
-                CurrentDriverRidesService.get({status: 'ATPICKUPLOCATION'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'ATPICKUPLOCATION'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;//different from PICKINGUP
-                            console.log('got Assigned Ride, ATPICKUPLOCATION');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() ATPICKUPLOCATION', error);
-                });//end CurrentDriverRidesService.get ATPICKUPLOCATION
-
-                CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'DROPPINGOFF'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = true;//different from PICKINGUP
-                            console.log('got Assigned Ride, DROPPINGOFF');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() DROPPINGOFF', error);
-                });//end CurrentDriverRidesService.get DROPPINGOFF
-            }// end if vm.isRideAssigned === false
-
-            console.log('getCurrentRideRequest() called API success:', response);
-
-
-        }, function(error) {
-
-            console.log('getCurrentRideRequest() returned no ASSIGNED rides:', error);
-
-        });//end CurrentDriverRidesService.get ASSIGNED
-
-        //Set refresh interval if not already set
-        if (!rideRefresher) {
-            rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-            console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-        }else {
-            console.log('REFRESH_INTERVAL already ran');
-        }
-
-    } //end getCurrentRideRequest()
+        }, function(error){
+            console.log('No Assigned Rides');
+        });
+    }//end newgetCurrentRideRequest
 
     function buildDirectionButtons(){
         if(vm.assignedRide.pickupLine1 !== undefined){

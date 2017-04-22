@@ -222,6 +222,41 @@ public class DriverController {
     }
 
     /*
+ * GET /drivers/getdrivercurrentride
+ *
+ */
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getdrivercurrentride")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "getDriverCurrentRide", nickname = "getDriverCurrentRide", notes = "Retrieves currently assigned ride to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> getDriverCurrentRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+        //if the driver has no status or is Available, then there is no current ride, return empty
+        if(driver == null || driver.getStatus() == null || driver.getStatus() == DriverStatus.AVAILABLE) {
+            return ResponseEntity.noContent().build();
+        }else {
+            Set<RideRequest> requests = driver.getRides();
+            for(RideRequest req : requests){
+                if(req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
+                        || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF){
+                    return ResponseEntity.ok(req);
+                }
+            }
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    /*
      * POST /drivers/{id}/rides
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{id}/rides")
@@ -277,24 +312,5 @@ public class DriverController {
 
             return ResponseEntity.ok(driverLocation);
         }
-    }
-
-    /*
-     * GET /drivers/{id}/location
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
-    @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> getDriverLocation(@PathVariable Long id) {
-        Driver driver = driverRepository.findOne(id);
-        DriverLocation loc = driverLocationRepository.findTop1ByDriverOrderByCreatedDateDesc(driver);
-        if (loc == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(loc);
     }
 }
