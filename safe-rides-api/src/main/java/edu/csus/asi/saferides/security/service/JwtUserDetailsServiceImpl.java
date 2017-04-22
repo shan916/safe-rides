@@ -16,18 +16,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+/**
+ * Provides two separate authentication methods (Real user, rider).
+ */
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
+    // dependency injections
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private RideRequestRepository rideRequestRepository;
-
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    /**
+     * Get UserDetail object for a User
+     *
+     * @param username the username of the User
+     * @return UserDetail object for user
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -39,12 +48,19 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    public UserDetails loadRiderByOnecard(String onecard) throws UsernameNotFoundException {
+    /**
+     * Get UserDetail object for a User
+     *
+     * @param oneCardId the onecard id of the rider
+     * @return UserDetail object for rider
+     * @throws UsernameNotFoundException
+     */
+    public UserDetails loadRiderByOnecard(String oneCardId) throws UsernameNotFoundException {
         // find user in rides table
-        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(onecard);
+        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(oneCardId);
 
         if (rideRequest == null) {
-            throw new UsernameNotFoundException(String.format("No rider found with OneCard '%s'.", onecard));
+            throw new UsernameNotFoundException(String.format("No rider found with OneCard ID '%s'.", oneCardId));
         } else {
             // return user with the requestor name and rider role
             User riderUser = new User(rideRequest.getOneCardId(), rideRequest.getRequestorFirstName(), rideRequest.getRequestorLastName());

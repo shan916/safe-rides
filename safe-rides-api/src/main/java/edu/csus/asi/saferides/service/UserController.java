@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
 
-/*
- * Rest API controller for the User resource 
- * */
+/**
+ * Rest API controller for the User resource
+ */
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/users")
@@ -51,11 +51,17 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AuthorityRepository authorityRepository;
 
 
+    /**
+     * Get information on authenticated user
+     *
+     * @param request
+     * @return JWTUser object
+     */
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "myUserInfo", nickname = "My User Information", notes = "Returns the authenticated user's information")
@@ -93,6 +99,12 @@ public class UserController {
         return user;
     }
 
+    /**
+     * Create a new user
+     *
+     * @param user to create
+     * @return result
+     */
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
@@ -113,6 +125,13 @@ public class UserController {
         return ResponseEntity.created(location).body(result);
     }
 
+    /**
+     * Processes authentication request for application users
+     *
+     * @param authenticationRequest POSTed authentication request
+     * @return JWT
+     * @throws AuthenticationException
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/auth")
     @ApiOperation(value = "authenticate", nickname = "Authenticate", notes = "User's authentication - Admin, Coordinator, Driver. Returns a JWT")
     @ApiResponses(value = {
@@ -142,6 +161,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Processes authentication request for riders
+     *
+     * @param riderAuthenticationRequest POSTed authentication request
+     * @return JWT
+     * @throws AuthenticationException
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/authrider")
     @ApiOperation(value = "authenticateRider", nickname = "Authenticate Rider", notes = "User's authentication - Rider. Returns a JWT")
     @ApiResponses(value = {
@@ -155,20 +181,29 @@ public class UserController {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
 
+        // create a new user object for a rider
         User riderUser = new User(riderAuthenticationRequest.getOneCardId().toLowerCase(), "anon_fname", "anon_lname");
 
+        // set roles for the new user to rider only
         ArrayList<Authority> authorityList = new ArrayList<Authority>();
         authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
         riderUser.setAuthorities(authorityList);
 
+        // create a token for the new user
         UserDetails userDetails = JwtUserFactory.create(riderUser);
-
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
+    /**
+     * Update a user
+     *
+     * @param username of user to update
+     * @param user     details to set
+     * @return status
+     */
     @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "updateUser", nickname = "Update User", notes = "Updates a user")

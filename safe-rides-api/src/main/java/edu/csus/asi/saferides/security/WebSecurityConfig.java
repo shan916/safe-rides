@@ -15,25 +15,33 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/*
-    https://github.com/szerhusenBC/jwt-spring-security-demo
- */
 
+/**
+ * Configuration settings for authentication and securing the api routes
+ * From: https://github.com/szerhusenBC/jwt-spring-security-demo
+ */
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // flag to check if the local in-memory database's console is enabled
     @Value("${spring.h2.console.enabled}")
     private boolean h2ConsoleEnabled;
 
+    // dependency injection
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
-
     @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
 
+    /**
+     * Dependency injection and specify which userdetails service and password encoder to use
+     *
+     * @param authenticationManagerBuilder
+     * @throws Exception
+     */
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
@@ -41,42 +49,57 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * Set ArgonPasswordEncoder as the PasswordEncoder
+     *
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new ArgonPasswordEncoder();
     }
 
+    /**
+     * Set AuthenticationTokenFilter
+     *
+     * @return JWTAuthenticationTokenFilter
+     * @throws Exception
+     */
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         return new JwtAuthenticationTokenFilter();
     }
 
+    /**
+     * Configure the api security
+     *
+     * @param httpSecurity
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
+        // allow access to the h2 console if enabled
         if (h2ConsoleEnabled) {
             httpSecurity.authorizeRequests().antMatchers("/h2-console/**").permitAll();
-
             httpSecurity.headers().frameOptions().disable();
         }
 
         httpSecurity
                 // we don't need CSRF because our token is invulnerable (we are not passing teh JWT as a cookie but rather in the header)
                 .csrf().disable()
-
+                // JwtAuthenticationEntryPoint
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
+                // set up children for requests
                 .authorizeRequests()
-
                 // allow POST to /users/auth
-                .antMatchers(HttpMethod.POST, "/users/auth/**", "/users/authrider/**", "/rides").permitAll()
-
+                .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider").permitAll()
                 // allow OPTIONS to /rides
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                .antMatchers("/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
+                // allow access to the swagger api documentation
+                .antMatchers(HttpMethod.GET, "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 // all other request need a JWT
                 .anyRequest().authenticated();
 
