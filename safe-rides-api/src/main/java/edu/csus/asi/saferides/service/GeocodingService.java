@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+
+//Gets ride request location through phone gps
 @Service
 public class GeocodingService {
     @Value("${api-keys.geocoding}")
     private String geocodingApiKey;
 
+    // Sets the position coordinates for the specified RideRequest
     public void setCoordinates(RideRequest rideRequest){
         GeoApiContext ctx = new GeoApiContext();
         ctx.setApiKey(geocodingApiKey);
