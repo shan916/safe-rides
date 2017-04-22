@@ -3,7 +3,7 @@ package edu.csus.asi.saferides.security;
 import java.io.Serializable;
 
 /**
- * Authentication request that is POSTed to the api.
+ * Authentication request that is POSTed to the API.
  */
 public class JwtAuthenticationRequest implements Serializable {
 

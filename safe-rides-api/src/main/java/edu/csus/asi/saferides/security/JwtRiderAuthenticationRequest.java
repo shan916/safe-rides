@@ -2,6 +2,9 @@ package edu.csus.asi.saferides.security;
 
 import java.io.Serializable;
 
+/**
+ * This class is used for authenticating riders and allowing only one request per session
+ */
 public class JwtRiderAuthenticationRequest implements Serializable {
 
     // versioning for serialized object (is not really needed)

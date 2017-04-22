@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * Commence an authentication scheme.
+ * Provides a custom authentication scheme.
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
