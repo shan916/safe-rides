@@ -6,6 +6,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+/* A DriverLocation contains the longitude and latitude of a driver.
+ * Since the driver position is not updated constantly, DriverLocation
+ * also contains the time at which the location was last updated.
+ */
 public class DriverLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,13 +29,14 @@ public class DriverLocation {
     private Driver driver;
 
     @PrePersist
+    //change the last time updated to the current time when the location is updated.
     public void updateTimeStamps() {
         createdDate = new Date();
     }
 
     protected DriverLocation() {
     }
-
+    
     public DriverLocation(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -78,6 +83,7 @@ public class DriverLocation {
     }
 
     @Override
+    //String format for the DriverLocation data.
     public String toString() {
         return "DriverLocation{" +
                 "id=" + id +

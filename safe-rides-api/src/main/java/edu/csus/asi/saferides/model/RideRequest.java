@@ -6,6 +6,14 @@ import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Entity
+/*
+A RideRequest holds rider info, the time the request was made, last modified, assigned,
+the number of passengers,
+the place the rider needs to be picked up at,
+the place the rider needs to be dropped off at,
+an optional message for the coordinator to create and for the assigned driver to see,
+and the odometer readings for assigned driver vehicle mileage
+*/
 public class RideRequest {
     @ManyToOne
     private Driver driver;
@@ -110,6 +118,8 @@ public class RideRequest {
 
     @PreUpdate
     @PrePersist
+    //Updates the last time this RideRequest was updated, the time this RideRequest was assigned,
+    //and the time this RideRequest was created.
     public void updateTimeStamps() {
         lastModified = new Date();
 
@@ -331,6 +341,7 @@ public class RideRequest {
     }
 
     @Override
+    //String format for this RideRequest's fields.
     public String toString() {
         return "RideRequest{" +
                 "driver=" + driver +
