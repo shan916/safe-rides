@@ -22,7 +22,7 @@ angular.module('safeRidesWebApp')
             vm.loadingActiveCoordinators = true;
             vm.loadingInactiveCoordinators = true;
 
-            CoordinatorService.query({active: true}).$promise.then(function(response) {
+            CoordinatorService.query().$promise.then(function(response) {
                 vm.loadingActiveCoordinators = false;
                 vm.activeCoordinators = response;
                 console.log('got active Coordinators:', response);
@@ -31,7 +31,7 @@ angular.module('safeRidesWebApp')
                 console.log('error getting active coordinators:', error);
             });
 
-            CoordinatorService.query({active: false}).$promise.then(function(response) {
+            CoordinatorService.query().$promise.then(function(response) {
                 vm.loadingInactiveCoordinators = false;
                 vm.inactiveCoordinators = response;
                 console.log('got inactive coordinators:', response);
