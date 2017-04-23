@@ -9,11 +9,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-/*
- * @author Zeeshan Khaliq
- *
+/**
  * Model object for Driver Entity
- * */
+ */
 
 @Entity
 public class Driver {
