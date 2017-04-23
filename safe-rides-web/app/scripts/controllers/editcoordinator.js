@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditcoordinatorCtrl', function($stateParams, $location, CoordinatorService, Coordinator) {
+    .controller('EditcoordinatorCtrl', function($stateParams, $location, user-service, Coordinator) {
         var vm = this;
 
         vm.coordinator = new Coordinator();
@@ -22,7 +22,7 @@ angular.module('safeRidesWebApp')
 
         function getCoordinator(coordinatorId) {
             vm.loading = true;
-            CoordinatorService.get({
+            user-service.get({
                 id: coordinatorId
             }).$promise.then(function(response) {
                 vm.loading = false;
@@ -35,7 +35,7 @@ angular.module('safeRidesWebApp')
         }
 
         function updateCoordinator() {
-            CoordinatorService.update({
+            user-service.update({
                 id: vm.coordinator.id
             }, vm.coordinator).$promise.then(function(response) {
                 console.log('updated coordinator:', response);
@@ -57,7 +57,7 @@ angular.module('safeRidesWebApp')
             if ($stateParams.coordinatorId) {
                 updateCoordinator();
             } else {
-                CoordinatorService.save(vm.coordinator).$promise.then(function(response) {
+                user-service.save(vm.coordinator).$promise.then(function(response) {
                     console.log('saved coordinator:', response);
                     $location.path('/managecoordinators');
                 }, function(error) {

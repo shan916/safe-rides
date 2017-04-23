@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManageCoordinatorsCtrl', function(CoordinatorService, $uibModal) {
+    .controller('ManageCoordinatorsCtrl', function(user-service, $uibModal, authManager, $state, AuthTokenService) {
         var vm = this;
 
         vm.activeCoordinators = [];
@@ -22,7 +22,7 @@ angular.module('safeRidesWebApp')
             vm.loadingActiveCoordinators = true;
             vm.loadingInactiveCoordinators = true;
 
-            CoordinatorService.query().$promise.then(function(response) {
+            user-service.query().$promise.then(function(response) {
                 vm.loadingActiveCoordinators = false;
                 vm.activeCoordinators = response;
                 console.log('got active Coordinators:', response);
@@ -31,7 +31,7 @@ angular.module('safeRidesWebApp')
                 console.log('error getting active coordinators:', error);
             });
 
-            CoordinatorService.query().$promise.then(function(response) {
+            user-service.query().$promise.then(function(response) {
                 vm.loadingInactiveCoordinators = false;
                 vm.inactiveCoordinators = response;
                 console.log('got inactive coordinators:', response);
@@ -78,7 +78,7 @@ angular.module('safeRidesWebApp')
 
             modalInstance.result.then(function() {
                 coordinator.active = !coordinator.active;
-                CoordinatorService.update({id: coordinator.id}, coordinator).$promise.then(function(response) {
+                user-service.update({id: coordinator.id}, coordinator).$promise.then(function(response) {
                     console.log('updated coordinator, now refreshing', response);
                     getCoordinators();
                 }, function(error) {
@@ -91,7 +91,7 @@ angular.module('safeRidesWebApp')
 
         function deleteCoordinator(coordinator) {
             console.log(coordinator);
-            CoordinatorService.remove({
+            user-service.remove({
                 id: coordinator.id
             }).$promise.then(function(response) {
                 console.log('deleted coordinator:', response);
