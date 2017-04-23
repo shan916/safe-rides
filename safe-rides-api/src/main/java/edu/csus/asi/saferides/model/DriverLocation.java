@@ -160,12 +160,11 @@ public class DriverLocation {
     }
 
     /**
-     * Get a string object representing the values of the Driver Object
+     * Gets the string representation of the Driver Object
      *
      * @return DriverLocation string object
      */
     @Override
-    //String format for the DriverLocation data.
     public String toString() {
         return "DriverLocation{" +
                 "id=" + id +
