@@ -8,8 +8,8 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                            $state, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
+.controller('DriverdashboardCtrl', function($scope, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
+                                            $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
     var vm = this;
     vm.loadingRideRequest = true;
     vm.ride = undefined;
@@ -59,6 +59,7 @@ angular.module('safeRidesWebApp')
     }
 
     function getCurrentRideRequest() {
+        vm.isRideAssigned = false;
         GetDriverCurrentRideService.get().$promise.then(function(response) {
             if(response === undefined){
                 console.log('response is undefined');
@@ -93,6 +94,7 @@ angular.module('safeRidesWebApp')
 
         }, function(error){
             console.log('No Assigned Rides');
+            vm.isRideAssigned = false;
         });
     }//end newgetCurrentRideRequest
 
@@ -107,6 +109,14 @@ angular.module('safeRidesWebApp')
             console.log('buttons built');
         }
     }
+
+    function updateDriver() {
+        DriverSaveService.update(vm.driver).$promise.then(function(response) {
+            console.log('saved driver endNightOdo:', response);
+        }, function(error) {
+            console.log('error saving driver endNightOdo:', error);
+        });
+    };
 
     function updateRideRequest(){
         RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function(response) {
@@ -172,8 +182,8 @@ angular.module('safeRidesWebApp')
         vm.endNightPressed = true;
     }
     vm.submitEndNightOdo = function(){
-        //TODO save driver's last odo recording to driver on api
-        //driver.endNightOdo = vm.endNightOdo;
+        vm.driver.endNightOdo = vm.endNightOdo;
+        updateDriver();
     }
     vm.cancelEndNight = function(){
         vm.endNightPressed = false;

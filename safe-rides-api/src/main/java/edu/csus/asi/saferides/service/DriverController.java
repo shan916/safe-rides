@@ -142,6 +142,33 @@ public class DriverController {
     }
 
     /*
+ * PUT /drivers/{id}
+ */
+    @RequestMapping(method = RequestMethod.PUT, value = "/endofnight")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "saveendNightOdo", nickname = "saveendNightOdo", notes = "Updates a driver endNightOdo")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> endOfNight(HttpServletRequest request, @RequestBody Driver driver) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver tempDriver = driverRepository.findByUser(user);
+
+        if (driver.getId() != null && driver.getId() == tempDriver.getId()) {
+            tempDriver.setendNightOdo(driver.getendNightOdo());
+            return ResponseEntity.ok(tempDriver);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    /*
      * DELETE /drivers/{id}
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -225,7 +252,6 @@ public class DriverController {
  * GET /drivers/getdrivercurrentride
  *
  */
-
     @RequestMapping(method = RequestMethod.GET, value = "/getdrivercurrentride")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "getDriverCurrentRide", nickname = "getDriverCurrentRide", notes = "Retrieves currently assigned ride to the authenticated driver")

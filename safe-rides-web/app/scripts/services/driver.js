@@ -23,6 +23,7 @@ angular.module('safeRidesWebApp')
             this.vehicle = new Vehicle();
             this.status = undefined;
             this.rides = undefined;
+            this.endNightOdo = undefined;
 
             if (data) {
                 angular.extend(this, data);

@@ -11,7 +11,7 @@
   <!-- No Ride View -->
   <div ng-show="ctrl.isRideAssigned === false">
     <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
-        <strong>No Incoming Ride Requests</strong> You currently do not have any ride requests assigned to you.
+        <strong>No Incoming Ride Requests:</strong> You currently do not have any ride requests assigned to you.
     </div>
     <div class="col-md-12 text-center">
         <div class="row text-center">
@@ -131,7 +131,7 @@
                   ng-show="ctrl.assignedRide.status === 'PICKINGUP' || ctrl.assignedRide.status === 'ATPICKUPLOCATION'">
                       Arrived / Notify Rider
                   </button>
-              
+
             </div>
             <div class="col-md-4"><!-- dropoff -->
               <!--h4>Drop-off Address</h4-->

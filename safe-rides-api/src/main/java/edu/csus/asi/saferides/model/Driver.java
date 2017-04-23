@@ -80,7 +80,7 @@ public class Driver {
 	private User user;
 
 	@Column(nullable = false)
-	private long endOfNightOdo;
+	private long endNightOdo;
 
 	@PreUpdate
 	@PrePersist
@@ -217,12 +217,12 @@ public class Driver {
 		this.vehicle = vehicle;
 	}
 
-	public long getEndOfNightOdo() {
-		return endOfNightOdo;
+	public long getendNightOdo() {
+		return endNightOdo;
 	}
 
-	public void setEndOfNightOdo(long endOfNightOdo) {
-		this.endOfNightOdo = endOfNightOdo;
+	public void setendNightOdo(long endNightOdo) {
+		this.endNightOdo = endNightOdo;
 	}
 
 	public Set<RideRequest> getRides() {
@@ -304,7 +304,7 @@ public class Driver {
 				", rides=" + rides +
 				", locations=" + locations +
 				", user=" + user +
-//				", endOfNightOdometer=" + endOfNightOdometer +
+				", endNightOdometer=" + endNightOdo +
 				'}';
 	}
 }
