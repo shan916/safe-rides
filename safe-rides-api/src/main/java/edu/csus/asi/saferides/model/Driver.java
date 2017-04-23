@@ -79,8 +79,8 @@ public class Driver {
 	@ManyToOne(fetch=FetchType.LAZY)
 	private User user;
 
-	@Column(nullable = false)
-	private long endNightOdo;
+    @Column
+    private Long endNightOdo;
 
 	@PreUpdate
 	@PrePersist
@@ -217,12 +217,12 @@ public class Driver {
 		this.vehicle = vehicle;
 	}
 
-	public long getendNightOdo() {
-		return endNightOdo;
+    public Long getEndNightOdo() {
+        return endNightOdo;
 	}
 
-	public void setendNightOdo(long endNightOdo) {
-		this.endNightOdo = endNightOdo;
+    public void setEndNightOdo(Long endNightOdo) {
+        this.endNightOdo = endNightOdo;
 	}
 
 	public Set<RideRequest> getRides() {

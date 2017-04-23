@@ -111,7 +111,7 @@ angular.module('safeRidesWebApp')
     }
 
     function updateDriver() {
-        DriverSaveService.update(vm.driver).$promise.then(function(response) {
+        DriverSaveService.update(vm.endNightOdo).$promise.then(function(response) {
             console.log('saved driver endNightOdo:', response);
         }, function(error) {
             console.log('error saving driver endNightOdo:', error);

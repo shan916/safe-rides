@@ -142,8 +142,8 @@ public class DriverController {
     }
 
     /*
- * PUT /drivers/{id}
- */
+    * PUT /drivers/{id}
+    */
     @RequestMapping(method = RequestMethod.PUT, value = "/endofnight")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "saveendNightOdo", nickname = "saveendNightOdo", notes = "Updates a driver endNightOdo")
@@ -152,7 +152,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> endOfNight(HttpServletRequest request, @RequestBody Driver driver) {
+    public ResponseEntity<?> endOfNight(HttpServletRequest request, @RequestBody Long endNightOdo) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
@@ -160,9 +160,10 @@ public class DriverController {
 
         Driver tempDriver = driverRepository.findByUser(user);
 
-        if (driver.getId() != null && driver.getId() == tempDriver.getId()) {
-            tempDriver.setendNightOdo(driver.getendNightOdo());
-            return ResponseEntity.ok(tempDriver);
+        if (tempDriver != null) {
+            tempDriver.setEndNightOdo(endNightOdo);
+            driverRepository.save(tempDriver);
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -249,12 +250,12 @@ public class DriverController {
     }
 
     /*
- * GET /drivers/getdrivercurrentride
+ * GET /drivers/currentride
  *
  */
-    @RequestMapping(method = RequestMethod.GET, value = "/getdrivercurrentride")
+    @RequestMapping(method = RequestMethod.GET, value = "/currentride")
     @PreAuthorize("hasRole('DRIVER')")
-    @ApiOperation(value = "getDriverCurrentRide", nickname = "getDriverCurrentRide", notes = "Retrieves currently assigned ride to the authenticated driver")
+    @ApiOperation(value = "currentRide", nickname = "currentRide", notes = "Retrieves currently assigned ride to the authenticated driver")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -270,7 +271,7 @@ public class DriverController {
         //if the driver has no status or is Available, then there is no current ride, return empty
         if(driver == null || driver.getStatus() == null || driver.getStatus() == DriverStatus.AVAILABLE) {
             return ResponseEntity.noContent().build();
-        }else {
+        } else {
             Set<RideRequest> requests = driver.getRides();
             for(RideRequest req : requests){
                 if(req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
