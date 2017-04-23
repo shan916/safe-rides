@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * Provides a custom authentication scheme.
+ * Provides a custom authentication scheme. Is launched when an AuthenticationException is detected.
+ * Current implementation is a naive 401 Response.
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {

@@ -189,7 +189,7 @@ public class DriverController {
     }
 
     /*
-     * GET /drivers/{id}/rides
+     * GET /drivers/rides
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rides")
     @PreAuthorize("hasRole('DRIVER')")
@@ -250,9 +250,13 @@ public class DriverController {
         return ResponseEntity.ok(location);
     }
 
-    /*
-    * POST /drivers/location
-    */
+    /**
+     * POST /drivers/location
+     *
+     * @param request        client request (contains the Authorization header)
+     * @param driverLocation the new driver location
+     * @return the updated driver location or a message
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/location")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "setDriverLocation", nickname = "setDriverLocation", notes = "Authenticated driver updates their latest/current location.")
@@ -279,8 +283,11 @@ public class DriverController {
         }
     }
 
-    /*
+    /**
      * GET /drivers/{id}/location
+     *
+     * @param id the id of the Driver
+     * @return the latest driver location object of the specified driver
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
     @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")

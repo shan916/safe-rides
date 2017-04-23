@@ -12,8 +12,8 @@ import java.util.Date;
  */
 public class JwtUser implements UserDetails {
 
-	private static final long serialVersionUID = -8915361252628832537L;
-	private final Long id;
+    private static final long serialVersionUID = -8915361252628832537L;
+    private final Long id;
     private final String username;
     private final String firstname;
     private final String lastname;

@@ -5,15 +5,15 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
+/**
+ * A RideRequest holds rider info, the time the request was made, last modified, assigned,
+ * the number of passengers,
+ * the place the rider needs to be picked up at,
+ * the place the rider needs to be dropped off at,
+ * an optional message for the coordinator to create and for the assigned driver to see,
+ * and the odometer readings for assigned driver vehicle mileage
+ */
 @Entity
-/*
-A RideRequest holds rider info, the time the request was made, last modified, assigned,
-the number of passengers,
-the place the rider needs to be picked up at,
-the place the rider needs to be dropped off at,
-an optional message for the coordinator to create and for the assigned driver to see,
-and the odometer readings for assigned driver vehicle mileage
-*/
 public class RideRequest {
     @ManyToOne
     private Driver driver;
@@ -22,11 +22,11 @@ public class RideRequest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-	@Column(nullable = false)
-	private String oneCardId;
+    @Column(nullable = false)
+    private String oneCardId;
 
-	@Column(updatable = false)
-	private Date requestDate;
+    @Column(updatable = false)
+    private Date requestDate;
 
     @Column
     private Date lastModified;
@@ -40,8 +40,8 @@ public class RideRequest {
     @Column(nullable = false)
     private String requestorLastName;
 
-	@Column(nullable = false)
-	private String requestorPhoneNumber;
+    @Column(nullable = false)
+    private String requestorPhoneNumber;
 
     @Column(nullable = false)
     @Min(1)
@@ -99,22 +99,22 @@ public class RideRequest {
     protected RideRequest() {
     }
 
-	public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
-			String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity,
-			String dropoffLine1, String dropoffCity) {
-		super();
-		this.oneCardId = oneCardId;
-		this.requestDate = new Date();
-		this.requestorFirstName = requestorFirstName;
-		this.requestorLastName = requestorLastName;
-		this.requestorPhoneNumber = requestorPhoneNumber;
-		this.numPassengers = numPassengers;
-		this.pickupLine1 = pickupLine1;
-		this.pickupCity = pickupCity;
-		this.dropoffLine1 = dropoffLine1;
-		this.dropoffCity = dropoffCity;
-		this.status = RideRequestStatus.UNASSIGNED;
-	}
+    public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
+                       String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity,
+                       String dropoffLine1, String dropoffCity) {
+        super();
+        this.oneCardId = oneCardId;
+        this.requestDate = new Date();
+        this.requestorFirstName = requestorFirstName;
+        this.requestorLastName = requestorLastName;
+        this.requestorPhoneNumber = requestorPhoneNumber;
+        this.numPassengers = numPassengers;
+        this.pickupLine1 = pickupLine1;
+        this.pickupCity = pickupCity;
+        this.dropoffLine1 = dropoffLine1;
+        this.dropoffCity = dropoffCity;
+        this.status = RideRequestStatus.UNASSIGNED;
+    }
 
     @PreUpdate
     @PrePersist
@@ -156,21 +156,21 @@ public class RideRequest {
         this.id = id;
     }
 
-	public String getOneCardId() {
-		return oneCardId;
-	}
+    public String getOneCardId() {
+        return oneCardId;
+    }
 
-	public void setOneCardId(String oneCardId) {
-		this.oneCardId = oneCardId;
-	}
+    public void setOneCardId(String oneCardId) {
+        this.oneCardId = oneCardId;
+    }
 
-	public Date getRequestDate() {
-		return requestDate;
-	}
+    public Date getRequestDate() {
+        return requestDate;
+    }
 
-	public void setRequestDate(Date requestDate) {
-		this.requestDate = requestDate;
-	}
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
+    }
 
     public Date getLastModified() {
         return lastModified;
@@ -196,13 +196,13 @@ public class RideRequest {
         this.requestorLastName = requestorLastName;
     }
 
-	public String getRequestorPhoneNumber() {
-		return requestorPhoneNumber;
-	}
+    public String getRequestorPhoneNumber() {
+        return requestorPhoneNumber;
+    }
 
-	public void setRequestorPhoneNumber(String requestorPhoneNumber) {
-		this.requestorPhoneNumber = requestorPhoneNumber;
-	}
+    public void setRequestorPhoneNumber(String requestorPhoneNumber) {
+        this.requestorPhoneNumber = requestorPhoneNumber;
+    }
 
     public int getNumPassengers() {
         return numPassengers;

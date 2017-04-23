@@ -7,6 +7,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * NOTE: this class is being documented in feature/app-active-inactive
+ */
 public class Util {
 
     public static String formatAddress(String line1, String line2, String city) {
