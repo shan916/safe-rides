@@ -151,16 +151,15 @@ public class Driver {
     /**
      * Constructor for creating a driver object
      *
-     * @param csusId
-     * @param driverFirstName
-     * @param driverLastName
-     * @param phoneNumber
-     * @param dlState
-     * @param dlNumber
-     * @param insuranceChecked
-     * @param insuranceCompany
-     * @param active
-     * @return No return value.
+     * @param csusId           the CSUS ID of the driver
+     * @param driverFirstName  the driver's first name
+     * @param driverLastName   the driver's last name
+     * @param phoneNumber      the phone number for the driver
+     * @param dlState          the driver license state abbreviation
+     * @param dlNumber         the driver license number
+     * @param insuranceChecked indicates if insurance has been checked for the drive
+     * @param insuranceCompany the driver's insurance company
+     * @param active           indicates if the driver is active
      */
     public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
                   String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
@@ -234,7 +233,7 @@ public class Driver {
     /**
      * Get driver's last name
      *
-     * @return
+     * @return the driver's last name
      */
     public String getDriverLastName() {
         return driverLastName;
