@@ -19,10 +19,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Vehicle {
 
+	/**
+	 * driver field is hidden from other classes other than Driver class object
+	 */
 	@JsonIgnore
 	@OneToOne
 	private Driver driver;
 
+	/**
+	 * Primary Key
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -45,9 +51,24 @@ public class Vehicle {
 	@Column(nullable = false)
 	@Min(2)
 	private Integer seats;
-	
+
+	/**
+	 * Constructor used by JPA
+	 */
 	protected Vehicle() { }
-	
+
+	/**
+	 * Constructor for creating a vehicle object
+	 * @param driver
+	 * @param make
+	 * @param model
+	 * @param year
+	 * @param licensePlate
+	 * @param color
+	 * @param seats
+	 *
+	 * @return No return value.
+	 */
 	public Vehicle(Driver driver, String make, String model, String year, String licensePlate, String color,
 			Integer seats) {
 		super();
