@@ -76,9 +76,9 @@ angular.module('safeRidesWebApp')
                 }
             }
         }, function(error){
-                console.log('No Driver GetDriverMe');
+                console.log('No Driver GetDriverMe: ', error);
         });
-    };
+    }
 
     function getCurrentRideRequest() {
         vm.isRideAssigned = false;
@@ -126,7 +126,7 @@ angular.module('safeRidesWebApp')
             }
 
         }, function(error){
-            console.log('No Assigned Rides');
+            console.log('No Assigned Rides: ', error);
             vm.isRideAssigned = false;
         });
     }//end newgetCurrentRideRequest
@@ -149,7 +149,7 @@ angular.module('safeRidesWebApp')
         }, function(error) {
             console.log('error saving driver endNightOdo:', error);
         });
-    };
+    }
 
     function revertEndNightOdo() {
         DriverSaveService.update(0).$promise.then(function(response) {
@@ -157,7 +157,7 @@ angular.module('safeRidesWebApp')
         }, function(error) {
             console.log('error saving driver endNightOdo:', error);
         });
-    };
+    }
 
     function updateRideRequest(){
         RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function(response) {
@@ -208,7 +208,7 @@ angular.module('safeRidesWebApp')
             vm.assignedRide.status = 'ATPICKUPLOCATION';
             updateRideRequest();
         }else{
-            console.log("Already notified rider");
+            console.log('Already notified rider');
         }
             vm.isRideAssigned = true;
             vm.pickedUpButtonPressed = false;
@@ -222,18 +222,18 @@ angular.module('safeRidesWebApp')
 
     vm.endNight = function() {
         vm.endNightPressed = true;
-    }
+    };
     vm.submitEndNightOdo = function(){
         vm.driver.endNightOdo = vm.endNightOdo;
         updateDriver();
         vm.isEndNightOdoSubmitted = true;
-    }
+    };
     vm.cancelEndNight = function(){
         revertEndNightOdo();
         vm.endNightPressed = false;
         vm.isEndNightOdoSubmitted = false;
         getCurrentRideRequest();
-    }
+    };
 
     /**
     *   Driver can manually refresh to see if they
