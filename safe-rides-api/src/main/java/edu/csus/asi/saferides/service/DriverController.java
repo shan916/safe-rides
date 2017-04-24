@@ -202,7 +202,7 @@ public class DriverController {
         Driver tempDriver = driverRepository.findByUser(user);
 
         if (tempDriver != null) {
-            tempDriver.setEndNightOdo(endNightOdo);
+            tempDriver.setEndOfNightOdo(endNightOdo);
             driverRepository.save(tempDriver);
             return ResponseEntity.ok().build();
         } else {
