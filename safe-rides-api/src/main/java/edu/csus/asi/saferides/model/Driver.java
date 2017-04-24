@@ -129,6 +129,9 @@ public class Driver {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    /**
+     * the driver's odometer reading at the end of the night
+     */
     @Column(nullable = false)
     private long endOfNightOdo;
 
@@ -556,7 +559,7 @@ public class Driver {
                 ", rides=" + rides +
                 ", locations=" + locations +
                 ", user=" + user +
-                ", endOfNightOdometer=" + endOfNightOdometer +
+                ", endOfNightOdo=" + endOfNightOdo +
                 '}';
     }
 }
