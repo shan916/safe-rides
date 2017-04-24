@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,39 +21,58 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Set;
 
-/*
- * @author Zeeshan Khaliq
- * 
- * Rest API controller for the Driver resource 
- * */
+/**
+ * Rest API controller for the Driver resource
+ */
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/drivers")
 @PreAuthorize("hasRole('COORDINATOR')")
 public class DriverController {
 
-    // this creates a singleton for DriverRepository
+    /**
+     * a singleton for the DriverRepository
+     */
     @Autowired
     private DriverRepository driverRepository;
 
-    // this creates a singleton for RideRequestRepository
+    /**
+     * a singleton for the RideRequestRepository
+     */
     @Autowired
     private RideRequestRepository rideRequestRepository;
 
+    /**
+     * a singleton for the DriverLocationRepository
+     */
     @Autowired
     private DriverLocationRepository driverLocationRepository;
 
+    /**
+     * set name of the response key that stores the JWT
+     */
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    /**
+     * a singleton for the JwtTokenUtil
+     */
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * a singleton for the UserRepository
+     */
     @Autowired
     private UserRepository userRepository;
 
-    /*
+    /**
      * GET /drivers
+     * <p>
+     * If active is null, returns all drivers. Otherwise, returns all drivers filtered by the active parameter.
+     *
+     * @param active (optional query param) if the driver is active or not
+     * @return a list of drivers
      */
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
@@ -75,8 +93,11 @@ public class DriverController {
         }
     }
 
-    /*
+    /**
      * GET /drivers/{id}
+     *
+     * @param id the id of the driver to return
+     * @return the driver with the given id or 404 if not found
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
@@ -90,14 +111,19 @@ public class DriverController {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(result);
         }
     }
 
-    /*
+    /**
      * POST /drivers
+     * <p>
+     * Creates the given driver in database
+     *
+     * @param driver request body containing the driver to create
+     * @return ResponseEntity containing the created driver and it's location
      */
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
@@ -116,8 +142,20 @@ public class DriverController {
         return ResponseEntity.created(location).body(result);
     }
 
-    /*
+    /**
      * PUT /drivers/{id}
+     * <p>
+     * Updates the driver located at drivers/{id} with the new data from the request body.
+     * <p>
+     * Returns HTTP status code 400 under the following conditions
+     * <ul>
+     * <li>id in path is different from id in request body</li>
+     * <li>driver is being deactivated while status is not AVAILABLE</li>
+     * </ul>
+     *
+     * @param id     path parameter for id of driver to update
+     * @param driver request body containing the driver to update
+     * @return the updated driver or error message
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates a driver")
@@ -127,22 +165,28 @@ public class DriverController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody Driver driver) {
-        if (driver.getId() != null && driver.getId() == id) {
+        if (driver.getId() != null && driver.getId().equals(id)) {
             Driver result = driverRepository.findOne(id);
 
+            // return 400 if trying to deactivate a driver that's not AVAILABLE
             if (!driver.getActive() && result.getStatus() != DriverStatus.AVAILABLE) {
-                return ResponseEntity.badRequest().body("The driver must not have any in progress rides");
+                return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
             }
 
             result = driverRepository.save(driver);
             return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
         }
     }
 
-    /*
+    /**
      * DELETE /drivers/{id}
+     * <p>
+     * Deletes the driver with the given id
+     *
+     * @param id path parameter for the driver to delete
+     * @return 204 if deleted successfully, 400 if driver with id does not exist
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ApiOperation(value = "delete", nickname = "delete", notes = "Deletes a driver")
@@ -153,7 +197,7 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (driverRepository.findOne(id) == null) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Driver not specified"));
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver does not exist"));
         } else {
             driverRepository.delete(id);
             return ResponseEntity.noContent().build();
@@ -286,7 +330,7 @@ public class DriverController {
     /**
      * GET /drivers/{id}/location
      *
-     * @param id the id of the Driver
+     * @param id path param for the id of the driver
      * @return the latest driver location object of the specified driver
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
