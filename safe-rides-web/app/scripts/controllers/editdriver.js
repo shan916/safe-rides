@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function($stateParams, $location, DriverService, Driver) {
+    .controller('EditdriverCtrl', function ($stateParams, $location, DriverService, Driver) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -31,11 +31,11 @@ angular.module('safeRidesWebApp')
             vm.loading = true;
             DriverService.get({
                 id: driverId
-            }).$promise.then(function(response) {
+            }).$promise.then(function (response) {
                 vm.loading = false;
                 vm.driver = response;
                 console.log('got driver:', response);
-            }, function(error) {
+            }, function (error) {
                 vm.loading = false;
                 console.log('error getting driver:', error);
             });
@@ -44,10 +44,10 @@ angular.module('safeRidesWebApp')
         function updateDriver() {
             DriverService.update({
                 id: vm.driver.id
-            }, vm.driver).$promise.then(function(response) {
+            }, vm.driver).$promise.then(function (response) {
                 console.log('updated driver:', response);
                 $location.path('/managedrivers');
-            }, function(error) {
+            }, function (error) {
                 console.log('error updating driver:', error);
             });
         }
@@ -60,14 +60,14 @@ angular.module('safeRidesWebApp')
             vm.yearChoices.push(year);
         }
 
-        vm.saveDriver = function() {
+        vm.saveDriver = function () {
             if ($stateParams.driverId) {
                 updateDriver();
             } else {
-                DriverService.save(vm.driver).$promise.then(function(response) {
+                DriverService.save(vm.driver).$promise.then(function (response) {
                     console.log('saved driver:', response);
                     $location.path('/managedrivers');
-                }, function(error) {
+                }, function (error) {
                     console.log('error saving driver:', error);
                 });
             }

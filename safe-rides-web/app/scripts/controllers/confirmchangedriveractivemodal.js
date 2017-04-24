@@ -8,15 +8,15 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-  .controller('ConfirmChangeDriverActiveModalCtrl', function (driver, $uibModalInstance) {
-      var vm = this;
-      vm.driver = driver;
+    .controller('ConfirmChangeDriverActiveModalCtrl', function (driver, $uibModalInstance) {
+        var vm = this;
+        vm.driver = driver;
 
-      vm.cancel = function() {
-          $uibModalInstance.dismiss('cancel');
-      };
+        vm.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
 
-      vm.ok = function() {
-          $uibModalInstance.close();
-      };
-  });
+        vm.ok = function () {
+            $uibModalInstance.close();
+        };
+    });

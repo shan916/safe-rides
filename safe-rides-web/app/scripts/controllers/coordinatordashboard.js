@@ -31,8 +31,8 @@ var app = angular.module('safeRidesWebApp')
         vm.driversLocation = [];
 
         /*
-        * Kick user out if not authenticated or if not a coordinator
-        * */
+         * Kick user out if not authenticated or if not a coordinator
+         * */
         if (authManager.isAuthenticated()) {
             if (!AuthTokenService.isInRole('ROLE_COORDINATOR')) {
                 Notification.error({

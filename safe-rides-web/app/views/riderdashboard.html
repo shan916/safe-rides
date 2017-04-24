@@ -15,7 +15,9 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label for="oneCardId">OneCard ID</label>
-                        <input id="oneCardId" name="oneCardId" type="text" class="form-control" required ng-model="ctrl.oneCardId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="9 digit ID">
+                        <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
+                               ng-model="ctrl.oneCardId" ui-mask="999999999" ui-mask-placeholder
+                               ui-mask-placeholder-char="_" placeholder="9 digit ID">
                         <div ng-messages="rideRequestForm.oneCardId.$dirty && rideRequestForm.oneCardId.$error">
                             <div class="input-error" ng-message="required">* required</div>
                         </div>
@@ -39,8 +41,10 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="requestorFirstName">First Name</label>
-                            <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control" required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
-                            <div ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
+                            <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control"
+                                   required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
+                            <div
+                                ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -48,8 +52,10 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="requestorLastName">Last Name</label>
-                            <input id="requestorLastName" name="requestorLastName" type="text" class="form-control" required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
-                            <div ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
+                            <input id="requestorLastName" name="requestorLastName" type="text" class="form-control"
+                                   required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
+                            <div
+                                ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -57,8 +63,11 @@
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="requestorPhoneNumber">Phone</label>
-                            <input id="requestorPhoneNumber" name="requestorPhoneNumber" type="text" class="form-control" required ng-model="ctrl.rideRequest.requestorPhoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
-                            <div ng-messages="rideRequestForm.requestorPhoneNumber.$dirty && rideRequestForm.requestorPhoneNumber.$error">
+                            <input id="requestorPhoneNumber" name="requestorPhoneNumber" type="text"
+                                   class="form-control" required ng-model="ctrl.rideRequest.requestorPhoneNumber"
+                                   ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
+                            <div
+                                ng-messages="rideRequestForm.requestorPhoneNumber.$dirty && rideRequestForm.requestorPhoneNumber.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -66,10 +75,12 @@
                     <div class="col-sm-12 col-md-2">
                         <div class="form-group">
                             <label for="numPassengers">Number of Riders</label>
-                            <select name="numPassengers" id="numPassengers" class="form-control" required ng-model="ctrl.rideRequest.numPassengers">
+                            <select name="numPassengers" id="numPassengers" class="form-control" required
+                                    ng-model="ctrl.rideRequest.numPassengers">
                                 <option ng-repeat="count in ctrl.maxRidersCount" value="{{count}}">{{count}}</option>
                             </select>
-                            <div ng-messages="rideRequestForm.numPassengers.$dirty && rideRequestForm.numPassengers.$error">
+                            <div
+                                ng-messages="rideRequestForm.numPassengers.$dirty && rideRequestForm.numPassengers.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -81,18 +92,21 @@
                         <h3>Pickup Address</h3>
                         <div class="form-group">
                             <label for="pickupLine1">Line 1</label>
-                            <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required placeholder="Pickup Line 1" ng-model="ctrl.rideRequest.pickupLine1">
+                            <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required
+                                   placeholder="Pickup Line 1" ng-model="ctrl.rideRequest.pickupLine1">
                             <div ng-messages="rideRequestForm.pickupLine1.$dirty && rideRequestForm.pickupLine1.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="pickupLine2">Line 2</label>
-                            <input id="pickupLine2" name="pickupLine2" type="text" class="form-control" placeholder="Pickup Line 2" ng-model="ctrl.rideRequest.pickupLine2">
+                            <input id="pickupLine2" name="pickupLine2" type="text" class="form-control"
+                                   placeholder="Pickup Line 2" ng-model="ctrl.rideRequest.pickupLine2">
                         </div>
                         <div class="form-group">
                             <label for="pickupCity">City</label>
-                            <input id="pickupCity" name="pickupCity" type="text" class="form-control" required placeholder="Pickup City" ng-model="ctrl.rideRequest.pickupCity">
+                            <input id="pickupCity" name="pickupCity" type="text" class="form-control" required
+                                   placeholder="Pickup City" ng-model="ctrl.rideRequest.pickupCity">
                             <div ng-messages="rideRequestForm.pickupCity.$dirty && rideRequestForm.pickupCity.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -103,18 +117,22 @@
                         <h3>Drop-off Address</h3>
                         <div class="form-group">
                             <label for="dropoffLine1">Line 1</label>
-                            <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required placeholder="Drop-off Line 1" ng-model="ctrl.rideRequest.dropoffLine1">
-                            <div ng-messages="rideRequestForm.dropoffLine1.$dirty && rideRequestForm.dropoffLine1.$error">
+                            <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required
+                                   placeholder="Drop-off Line 1" ng-model="ctrl.rideRequest.dropoffLine1">
+                            <div
+                                ng-messages="rideRequestForm.dropoffLine1.$dirty && rideRequestForm.dropoffLine1.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="dropoffLine2">Line 2</label>
-                            <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control" placeholder="Drop-off Line 2" ng-model="ctrl.rideRequest.dropoffLine2">
+                            <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control"
+                                   placeholder="Drop-off Line 2" ng-model="ctrl.rideRequest.dropoffLine2">
                         </div>
                         <div class="form-group">
                             <label for="dropoffCity">City</label>
-                            <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required placeholder="Drop-off City" ng-model="ctrl.rideRequest.dropoffCity">
+                            <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required
+                                   placeholder="Drop-off City" ng-model="ctrl.rideRequest.dropoffCity">
                             <div ng-messages="rideRequestForm.dropoffCity.$dirty && rideRequestForm.dropoffCity.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -123,7 +141,9 @@
                 </div>
             </form>
 
-            <button class="btn btn-primary btn-block" ng-disabled="rideRequestForm.$invalid" ng-click="ctrl.submitRideRequest()">Request Ride</button>
+            <button class="btn btn-primary btn-block" ng-disabled="rideRequestForm.$invalid"
+                    ng-click="ctrl.submitRideRequest()">Request Ride
+            </button>
         </div>
     </div> <!-- Ride Request panel-->
 
@@ -134,15 +154,18 @@
         <div class="panel-body">
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                        <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a driver</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup location</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup location</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
-                        <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
-                        <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
-                            <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
-                        </p>
+                    <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a
+                        driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup
+                        location</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup
+                        location</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
+                    <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
+                        <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
+                    </p>
                     <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED' || ctrl.existingRide.status === 'PICKINGUP'">
                         Your driver should arrive in approximately {{ctrl.getEstimatedTime()}}
                         <small>(as of {{ctrl.existingRide.assignedDate | date: 'shortTime'}})</small>
@@ -152,7 +175,10 @@
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE' && ctrl.existingRide.status !== 'ATPICKUPLOCATION'">Cancel Ride</button>
+                    <button class="btn btn-danger"
+                            ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE' && ctrl.existingRide.status !== 'ATPICKUPLOCATION'">
+                        Cancel Ride
+                    </button>
                 </div>
             </div>
         </div>

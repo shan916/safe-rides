@@ -8,7 +8,7 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('RideRequest', function() {
+    .factory('RideRequest', function () {
         function RideRequest(data) {
             this.id = undefined;
             this.oneCardId = undefined;
@@ -42,7 +42,7 @@ angular.module('safeRidesWebApp')
             }
         }
 
-        RideRequest.prototype.statusOrderValue = function() {
+        RideRequest.prototype.statusOrderValue = function () {
             switch (this.status) {
                 case 'UNASSIGNED':
                     return 0;
@@ -65,7 +65,7 @@ angular.module('safeRidesWebApp')
             }
         };
 
-        RideRequest.prototype.getVehicleDescription = function() {
+        RideRequest.prototype.getVehicleDescription = function () {
             return this.driver.vehicle.color + ' ' + this.driver.vehicle.year + ' ' + this.driver.vehicle.make + ' ' + this.driver.vehicle.model;
         };
 

@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('AssignRideService', function($resource, ENV) {
+    .factory('AssignRideService', function ($resource, ENV) {
 
         return $resource(ENV.apiEndpoint + 'drivers/:id/rides', {
             id: '@id'

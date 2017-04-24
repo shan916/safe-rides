@@ -19,7 +19,7 @@
      });
    });
  }
-*/
+ */
 angular
     .module('safeRidesWebApp', [
         'ngAnimate',
@@ -39,26 +39,26 @@ angular
         'ui-notification'
     ])
 
-    .run(function($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
-        $rootScope.$on('tokenHasExpired', function() {
+        $rootScope.$on('tokenHasExpired', function () {
             AuthTokenService.removeToken();
             console.log('Your session has expired!');
         });
 
-        $rootScope.$on('$stateChangeStart', function(event, toState) {
+        $rootScope.$on('$stateChangeStart', function (event, toState) {
             $rootScope.redirect = toState.name;
         });
 
         $rootScope.$on('$stateChangeError', console.log.bind(console));
 
-        $rootScope.$on('$stateChangeSuccess', function() {
-          $rootScope.currentState = $state.current.name;
+        $rootScope.$on('$stateChangeSuccess', function () {
+            $rootScope.currentState = $state.current.name;
         });
 
-        $rootScope.globalLogout = function() {
+        $rootScope.globalLogout = function () {
             AuthTokenService.removeToken();
             $state.go('/');
             // update the user authentication state right away
@@ -69,14 +69,14 @@ angular
 
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: ['$state', function($state) {
+            unauthenticatedRedirector: ['$state', function ($state) {
                 $state.go('login');
             }],
-            tokenGetter: ['options', 'AuthTokenService', function(options, AuthTokenService) {
+            tokenGetter: ['options', 'AuthTokenService', function (options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
                 if (options && options.url.substr(options.url.length - 5) === '.html') {
                     return null;

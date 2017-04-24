@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ResetpasswordCtrl', function() {
+    .controller('ResetpasswordCtrl', function () {
         this.awesomeThings = [
             'HTML5 Boilerplate',
             'AngularJS',
