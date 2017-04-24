@@ -15,17 +15,23 @@ import java.util.List;
  * 
  * */
 public interface DriverRepository extends CrudRepository<Driver, Long> {
-	/*
-	 * Other query methods can be defined by simply declaring the method signature.
+    /*
+     * Other query methods can be defined by simply declaring the method signature.
 	 * Spring Data JPA will automagically create an implementation on the fly.
 	 * */
-	List<Driver> findByActive(Boolean active);
-	
-	List<Driver> findByActiveTrueOrderByModifiedDateDesc();
-	
-	List<Driver> findByActiveFalseOrderByModifiedDateDesc();
-	
-	List<Driver> findAllByOrderByModifiedDateDesc();
 
-	Driver findByUser(User user);
+    // Returns a list of Drivers by status=active
+    List<Driver> findByActive(Boolean active);
+
+    // Returns a list of Drivers by status=active, ordered by modified date
+    List<Driver> findByActiveTrueOrderByModifiedDateDesc();
+
+    // Returns a list of Drivers by status=active, ordered in reverse by modified date.
+    List<Driver> findByActiveFalseOrderByModifiedDateDesc();
+
+    // Returns a list of all drivers ordered by modified date.
+    List<Driver> findAllByOrderByModifiedDateDesc();
+
+    //Returns a driver with the specified user name.
+    Driver findByUser(User user);
 }

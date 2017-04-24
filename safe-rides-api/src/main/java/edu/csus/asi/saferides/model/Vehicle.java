@@ -1,14 +1,9 @@
 package edu.csus.asi.saferides.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Min;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 /*
  * @author Zeeshan Khaliq
@@ -19,115 +14,239 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Vehicle {
 
-	@JsonIgnore
-	@OneToOne
-	private Driver driver;
+    /**
+     * driver field is hidden from other classes other than Driver class object
+     */
+    @JsonIgnore
+    @OneToOne
+    private Driver driver;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	@Column(nullable = false)
-	private String make;
-	
-	@Column(nullable = false)
-	private String model;
-	
-	@Column(nullable = false, length = 4)
-	private String year;
-	
-	@Column(nullable = false)
-	private String licensePlate;
-	
-	@Column(nullable = false)
-	private String color;
-	
-	@Column(nullable = false)
-	@Min(2)
-	private Integer seats;
-	
-	protected Vehicle() { }
-	
-	public Vehicle(Driver driver, String make, String model, String year, String licensePlate, String color,
-			Integer seats) {
-		super();
-		this.driver = driver;
-		this.make = make;
-		this.model = model;
-		this.year = year;
-		this.licensePlate = licensePlate;
-		this.color = color;
-		this.seats = seats;
-	}
-	
-	public Driver getDriver() {
-		return driver;
-	}
+    /**
+     * Primary Key
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
+    /**
+     * Vehicle's make
+     */
+    @Column(nullable = false)
+    private String make;
 
-	public Long getVehicleId() {
-		return id;
-	}
+    /**
+     * Vehicle's model
+     */
+    @Column(nullable = false)
+    private String model;
 
-	public void setVehicleId(Long vehicleId) {
-		this.id = vehicleId;
-	}
+    /**
+     * Vehicle's year
+     */
+    @Column(nullable = false, length = 4)
+    private String year;
 
-	public String getMake() {
-		return make;
-	}
+    /**
+     * Vehicle's license plate
+     */
+    @Column(nullable = false)
+    private String licensePlate;
 
-	public void setMake(String make) {
-		this.make = make;
-	}
+    /**
+     * Vehicle's color
+     */
+    @Column(nullable = false)
+    private String color;
 
-	public String getModel() {
-		return model;
-	}
+    /**
+     * Vehicle's seats
+     */
+    @Column(nullable = false)
+    @Min(2)
+    private Integer seats;
 
-	public void setModel(String model) {
-		this.model = model;
-	}
+    /**
+     * Constructor used by JPA
+     */
+    protected Vehicle() {
+    }
 
-	public String getYear() {
-		return year;
-	}
+    /**
+     * Constructor for creating a vehicle object
+     *
+     * @param driver
+     * @param make
+     * @param model
+     * @param year
+     * @param licensePlate
+     * @param color
+     * @param seats
+     */
+    public Vehicle(Driver driver, String make, String model, String year, String licensePlate, String color,
+                   Integer seats) {
+        super();
+        this.driver = driver;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.licensePlate = licensePlate;
+        this.color = color;
+        this.seats = seats;
+    }
 
-	public void setYear(String year) {
-		this.year = year;
-	}
+    /**
+     * Get driver
+     *
+     * @return driver
+     */
+    public Driver getDriver() {
+        return driver;
+    }
 
-	public String getLicensePlate() {
-		return licensePlate;
-	}
+    /**
+     * Set driver
+     *
+     * @param driver
+     */
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
 
-	public void setLicensePlate(String licensePlate) {
-		this.licensePlate = licensePlate;
-	}
+    /**
+     * Get vehicle's ID
+     *
+     * @return id
+     */
+    public Long getVehicleId() {
+        return id;
+    }
 
-	public String getColor() {
-		return color;
-	}
+    /**
+     * Set vehicle's ID
+     *
+     * @param vehicleId
+     */
+    public void setVehicleId(Long vehicleId) {
+        this.id = vehicleId;
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+    /**
+     * Get vehicle's make
+     *
+     * @return make
+     */
+    public String getMake() {
+        return make;
+    }
 
-	public Integer getSeats() {
-		return seats;
-	}
+    /**
+     * Set vehicle's make
+     *
+     * @param make
+     */
+    public void setMake(String make) {
+        this.make = make;
+    }
 
-	public void setSeats(Integer seats) {
-		this.seats = seats;
-	}
+    /**
+     * Get vehicle's model
+     *
+     * @return model
+     */
+    public String getModel() {
+        return model;
+    }
 
-	@Override
-	public String toString() {
-		return "Vehicle [driver=" + driver + ", id=" + id + ", make=" + make + ", model=" + model + ", year=" + year
-				+ ", licensePlate=" + licensePlate + ", color=" + color + ", seats=" + seats + "]";
-	}
+    /**
+     * Set vehicle's model
+     *
+     * @param model
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * Get vehicle's year
+     *
+     * @return
+     */
+    public String getYear() {
+        return year;
+    }
+
+    /**
+     * Set vehicle's year
+     *
+     * @param year
+     */
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    /**
+     * Get vehicle's license plate
+     *
+     * @return licensePlate
+     */
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    /**
+     * Set vehicle's license plate
+     *
+     * @param licensePlate
+     */
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    /**
+     * Get vehicle's color
+     *
+     * @return
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Set vehicle's color
+     *
+     * @param color
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    /**
+     * Get vehicle's number of seats
+     *
+     * @return
+     */
+    public Integer getSeats() {
+        return seats;
+    }
+
+    /**
+     * Set vehicle's number of seats
+     *
+     * @param seats
+     */
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
+
+    /**
+     * Gets a string object representing the values of the Vehicle Object
+     *
+     * @return Vehicle string object
+     */
+    @Override
+    public String toString() {
+        return "Vehicle [driver=" + driver + ", id=" + id + ", make=" + make + ", model=" + model + ", year=" + year
+                + ", licensePlate=" + licensePlate + ", color=" + color + ", seats=" + seats + "]";
+    }
 
 }

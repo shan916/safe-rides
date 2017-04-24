@@ -45,11 +45,11 @@ public class SafeRidesApiApplication {
             Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", true, "Farmers", true);
             Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", true, "Farmers", true);
             Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", true, "Farmers", true);
-            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", true, "Farmers", true);
-            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", true, "Farmers", true);
-            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", true, "Farmers", true);
-            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", true, "Farmers", true);
-            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", true, "Farmers", true);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157", "CA", "E5555555", true, "Farmers", true);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579", "CA", "E6666666", true, "Farmers", true);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650", "CA", "E7777777", true, "Farmers", true);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110", "CA", "E8888888", true, "Farmers", true);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066", "CA", "E9999999", true, "Farmers", true);
 
             Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
             Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);

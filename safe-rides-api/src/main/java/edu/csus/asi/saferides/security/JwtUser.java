@@ -12,12 +12,12 @@ import java.util.Date;
  */
 public class JwtUser implements UserDetails {
 
+    private static final long serialVersionUID = -8915361252628832537L;
     private final Long id;
     private final String username;
     private final String firstname;
     private final String lastname;
     private final String password;
-    private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean enabled;
     private final Date lastPasswordResetDate;
@@ -29,7 +29,6 @@ public class JwtUser implements UserDetails {
      * @param username              oneCardId or username
      * @param firstname             first name
      * @param lastname              last name
-     * @param email                 email
      * @param password              password
      * @param authorities           authorities / roles
      * @param enabled               enabled flag or active
@@ -40,7 +39,6 @@ public class JwtUser implements UserDetails {
             String username,
             String firstname,
             String lastname,
-            String email,
             String password,
             Collection<? extends GrantedAuthority> authorities,
             boolean enabled,
@@ -50,7 +48,6 @@ public class JwtUser implements UserDetails {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.enabled = enabled;
@@ -126,15 +123,6 @@ public class JwtUser implements UserDetails {
      */
     public String getLastname() {
         return lastname;
-    }
-
-    /**
-     * Get email
-     *
-     * @return email
-     */
-    public String getEmail() {
-        return email;
     }
 
     /**
