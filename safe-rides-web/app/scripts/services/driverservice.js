@@ -66,6 +66,15 @@ angular.module('safeRidesWebApp')
             });
         });
 
+        angular.module('safeRidesWebApp')
+                .factory('GetDriverMe', function($resource, ENV) {
+                    return $resource(ENV.apiEndpoint + 'drivers/me', {
+                        get: {
+                            method: 'GET',
+                            isArray: true
+                        }
+                    });
+                });
 
 angular.module('safeRidesWebApp')
     .factory('DriverLocationService', function($resource, ENV) {

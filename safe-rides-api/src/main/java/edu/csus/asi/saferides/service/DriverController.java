@@ -284,6 +284,34 @@ public class DriverController {
     }
 
     /*
+* GET /drivers/currentride
+*
+*/
+    @RequestMapping(method = RequestMethod.GET, value = "/me")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "getDriver", nickname = "getDriver", notes = "Retrieves current driver to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> getMe(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+
+        if(driver == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(driver);
+        }
+    }
+
+
+    /*
      * POST /drivers/{id}/rides
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{id}/rides")

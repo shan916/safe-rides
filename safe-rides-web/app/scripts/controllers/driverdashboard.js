@@ -8,7 +8,7 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('DriverdashboardCtrl', function($scope, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
+.controller('DriverdashboardCtrl', function($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
                                             $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
     var vm = this;
     vm.loadingRideRequest = true;
@@ -29,6 +29,8 @@ angular.module('safeRidesWebApp')
     var rideRefresher;
     vm.endNightPressed = false;
     vm.currentRideRequest = undefined;
+    vm.isEndNightOdoSubmitted = false;
+    vm.localDriver = undefined;
 
     /*
     * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -58,29 +60,58 @@ angular.module('safeRidesWebApp')
         console.log('Not authenticated');
     }
 
+    function getLocalDriver() {
+        GetDriverMe.get().$promise.then(function(response) {
+            if(response === undefined) {
+
+            } else {
+                vm.localDriver = new Driver(response);
+                console.log('GetDriverMe success');
+                if(vm.localDriver.endNightOdo > 0){
+                    vm.isEndNightOdoSubmitted = true;
+                    console.log('end night odo localDriver > 0');
+                } else {
+                    console.log('end night odo localDriver < 0');
+                    vm.isEndNightOdoSubmitted = false;
+                }
+            }
+        }, function(error){
+                console.log('No Driver GetDriverMe');
+        });
+    };
+
     function getCurrentRideRequest() {
         vm.isRideAssigned = false;
+
+        if(vm.localDriver === undefined) {
+            getLocalDriver();
+        }
+
         GetDriverCurrentRideService.get().$promise.then(function(response) {
             if(response === undefined){
                 console.log('response is undefined');
                 return;
-            } else {
+            } else if (response !== undefined) {
                 vm.assignedRide = new RideRequest(response);
                 if(vm.assignedRide.status === 'ASSIGNED'){
                     vm.isRideAssigned=true;
                     vm.pickedUpButtonPressed = false;
+                    vm.isEndNightOdoSubmitted = false;
                     console.log('got Assigned Ride, ASSIGNED');
                 } else if (vm.assignedRide.status === 'PICKINGUP') {
                     vm.isRideAssigned = true;
                     vm.pickedUpButtonPressed = false;
+                    vm.isEndNightOdoSubmitted = false;
                     console.log('got Assigned Ride, PICKINGUP');
                 } else if (vm.assignedRide.status === 'ATPICKUPLOCATION'){
                     vm.isRideAssigned = true;
-                    vm.pickedUpButtonPressed = false;//different from PICKINGUP
+                    vm.pickedUpButtonPressed = false;//different from DROPPINGOFF
+                    vm.isEndNightOdoSubmitted = false;
                     console.log('got Assigned Ride, ATPICKUPLOCATION');
                 } else if (vm.assignedRide.status === 'DROPPINGOFF'){
                     vm.isRideAssigned = true;
                     vm.pickedUpButtonPressed = true;//different from PICKINGUP
+                    vm.isEndNightOdoSubmitted = false;
                     console.log('got Assigned Ride, DROPPINGOFF');
                 }
                 buildDirectionButtons();
@@ -90,6 +121,8 @@ angular.module('safeRidesWebApp')
                 }else {
                     console.log('REFRESH_INTERVAL already ran');
                 }
+            } else { //check the end night odo has been entered
+
             }
 
         }, function(error){
@@ -112,6 +145,14 @@ angular.module('safeRidesWebApp')
 
     function updateDriver() {
         DriverSaveService.update(vm.endNightOdo).$promise.then(function(response) {
+            console.log('saved driver endNightOdo:', response);
+        }, function(error) {
+            console.log('error saving driver endNightOdo:', error);
+        });
+    };
+
+    function revertEndNightOdo() {
+        DriverSaveService.update(0).$promise.then(function(response) {
             console.log('saved driver endNightOdo:', response);
         }, function(error) {
             console.log('error saving driver endNightOdo:', error);
@@ -157,6 +198,7 @@ angular.module('safeRidesWebApp')
             vm.assignedRide.endOdometer = vm.endOdo;
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
+            vm.isEndNightOdoSubmitted = false;
             updateRideRequest();
             $interval(getCurrentRideRequest, REFRESH_INTERVAL);
     };
@@ -184,9 +226,13 @@ angular.module('safeRidesWebApp')
     vm.submitEndNightOdo = function(){
         vm.driver.endNightOdo = vm.endNightOdo;
         updateDriver();
+        vm.isEndNightOdoSubmitted = true;
     }
     vm.cancelEndNight = function(){
+        revertEndNightOdo();
         vm.endNightPressed = false;
+        vm.isEndNightOdoSubmitted = false;
+        getCurrentRideRequest();
     }
 
     /**

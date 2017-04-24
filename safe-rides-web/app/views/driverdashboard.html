@@ -8,60 +8,60 @@
         </div>
     </div>
 
-  <!-- No Ride View -->
-  <div ng-show="ctrl.isRideAssigned === false">
-    <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
-        <strong>No Incoming Ride Requests:</strong> You currently do not have any ride requests assigned to you.
-    </div>
-    <div class="col-md-12 text-center">
-        <div class="row text-center">
-            <button class="btn btn-default btn-info" type="button"
-                    ng-click="ctrl.refresh()">
-              Refresh
-            </button>
-        </div>
-        <div class="row text-center">
-            <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.endNight()" ng-show="!ctrl.endNightPressed">
-              End Night
-          </button>
+      <div class="panel panel-warning" ng-show="ctrl.isEndNightOdoSubmitted === true">
+          <div class="panel-heading text-center">
+              <h3 class="panel-title">End Of Night</h3>
+          </div>
+          <div class="panel-body text-center">
+              You have chosen to end the night as a ASI Safe Rides Driver volunteer.
+              <br>
+              <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.cancelEndNight()">
+                Cancel
+              </button>
+          </div>
       </div>
-      <div class="col-md-3">
 
+<!-- No Ride View -->
+<div class="panel panel-warning" ng-show="ctrl.isRideAssigned === false && ctrl.isEndNightOdoSubmitted === false">
+  <div class="panel-heading text-center">
+      <h3 class="panel-title">No Incoming Ride Requests</h3>
+  </div>
+  <div class="panel-body text-center">
+      <div class="alert alert-info" role="alert"><!-- alert-dismissible-->
+          You currently do not have any ride requests assigned to you.
       </div>
-        <div class="row text-center col-md-6">
-            <div class="col-md-3"></div>
-            <div class="col-md-6" ng-show="ctrl.endNightPressed">
-                <form name="odoEndNightForm" class="form-vertical">
-                  <label for="odoEndNightForm">Enter ODO to complete ASI Safe Rides Night: </label>
-                  <input id="odoEndNight" name="odoEndNight" type="number" class="form-control" required
-                  placeholder="ex: 120405" ng-model="ctrl.endNightOdo"
-                  ng-maxlength="6" ng-minlength="3" ng-min="100">
-                  <div ng-messages="odoEndNightForm.odoStartRide.$dirty && odoEndNightForm.odoStartRide.$error">
-                      <div class="input-error" ng-message="required">* required to complete Safe Rides Night</div>
-                  </div>
-                </form>
-                <button class="btn btn-default btn-success" type="button" ng-click="ctrl.submitEndNightOdo()" ng-disabled="odoEndNightForm.$invalid">
-                  Submit
-                </button>
-                <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.cancelEndNight()">
-                  Cancel
-                </button>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="col-md-3"></div>
+      <button class="btn btn-default btn-info" type="button"
+              ng-click="ctrl.refresh()">
+        Refresh
+      </button>
+      <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.endNight()" ng-show="!ctrl.endNightPressed">
+        End Night
+      </button>
+      <button class="btn btn-default btn-danger" type="button" ng-click="ctrl.cancelEndNight()" ng-show="ctrl.endNightPressed">
+        Cancel
+      </button>
+    <div class="col-md-6" ng-show="ctrl.endNightPressed">
+        <form name="odoEndNightForm" class="form-vertical">
+          <label for="odoEndNightForm">Enter ODO to complete ASI Safe Rides Night: </label>
+          <input id="odoEndNight" name="odoEndNight" type="number" class="form-control" required
+          placeholder="ex: 120405" ng-model="ctrl.endNightOdo"
+          ng-maxlength="6" ng-minlength="3" ng-min="100">
+          <div ng-messages="odoEndNightForm.odoStartRide.$dirty && odoEndNightForm.odoStartRide.$error">
+              <div class="input-error" ng-message="required">* required to complete Safe Rides Night</div>
+          </div>
+        </form>
+        <button class="btn btn-default btn-success" type="button" ng-click="ctrl.submitEndNightOdo()" ng-disabled="odoEndNightForm.$invalid">
+          Submit
+        </button>
     </div>
-    <div class="row text-center">
-        <strong>Call ASI: (916) 278-8294</strong>
-    </div>
-
-      <!--div class="col-md-12 text-center"-->
-  </div><!-- end No Ride View -->
+  </div>
+ </div>
+ <!-- end No ride view-->
 
     <!-- New Ride Available -->
     <div class="panel panel-success" ng-show="ctrl.assignedRide.status === 'ASSIGNED'">
       <div class="panel-heading text-center">
-          <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;<strong>New Ride Assigned</strong>&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
+          <h3 class="panel-title"><img src="images/car_icon_18px.png">&nbsp;&nbsp;New Ride Assigned&nbsp;&nbsp;<img src="images/car_icon_18px.png"></h3>
       </div>
       <div class="panel-body">
             <div class="row margin-top-20">
