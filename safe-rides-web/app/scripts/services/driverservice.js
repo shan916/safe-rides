@@ -21,6 +21,16 @@ angular.module('safeRidesWebApp')
     });
 
 angular.module('safeRidesWebApp')
+    .factory('DriverSaveService', function($resource, ENV) {
+
+        return $resource(ENV.apiEndpoint + 'drivers/endofnight', null, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    });
+
+angular.module('safeRidesWebApp')
     .factory('DriverRidesService', function($resource, ENV) {
 
         return $resource(ENV.apiEndpoint + 'drivers/:id/rides', {
@@ -45,6 +55,26 @@ angular.module('safeRidesWebApp')
             }
         });
     });
+
+angular.module('safeRidesWebApp')
+        .factory('GetDriverCurrentRideService', function($resource, ENV) {
+            return $resource(ENV.apiEndpoint + 'drivers/currentride', {
+                get: {
+                    method: 'GET',
+                    isArray: true
+                }
+            });
+        });
+
+        angular.module('safeRidesWebApp')
+                .factory('GetDriverMe', function($resource, ENV) {
+                    return $resource(ENV.apiEndpoint + 'drivers/me', {
+                        get: {
+                            method: 'GET',
+                            isArray: true
+                        }
+                    });
+                });
 
 angular.module('safeRidesWebApp')
     .factory('DriverLocationService', function($resource, ENV) {

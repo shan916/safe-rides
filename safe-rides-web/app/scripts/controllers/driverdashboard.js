@@ -8,8 +8,8 @@
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService, Notification) {
+.controller('DriverdashboardCtrl', function($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
+                                            $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
     var vm = this;
     vm.loadingRideRequest = true;
     vm.ride = undefined;
@@ -28,6 +28,9 @@ angular.module('safeRidesWebApp')
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
     vm.endNightPressed = false;
+    vm.currentRideRequest = undefined;
+    vm.isEndNightOdoSubmitted = false;
+    vm.localDriver = undefined;
 
     /*
     * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -57,104 +60,76 @@ angular.module('safeRidesWebApp')
         console.log('Not authenticated');
     }
 
-    function getCurrentRideRequest() {
+    function getLocalDriver() {
+        GetDriverMe.get().$promise.then(function(response) {
+            if(response === undefined) {
 
-        CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
-            vm.assignedRideRequest = response;
-            vm.isRideAssigned = false;
-
-            vm.pickedUpButtonPressed = false;
-            vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                var rideRequest = new RideRequest(element);
-                assignedRideRequest[index] = rideRequest;
-                //if not in progress
-                if(rideRequest.status === 'ASSIGNED'){
-                    vm.assignedRide = rideRequest;
-                    vm.isRideAssigned=true;
-                    console.log('got Assigned Ride, ASSIGNED');
-                    buildDirectionButtons();
-                    return;
+            } else {
+                vm.localDriver = new Driver(response);
+                console.log('GetDriverMe success');
+                if(vm.localDriver.endNightOdo > 0){
+                    vm.isEndNightOdoSubmitted = true;
+                    console.log('end night odo localDriver > 0');
+                } else {
+                    console.log('end night odo localDriver < 0');
+                    vm.isEndNightOdoSubmitted = false;
                 }
+            }
+        }, function(error){
+                console.log('No Driver GetDriverMe: ', error);
+        });
+    }
 
-            });
+    function getCurrentRideRequest() {
+        vm.isRideAssigned = false;
 
-            if(vm.isRideAssigned === false){
-                CurrentDriverRidesService.get({status: 'PICKINGUP'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'PICKINGUP') {
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;
-                            console.log('got Assigned Ride, PICKINGUP');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned PICKINGUP:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() PICKINGUP', error);
-                });//end CurrentDriverRidesService.get PICKINGUP
-
-                CurrentDriverRidesService.get({status: 'ATPICKUPLOCATION'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'ATPICKUPLOCATION'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;//different from PICKINGUP
-                            console.log('got Assigned Ride, ATPICKUPLOCATION');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() ATPICKUPLOCATION', error);
-                });//end CurrentDriverRidesService.get ATPICKUPLOCATION
-
-                CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'DROPPINGOFF'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = true;//different from PICKINGUP
-                            console.log('got Assigned Ride, DROPPINGOFF');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() DROPPINGOFF', error);
-                });//end CurrentDriverRidesService.get DROPPINGOFF
-            }// end if vm.isRideAssigned === false
-
-            console.log('getCurrentRideRequest() called API success:', response);
-
-
-        }, function(error) {
-
-            console.log('getCurrentRideRequest() returned no ASSIGNED rides:', error);
-
-        });//end CurrentDriverRidesService.get ASSIGNED
-
-        //Set refresh interval if not already set
-        if (!rideRefresher) {
-            rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-            console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-        }else {
-            console.log('REFRESH_INTERVAL already ran');
+        if(vm.localDriver === undefined) {
+            getLocalDriver();
         }
 
-    } //end getCurrentRideRequest()
+        GetDriverCurrentRideService.get().$promise.then(function(response) {
+            if(response === undefined){
+                console.log('response is undefined');
+                return;
+            } else if (response !== undefined) {
+                vm.assignedRide = new RideRequest(response);
+                if(vm.assignedRide.status === 'ASSIGNED'){
+                    vm.isRideAssigned=true;
+                    vm.pickedUpButtonPressed = false;
+                    vm.isEndNightOdoSubmitted = false;
+                    console.log('got Assigned Ride, ASSIGNED');
+                } else if (vm.assignedRide.status === 'PICKINGUP') {
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = false;
+                    vm.isEndNightOdoSubmitted = false;
+                    console.log('got Assigned Ride, PICKINGUP');
+                } else if (vm.assignedRide.status === 'ATPICKUPLOCATION'){
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = false;//different from DROPPINGOFF
+                    vm.isEndNightOdoSubmitted = false;
+                    console.log('got Assigned Ride, ATPICKUPLOCATION');
+                } else if (vm.assignedRide.status === 'DROPPINGOFF'){
+                    vm.isRideAssigned = true;
+                    vm.pickedUpButtonPressed = true;//different from PICKINGUP
+                    vm.isEndNightOdoSubmitted = false;
+                    console.log('got Assigned Ride, DROPPINGOFF');
+                }
+                buildDirectionButtons();
+
+                if (!rideRefresher) {
+                    rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+                }else {
+                    console.log('REFRESH_INTERVAL already ran');
+                }
+            } else { //check the end night odo has been entered
+
+            }
+
+        }, function(error){
+            console.log('No Assigned Rides: ', error);
+            vm.isRideAssigned = false;
+        });
+    }//end newgetCurrentRideRequest
 
     function buildDirectionButtons(){
         if(vm.assignedRide.pickupLine1 !== undefined){
@@ -166,6 +141,22 @@ angular.module('safeRidesWebApp')
             ', ' + vm.assignedRide.dropoffCity + ', CA';
             console.log('buttons built');
         }
+    }
+
+    function updateDriver() {
+        DriverSaveService.update(vm.endNightOdo).$promise.then(function(response) {
+            console.log('saved driver endNightOdo:', response);
+        }, function(error) {
+            console.log('error saving driver endNightOdo:', error);
+        });
+    }
+
+    function revertEndNightOdo() {
+        DriverSaveService.update(0).$promise.then(function(response) {
+            console.log('saved driver endNightOdo:', response);
+        }, function(error) {
+            console.log('error saving driver endNightOdo:', error);
+        });
     }
 
     function updateRideRequest(){
@@ -207,6 +198,7 @@ angular.module('safeRidesWebApp')
             vm.assignedRide.endOdometer = vm.endOdo;
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
+            vm.isEndNightOdoSubmitted = false;
             updateRideRequest();
             $interval(getCurrentRideRequest, REFRESH_INTERVAL);
     };
@@ -216,7 +208,7 @@ angular.module('safeRidesWebApp')
             vm.assignedRide.status = 'ATPICKUPLOCATION';
             updateRideRequest();
         }else{
-            console.log("Already notified rider");
+            console.log('Already notified rider');
         }
             vm.isRideAssigned = true;
             vm.pickedUpButtonPressed = false;
@@ -230,14 +222,18 @@ angular.module('safeRidesWebApp')
 
     vm.endNight = function() {
         vm.endNightPressed = true;
-    }
+    };
     vm.submitEndNightOdo = function(){
-        //TODO save driver's last odo recording to driver on api
-        //driver.endNightOdo = vm.endNightOdo;
-    }
+        vm.driver.endNightOdo = vm.endNightOdo;
+        updateDriver();
+        vm.isEndNightOdoSubmitted = true;
+    };
     vm.cancelEndNight = function(){
+        revertEndNightOdo();
         vm.endNightPressed = false;
-    }
+        vm.isEndNightOdoSubmitted = false;
+        getCurrentRideRequest();
+    };
 
     /**
     *   Driver can manually refresh to see if they

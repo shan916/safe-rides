@@ -182,6 +182,34 @@ public class DriverController {
         }
     }
 
+    /*
+    * PUT /drivers/endOfNight
+    */
+    @RequestMapping(method = RequestMethod.PUT, value = "/endofnight")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "saveEndNightOdo", nickname = "saveEndNightOdo", notes = "Updates a driver's end of night odometer")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> endOfNight(HttpServletRequest request, @RequestBody Long endNightOdo) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver tempDriver = driverRepository.findByUser(user);
+
+        if (tempDriver != null) {
+            tempDriver.setEndNightOdo(endNightOdo);
+            driverRepository.save(tempDriver);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver not found."));
+        }
+    }
+
     /**
      * DELETE /drivers/{id}
      * <p>
@@ -264,6 +292,65 @@ public class DriverController {
 
         } else {
             return ResponseEntity.ok(driver.getRides());
+        }
+    }
+
+    /**
+     * GET /drivers/currentride
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/currentride")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "currentRide", nickname = "currentRide", notes = "Retrieves currently assigned ride to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> getDriverCurrentRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+        //if the driver has no status or is Available, then there is no current ride, return empty
+        if (driver == null || driver.getStatus() == null || driver.getStatus() == DriverStatus.AVAILABLE) {
+            return ResponseEntity.noContent().build();
+        } else {
+            Set<RideRequest> requests = driver.getRides();
+            for (RideRequest req : requests) {
+                if (req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
+                        || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF) {
+                    return ResponseEntity.ok(req);
+                }
+            }
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * GET /drivers/me
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/me")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "getDriver", nickname = "getDriver", notes = "Retrieves current driver to the authenticated driver")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> getMe(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsername(username);
+
+        Driver driver = driverRepository.findByUser(user);
+
+        if (driver == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(driver);
         }
     }
 
