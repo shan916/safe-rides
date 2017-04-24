@@ -8,9 +8,9 @@ package edu.csus.asi.saferides.model;
  * DROPPINGOFF - Driver is on their way to drop off a rider
  */
 public enum DriverStatus {
-	AVAILABLE,
-	ASSIGNED,
-	PICKINGUP,
-	ATPICKUPLOCATION,
-	DROPPINGOFF
+    AVAILABLE,
+    ASSIGNED,
+    PICKINGUP,
+    ATPICKUPLOCATION,
+    DROPPINGOFF
 }

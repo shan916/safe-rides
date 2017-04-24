@@ -165,10 +165,10 @@ public class RideRequestController {
 
     /**
      * PUT /rides/{id}
-     *
+     * <p>
      * Updates the ride located at rides/{id} with the new data from the request body.
      *
-     * @param id path parameter for id of ride to update
+     * @param id          path parameter for id of ride to update
      * @param rideRequest request body containing the ride to update
      * @return the updated ride
      */
@@ -190,7 +190,7 @@ public class RideRequestController {
 
     /**
      * GET /rides/mine
-     *
+     * <p>
      * Returns the current ride request for the authenticated rider or no content if it doesn't exist
      *
      * @param request the HTTP servlet request

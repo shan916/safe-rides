@@ -129,8 +129,8 @@ public class Driver {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-	@Column(nullable = false)
-	private long endOfNightOdo;
+    @Column(nullable = false)
+    private long endOfNightOdo;
 
     /**
      * Updates time stamp date if modified or creates a new date
@@ -427,18 +427,18 @@ public class Driver {
      *
      * @return the driver's end of night odometer
      */
-	public long getEndOfNightOdo() {
-		return endOfNightOdo;
-	}
+    public long getEndOfNightOdo() {
+        return endOfNightOdo;
+    }
 
     /**
      * Set the driver's end of night odometer
      *
      * @param endOfNightOdo the driver's end of night odometer
      */
-	public void setEndOfNightOdo(long endOfNightOdo) {
-		this.endOfNightOdo = endOfNightOdo;
-	}
+    public void setEndOfNightOdo(long endOfNightOdo) {
+        this.endOfNightOdo = endOfNightOdo;
+    }
 
     /**
      * Get rides. If there are no ride request it returns a new
@@ -462,7 +462,7 @@ public class Driver {
     public DriverStatus getStatus() {
         boolean assigned = false;
         boolean pickingUp = false;
-		boolean atPickupLocation = false;
+        boolean atPickupLocation = false;
 
         for (RideRequest ride : getRides()) {
             RideRequestStatus rideStatus = ride.getStatus();
@@ -473,9 +473,9 @@ public class Driver {
                 case PICKINGUP:
                     pickingUp = true;
                     break;
-				case ATPICKUPLOCATION:
-					atPickupLocation = true;
-					break;
+                case ATPICKUPLOCATION:
+                    atPickupLocation = true;
+                    break;
                 case ASSIGNED:
                     assigned = true;
                     break;
@@ -486,9 +486,9 @@ public class Driver {
 
         if (pickingUp) {
             return DriverStatus.PICKINGUP;
-        } else if(atPickupLocation){
-        	return DriverStatus.ATPICKUPLOCATION;
-		} else if (assigned) {
+        } else if (atPickupLocation) {
+            return DriverStatus.ATPICKUPLOCATION;
+        } else if (assigned) {
             return DriverStatus.ASSIGNED;
         } else {
             return DriverStatus.AVAILABLE;

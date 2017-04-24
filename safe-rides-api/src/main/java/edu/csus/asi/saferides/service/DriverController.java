@@ -95,7 +95,7 @@ public class DriverController {
 
     /**
      * GET /drivers/{id}
-     *
+     * <p>
      * Returns the driver with the given id
      *
      * @param id the id of the driver to return

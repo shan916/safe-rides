@@ -16,7 +16,7 @@ import java.util.List;
  * */
 public interface DriverRepository extends CrudRepository<Driver, Long> {
     /*
-	 * Other query methods can be defined by simply declaring the method signature.
+     * Other query methods can be defined by simply declaring the method signature.
 	 * Spring Data JPA will automagically create an implementation on the fly.
 	 * */
 
