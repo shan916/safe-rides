@@ -33,8 +33,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     // dependency injection
     @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
+
     @Autowired
     private AuthorityRepository authorityRepository;
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 

@@ -303,6 +303,8 @@ app.filter('FriendlyStatusName', function () {
                 return 'Assigned';
             case 'PICKINGUP':
                 return 'Driving to pickup';
+            case 'ATPICKUPLOCATION':
+                return 'Driver at pickup location';
             case 'DROPPINGOFF':
                 return 'Driving to dropoff';
             case 'COMPLETE':

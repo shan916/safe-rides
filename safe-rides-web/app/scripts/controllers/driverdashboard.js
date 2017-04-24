@@ -16,6 +16,7 @@ angular.module('safeRidesWebApp')
     vm.rideRequests = [];
     vm.startOdo = undefined;
     vm.endOdo = undefined;
+    vm.endNightOdo = undefined;
     vm.assignedRide = undefined;
     vm.getPickupDirections = undefined;
     vm.dropoffAddress = undefined;
@@ -26,6 +27,7 @@ angular.module('safeRidesWebApp')
     vm.driver = undefined;
     var REFRESH_INTERVAL = 30000;
     var rideRefresher;
+    vm.endNightPressed = false;
 
     /*
     * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -66,7 +68,7 @@ angular.module('safeRidesWebApp')
                 var rideRequest = new RideRequest(element);
                 assignedRideRequest[index] = rideRequest;
                 //if not in progress
-                if(!vm.inprogressFlag && rideRequest.status === 'ASSIGNED'){
+                if(rideRequest.status === 'ASSIGNED'){
                     vm.assignedRide = rideRequest;
                     vm.isRideAssigned=true;
                     console.log('got Assigned Ride, ASSIGNED');
@@ -95,6 +97,25 @@ angular.module('safeRidesWebApp')
                 }, function(error) {
                     console.log('error getCurrentRideRequest() PICKINGUP', error);
                 });//end CurrentDriverRidesService.get PICKINGUP
+
+                CurrentDriverRidesService.get({status: 'ATPICKUPLOCATION'}).$promise.then(function(response) {
+                    vm.assignedRideRequest = response;
+                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
+                        var rideRequest = new RideRequest(element);
+                        assignedRideRequest[index] = rideRequest;
+                        if(rideRequest.status === 'ATPICKUPLOCATION'){
+                            vm.assignedRide = rideRequest;
+                            vm.isRideAssigned = true;
+                            vm.pickedUpButtonPressed = false;//different from PICKINGUP
+                            console.log('got Assigned Ride, ATPICKUPLOCATION');
+                            buildDirectionButtons();
+                            return;
+                        }
+                    });
+                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
+                }, function(error) {
+                    console.log('error getCurrentRideRequest() ATPICKUPLOCATION', error);
+                });//end CurrentDriverRidesService.get ATPICKUPLOCATION
 
                 CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
                     vm.assignedRideRequest = response;
@@ -139,17 +160,10 @@ angular.module('safeRidesWebApp')
         if(vm.assignedRide.pickupLine1 !== undefined){
             vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
             ', ' + vm.assignedRide.pickupCity + ', CA';
-            if(vm.assignedRide.pickupLine2 !== undefined){
-                vm.pickupAddress += ', ' + vm.assignedRide.pickupLine2;
-            }
         }
         if(vm.assignedRide.dropoffLine1 !== undefined){
             vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
             ', ' + vm.assignedRide.dropoffCity + ', CA';
-
-            if(vm.assignedRide.dropoffLine2 !== undefined){
-                vm.dropoffAddress += ', ' + vm.assignedRide.dropoffLine2;
-            }
             console.log('buttons built');
         }
     }
@@ -177,9 +191,6 @@ angular.module('safeRidesWebApp')
             vm.pickedUpButtonPressed = false;
 
             updateRideRequest();
-
-            //TODO notify rider, Ride on the way
-
         }
     };
 
@@ -190,22 +201,43 @@ angular.module('safeRidesWebApp')
         updateRideRequest();
     };
 
-    vm.endRide = function(){
+    vm.endRide = function() {
         vm.assignedRide.status = 'COMPLETE';
         //if(vm.assignedRide.startOdo > vm.endOdo){}
             vm.assignedRide.endOdometer = vm.endOdo;
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
             updateRideRequest();
-            if (!rideRefresher) {
-                rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-                console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-            }
+            $interval(getCurrentRideRequest, REFRESH_INTERVAL);
     };
 
-    vm.notifyRider = function(){
-
+    vm.notifyRider = function() {
+        if(vm.assignedRide.status !== 'ATPICKUPLOCATION'){
+            vm.assignedRide.status = 'ATPICKUPLOCATION';
+            updateRideRequest();
+        }else{
+            console.log("Already notified rider");
+        }
+            vm.isRideAssigned = true;
+            vm.pickedUpButtonPressed = false;
+            Notification.success({
+                message: vm.assignedRide.requestorFirstName+'&nbsp;'+vm.assignedRide.requestorLastName+' has been notified.',
+                positionX: 'center',
+                delay: 4000,
+                replaceMessage: true
+            });
     };
+
+    vm.endNight = function() {
+        vm.endNightPressed = true;
+    }
+    vm.submitEndNightOdo = function(){
+        //TODO save driver's last odo recording to driver on api
+        //driver.endNightOdo = vm.endNightOdo;
+    }
+    vm.cancelEndNight = function(){
+        vm.endNightPressed = false;
+    }
 
     /**
     *   Driver can manually refresh to see if they
@@ -231,6 +263,7 @@ angular.module('safeRidesWebApp')
                 });
             } else {
                 console.log('Distance is not long enough to update the api.');
+//                getCurrentRideRequest();
             }
 
             vm.lastCoords = coords;
@@ -275,5 +308,6 @@ angular.module('safeRidesWebApp')
             $interval.cancel(locationUpdater);
         }
     });
+
 
 });//end Controller

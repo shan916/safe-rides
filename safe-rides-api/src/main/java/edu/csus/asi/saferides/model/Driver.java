@@ -129,6 +129,9 @@ public class Driver {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+	@Column(nullable = false)
+	private long endOfNightOdo;
+
     /**
      * Updates time stamp date if modified or creates a new date
      * if one doesn't already exist.
@@ -420,6 +423,24 @@ public class Driver {
     }
 
     /**
+     * Get the driver's end of night odometer
+     *
+     * @return the driver's end of night odometer
+     */
+	public long getEndOfNightOdo() {
+		return endOfNightOdo;
+	}
+
+    /**
+     * Set the driver's end of night odometer
+     *
+     * @param endOfNightOdo the driver's end of night odometer
+     */
+	public void setEndOfNightOdo(long endOfNightOdo) {
+		this.endOfNightOdo = endOfNightOdo;
+	}
+
+    /**
      * Get rides. If there are no ride request it returns a new
      * hash set of ride requests.
      *
@@ -441,6 +462,7 @@ public class Driver {
     public DriverStatus getStatus() {
         boolean assigned = false;
         boolean pickingUp = false;
+		boolean atPickupLocation = false;
 
         for (RideRequest ride : getRides()) {
             RideRequestStatus rideStatus = ride.getStatus();
@@ -451,6 +473,9 @@ public class Driver {
                 case PICKINGUP:
                     pickingUp = true;
                     break;
+				case ATPICKUPLOCATION:
+					atPickupLocation = true;
+					break;
                 case ASSIGNED:
                     assigned = true;
                     break;
@@ -461,7 +486,9 @@ public class Driver {
 
         if (pickingUp) {
             return DriverStatus.PICKINGUP;
-        } else if (assigned) {
+        } else if(atPickupLocation){
+        	return DriverStatus.ATPICKUPLOCATION;
+		} else if (assigned) {
             return DriverStatus.ASSIGNED;
         } else {
             return DriverStatus.AVAILABLE;
@@ -529,6 +556,7 @@ public class Driver {
                 ", rides=" + rides +
                 ", locations=" + locations +
                 ", user=" + user +
+                ", endOfNightOdometer=" + endOfNightOdometer +
                 '}';
     }
 }
