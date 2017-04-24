@@ -49,7 +49,7 @@ public class DriverController {
     private DriverLocationRepository driverLocationRepository;
 
     /**
-     * set name of the response key that stores the JWT
+     * HTTP header that stores the JWT, defined in application.yaml
      */
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -67,7 +67,7 @@ public class DriverController {
     private UserRepository userRepository;
 
     /**
-     * GET /drivers
+     * GET /drivers?active=
      * <p>
      * If active is null, returns all drivers. Otherwise, returns all drivers filtered by the active parameter.
      *
@@ -95,6 +95,8 @@ public class DriverController {
 
     /**
      * GET /drivers/{id}
+     *
+     * Returns the driver with the given id
      *
      * @param id the id of the driver to return
      * @return the driver with the given id or 404 if not found
@@ -147,7 +149,7 @@ public class DriverController {
      * <p>
      * Updates the driver located at drivers/{id} with the new data from the request body.
      * <p>
-     * Returns HTTP status code 400 under the following conditions
+     * Returns HTTP status code 400 under the following conditions:
      * <ul>
      * <li>id in path is different from id in request body</li>
      * <li>driver is being deactivated while status is not AVAILABLE</li>
