@@ -14,23 +14,23 @@ angular.module('safeRidesWebApp')
         vm.loadingRideRequest = true;
         vm.ride = undefined;
         vm.rideRequests = [];
-        vm.startOdo = undefined;
-        vm.endOdo = undefined;
-        vm.endOfNightOdo = undefined;
-        vm.assignedRide = undefined;
+        vm.startOdo = undefined; //used in form to capture startOdo
+        vm.endOdo = undefined;  //used in form to capture endOdo
+        vm.endOfNightOdo = undefined; //used in form to capture endOfNightOdo
+        vm.assignedRide = undefined; //holds current ride assinged to Driver
         vm.getPickupDirections = undefined;
-        vm.dropoffAddress = undefined;
+        vm.dropoffAddress = undefined;  //used to create address
         vm.assignedRideRequest = undefined;
-        vm.isRideAssigned = false;
-        vm.pickedUpButtonPressed = false;
-        vm.lastCoords = undefined;
-        vm.driver = undefined;
-        var REFRESH_INTERVAL = 30000;
-        var rideRefresher;
-        vm.endNightPressed = false;
+        vm.isRideAssigned = false;  //is there currently a ride for this Driver
+        vm.pickedUpButtonPressed = false; //Driver must press "picked up" button to reveal the dropoff address
+        vm.lastCoords = undefined;  //last known coordinates for this driver
+        vm.driver = undefined;  //used to authenticate this driver is a valid user
+        var REFRESH_INTERVAL = 30000;   //Refresh time in ms for refreshing getCurrentRideRequest
+        var rideRefresher; //used to signify if the refresh interval has been created yet
+        vm.endNightPressed = false; //is the end of night button pressed
         vm.currentRideRequest = undefined;
-        vm.isendOfNightOdoSubmitted = false;
-        vm.localDriver = undefined;
+        vm.isendOfNightOdoSubmitted = false;  //has the end of night odometer reading been submitted
+        vm.localDriver = undefined;  //this currently signed in Driver
 
         /*
          * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -60,6 +60,10 @@ angular.module('safeRidesWebApp')
             console.log('Not authenticated');
         }
 
+        /*
+        * gets the currently signed in driver
+        * and checks if the end of night odometer has been submitted
+        */
         function getLocalDriver() {
             GetDriverMe.get().$promise.then(function (response) {
                 if (response === undefined) {
@@ -79,13 +83,19 @@ angular.module('safeRidesWebApp')
             });
         }
 
+        /*
+        *   gets the currently assigned ride request
+        *   and assigns state of driver with booleans
+        *   isRideAssigned, pickedUpButtonPressed, and isendOfNightOdoSubmitted
+        */
         function getCurrentRideRequest() {
             vm.isRideAssigned = false;
 
+            //get current driver signed in
             if (vm.localDriver === undefined) {
                 getLocalDriver();
             }
-
+            //get the current ride request to driver
             GetDriverCurrentRideService.get().$promise.then(function (response) {
                 if (response === undefined) {
                     console.log('response is undefined');
@@ -113,8 +123,9 @@ angular.module('safeRidesWebApp')
                         vm.isendOfNightOdoSubmitted = false;
                         console.log('got Assigned Ride, DROPPINGOFF');
                     }
+                    //creat address links
                     buildDirectionButtons();
-
+                    //create refresh interval
                     if (!rideRefresher) {
                         rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
                     } else {
@@ -130,6 +141,9 @@ angular.module('safeRidesWebApp')
             });
         }//end newgetCurrentRideRequest
 
+        /*
+        *   Creates links for directions to pickup and dropoff addresses on google maps
+        */
         function buildDirectionButtons() {
             if (vm.assignedRide.pickupLine1 !== undefined) {
                 vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
@@ -142,6 +156,9 @@ angular.module('safeRidesWebApp')
             }
         }
 
+        /*
+        *   Updates a drivers end of night odometer reading
+        */
         function updateDriver() {
             DriverSaveService.update(vm.endOfNightOdo).$promise.then(function (response) {
                 console.log('saved driver endOfNightOdo:', response);
@@ -150,6 +167,10 @@ angular.module('safeRidesWebApp')
             });
         }
 
+        /*
+        *   Reverts the end of the night odometer reading back
+        *   to its previous value
+        */
         function revertendOfNightOdo() {
             DriverSaveService.update(0).$promise.then(function (response) {
                 console.log('saved driver endOfNightOdo:', response);
@@ -158,6 +179,9 @@ angular.module('safeRidesWebApp')
             });
         }
 
+        /*
+        *   updates currently assigned ride request
+        */
         function updateRideRequest() {
             RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function (response) {
                 console.log('Driver, saved riderequest:', response);
@@ -166,7 +190,13 @@ angular.module('safeRidesWebApp')
             });
         }
 
-        //enter odometer and view newly assigned ride
+
+        /*  enter odometer and view newly assigned ride
+        *   New Ride Assigned panel
+        *   When driver is assigned a ride this screen asks for the
+        *   Drivers odometer reading in order to reveal the pickup address
+        *   and current ride panel
+        */
         vm.viewRide = function () {
             //Stop refresh when a new ride is assigned.
             //No new data
@@ -184,6 +214,11 @@ angular.module('safeRidesWebApp')
             }
         };
 
+        /*
+        *   When "pickedUp" button is pressed the Driver has signified
+        *   they have picked up the rider/passengers and is now heading
+        *   towards the dropoff location
+        */
         vm.pickedUp = function () {
             vm.assignedRide.status = 'DROPPINGOFF';
             vm.isRideAssigned = true;
@@ -191,6 +226,10 @@ angular.module('safeRidesWebApp')
             updateRideRequest();
         };
 
+        /*
+        *   Ending the ride request requires the Driver enters the
+        *   ending odometer reading
+        */
         vm.endRide = function () {
             vm.assignedRide.status = 'COMPLETE';
             //if(vm.assignedRide.startOdo > vm.endOdo){}
@@ -202,6 +241,10 @@ angular.module('safeRidesWebApp')
             $interval(getCurrentRideRequest, REFRESH_INTERVAL);
         };
 
+        /*
+        *   changes the ride request status to notify the rider
+        *   the driver has arrived at their pickup location
+        */
         vm.notifyRider = function () {
             if (vm.assignedRide.status !== 'ATPICKUPLOCATION') {
                 vm.assignedRide.status = 'ATPICKUPLOCATION';
@@ -219,14 +262,27 @@ angular.module('safeRidesWebApp')
             });
         };
 
+        /*
+        *   when Driver wants to end night and submit end of night odometer
+        */
         vm.endNight = function () {
             vm.endNightPressed = true;
         };
+
+        /*
+        *   Submit end of night odometer reading
+        *   Shows End of Night panel
+        */
         vm.submitendOfNightOdo = function () {
             vm.driver.endOfNightOdo = vm.endOfNightOdo;
             updateDriver();
-            vm.isendOfNightOdoSubmitted = true;
+            vm.isendOfNightOdoSubmitted = true; // shows end of night panel
         };
+
+        /*
+        *   Cancelling and reverting end of night odometer reading
+        *   back to it's previous value
+        */
         vm.cancelEndNight = function () {
             revertendOfNightOdo();
             vm.endNightPressed = false;
@@ -242,7 +298,9 @@ angular.module('safeRidesWebApp')
             getCurrentRideRequest();
         };
 
-
+        /*
+        * updates this drivers current location if allowed in browser
+        */
         var updateLocation = function () {
             GeolocationService.getCurrentPosition().then(function (location) {
                 var coords = {
@@ -258,7 +316,6 @@ angular.module('safeRidesWebApp')
                     });
                 } else {
                     console.log('Distance is not long enough to update the api.');
-//                getCurrentRideRequest();
                 }
 
                 vm.lastCoords = coords;
