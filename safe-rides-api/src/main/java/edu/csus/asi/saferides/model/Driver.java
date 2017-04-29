@@ -149,7 +149,7 @@ public class Driver {
     }
 
     /**
-     * Constructor used by JPA
+     * Constructor used by JPA to construct a Driver entity
      */
     protected Driver() {
     }
