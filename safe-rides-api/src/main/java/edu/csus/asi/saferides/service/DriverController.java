@@ -234,8 +234,12 @@ public class DriverController {
         }
     }
 
-    /*
+    /**
      * GET /drivers/{id}/rides
+     *
+     * @param id - id of driver to get rides for
+     * @param status status to filter rides by
+     * @return list of rides for driver with specified id and filtered with specified status
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/rides")
     @PreAuthorize("hasRole('DRIVER')")
@@ -262,8 +266,12 @@ public class DriverController {
         }
     }
 
-    /*
+    /**
      * GET /drivers/rides
+     *
+     * @param request HTTP servlet request
+     * @param status status to filter rides by
+     * @return list of rides for the authenticated driver, filtered by the specified status
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rides")
     @PreAuthorize("hasRole('DRIVER')")
@@ -297,6 +305,9 @@ public class DriverController {
 
     /**
      * GET /drivers/currentride
+     *
+     * @param request HTTP servlet request
+     * @return the current ride for the authenticated driver
      */
     @RequestMapping(method = RequestMethod.GET, value = "/currentride")
     @PreAuthorize("hasRole('DRIVER')")
@@ -330,6 +341,9 @@ public class DriverController {
 
     /**
      * GET /drivers/me
+     *
+     * @param request HTTP servlet request
+     * @return the authenticated driver's Driver object
      */
     @RequestMapping(method = RequestMethod.GET, value = "/me")
     @PreAuthorize("hasRole('DRIVER')")

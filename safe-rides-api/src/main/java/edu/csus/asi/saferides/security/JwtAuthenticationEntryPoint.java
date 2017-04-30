@@ -30,7 +30,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
      * @param request       that resulted in an AuthenticationException
      * @param response      so that the user agent can begin authentication
      * @param authException that caused the invocation
-     * @throws IOException
+     * @throws IOException IO exception
      */
     @Override
     public void commence(HttpServletRequest request,

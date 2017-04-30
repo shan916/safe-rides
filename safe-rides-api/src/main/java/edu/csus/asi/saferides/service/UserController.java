@@ -59,7 +59,7 @@ public class UserController {
     /**
      * Get information on authenticated user
      *
-     * @param request
+     * @param request HTTP servlet request
      * @return JWTUser object
      */
     @RequestMapping(value = "/me", method = RequestMethod.GET)
@@ -130,7 +130,7 @@ public class UserController {
      *
      * @param authenticationRequest POSTed authentication request
      * @return JWT
-     * @throws AuthenticationException
+     * @throws AuthenticationException authentication exception
      */
     @RequestMapping(method = RequestMethod.POST, value = "/auth")
     @ApiOperation(value = "authenticate", nickname = "Authenticate", notes = "User's authentication - Admin, Coordinator, Driver. Returns a JWT")
@@ -166,7 +166,7 @@ public class UserController {
      *
      * @param riderAuthenticationRequest POSTed authentication request
      * @return JWT
-     * @throws AuthenticationException
+     * @throws AuthenticationException authentication exception
      */
     @RequestMapping(method = RequestMethod.POST, value = "/authrider")
     @ApiOperation(value = "authenticateRider", nickname = "Authenticate Rider", notes = "User's authentication - Rider. Returns a JWT")

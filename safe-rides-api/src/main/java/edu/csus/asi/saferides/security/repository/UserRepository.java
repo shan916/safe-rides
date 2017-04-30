@@ -15,7 +15,7 @@ import java.util.List;
  * <p>
  * Other query methods can be defined by simply declaring the method signature.
  * Spring Data JPA will automatically create an implementation on the fly.
- * See <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods" target="_blank>Query Methods</a>
+ * See <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods" target="_blank">Query Methods</a>
  */
 public interface UserRepository extends CrudRepository<User, Long> {
 
