@@ -5,17 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 
-/*
- * @author Zeeshan Khaliq
- * 
+/**
  * Model object for Vehicle Entity
- * */
+ */
 
 @Entity
 public class Vehicle {
 
     /**
-     * driver field is hidden from other classes other than Driver class object
+     * One to one relationship between Driver and Vehicle.
      */
     @JsonIgnore
     @OneToOne
@@ -59,7 +57,7 @@ public class Vehicle {
     private String color;
 
     /**
-     * Vehicle's seats
+     * The number of seats in the vehicle including the driver seat
      */
     @Column(nullable = false)
     @Min(2)
@@ -74,13 +72,13 @@ public class Vehicle {
     /**
      * Constructor for creating a vehicle object
      *
-     * @param driver
-     * @param make
-     * @param model
-     * @param year
-     * @param licensePlate
-     * @param color
-     * @param seats
+     * @param driver - the driver that owns the vehicle
+     * @param make the make of the vehicle
+     * @param model the model of the vehicle
+     * @param year the year of the vehicle
+     * @param licensePlate the license plate of the vehicle
+     * @param color the color of the vehicle
+     * @param seats the number of seats in the vehicle including the driver seat
      */
     public Vehicle(Driver driver, String make, String model, String year, String licensePlate, String color,
                    Integer seats) {
@@ -97,7 +95,7 @@ public class Vehicle {
     /**
      * Get driver
      *
-     * @return driver
+     * @return the driver that owns the vehicle
      */
     public Driver getDriver() {
         return driver;
@@ -106,34 +104,34 @@ public class Vehicle {
     /**
      * Set driver
      *
-     * @param driver
+     * @param driver the driver that owns the vehicle
      */
     public void setDriver(Driver driver) {
         this.driver = driver;
     }
 
     /**
-     * Get vehicle's ID
+     * Get primary key
      *
-     * @return id
+     * @return primary key of vehicle
      */
-    public Long getVehicleId() {
+    public Long getId() {
         return id;
     }
 
     /**
-     * Set vehicle's ID
+     * Set primary key
      *
-     * @param vehicleId
+     * @param id the primary key
      */
-    public void setVehicleId(Long vehicleId) {
-        this.id = vehicleId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
      * Get vehicle's make
      *
-     * @return make
+     * @return the vehicle's make
      */
     public String getMake() {
         return make;
@@ -142,7 +140,7 @@ public class Vehicle {
     /**
      * Set vehicle's make
      *
-     * @param make
+     * @param make the vehicle's make
      */
     public void setMake(String make) {
         this.make = make;
@@ -151,7 +149,7 @@ public class Vehicle {
     /**
      * Get vehicle's model
      *
-     * @return model
+     * @return the vehicle's model
      */
     public String getModel() {
         return model;
@@ -160,7 +158,7 @@ public class Vehicle {
     /**
      * Set vehicle's model
      *
-     * @param model
+     * @param model the vehicle's model
      */
     public void setModel(String model) {
         this.model = model;
@@ -169,7 +167,7 @@ public class Vehicle {
     /**
      * Get vehicle's year
      *
-     * @return
+     * @return the vehicle's year
      */
     public String getYear() {
         return year;
@@ -178,7 +176,7 @@ public class Vehicle {
     /**
      * Set vehicle's year
      *
-     * @param year
+     * @param year the vehicle's year
      */
     public void setYear(String year) {
         this.year = year;
@@ -187,7 +185,7 @@ public class Vehicle {
     /**
      * Get vehicle's license plate
      *
-     * @return licensePlate
+     * @return the vehicle's license plate
      */
     public String getLicensePlate() {
         return licensePlate;
@@ -196,7 +194,7 @@ public class Vehicle {
     /**
      * Set vehicle's license plate
      *
-     * @param licensePlate
+     * @param licensePlate the vehicle's license plate
      */
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
@@ -205,7 +203,7 @@ public class Vehicle {
     /**
      * Get vehicle's color
      *
-     * @return
+     * @return the vehicle's color
      */
     public String getColor() {
         return color;
@@ -214,16 +212,16 @@ public class Vehicle {
     /**
      * Set vehicle's color
      *
-     * @param color
+     * @param color the vehicle's color
      */
     public void setColor(String color) {
         this.color = color;
     }
 
     /**
-     * Get vehicle's number of seats
+     * Get the number of seats in the vehicle including the driver seat
      *
-     * @return
+     * @return the number of seats in the vehicle including the driver seat
      */
     public Integer getSeats() {
         return seats;
@@ -232,7 +230,7 @@ public class Vehicle {
     /**
      * Set vehicle's number of seats
      *
-     * @param seats
+     * @param seats the number of seats in the vehicle including the driver seat
      */
     public void setSeats(Integer seats) {
         this.seats = seats;
@@ -241,7 +239,7 @@ public class Vehicle {
     /**
      * Gets a string object representing the values of the Vehicle Object
      *
-     * @return Vehicle string object
+     * @return string representation of the Vehicle object
      */
     @Override
     public String toString() {

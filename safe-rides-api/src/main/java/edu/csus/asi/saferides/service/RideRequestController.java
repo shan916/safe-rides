@@ -111,11 +111,9 @@ public class RideRequestController {
 
     /**
      * POST /rides
-     * <p>
      * Creates the given ride request in the database
      * <p>
-     * Returns HTTP status code 400 under the following conditions:
-     * <p>
+     * Returns HTTP status code 400 under the following conditions
      * <ul>
      * <li>
      * oneCardId is null
