@@ -9,6 +9,20 @@
  */
 angular.module('safeRidesWebApp')
     .controller('ManageCoordinatorsCtrl', function(user-service, $uibModal, authManager, $state, AuthTokenService) {
+      // kick user out if not authenticated
+      if(!authManager.isAuthenticated()){
+          $state.go('login');
+          console.log('Not authenticated');
+          return;
+      }
+
+      // kick user out if not coordinator
+      if(!AuthTokenService.isInRole('ROLE_ADMIN')){
+          $state.go('/');
+          console.log('Not an admin');
+          return;
+      }
+
         var vm = this;
 
         vm.activeCoordinators = [];
@@ -22,7 +36,7 @@ angular.module('safeRidesWebApp')
             vm.loadingActiveCoordinators = true;
             vm.loadingInactiveCoordinators = true;
 
-            user-service.query().$promise.then(function(response) {
+            user-service.query({active: true}).$promise.then(function(response) {
                 vm.loadingActiveCoordinators = false;
                 vm.activeCoordinators = response;
                 console.log('got active Coordinators:', response);
@@ -31,7 +45,7 @@ angular.module('safeRidesWebApp')
                 console.log('error getting active coordinators:', error);
             });
 
-            user-service.query().$promise.then(function(response) {
+            user-service.query({active: false}).$promise.then(function(response) {
                 vm.loadingInactiveCoordinators = false;
                 vm.inactiveCoordinators = response;
                 console.log('got inactive coordinators:', response);
@@ -43,34 +57,34 @@ angular.module('safeRidesWebApp')
 
         getCoordinators();
 
-        vm.openConfirmDeleteModal = function(coordinator) {
+        vm.openConfirmDeleteModal = function(user) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/confirmdeletecoordinatormodal.html',
                 controller: 'ConfirmDeleteCoordinatorModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     coordinator: function() {
-                        return coordinator;
+                        return user;
                     }
                 },
                 size: 'md'
             });
 
-            modalInstance.result.then(function(coordinator) {
-                deleteCoordinator(coordinator);
+            modalInstance.result.then(function(user) {
+                deleteCoordinator(user);
             }, function() {
                 // cancel clicked
             });
         };
 
-        vm.openConfirmChangeCoordinatorActiveModal = function(coordinator) {
+        vm.openConfirmChangeCoordinatorActiveModal = function(user) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/confirmchangecoordinatoractivemodal.html',
                 controller: 'ConfirmChangeCoordinatorActiveModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
                     coordinator: function() {
-                        return coordinator;
+                        return user;
                     }
                 },
                 size: 'md'
@@ -78,7 +92,7 @@ angular.module('safeRidesWebApp')
 
             modalInstance.result.then(function() {
                 coordinator.active = !coordinator.active;
-                user-service.update({id: coordinator.id}, coordinator).$promise.then(function(response) {
+                user-service.update({id: coordinator.id}, user).$promise.then(function(response) {
                     console.log('updated coordinator, now refreshing', response);
                     getCoordinators();
                 }, function(error) {
@@ -89,8 +103,8 @@ angular.module('safeRidesWebApp')
             });
         };
 
-        function deleteCoordinator(coordinator) {
-            console.log(coordinator);
+        function deleteCoordinator(user) {
+            console.log(user);
             user-service.remove({
                 id: coordinator.id
             }).$promise.then(function(response) {
