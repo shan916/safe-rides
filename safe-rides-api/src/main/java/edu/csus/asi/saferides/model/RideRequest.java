@@ -390,7 +390,7 @@ public class RideRequest {
     /**
      * Gets the number of passengers including the ride requestor
      *
-     * @return
+     * @return the number of passengers including the ride requestor
      */
     public int getNumPassengers() {
         return numPassengers;
