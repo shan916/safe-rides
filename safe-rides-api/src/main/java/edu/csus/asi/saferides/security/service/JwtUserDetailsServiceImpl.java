@@ -35,7 +35,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
      *
      * @param username the username of the User
      * @return UserDetail object for user
-     * @throws UsernameNotFoundException
+     * @throws UsernameNotFoundException error if username not found in the datastore (database - users table)
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -53,7 +53,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
      *
      * @param oneCardId the onecard id of the rider
      * @return UserDetail object for rider
-     * @throws UsernameNotFoundException
+     * @throws UsernameNotFoundException error if username not found in the datastore (database - users table)
      */
     public UserDetails loadRiderByOnecard(String oneCardId) throws UsernameNotFoundException {
         // find user in rides table
