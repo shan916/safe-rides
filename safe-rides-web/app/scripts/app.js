@@ -192,7 +192,8 @@ angular
                     controller: 'ManageCoordinatorsCtrl',
                     controllerAs: 'ctrl',
                     data: {
-                        requireLogin: true
+                        requireLogin: true,
+                        requiresLogin: true
                     }
                 });
 

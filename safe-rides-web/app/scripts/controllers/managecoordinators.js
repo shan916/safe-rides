@@ -16,7 +16,7 @@ angular.module('safeRidesWebApp')
           return;
       }
 
-      // kick user out if not coordinator
+      // kick user out if not admin
       if(!AuthTokenService.isInRole('ROLE_ADMIN')){
           $state.go('/');
           console.log('Not an admin');
@@ -36,7 +36,7 @@ angular.module('safeRidesWebApp')
             vm.loadingActiveCoordinators = true;
             vm.loadingInactiveCoordinators = true;
 
-            user-service.query({active: true}).$promise.then(function(response) {
+            user-service.query({enabled: true}).$promise.then(function(response) {
                 vm.loadingActiveCoordinators = false;
                 vm.activeCoordinators = response;
                 console.log('got active Coordinators:', response);
@@ -45,7 +45,7 @@ angular.module('safeRidesWebApp')
                 console.log('error getting active coordinators:', error);
             });
 
-            user-service.query({active: false}).$promise.then(function(response) {
+            user-service.query({enabled: false}).$promise.then(function(response) {
                 vm.loadingInactiveCoordinators = false;
                 vm.inactiveCoordinators = response;
                 console.log('got inactive coordinators:', response);
@@ -91,8 +91,8 @@ angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function() {
-                coordinator.active = !coordinator.active;
-                user-service.update({id: coordinator.id}, user).$promise.then(function(response) {
+                user.enabled = !user.enabled;
+                user-service.update({id: user.id}, user).$promise.then(function(response) {
                     console.log('updated coordinator, now refreshing', response);
                     getCoordinators();
                 }, function(error) {

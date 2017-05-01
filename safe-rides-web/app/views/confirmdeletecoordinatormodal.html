@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Confirm Delete</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <p>Are you sure you want to delete the following driver?</p>
+    <strong>{{ctrl.user.firstname}}&nbsp;{{ctrl.user.lastname}}</strong>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" ng-click="ctrl.ok()">OK</button>
+    <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
+</div>

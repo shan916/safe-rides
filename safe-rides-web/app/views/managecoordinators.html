@@ -14,21 +14,17 @@
                         <table class="table table-responsive">
                             <thead>
                                 <th class="col-xs-2">Name</th>
-                                <th class="col-xs-2">Phone #</th>
-                                <th class="col-xs-1">OneCard ID</th>
                                 <th class="col-xs-1">active</th>
                                 <th class="col-xs-3">Actions</th>
 
                                 <tbody>
                                     <tr ng-repeat="coordinator in ctrl.activeCoordinators">
-                                        <td>{{coordinator.coordinatorFirstName}}&nbsp;{{coordinator.coordinatorLastName}}</td>
-                                        <td>{{coordinator.phoneNumber | phone}}</td>
-                                        <td>{{coordinator.csusId}}</td>
-                                        <td>{{coordinator.active}}</td>
+                                        <td>{{user.firstname}}&nbsp;{{user.lastname}}</td>
+                                        <td>{{user.enabled}}</td>
                                         <td>
-                                            <a ui-sref="editcoordinator({coordinatorId: coordinator.id})" class="btn btn-primary">Edit</a>
-                                            <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(coordinator)" >Delete</button>
-                                            <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(coordinator)">Deactivate</button>
+                                            <a ui-sref="editcoordinator({coordinatorId: user.id})" class="btn btn-primary">Edit</a>
+                                            <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(user)" >Delete</button>
+                                            <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(user)">Deactivate</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -62,18 +58,14 @@
                                 <table class="table table-responsive">
                                     <thead>
                                       <th class="col-xs-2">Name</th>
-                                      <th class="col-xs-2">Phone #</th>
-                                      <th class="col-xs-1">OneCard ID</th>
                                       <th class="col-xs-1">active</th>
                                         <tbody>
                                             <tr ng-repeat="coordinator in ctrl.inactiveCoordinators | filter: ctrl.searchString | limitTo: 25">
-                                                <td>{{coordinator.coordinatorFirstName}}&nbsp;{{coordinator.coordinatorLastName}}</td>
-                                                <td>{{coordinator.phoneNumber | phone}}</td>
-                                                <td>{{coordinator.csusId}}</td>
+                                                <td>{{user.firstname}}&nbsp;{{user.lastname}}</td>
                                                 <td>
-                                                    <a ui-sref="editcoordinator({coordinatorId: coordinator.id})" class="btn btn-primary">Edit</a>
-                                                    <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(coordinator)">Delete</button>
-                                                    <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(coordinator)">Activate</button>
+                                                    <a ui-sref="editcoordinator({coordinatorId: user.id})" class="btn btn-primary">Edit</a>
+                                                    <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(user)">Delete</button>
+                                                    <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(user)">Activate</button>
                                                 </td>
                                             </tr>
                                         </tbody>
