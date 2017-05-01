@@ -130,3 +130,7 @@ body {
 .color-key-text-padding {
     padding-left: 5px;
 }
+
+.page-header {
+    background-color: #ccc;
+}
