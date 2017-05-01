@@ -49,10 +49,20 @@ public class JwtAuthenticationRequest implements Serializable {
         this.username = username;
     }
 
+    /**
+     * Get password
+     *
+     * @return password
+     */
     public String getPassword() {
         return this.password;
     }
 
+    /**
+     * Set password
+     *
+     * @param password the password to set
+     */
     public void setPassword(String password) {
         this.password = password;
     }

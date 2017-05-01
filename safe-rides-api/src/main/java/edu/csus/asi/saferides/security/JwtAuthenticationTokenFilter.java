@@ -50,11 +50,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
      * Rider authentication is less strict. It allows any valid onecard id; however, the only role that is allowed for
      * a rider is rider. The application user validates the user details (without the password).
      *
-     * @param request
-     * @param response
-     * @param chain
-     * @throws ServletException
-     * @throws IOException
+     * @param request HTTP servlet request
+     * @param response HTTP servlet response
+     * @param chain servlet filter chain
+     * @throws ServletException servlet exception
+     * @throws IOException IO exception
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

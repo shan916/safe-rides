@@ -149,7 +149,7 @@ public class Driver {
     }
 
     /**
-     * Constructor used by JPA
+     * Constructor used by JPA to construct a Driver entity
      */
     protected Driver() {
     }
@@ -183,36 +183,36 @@ public class Driver {
     }
 
     /**
-     * Get ID
+     * Get primary key
      *
-     * @return ID
+     * @return primary key
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Set ID
+     * Set primary key
      *
-     * @param id
+     * @param id the primary key
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * Get CSUS ID
+     * Get the CSUS ID of the driver
      *
-     * @return csusId
+     * @return the CSUS ID of the driver
      */
     public String getCsusId() {
         return csusId;
     }
 
     /**
-     * Set CSUS ID
+     * Set the CSUS ID of the driver
      *
-     * @param csusId
+     * @param csusId the CSUS ID of the driver
      */
     public void setCsusId(String csusId) {
         this.csusId = csusId;
@@ -221,23 +221,23 @@ public class Driver {
     /**
      * Get driver's first name
      *
-     * @return driverFirstName
+     * @return the driver's first name
      */
     public String getDriverFirstName() {
         return driverFirstName;
     }
 
     /**
-     * Set driver's first name
+     * Set the driver's first name
      *
-     * @param driverFirstName
+     * @param driverFirstName the driver's first name
      */
     public void setDriverFirstName(String driverFirstName) {
         this.driverFirstName = driverFirstName;
     }
 
     /**
-     * Get driver's last name
+     * Get the driver's last name
      *
      * @return the driver's last name
      */
@@ -246,9 +246,9 @@ public class Driver {
     }
 
     /**
-     * Set driver's last name
+     * Set the driver's last name
      *
-     * @param driverLastName
+     * @param driverLastName the driver's last name
      */
     public void setDriverLastName(String driverLastName) {
         this.driverLastName = driverLastName;
@@ -257,7 +257,7 @@ public class Driver {
     /**
      * Get driver's phone number
      *
-     * @return phoneNumber
+     * @return driver's phone number
      */
     public String getPhoneNumber() {
         return phoneNumber;
@@ -266,7 +266,7 @@ public class Driver {
     /**
      * Set driver's phone number
      *
-     * @param phoneNumber
+     * @param phoneNumber driver's phone number
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -275,7 +275,7 @@ public class Driver {
     /**
      * Get abbreviation name of the U.S. state on the driver's license
      *
-     * @return dlState
+     * @return abbreviation name of the U.S. state on the driver's license
      */
     public String getDlState() {
         return dlState;
@@ -284,7 +284,7 @@ public class Driver {
     /**
      * Set abbreviation name of the U.S. state on the driver's license
      *
-     * @param dlState
+     * @param dlState abbreviation name of the U.S. state on the driver's license
      */
     public void setDlState(String dlState) {
         this.dlState = dlState;
@@ -293,7 +293,7 @@ public class Driver {
     /**
      * Get driver's license number
      *
-     * @return dlNumber
+     * @return driver's license number
      */
     public String getDlNumber() {
         return dlNumber;
@@ -302,7 +302,7 @@ public class Driver {
     /**
      * Set driver's license number
      *
-     * @param dlNumber
+     * @param dlNumber driver's license number
      */
     public void setDlNumber(String dlNumber) {
         this.dlNumber = dlNumber;
@@ -311,16 +311,16 @@ public class Driver {
     /**
      * Get boolean if whether insurance is checked or not
      *
-     * @return insuranceChecked
+     * @return whether insurance is checked or not
      */
     public Boolean getInsuranceChecked() {
         return insuranceChecked;
     }
 
     /**
-     * Set boolean if whether insurance is checked or not
+     * Set boolean indicating whether insurance is checked or not
      *
-     * @param insuranceChecked
+     * @param insuranceChecked whether insurance is checked or not
      */
     public void setInsuranceChecked(Boolean insuranceChecked) {
         this.insuranceChecked = insuranceChecked;
@@ -329,7 +329,7 @@ public class Driver {
     /**
      * Get insurance company name
      *
-     * @return insuranceCompany
+     * @return insurance company name
      */
     public String getInsuranceCompany() {
         return insuranceCompany;
@@ -338,25 +338,25 @@ public class Driver {
     /**
      * Set insurance company name
      *
-     * @param insuranceCompany
+     * @param insuranceCompany insurance company name
      */
     public void setInsuranceCompany(String insuranceCompany) {
         this.insuranceCompany = insuranceCompany;
     }
 
     /**
-     * Get boolean if whether driver is active or not
+     * Get boolean indicating whether driver is active or not
      *
-     * @return active
+     * @return whether driver is active or not
      */
     public Boolean getActive() {
         return active;
     }
 
     /**
-     * Set boolean if whether driver is active or not
+     * Set boolean indicating whether driver is active or not
      *
-     * @param active
+     * @param active whether driver is active or not
      */
     public void setActive(Boolean active) {
         this.active = active;
@@ -365,7 +365,7 @@ public class Driver {
     /**
      * Set driver's status
      *
-     * @param status
+     * @param status the driver's status
      */
     public void setStatus(DriverStatus status) {
         this.status = status;
@@ -374,7 +374,7 @@ public class Driver {
     /**
      * Get created date
      *
-     * @return createdDate
+     * @return creation date of the driver
      */
     public Date getCreatedDate() {
         return createdDate;
@@ -383,7 +383,7 @@ public class Driver {
     /**
      * Set created date
      *
-     * @param createdDate
+     * @param createdDate the creation date of the driver
      */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
@@ -392,7 +392,7 @@ public class Driver {
     /**
      * Get modified date
      *
-     * @return modifiedDate
+     * @return last modified date
      */
     public Date getModifiedDate() {
         return modifiedDate;
@@ -401,25 +401,25 @@ public class Driver {
     /**
      * Set modified date
      *
-     * @param modifiedDate
+     * @param modifiedDate modified date of driver
      */
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
     /**
-     * Get vehicle
+     * Get vehicle owned by the driver
      *
-     * @return vehicle
+     * @return vehicle owned by the driver
      */
     public Vehicle getVehicle() {
         return vehicle;
     }
 
     /**
-     * Set vehicle
+     * Set vehicle owned by the driver
      *
-     * @param vehicle
+     * @param vehicle vehicle owned by the driver
      */
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
@@ -510,25 +510,25 @@ public class Driver {
     /**
      * Set driver's locations
      *
-     * @param locations
+     * @param locations driver's locations
      */
     public void setLocations(Set<DriverLocation> locations) {
         this.locations = locations;
     }
 
     /**
-     * Get user
+     * Get user associated with driver
      *
-     * @return user
+     * @return user associated with driver
      */
     public User getUser() {
         return user;
     }
 
     /**
-     * Set user
+     * Set user associated with driver
      *
-     * @param user
+     * @param user user associated with driver
      */
     public void setUser(User user) {
         this.user = user;

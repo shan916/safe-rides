@@ -13,10 +13,10 @@ public class ResponseMessage {
     /**
      * Constructor for the ResponseMessage requiring message to be set
      *
-     * @param s the message
+     * @param message the message
      */
-    public ResponseMessage(String s) {
-        this.message = s;
+    public ResponseMessage(String message) {
+        this.message = message;
     }
 
     /**
