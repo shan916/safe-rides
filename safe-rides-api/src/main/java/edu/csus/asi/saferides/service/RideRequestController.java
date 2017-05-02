@@ -196,7 +196,7 @@ public class RideRequestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/mine")
     @PreAuthorize("hasRole('RIDER')")
-    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns currently authenticated user's current ride request...")
+    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns authenticated user's current ride request...")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -216,6 +216,50 @@ public class RideRequestController {
             RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
             return ResponseEntity.ok(dto);
         }
+    }
+
+    /**
+     * POST /rides/mine/cancel
+     * <p>
+     * Cancels the authenticated user's current ride request.
+     * <p>
+     * Returns HTTP status code 400 under the following conditions:
+     * <ul>
+     * <li>
+     * No ride exists for the user
+     * </li>
+     * <li>
+     * The ride has already been assigned to a driver
+     * </li>
+     * </ul>
+     *
+     * @param request HTTP servlet request
+     * @return HTTP 200 if ride successfully canceled, error otherwise
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/mine/cancel")
+    @PreAuthorize("hasRole('RIDER')")
+    @ApiOperation(value = "cancelMyRide", nickname = "cancelMyRide", notes = "Cancels authenticated user's current ride request...")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> cancelMyRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+
+        if (rideRequest == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("No ride found for user"));
+        } else if (rideRequest.getStatus() != RideRequestStatus.UNASSIGNED) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Ride cannot be canceled while assigned to a driver"));
+        } else {
+            rideRequest.setStatus(RideRequestStatus.CANCELEDBYRIDER);
+            rideRequestRepository.save(rideRequest);
+            return ResponseEntity.ok().build();
+        }
+
     }
 
 }

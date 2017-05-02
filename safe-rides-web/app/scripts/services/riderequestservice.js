@@ -19,4 +19,13 @@ angular.module('safeRidesWebApp')
             }
         });
 
+    })
+
+    .factory('MyRideService', function ($resource, ENV) {
+        return $resource(ENV.apiEndpoint + 'rides/mine', null, {
+            cancel: {
+                method: 'POST',
+                url: ENV.apiEndpoint + 'rides/mine/cancel'
+            }
+        });
     });

@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification) {
+    .controller('RiderdashboardCtrl', function (UserService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -16,6 +16,7 @@ angular.module('safeRidesWebApp')
         vm.oneCardId = undefined;
         vm.rideRequest = new RideRequest();
         vm.existingRide = undefined;
+        vm.cancelPressed = undefined;
 
         var REFRESH_INTERVAL = 30000;
         var rideRefresher;
@@ -49,9 +50,13 @@ angular.module('safeRidesWebApp')
          * */
         function getRide() {
             vm.loading = true;
-            $http.get(ENV.apiEndpoint + 'rides/mine').then(function (response) {
-                if (response.data && response.data !== '') {
-                    vm.existingRide = new RideRequest(response.data);
+            MyRideService.get().$promise.then(function (response) {
+                if (response && response !== '') {
+                    vm.existingRide = new RideRequest(response);
+
+                    if (vm.existingRide.status === 'CANCELEDBYRIDER' || vm.existingRide.status === 'CANCELEDBYCOORDINATOR' || vm.existingRide.status === 'CANCELEDBYOTHER') {
+                        vm.existingRide = undefined;
+                    }
 
                     // set refresh interval only if ride has been requested
                     if (!rideRefresher) {
@@ -59,7 +64,7 @@ angular.module('safeRidesWebApp')
                     }
                 }
 
-                console.log(response.data);
+                console.log(response);
                 vm.loading = false;
             }, function (error) {
                 console.log(error);
@@ -130,6 +135,37 @@ angular.module('safeRidesWebApp')
                 return vm.existingRide.estimatedTime;
             } else {
                 return vm.existingRide.estimatedTime + ' minutes';
+            }
+        };
+
+        /**
+         * Cancels the current ride if it is still UNASSIGNED
+         */
+        vm.cancelRide = function () {
+            // first time pressing cancel
+            if (!vm.cancelPressed) {
+                vm.cancelPressed = true;
+                return;
+            }
+
+            // cancel confirmed
+            if (vm.existingRide.status === 'UNASSIGNED') {
+                MyRideService.cancel().$promise.then(function (response) {
+                    getRide();
+                    console.log('Ride canceled:', response);
+                    Notification.info({
+                        message: 'Your ride has been cancelled',
+                        positionX: 'center',
+                        delay: 6000
+                    });
+                }, function (error) {
+                    Notification.error({
+                        message: 'Your ride could not be cancelled. Please contact the Safe Rides office.',
+                        positionX: 'center',
+                        delay: 60000
+                    });
+                    console.log('Ride cancellation failed:', error);
+                });
             }
         };
 
