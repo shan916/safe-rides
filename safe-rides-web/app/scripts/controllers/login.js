@@ -15,17 +15,21 @@ angular.module('safeRidesWebApp')
         }
 
         var vm = this;
+        vm.loading = false;
         vm.username = undefined;
         vm.password = undefined;
         vm.message = undefined;
 
         vm.login = function () {
+            vm.loading = true;
+
             var credentials = {
                 username: vm.username,
                 password: vm.password
             };
 
             UserService.userAuthentication(credentials).then(function (response) {
+                    vm.loading = false;
                     console.log(response.data.token);
                     AuthTokenService.setToken(response.data.token);
 
@@ -36,6 +40,7 @@ angular.module('safeRidesWebApp')
                     }
                 },
                 function (response) {
+                    vm.loading = false;
                     console.log('login error: ', response.data);
                     if (response.status === 422 && response.data.message === 'Bad credentials') {
                         vm.message = 'Bad credentials';

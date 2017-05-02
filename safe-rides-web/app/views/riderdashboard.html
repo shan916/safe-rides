@@ -175,9 +175,10 @@
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-danger"
-                            ng-show="ctrl.existingRide.status !== 'DROPPINGOFF' && ctrl.existingRide.status !== 'COMPLETE' && ctrl.existingRide.status !== 'ATPICKUPLOCATION'">
-                        Cancel Ride
+                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status === 'UNASSIGNED'"
+                            ng-click="ctrl.cancelRide()">
+                        <span ng-hide="ctrl.cancelPressed">Cancel Ride</span>
+                        <span ng-show="ctrl.cancelPressed">Confirm Cancellation</span>
                     </button>
                 </div>
             </div>
