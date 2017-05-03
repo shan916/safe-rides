@@ -1,0 +1,54 @@
+<div class="container">
+    <div clas="row">
+        <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.settingsLoading"></span>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">SafeRides Settings</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Operation Hours</h4>
+                <p>Select the time range and days to accept new ride requests</p>
+                <div ng-show="ctrl.hours">
+                    <p>Active program time: {{ctrl.hours}} hours and {{ctrl.minutes}} minutes.</p>
+                </div>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-6">
+                        <div class="pull-right">
+                            <label>Start Time</label>
+                            <div uib-timepicker ng-model="ctrl.startTime" ng-change="ctrl.changedTime()" hour-step="1" minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>End Time</label>
+                        <div uib-timepicker ng-model="ctrl.endTime" ng-change="ctrl.changedTime()" hour-step="1" minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                    </div>
+                </div>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="monday"> Monday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="tuesday"> Tuesday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="wednesday"> Wednesday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="thursday"> Thursday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="friday"> Friday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="saturday"> Saturday
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="sunday"> Sunday
+                </label>
+
+                <hr>
+
+                <button type="button" class="btn btn-info" ng-click="ctrl.toggleMode()">12H / 24H</button>
+            </div>
+        </div>
+    </div>
+</div>
