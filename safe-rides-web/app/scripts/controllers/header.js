@@ -8,12 +8,12 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('HeaderCtrl', function() {
+    .controller('HeaderCtrl', function () {
         var vm = this;
         vm.routes = [{
-                text: 'Home',
-                path: '#!/'
-            },
+            text: 'Home',
+            path: '#!/'
+        },
             // { text: 'Login', path: '#!/login '},
             {
                 text: 'Coordinator Dashboard',
@@ -29,7 +29,7 @@ angular.module('safeRidesWebApp')
 
         vm.activeRoute = vm.routes[0];
 
-        vm.setActive = function(route) {
+        vm.setActive = function (route) {
             vm.activeRoute = route;
         };
 

@@ -11,29 +11,35 @@
                 <div style="max-height:450px; overflow: auto;">
                     <table class="table table-responsive">
                         <thead>
-                            <th class="col-xs-2">Name</th>
-                            <th class="col-xs-2">Phone #</th>
-                            <th class="col-xs-1">OneCard ID</th>
-                            <th class="col-xs-1">DL State</th>
-                            <th class="col-xs-1">DL Number</th>
-                            <th class="col-xs-1">Status</th>
-                            <th class="col-xs-3">Actions</th>
+                        <th class="col-xs-2">Name</th>
+                        <th class="col-xs-2">Phone #</th>
+                        <th class="col-xs-1">OneCard ID</th>
+                        <th class="col-xs-1">DL State</th>
+                        <th class="col-xs-1">DL Number</th>
+                        <th class="col-xs-1">Status</th>
+                        <th class="col-xs-3">Actions</th>
 
-                            <tbody>
-                                <tr ng-repeat="driver in ctrl.activeDrivers">
-                                    <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
-                                    <td>{{driver.phoneNumber | phone}}</td>
-                                    <td>{{driver.csusId}}</td>
-                                    <td>{{driver.dlState}}</td>
-                                    <td>{{driver.dlNumber}}</td>
-                                    <td>{{driver.status}}</td>
-                                    <td>
-                                        <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                        <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Delete</button>
-                                        <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)" ng-disabled="driver.status !== 'AVAILABLE'">Deactivate</button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                        <tbody>
+                        <tr ng-repeat="driver in ctrl.activeDrivers">
+                            <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                            <td>{{driver.phoneNumber | phone}}</td>
+                            <td>{{driver.csusId}}</td>
+                            <td>{{driver.dlState}}</td>
+                            <td>{{driver.dlNumber}}</td>
+                            <td>{{driver.status}}</td>
+                            <td>
+                                <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                                <button type="button" class="btn btn-danger"
+                                        ng-click="ctrl.openConfirmDeleteModal(driver)"
+                                        ng-disabled="driver.status !== 'AVAILABLE'">Delete
+                                </button>
+                                <button type="button" class="btn btn-warning"
+                                        ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)"
+                                        ng-disabled="driver.status !== 'AVAILABLE'">Deactivate
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
                         </thead>
                     </table>
                 </div>
@@ -53,7 +59,8 @@
                                     <label for="search">Filter:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                                        <input type="text" id="search" class="form-control" placeholder="Search" ng-model="ctrl.searchString">
+                                        <input type="text" id="search" class="form-control" placeholder="Search"
+                                               ng-model="ctrl.searchString">
                                     </div>
                                 </div>
                             </div>
@@ -62,26 +69,30 @@
                         <div style="max-height:450px; overflow: auto;">
                             <table class="table table-responsive">
                                 <thead>
-                                  <th class="col-xs-2">Name</th>
-                                  <th class="col-xs-2">Phone #</th>
-                                  <th class="col-xs-1">OneCard ID</th>
-                                  <th class="col-xs-1">DL State</th>
-                                  <th class="col-xs-1">DL Number</th>
-                                  <th class="col-xs-3">Actions</th>
-                                    <tbody>
-                                        <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
-                                            <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
-                                            <td>{{driver.phoneNumber | phone}}</td>
-                                            <td>{{driver.csusId}}</td>
-                                            <td>{{driver.dlState}}</td>
-                                            <td>{{driver.dlNumber}}</td>
-                                            <td>
-                                                <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
-                                                <button type="button" class="btn btn-danger" ng-click="ctrl.openConfirmDeleteModal(driver)">Delete</button>
-                                                <button type="button" class="btn btn-warning" ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                <th class="col-xs-2">Name</th>
+                                <th class="col-xs-2">Phone #</th>
+                                <th class="col-xs-1">OneCard ID</th>
+                                <th class="col-xs-1">DL State</th>
+                                <th class="col-xs-1">DL Number</th>
+                                <th class="col-xs-3">Actions</th>
+                                <tbody>
+                                <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
+                                    <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                                    <td>{{driver.phoneNumber | phone}}</td>
+                                    <td>{{driver.csusId}}</td>
+                                    <td>{{driver.dlState}}</td>
+                                    <td>{{driver.dlNumber}}</td>
+                                    <td>
+                                        <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                                        <button type="button" class="btn btn-danger"
+                                                ng-click="ctrl.openConfirmDeleteModal(driver)">Delete
+                                        </button>
+                                        <button type="button" class="btn btn-warning"
+                                                ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
                                 </thead>
                             </table>
                         </div>

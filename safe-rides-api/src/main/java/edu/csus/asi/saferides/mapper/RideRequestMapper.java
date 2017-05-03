@@ -7,7 +7,7 @@ import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by shan on 4/2/17.
+ * Maps a RideRequest object to a RideRequestDto object
  */
 @Component
 public class RideRequestMapper extends ConfigurableMapper {

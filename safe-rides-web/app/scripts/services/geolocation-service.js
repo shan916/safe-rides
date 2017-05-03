@@ -9,7 +9,7 @@
  * http://stackoverflow.com/a/33403957
  */
 angular.module('safeRidesWebApp')
-    .factory('GeolocationService', ['$q', '$window', function($q, $window) {
+    .factory('GeolocationService', ['$q', '$window', function ($q, $window) {
 
         function getCurrentPosition() {
             var deferred = $q.defer();
@@ -18,10 +18,10 @@ angular.module('safeRidesWebApp')
                 deferred.reject('Geolocation not supported.');
             } else {
                 $window.navigator.geolocation.getCurrentPosition(
-                    function(position) {
+                    function (position) {
                         deferred.resolve(position);
                     },
-                    function(err) {
+                    function (err) {
                         deferred.reject(err);
                     });
             }

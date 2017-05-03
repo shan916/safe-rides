@@ -1,313 +1,260 @@
 'use strict';
 
 /**
-* @ngdoc function
-* @name safeRidesWebApp.controller:DriverdashboardCtrl
-* @description
-* # DriverdashboardCtrl
-* Controller of the safeRidesWebApp
-*/
+ * @ngdoc function
+ * @name safeRidesWebApp.controller:DriverdashboardCtrl
+ * @description
+ * # DriverdashboardCtrl
+ * Controller of the safeRidesWebApp
+ */
 angular.module('safeRidesWebApp')
-.controller('DriverdashboardCtrl', function($scope, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                            $state, $interval, GeolocationService, CurrentDriverLocationService, UserService, Notification) {
-    var vm = this;
-    vm.loadingRideRequest = true;
-    vm.ride = undefined;
-    vm.rideRequests = [];
-    vm.startOdo = undefined;
-    vm.endOdo = undefined;
-    vm.endNightOdo = undefined;
-    vm.assignedRide = undefined;
-    vm.getPickupDirections = undefined;
-    vm.dropoffAddress = undefined;
-    vm.assignedRideRequest = undefined;
-    vm.isRideAssigned = false;
-    vm.pickedUpButtonPressed = false;
-    vm.lastCoords = undefined;
-    vm.driver = undefined;
-    var REFRESH_INTERVAL = 30000;
-    var rideRefresher;
-    vm.endNightPressed = false;
+    .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
+                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
+        var vm = this;
+        vm.ride = undefined;
+        vm.rideRequests = [];
+        vm.startOdo = undefined; //used in form to capture startOdo
+        vm.endOdo = undefined; //ending odometer reading for ride request
+        vm.assignedRide = undefined; //holds current ride assinged to Driver
+        vm.dropoffAddress = undefined;  //used to create address
+        vm.pickupAddress = undefined;
+        vm.isRideAssigned = false;  //is there currently a ride for this Driver
+        vm.pickedUpButtonPressed = false; //Driver must press "picked up" button to reveal the dropoff address
+        vm.lastCoords = undefined;  //last known coordinates for this driver
+        vm.driver = undefined;  //used to authenticate this driver is a valid user
+        var REFRESH_INTERVAL = 30000;   //Refresh time in ms for refreshing getCurrentRideRequest
+        var rideRefresher; //used to signify if the refresh interval has been created yet
+        vm.localDriver = undefined;  //this currently signed in Driver
 
-    /*
-    * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
-    * */
-    if (authManager.isAuthenticated()) {
-        if (AuthTokenService.isInRole('ROLE_COORDINATOR') ||                                            // Coordinator and up
-            (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER'))) {   // Just a rider
-            Notification.error({
-                message: 'You must be logged in as a driver to view the driver dashboard.',
-                positionX: 'center',
-                delay: 10000,
-                replaceMessage: true
-            });
-            $state.go('/');
-            console.log('Not a driver');
+        /*
+         * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
+         * */
+        if (authManager.isAuthenticated()) {
+            if (AuthTokenService.isInRole('ROLE_COORDINATOR') ||                                            // Coordinator and up
+                (AuthTokenService.isInRole('ROLE_RIDER') && !AuthTokenService.isInRole('ROLE_DRIVER'))) {   // Just a rider
+                Notification.error({
+                    message: 'You must be logged in as a driver to view the driver dashboard.',
+                    positionX: 'center',
+                    delay: 10000,
+                    replaceMessage: true
+                });
+                $state.go('/');
+                console.log('Not a driver');
+            } else {
+                UserService.getAuthUserInfo().then(function (response) {
+                    vm.driver = response.data;
+                }, function (error) {
+                    console.log('error getting the driver name', error);
+                });
+                console.log('about to call getCurrentRideRequest');
+                getCurrentRideRequest();
+            }
         } else {
-            UserService.getAuthUserInfo().then(function(response){
-                vm.driver = response.data;
-            }, function(error){
-                console.log('error getting the driver name', error);
-            });
-
-            getCurrentRideRequest();
+            $state.go('login');
+            console.log('Not authenticated');
         }
-    } else {
-        $state.go('login');
-        console.log('Not authenticated');
-    }
 
-    function getCurrentRideRequest() {
-
-        CurrentDriverRidesService.get({status: 'ASSIGNED'}).$promise.then(function(response) {
-            vm.assignedRideRequest = response;
+        /*
+        *   gets the currently assigned ride request
+        *   and assigns state of driver with booleans
+        *   isRideAssigned, pickedUpButtonPressed
+        */
+        function getCurrentRideRequest() {
             vm.isRideAssigned = false;
-
-            vm.pickedUpButtonPressed = false;
-            vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                var rideRequest = new RideRequest(element);
-                assignedRideRequest[index] = rideRequest;
-                //if not in progress
-                if(rideRequest.status === 'ASSIGNED'){
-                    vm.assignedRide = rideRequest;
-                    vm.isRideAssigned=true;
-                    console.log('got Assigned Ride, ASSIGNED');
-                    buildDirectionButtons();
-                    return;
-                }
-
-            });
-
-            if(vm.isRideAssigned === false){
-                CurrentDriverRidesService.get({status: 'PICKINGUP'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'PICKINGUP') {
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;
-                            console.log('got Assigned Ride, PICKINGUP');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned PICKINGUP:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() PICKINGUP', error);
-                });//end CurrentDriverRidesService.get PICKINGUP
-
-                CurrentDriverRidesService.get({status: 'ATPICKUPLOCATION'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'ATPICKUPLOCATION'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
-                            vm.pickedUpButtonPressed = false;//different from PICKINGUP
-                            console.log('got Assigned Ride, ATPICKUPLOCATION');
-                            buildDirectionButtons();
-                            return;
-                        }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() ATPICKUPLOCATION', error);
-                });//end CurrentDriverRidesService.get ATPICKUPLOCATION
-
-                CurrentDriverRidesService.get({status: 'DROPPINGOFF'}).$promise.then(function(response) {
-                    vm.assignedRideRequest = response;
-                    vm.assignedRideRequest.forEach(function(element, index, assignedRideRequest) {
-                        var rideRequest = new RideRequest(element);
-                        assignedRideRequest[index] = rideRequest;
-                        if(rideRequest.status === 'DROPPINGOFF'){
-                            vm.assignedRide = rideRequest;
-                            vm.isRideAssigned = true;
+            //get the current ride request to driver
+            GetDriverCurrentRideService.get().$promise.then(function (response) {
+                if (response !== undefined) {
+                    vm.assignedRide = new RideRequest(response);
+                    if(vm.assignedRide.status !== undefined){
+                        vm.isRideAssigned = true;
+                        vm.pickedUpButtonPressed = false;
+                        if (vm.assignedRide.status === 'DROPPINGOFF') {
                             vm.pickedUpButtonPressed = true;//different from PICKINGUP
-                            console.log('got Assigned Ride, DROPPINGOFF');
-                            buildDirectionButtons();
-                            return;
                         }
-                    });
-                    //console.log('getCurrentRideRequest() returned DROPPINGOFF:', response);
-                }, function(error) {
-                    console.log('error getCurrentRideRequest() DROPPINGOFF', error);
-                });//end CurrentDriverRidesService.get DROPPINGOFF
-            }// end if vm.isRideAssigned === false
+                        //creat address links
+                        buildDirectionButtons();
+                    } else {
+                        vm.isRideAssigned = false;
+                    }
+                    //create refresh interval
+                    if (!rideRefresher) {
+                        rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
+                    } else {
+                        console.log('REFRESH_INTERVAL already ran');
+                    }
+                } //end if
+            }, function (error) {
+                console.log('No Assigned Rides: ', error);
+                vm.isRideAssigned = false;
+            });
+        }//end newgetCurrentRideRequest
 
-            console.log('getCurrentRideRequest() called API success:', response);
-
-
-        }, function(error) {
-
-            console.log('getCurrentRideRequest() returned no ASSIGNED rides:', error);
-
-        });//end CurrentDriverRidesService.get ASSIGNED
-
-        //Set refresh interval if not already set
-        if (!rideRefresher) {
-            rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-            console.log('$interval(getCurrentRideRequest, REFRESH_INTERVAL) ran');
-        }else {
-            console.log('REFRESH_INTERVAL already ran');
+        /*
+        *   Creates links for directions to pickup and dropoff addresses on google maps
+        */
+        function buildDirectionButtons() {
+            if (vm.assignedRide.pickupLine1 !== undefined) {
+                vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
+                    ', ' + vm.assignedRide.pickupCity + ', CA';
+            }
+            if (vm.assignedRide.dropoffLine1 !== undefined) {
+                vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
+                    ', ' + vm.assignedRide.dropoffCity + ', CA';
+                console.log('buttons built');
+            }
         }
 
-    } //end getCurrentRideRequest()
-
-    function buildDirectionButtons(){
-        if(vm.assignedRide.pickupLine1 !== undefined){
-            vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
-            ', ' + vm.assignedRide.pickupCity + ', CA';
+        /*
+        *   updates currently assigned ride request
+        *   by passing the ride request id
+        */
+        function updateRideRequest() {
+            RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function (response) {
+                console.log('Driver, saved riderequest:', response);
+            }, function (error) {
+                console.log('Driver, error saving riderequest:', error);
+            });
         }
-        if(vm.assignedRide.dropoffLine1 !== undefined){
-            vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
-            ', ' + vm.assignedRide.dropoffCity + ', CA';
-            console.log('buttons built');
-        }
-    }
 
-    function updateRideRequest(){
-        RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function(response) {
-            console.log('Driver, saved riderequest:', response);
-        }, function(error) {
-            console.log('Driver, error saving riderequest:', error);
-        });
-    }
 
-    //enter odometer and view newly assigned ride
-    vm.viewRide = function() {
-        //Stop refresh when a new ride is assigned.
-        //No new data
-        if (rideRefresher) {
-            $interval.cancel(rideRefresher);
-        }
-        if(vm.startOdo !== undefined){
-            buildDirectionButtons();
-            vm.assignedRide.startOdometer = vm.startOdo;
-            vm.assignedRide.status = 'PICKINGUP';
+        /*  enter odometer and view newly assigned ride
+        *   New Ride Assigned panel
+        *   When driver is assigned a ride this screen asks for the
+        *   Drivers odometer reading in order to reveal the pickup address
+        *   and current ride panel
+        */
+        vm.viewRide = function () {
+            //Stop refresh when a new ride is assigned.
+            //No new data
+            if (rideRefresher) {
+                $interval.cancel(rideRefresher);
+            }
+            if (vm.startOdo !== undefined) {
+                buildDirectionButtons();
+                vm.assignedRide.status = 'PICKINGUP';
+                vm.isRideAssigned = true;
+                vm.pickedUpButtonPressed = false;
+                updateRideRequest();
+            }
+        };
+
+        /*
+        *   When "pickedUp" button is pressed the Driver has signified
+        *   they have picked up the rider/passengers and is now heading
+        *   towards the dropoff location
+        */
+        vm.pickedUp = function () {
+            vm.assignedRide.status = 'DROPPINGOFF';
             vm.isRideAssigned = true;
-            vm.pickedUpButtonPressed = false;
-
+            vm.pickedUpButtonPressed = true;
             updateRideRequest();
-        }
-    };
+        };
 
-    vm.pickedUp = function(){
-        vm.assignedRide.status = 'DROPPINGOFF';
-        vm.isRideAssigned = true;
-        vm.pickedUpButtonPressed = true;
-        updateRideRequest();
-    };
-
-    vm.endRide = function() {
-        vm.assignedRide.status = 'COMPLETE';
-        //if(vm.assignedRide.startOdo > vm.endOdo){}
+        /*
+        *   Ending the ride request requires the Driver enters the
+        *   ending odometer reading
+        */
+        vm.endRide = function () {
+            vm.assignedRide.status = 'COMPLETE';
+            //if(vm.assignedRide.startOdo > vm.endOdo){}
             vm.assignedRide.endOdometer = vm.endOdo;
+            updateRideRequest();
             vm.isRideAssigned = false;
             vm.pickedUpButtonPressed = false;
-            updateRideRequest();
             $interval(getCurrentRideRequest, REFRESH_INTERVAL);
-    };
+        };
 
-    vm.notifyRider = function() {
-        if(vm.assignedRide.status !== 'ATPICKUPLOCATION'){
-            vm.assignedRide.status = 'ATPICKUPLOCATION';
-            updateRideRequest();
-        }else{
-            console.log("Already notified rider");
-        }
+        /*
+        *   changes the ride request status to notify the rider
+        *   the driver has arrived at their pickup location
+        */
+        vm.notifyRider = function () {
+            if (vm.assignedRide.status !== 'ATPICKUPLOCATION') {
+                vm.assignedRide.status = 'ATPICKUPLOCATION';
+                updateRideRequest();
+            } else {
+                console.log('Already notified rider');
+            }
             vm.isRideAssigned = true;
             vm.pickedUpButtonPressed = false;
             Notification.success({
-                message: vm.assignedRide.requestorFirstName+'&nbsp;'+vm.assignedRide.requestorLastName+' has been notified.',
+                message: vm.assignedRide.requestorFirstName + '&nbsp;' + vm.assignedRide.requestorLastName + ' has been notified.',
                 positionX: 'center',
                 delay: 4000,
                 replaceMessage: true
             });
-    };
+        };
 
-    vm.endNight = function() {
-        vm.endNightPressed = true;
-    }
-    vm.submitEndNightOdo = function(){
-        //TODO save driver's last odo recording to driver on api
-        //driver.endNightOdo = vm.endNightOdo;
-    }
-    vm.cancelEndNight = function(){
-        vm.endNightPressed = false;
-    }
+        /**
+         *   Driver can manually refresh to see if they
+         *   have a ride assigned to them
+         */
+        vm.refresh = function () {
+            getCurrentRideRequest();
+        };
 
-    /**
-    *   Driver can manually refresh to see if they
-    *   have a ride assigned to them
-    */
-    vm.refresh = function(){
-        getCurrentRideRequest();
-    };
+        /*
+        * updates this drivers current location if allowed in browser
+        */
+        var updateLocation = function () {
+            GeolocationService.getCurrentPosition().then(function (location) {
+                var coords = {
+                    'latitude': location.coords.latitude,
+                    'longitude': location.coords.longitude
+                };
 
+                if (!vm.lastCoords || calcCrow(vm.lastCoords.latitude, vm.lastCoords.longitude, coords.latitude, coords.longitude) > 75) {
+                    CurrentDriverLocationService.save(coords).$promise.then(function (response) {
+                        console.log('saved driver\'s location:', response);
+                    }, function (error) {
+                        console.log('error saving driver\'s location:', error);
+                    });
+                } else {
+                    console.log('Distance is not long enough to update the api.');
+                }
 
-    var updateLocation = function() {
-        GeolocationService.getCurrentPosition().then(function(location) {
-            var coords = {
-                'latitude': location.coords.latitude,
-                'longitude': location.coords.longitude
-            };
+                vm.lastCoords = coords;
+            });
+        };
 
-            if (!vm.lastCoords || calcCrow(vm.lastCoords.latitude, vm.lastCoords.longitude, coords.latitude, coords.longitude) > 75) {
-                CurrentDriverLocationService.save(coords).$promise.then(function(response) {
-                    console.log('saved driver\'s location:', response);
-                }, function(error) {
-                    console.log('error saving driver\'s location:', error);
-                });
-            } else {
-                console.log('Distance is not long enough to update the api.');
-//                getCurrentRideRequest();
+        var locationUpdater = $interval(updateLocation, 15000);
+
+        // helpers for calculating coord distance
+        // http://stackoverflow.com/a/18883819
+        function calcCrow(_lat1, _lon1, _lat2, _lon2) {
+            var R = 6371e3; // meters
+            var dLat = toRad(_lat2 - _lat1);
+            var dLon = toRad(_lon2 - _lon1);
+            var lat1 = toRad(_lat1);
+            var lat2 = toRad(_lat2);
+
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c;
+            return d;
+        }
+
+        // Converts numeric degrees to radians
+        function toRad(Value) {
+            return Value * Math.PI / 180;
+        }
+
+        /*
+         * Destroy refresh interval on exit
+         * */
+        $scope.$on('$destroy', function () {
+            if (rideRefresher) {
+                $interval.cancel(rideRefresher);
             }
-
-            vm.lastCoords = coords;
         });
-    };
 
-    var locationUpdater = $interval(updateLocation, 15000);
-
-    // helpers for calculating coord distance
-    // http://stackoverflow.com/a/18883819
-    function calcCrow(_lat1, _lon1, _lat2, _lon2) {
-        var R = 6371e3; // meters
-        var dLat = toRad(_lat2 - _lat1);
-        var dLon = toRad(_lon2 - _lon1);
-        var lat1 = toRad(_lat1);
-        var lat2 = toRad(_lat2);
-
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var d = R * c;
-        return d;
-    }
-
-    // Converts numeric degrees to radians
-    function toRad(Value) {
-        return Value * Math.PI / 180;
-    }
-
-    /*
-    * Destroy refresh interval on exit
-    * */
-    $scope.$on('$destroy', function() {
-        if (rideRefresher) {
-            $interval.cancel(rideRefresher);
-        }
-    });
-
-    // destroy interval on exit
-    $scope.$on('$destroy', function() {
-        if (locationUpdater) {
-            $interval.cancel(locationUpdater);
-        }
-    });
+        // destroy interval on exit
+        $scope.$on('$destroy', function () {
+            if (locationUpdater) {
+                $interval.cancel(locationUpdater);
+            }
+        });
 
 
-});//end Controller
+    });//end Controller

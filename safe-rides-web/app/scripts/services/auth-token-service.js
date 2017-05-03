@@ -8,8 +8,8 @@
  * Service in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .service('AuthTokenService', function($window, $cookies, jwtHelper) {
-        this.getToken = function() {
+    .service('AuthTokenService', function ($window, $cookies, jwtHelper) {
+        this.getToken = function () {
             if ($window.localStorage.getItem('safeRidesToken')) {
                 return $window.localStorage.getItem('safeRidesToken');
             } else if ($cookies.get('safeRidesToken')) {
@@ -19,7 +19,7 @@ angular.module('safeRidesWebApp')
             }
         };
 
-        this.setToken = function(token) {
+        this.setToken = function (token) {
             $window.localStorage.setItem('safeRidesToken', token);
 
             var expirationDate = new Date();
@@ -29,7 +29,7 @@ angular.module('safeRidesWebApp')
             });
         };
 
-        this.removeToken = function() {
+        this.removeToken = function () {
             if ($window.localStorage.getItem('safeRidesToken')) {
                 $window.localStorage.removeItem('safeRidesToken');
             }
@@ -43,15 +43,15 @@ angular.module('safeRidesWebApp')
          * roleName options: ['ROLE_ADMIN','ROLE_COORDINATOR','ROLE_DRIVER','ROLE_RIDER']
          * returns true or false
          */
-        this.isInRole = function(roleName) {
+        this.isInRole = function (roleName) {
             var tokenPayload = jwtHelper.decodeToken(this.getToken());
             var isInRole = false;
 
-            if (tokenPayload.authorities === undefined){
+            if (tokenPayload.authorities === undefined) {
                 return false;
             }
 
-            tokenPayload.authorities.forEach(function(element) {
+            tokenPayload.authorities.forEach(function (element) {
                 if (element.authority === roleName) {
                     isInRole = true;
                     return;

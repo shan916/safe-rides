@@ -3,34 +3,38 @@
 </div>
 <div class="modal-body row" id="modal-body">
 
-  <div class="col-md-7">
-    <p ng-bind-html='ctrl.body'></p>
-  </div>
+    <div class="col-md-7">
+        <p ng-bind-html='ctrl.body'></p>
+    </div>
 
-  <div class="col-md-5">
-    <form name="reasonForCancelForm"><!-- class="my-form form-vertical" layout="column"-->
-    <label>Ride Request cancelled by</label>
-    <select name="reasonForCancellation" id="reasonForCancellation" class="form-control" required ng-model="ctrl.reasonForCancellation">
-      <div ng-messages="reasonForCancelForm.reasonForCancellation.$dirty && reasonForCancelForm.reasonForCancellation.$error">
-          <div class="option-error" ng-message="required">* required</div>
-      </div>
-      <option selected ng-repeat="reason in ctrl.cancelReasons" value="{{reason}}">{{reason}}</option>
-    </select>
-    <label ng-bind-html="ctrl.reasonRequest"></label>
-    <textarea name="cancelMessage" id="cancelMessage" class="form-control" required
-              ng-model="ctrl.cancelMessage" style="overflow:auto;resize:none;"
-              placeholder="Remarks" ng-minlength="ctrl.textareaMinLength">
+    <div class="col-md-5">
+        <form name="reasonForCancelForm"><!-- class="my-form form-vertical" layout="column"-->
+            <label>Ride Request cancelled by</label>
+            <select name="reasonForCancellation" id="reasonForCancellation" class="form-control" required
+                    ng-model="ctrl.reasonForCancellation">
+                <div
+                    ng-messages="reasonForCancelForm.reasonForCancellation.$dirty && reasonForCancelForm.reasonForCancellation.$error">
+                    <div class="option-error" ng-message="required">* required</div>
+                </div>
+                <option selected ng-repeat="reason in ctrl.cancelReasons" value="{{reason}}">{{reason}}</option>
+            </select>
+            <label ng-bind-html="ctrl.reasonRequest"></label>
+            <textarea name="cancelMessage" id="cancelMessage" class="form-control" required
+                      ng-model="ctrl.cancelMessage" style="overflow:auto;resize:none;"
+                      placeholder="Remarks" ng-minlength="ctrl.textareaMinLength">
               <div ng-messages="reasonForCancelForm.cancelMessage.$dirty && reasonForCancelForm.cancelMessage.$error">
                   <div class="input-error" ng-message="required">* required</div>
               </div>
     </textarea>
     </div>
-  </form>
-  </div>
+    </form>
+</div>
 
 </div><!--end modal body-->
 <div class="modal-footer">
     <button type="button" class="btn" ng-class="{ 'btn-danger': ctrl.danger,
-                                                'btn-primary': !ctrl.danger }" ng-click="ctrl.ok()" ng-disabled="reasonForCancelForm.$invalid">OK</button>
+                                                'btn-primary': !ctrl.danger }" ng-click="ctrl.ok()"
+            ng-disabled="reasonForCancelForm.$invalid">OK
+    </button>
     <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
 </div>

@@ -27,6 +27,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * The class that bootstraps the application
+ * Sets the default database state and configures swagger
+ */
 @SpringBootApplication
 @EnableSwagger2
 public class SafeRidesApiApplication {
@@ -34,10 +38,23 @@ public class SafeRidesApiApplication {
     @Autowired
     GeocodingService geocodingService;
 
+    /**
+     * The main method
+     * @param args application arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(SafeRidesApiApplication.class, args);
     }
 
+    /**
+     * Demo data for the initial start of the application
+     * @param driverRepository  driver repository
+     * @param rideRequestRepository ride request repository
+     * @param userRepository user repository
+     * @param authorityRepository authority repository
+     * @param driverLocationRepository driver location repository
+     * @return CommandLineRunner
+     */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository, ConfigurationRepository configurationRepository) {
@@ -458,6 +475,10 @@ public class SafeRidesApiApplication {
         };
     }
 
+    /**
+     * Configures swagger
+     * @return Docket
+     */
     @Bean
     public Docket swaggerSettings() {
         return new Docket(DocumentationType.SWAGGER_2)

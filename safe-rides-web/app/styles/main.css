@@ -9,7 +9,6 @@ body {
     padding: 0;
 }
 
-
 /* Everything but the jumbotron gets side spacing for mobile first views */
 
 .header, .marketing, .footer {
@@ -17,14 +16,12 @@ body {
     padding-right: 15px;
 }
 
-
 /* Custom page header */
 
 .header {
     border-bottom: 1px solid #e5e5e5;
     margin-bottom: 10px;
 }
-
 
 /* Make the masthead heading the same height as the navigation */
 
@@ -35,7 +32,6 @@ body {
     padding-bottom: 19px;
 }
 
-
 /* Custom page footer */
 
 .footer {
@@ -44,10 +40,9 @@ body {
     border-top: 1px solid #e5e5e5;
 }
 
-.container-narrow>hr {
+.container-narrow > hr {
     margin: 30px 0;
 }
-
 
 /* Main marketing message and sign up button */
 
@@ -61,17 +56,15 @@ body {
     padding: 14px 24px;
 }
 
-
 /* Supporting marketing content */
 
 .marketing {
     margin: 40px 0;
 }
 
-.marketing p+h4 {
+.marketing p + h4 {
     margin-top: 28px;
 }
-
 
 /* Responsive: Portrait tablets and up */
 
@@ -79,21 +72,23 @@ body {
     .container {
         max-width: 730px;
     }
+
     /* Remove the padding we set earlier */
     .header, .marketing, .footer {
         padding-left: 0;
         padding-right: 0;
     }
+
     /* Space out the masthead */
     .header {
         margin-bottom: 30px;
     }
+
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
         border-bottom: 0;
     }
 }
-
 
 /* Responsive: desktops and up */
 
@@ -102,7 +97,6 @@ body {
         max-width: 1140px;
     }
 }
-
 
 /* Responsive: desktops and up */
 
@@ -127,11 +121,16 @@ body {
 /* Border size for color key and margin for column cells with text */
 
 .color-key-box {
-  border-style: solid;
-  border-width: 1px;
-  width: 35px;
-  height: 35px;
+    border-style: solid;
+    border-width: 1px;
+    width: 35px;
+    height: 35px;
 }
+
 .color-key-text-padding {
-  padding-left: 5px;
+    padding-left: 5px;
+}
+
+.page-header {
+    background-color: #ccc;
 }

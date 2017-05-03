@@ -8,15 +8,15 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RequestDetailModalCtrl', function($uibModalInstance, request) {
+    .controller('RequestDetailModalCtrl', function ($uibModalInstance, request) {
         var vm = this;
         vm.request = request;
 
-        vm.cancel = function() {
+        vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
 
-        vm.ok = function() {
+        vm.ok = function () {
             $uibModalInstance.close();
         };
     });
