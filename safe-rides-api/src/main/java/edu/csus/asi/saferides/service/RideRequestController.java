@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Date;
 
@@ -29,6 +31,7 @@ import java.util.Date;
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/rides")
 @PreAuthorize("hasRole('COORDINATOR')")
+@Validated
 public class RideRequestController {
 
     /**
@@ -132,7 +135,7 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
+    public ResponseEntity<?> save(HttpServletRequest request, @Valid @RequestBody RideRequest rideRequest) {
         String authToken = request.getHeader(this.tokenHeader);
 
         // if oneCardId is null or empty then grab the OneCardId from the authToken(if not null)
@@ -178,7 +181,7 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+    public ResponseEntity<?> save(@PathVariable Long id, @Valid @RequestBody RideRequest rideRequest) {
         geocodingService.setCoordinates(rideRequest);
 
         RideRequest result = rideRequestRepository.save(rideRequest);
