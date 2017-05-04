@@ -27,7 +27,7 @@ angular.module('safeRidesWebApp')
          * Update the application configuration
          */
         this.update = function(settings) {
-            return $http.post(ENV.apiEndpoint + 'config/update', settings);
+            return $http.put(ENV.apiEndpoint + 'config/update', settings);
         };
 
         return {
