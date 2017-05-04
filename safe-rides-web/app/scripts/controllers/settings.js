@@ -69,21 +69,21 @@ angular.module('safeRidesWebApp')
 
         vm.changedTime = function() {
             updateTimes();
-        }
+        };
 
         vm.changedDay = function() {
             updateDays();
-        }
+        };
 
         vm.toggleMode = function() {
             vm.isMeridian = !vm.isMeridian;
-        }
+        };
 
         /**
          * Persist data to server
          */
         vm.saveSettings = function() {
-            SettingsService.update(vm.settings).then(function(response) {
+            SettingsService.update(vm.settings).then(function() {
                 Notification.success({
                     message: 'Application settings updated.',
                     positionX: 'center',
@@ -91,7 +91,7 @@ angular.module('safeRidesWebApp')
                     replaceMessage: true
                 });
                 loadData();
-            }, function(error) {
+            }, function() {
                 Notification.error({
                     message: 'An error occured with updating the application settings. Please try again at a later time.',
                     positionX: 'center',
@@ -100,7 +100,7 @@ angular.module('safeRidesWebApp')
                 });
                 loadData();
             });
-        }
+        };
 
         /*
          * Update vm.settings.startTime and endTime with UI settings
@@ -130,7 +130,9 @@ angular.module('safeRidesWebApp')
             // clear old var
             vm.settings.daysOfWeek = [];
             // re-set values
-            vm.daysOfWeek.filter(d => d.selected == true).forEach(function(day) {
+            vm.daysOfWeek.filter(function(d) {
+                return d.selected === true;
+            }).forEach(function(day) {
                 switch (day.name) {
                     case 'Monday':
                         vm.settings.daysOfWeek.push('MONDAY');
@@ -163,56 +165,71 @@ angular.module('safeRidesWebApp')
             vm.settingsLoading = true;
             // get current settings
             SettingsService.current().then(function(response) {
-                vm.settings = new Settings(response.data);
+                    vm.settings = new Settings(response.data);
 
-                // set times
-                var now = moment();
-                var now2 = now.clone();
-                vm.startTime = now.hour(vm.settings.startTime[0]);
-                vm.startTime = now.minute(vm.settings.startTime[1]);
-                vm.endTime = now2.hour(vm.settings.endTime[0]);
-                vm.endTime = vm.endTime.minute(vm.settings.endTime[1]);
+                    // set times
+                    var now = moment();
+                    var now2 = now.clone();
+                    vm.startTime = now.hour(vm.settings.startTime[0]);
+                    vm.startTime = now.minute(vm.settings.startTime[1]);
+                    vm.endTime = now2.hour(vm.settings.endTime[0]);
+                    vm.endTime = vm.endTime.minute(vm.settings.endTime[1]);
 
-                updateTimes();
+                    updateTimes();
 
-                // set dates
-                // not checking array bounds as there SHOULD be a result no matter what
-                // the days are defined at the top of the controller.
-                vm.settings.daysOfWeek.forEach(function(day) {
-                    switch (day) {
-                        case 'MONDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Monday')[0].selected = true;
-                            break;
-                        case 'TUESDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Tuesday')[0].selected = true;
-                            break;
-                        case 'WEDNESDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Wednesday')[0].selected = true;
-                            break;
-                        case 'THURSDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Thursday')[0].selected = true;
-                            break;
-                        case 'FRIDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Friday')[0].selected = true;
-                            break;
-                        case 'SATURDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Saturday')[0].selected = true;
-                            break;
-                        case 'SUNDAY':
-                            vm.daysOfWeek.filter(d => d.name === 'Sunday')[0].selected = true;
-                    }
+                    // set dates
+                    // not checking array bounds as there SHOULD be a result no matter what
+                    // the days are defined at the top of the controller.
+                    vm.settings.daysOfWeek.forEach(function(day) {
+                        switch (day) {
+                            case 'MONDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Monday';
+                                })[0].selected = true;
+                                break;
+                            case 'TUESDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Tuesday';
+                                })[0].selected = true;
+                                break;
+                            case 'WEDNESDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Wednesday';
+                                })[0].selected = true;
+                                break;
+                            case 'THURSDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Thursday';
+                                })[0].selected = true;
+                                break;
+                            case 'FRIDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Friday';
+                                })[0].selected = true;
+                                break;
+                            case 'SATURDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Saturday';
+                                })[0].selected = true;
+                                break;
+                            case 'SUNDAY':
+                                vm.daysOfWeek.filter(function(d) {
+                                    return d.name === 'Sunday';
+                                })[0].selected = true;
+                        }
+                    });
+
+                    vm.settingsLoading = false;
+
+                },
+                function() {
+                    Notification.error({
+                        message: 'An error occured with retreiving the latest application settings. Please try again at a later time.',
+                        positionX: 'center',
+                        delay: 10000,
+                        replaceMessage: true
+                    });
+                    vm.settingsLoading = false;
                 });
-
-                vm.settingsLoading = false;
-
-            }, function(error) {
-                Notification.error({
-                    message: 'An error occured with retreiving the latest application settings. Please try again at a later time.',
-                    positionX: 'center',
-                    delay: 10000,
-                    replaceMessage: true
-                });
-                vm.settingsLoading = false;
-            });
         }
     });
