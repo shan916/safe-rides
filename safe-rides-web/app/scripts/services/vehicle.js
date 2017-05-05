@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('Vehicle', function() {
+    .factory('Vehicle', function () {
 
         function Vehicle() {
             this.make = undefined;

@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label for="datepickerstartinput">Start Date</label>
                 <div class="input-group date" id="datepickerstart">
-                    <input id="datepickerstartinput" type="text" class="form-control" />
+                    <input id="datepickerstartinput" type="text" class="form-control"/>
                     <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -35,7 +35,7 @@
             <div class="form-group">
                 <label for="datepickerendinput">End Date</label>
                 <div class="input-group date" id="datepickerend">
-                    <input id="datepickerendinput" type="text" class="form-control" />
+                    <input id="datepickerendinput" type="text" class="form-control"/>
                     <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -55,7 +55,7 @@
 </div>
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('#datepickerstart').datetimepicker({
             'format': 'L'
         });
@@ -63,10 +63,10 @@
             useCurrent: false, //Important! See issue #1075
             'format': 'L'
         });
-        $('#datepickerstart').on("dp.change", function(e) {
+        $('#datepickerstart').on("dp.change", function (e) {
             $('#datepickerend').data("DateTimePicker").minDate(e.date);
         });
-        $('#datepickerend').on("dp.change", function(e) {
+        $('#datepickerend').on("dp.change", function (e) {
             $('#datepickerstart').data("DateTimePicker").maxDate(e.date);
         });
     });

@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('User', function() {
+    .factory('User', function () {
 
         function User(data) {
             this.username = undefined;
@@ -27,9 +27,9 @@ angular.module('safeRidesWebApp')
          * returns true or false
          */
 
-        User.prototype.isInRole = function(roleName) {
+        User.prototype.isInRole = function (roleName) {
             var isInRole = false;
-            this.authorities.forEach(function(element) {
+            this.authorities.forEach(function (element) {
                 if (element.authority === roleName) {
                     isInRole = true;
                     return;

@@ -9,7 +9,7 @@
  */
 //TODO I'm not sure what to do with this service
 angular.module('safeRidesWebApp')
-    .factory('RideRequestService', function($resource, ENV) {
+    .factory('RideRequestService', function ($resource, ENV) {
 
         return $resource(ENV.apiEndpoint + 'rides/:id', {
             id: '@id'
@@ -19,4 +19,13 @@ angular.module('safeRidesWebApp')
             }
         });
 
+    })
+
+    .factory('MyRideService', function ($resource, ENV) {
+        return $resource(ENV.apiEndpoint + 'rides/mine', null, {
+            cancel: {
+                method: 'POST',
+                url: ENV.apiEndpoint + 'rides/mine/cancel'
+            }
+        });
     });
