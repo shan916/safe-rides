@@ -135,16 +135,17 @@ public class Util {
      * @return null if the ride is old. the ride if current
      * @throws IllegalStateException
      */
-    public RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
+    public static RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
             if (ride.getRequestDate().after(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant()))) {
                 return ride;
             } else {
-                throw new IllegalStateException("Configuration is missing");
+                return null;
             }
+        } else {
+            throw new IllegalStateException("Configuration is missing");
         }
-        return null;
     }
 
     /**
