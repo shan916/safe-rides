@@ -12,8 +12,7 @@ public class DriverUserMapper extends ConfigurableMapper {
 	@Override
 	protected void configure(MapperFactory factory) {
 	    factory.classMap(Driver.class, DriverCreationDto.class)
-	        .field("requestorFirstName", "requestorFirstName")
-	    	.field("csusId","csusId")
+	    .field("csusId","csusId")
 		.field("driverFirstName", "driverFirstName")
 		.field("driverLastName", "driverLastName")
 		.field("phoneNumber", "phoneNumber")

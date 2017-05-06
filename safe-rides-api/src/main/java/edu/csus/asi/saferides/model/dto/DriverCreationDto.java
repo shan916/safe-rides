@@ -21,6 +21,8 @@ public class DriverCreationDto {
     private Boolean active;
     private String password;
 
+    public DriverCreationDto(){}
+    
     public DriverCreationDto(String csusId, String driverFirstName, String driverLastName, String phoneNumber,
 			String dlState, String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active,
 			String password) {

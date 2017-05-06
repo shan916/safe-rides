@@ -346,9 +346,9 @@ public class SafeRidesApiApplication {
             geocodingService.setCoordinates(rideRequest18);
             geocodingService.setCoordinates(rideRequest19);
 
-            User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
-            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
-            User admin = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
+            User driver = new User("driver", "Driver", "Long", "hunter2");
+            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2");
+            User admin = new User("admin", "Admin", "Smith", "hunter2");
 
             ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
             ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();

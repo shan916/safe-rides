@@ -62,7 +62,7 @@ public class JwtTokenUtil implements Serializable {
         try {
             final Claims claims = getClaimsFromToken(token);
             // cast claims to ArrayList
-            ArrayList authorityClaimsArray = (ArrayList) claims.get(CLAIM_KEY_AUTHORITIES);
+            ArrayList<AuthorityName> authorityClaimsArray = (ArrayList<AuthorityName>) claims.get(CLAIM_KEY_AUTHORITIES);
             // get authority item and add it to the authorityNames arraylist
             for (Object el : authorityClaimsArray) {
                 authorityNames.add(Enum.valueOf(AuthorityName.class, ((LinkedHashMap<String, String>) el).get("authority")));

@@ -48,13 +48,6 @@ public class User {
     private String password;
 
     /**
-     * Email
-     */
-    @Column(nullable = false)
-    @Size(min = 2, max = 50)
-    private String email;
-
-    /**
      * Enabled / active flag
      */
     @Column(nullable = false)
@@ -89,14 +82,12 @@ public class User {
      * @param firstName first name
      * @param lastName  last name
      * @param password  password (in plaintext)
-     * @param email     email
      */
-    public User(String username, String firstName, String lastName, String password, String email) {
+    public User(String username, String firstName, String lastName, String password) {
         this.username = username;
         this.firstname = firstName;
         this.lastname = lastName;
         setPassword(password);
-        this.email = email;
         enabled = true;
     }
 
@@ -195,24 +186,7 @@ public class User {
         return password;
     }
 
-    /**
-     * Get user's email
-     *
-     * @return of user
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Set user's email
-     *
-     * @param email of user
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    
     /**
      * Get user's enabled / active flag
      *
