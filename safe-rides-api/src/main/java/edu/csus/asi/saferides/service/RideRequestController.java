@@ -5,8 +5,10 @@ import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
+import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -56,6 +59,12 @@ public class RideRequestController {
     private RideRequestMapper rideRequestMapper;
 
     /**
+     * a singleton for the ConfigurationRepository
+     */
+    @Autowired
+    private ConfigurationRepository configurationRepository;
+
+    /**
      * HTTP header that stores the JWT, defined in application.yaml
      */
     @Value("${jwt.header}")
@@ -78,9 +87,9 @@ public class RideRequestController {
             @ApiResponse(code = 500, message = "Failure")})
     public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
         if (status != null) {
-            return rideRequestRepository.findByStatus(status);
+            return Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
         } else {
-            return rideRequestRepository.findAll();
+            return Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
         }
     }
 
@@ -207,6 +216,9 @@ public class RideRequestController {
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
         RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+
+        // filter ride request
+        rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
 
         if (rideRequest == null) {
             return ResponseEntity.noContent().build();
