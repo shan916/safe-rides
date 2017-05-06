@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('CoordinatorreportCtrl', function() {
+    .controller('CoordinatorreportCtrl', function () {
         this.awesomeThings = [
             'HTML5 Boilerplate',
             'AngularJS',

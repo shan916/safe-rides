@@ -5,8 +5,8 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +22,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The 'interceptor' for all requests that receive an authentication challenge (401)
+ */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
+    // the output to logging should be removed later on
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
+    // dependency injection
     @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
 
@@ -35,21 +40,32 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    // set name of the response key that stores the JWT
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    /**
+     * Invoked once per request. Checks and validates the authentication token.
+     * Also differentiates between checking for rider authentication and application user authentication
+     * Rider authentication is less strict. It allows any valid onecard id; however, the only role that is allowed for
+     * a rider is rider. The application user validates the user details (without the password).
+     *
+     * @param request HTTP servlet request
+     * @param response HTTP servlet response
+     * @param chain servlet filter chain
+     * @throws ServletException servlet exception
+     * @throws IOException IO exception
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = request.getHeader(this.tokenHeader);
-        // authToken.startsWith("Bearer ")
-        // String authToken = header.substring(7);
 
         // Set SecurityContext / validate token if authToken is not null
         if (authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             ArrayList<AuthorityName> authoritiesFromToken = jwtTokenUtil.getAuthoritiesFromToken(authToken);
 
-            logger.info("checking authentication for user " + username);
+            log.info("checking authentication for user " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails;
@@ -75,7 +91,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    logger.info("authenticated user " + username + ", setting security context");
+                    log.info("authenticated user " + username + ", setting security context");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }

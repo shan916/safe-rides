@@ -22,7 +22,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+/**
+ * The class that bootstraps the application
+ * Sets the default database state and configures swagger
+ */
 @SpringBootApplication
 @EnableSwagger2
 public class SafeRidesApiApplication {
@@ -30,10 +35,23 @@ public class SafeRidesApiApplication {
     @Autowired
     GeocodingService geocodingService;
 
+    /**
+     * The main method
+     * @param args application arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(SafeRidesApiApplication.class, args);
     }
 
+    /**
+     * Demo data for the initial start of the application
+     * @param driverRepository  driver repository
+     * @param rideRequestRepository ride request repository
+     * @param userRepository user repository
+     * @param authorityRepository authority repository
+     * @param driverLocationRepository driver location repository
+     * @return CommandLineRunner
+     */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
@@ -44,11 +62,11 @@ public class SafeRidesApiApplication {
             Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", true, "Farmers", true);
             Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", true, "Farmers", true);
             Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", true, "Farmers", true);
-            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157","CA", "E5555555", true, "Farmers", true);
-            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579","CA", "E6666666", true, "Farmers", true);
-            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650","CA", "E7777777", true, "Farmers", true);
-            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110","CA", "E8888888", true, "Farmers", true);
-            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066","CA", "E9999999", true, "Farmers", true);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157", "CA", "E5555555", true, "Farmers", true);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579", "CA", "E6666666", true, "Farmers", true);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650", "CA", "E7777777", true, "Farmers", true);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110", "CA", "E8888888", true, "Farmers", true);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066", "CA", "E9999999", true, "Farmers", true);
 
             Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
             Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);
@@ -291,24 +309,38 @@ public class SafeRidesApiApplication {
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest3.setAssignedDate(new Date());
+            rideRequest3.setEstimatedTime("15");
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
             rideRequest5.setDriver(driver1);
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
+            rideRequest6.setAssignedDate(new Date());
+            rideRequest6.setEstimatedTime("30");
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
+            rideRequest8.setAssignedDate(new Date());
+            rideRequest8.setEstimatedTime("45");
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest9.setAssignedDate(new Date());
+            rideRequest9.setEstimatedTime("1 hour");
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
+            rideRequest10.setAssignedDate(new Date());
+            rideRequest10.setEstimatedTime("> 1 hour");
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
+            rideRequest11.setAssignedDate(new Date());
+            rideRequest11.setEstimatedTime("15");
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
+            rideRequest12.setAssignedDate(new Date());
+            rideRequest12.setEstimatedTime("30");
 
             geocodingService.setCoordinates(rideRequest0);
             geocodingService.setCoordinates(rideRequest1);
@@ -429,6 +461,10 @@ public class SafeRidesApiApplication {
         };
     }
 
+    /**
+     * Configures swagger
+     * @return Docket
+     */
     @Bean
     public Docket swaggerSettings() {
         return new Docket(DocumentationType.SWAGGER_2)

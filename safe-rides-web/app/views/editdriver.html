@@ -10,7 +10,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="csusid">OneCard ID</label>
-                            <input id="csusid" name="csusid" type="text" class="form-control" required ng-model="ctrl.driver.csusId" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit CSUS ID">
+                            <input id="csusid" name="csusid" type="text" class="form-control" required
+                                   ng-model="ctrl.driver.csusId" ui-mask="999999999" ui-mask-placeholder
+                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit CSUS ID">
                             <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -20,7 +22,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="name">First Name</label>
-                            <input id="firstName" name="firstName" type="text" class="form-control" required placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName" ng-minlength="2" ng-maxlength="30">
+                            <input id="firstName" name="firstName" type="text" class="form-control" required
+                                   placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName"
+                                   ng-minlength="2" ng-maxlength="30">
                             <div ng-messages="driverForm.firstName.$dirty && driverForm.firstName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
@@ -34,7 +38,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="name">Last Name</label>
-                            <input id="lastName" name="lastName" type="text" class="form-control" required placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName" ng-minlength="2" ng-maxlength="30">
+                            <input id="lastName" name="lastName" type="text" class="form-control" required
+                                   placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName"
+                                   ng-minlength="2" ng-maxlength="30">
                             <div ng-messages="driverForm.lastName.$dirty && driverForm.lastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
@@ -49,7 +55,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="dlnum">Phone Number</label>
-                            <input id="dlnum" name="phoneNumber" type="text" class="form-control" ng-model="ctrl.driver.phoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
+                            <input id="dlnum" name="phoneNumber" type="text" class="form-control"
+                                   ng-model="ctrl.driver.phoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder
+                                   ui-mask-placeholder-char="_">
                             <div ng-messages="driverForm.phoneNumber.$dirty && driverForm.phoneNumber.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -59,7 +67,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="dlnum">DL Number</label>
-                            <input id="dlNum" name="dlNum" type="text" class="form-control" required placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber" ng-minlength="2">
+                            <input id="dlNum" name="dlNum" type="text" class="form-control" required
+                                   placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber"
+                                   ng-minlength="2">
                             <div ng-messages="driverForm.dlNum.$dirty && driverForm.dlNum.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
@@ -70,7 +80,8 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="state">DL State</label>
-                            <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState" required>
+                            <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState"
+                                    required>
                                 <option ng-repeat="state in ctrl.stateChoices" value={{state}}>{{state}}</option>
                             </select>
                             <div ng-messages="driverForm.state.$dirty && driverForm.state.$error">
@@ -84,10 +95,13 @@
                     <div class="col-sm-4">
                         <div class="checkbox">
                             <label>
-                                <input id="insurance" name="insurance" type="checkbox" ng-model="ctrl.driver.insuranceChecked" required> Insurance Checked
+                                <input id="insurance" name="insurance" type="checkbox"
+                                       ng-model="ctrl.driver.insuranceChecked" required> Insurance Checked
                             </label>
                             <div ng-messages="driverForm.insurance.$error">
-                                <div class="input-error" ng-message="required">* Have you checked that the driver's insurance is valid?</div>
+                                <div class="input-error" ng-message="required">* Have you checked that the driver's
+                                    insurance is valid?
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,7 +110,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="insuranceCompany">Insurance Company</label>
-                            <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control" required placeholder="Enter the driver's insurance company" ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
+                            <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control"
+                                   required placeholder="Enter the driver's insurance company"
+                                   ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
                             <div ng-messages="driverForm.insuranceCompany.$dirty && driverForm.insuranceCompany.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="minlength">* must be at least 3 characters</div>
@@ -119,7 +135,8 @@
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label for="make">Make</label>
-                            <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make" required ng-model="ctrl.driver.vehicle.make">
+                            <input id="make" name="make" type="text" class="form-control" placeholder="Enter the make"
+                                   required ng-model="ctrl.driver.vehicle.make">
                             <div ng-messages="driverForm.make.$dirty && driverForm.make.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -129,7 +146,8 @@
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label for="model">Model</label>
-                            <input id="model" name="model" type="text" class="form-control" placeholder="Enter the model" required ng-model="ctrl.driver.vehicle.model">
+                            <input id="model" name="model" type="text" class="form-control"
+                                   placeholder="Enter the model" required ng-model="ctrl.driver.vehicle.model">
                             <div ng-messages="driverForm.model.$dirty && driverForm.model.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -139,7 +157,8 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="year">Year</label>
-                            <select name="year" id="year" class="form-control" ng-model="ctrl.driver.vehicle.year" required>
+                            <select name="year" id="year" class="form-control" ng-model="ctrl.driver.vehicle.year"
+                                    required>
                                 <option ng-repeat="year in ctrl.yearChoices" value={{year}}>{{year}}</option>
                             </select>
                             <div ng-messages="driverForm.year.$dirty && driverForm.year.$error">
@@ -153,7 +172,9 @@
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label for="licensePlate">License Plate</label>
-                            <input id="licensePlate" name="licensePlate" type="text" class="form-control" placeholder="Enter the license plate number" required ng-model="ctrl.driver.vehicle.licensePlate" ng-minlength="2">
+                            <input id="licensePlate" name="licensePlate" type="text" class="form-control"
+                                   placeholder="Enter the license plate number" required
+                                   ng-model="ctrl.driver.vehicle.licensePlate" ng-minlength="2">
                             <div ng-messages="driverForm.licensePlate.$dirty && driverForm.licensePlate.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="ng-minlength">* must be at least 2 characters</div>
@@ -164,7 +185,8 @@
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label for="color">Color</label>
-                            <input id="color" name="color" type="text" class="form-control" placeholder="Enter the color" required ng-model="ctrl.driver.vehicle.color">
+                            <input id="color" name="color" type="text" class="form-control"
+                                   placeholder="Enter the color" required ng-model="ctrl.driver.vehicle.color">
                             <div ng-messages="driverForm.color.$dirty && driverForm.color.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -174,7 +196,8 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="seats">Seats</label>
-                            <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats" required min="2" ng-model="ctrl.driver.vehicle.seats">
+                            <input id="seats" name="seats" type="number" class="form-control" placeholder="Seats"
+                                   required min="2" ng-model="ctrl.driver.vehicle.seats">
                             <div ng-messages="vehicleForm.seats.$error">
                                 <div class="input-error" ng-message="min">* Enter >= 2</div>
                             </div>
@@ -190,9 +213,11 @@
         <div class="col-sm-12">
             <div class="pull-right">
                 <a ui-sref="managedrivers" class="btn btn-default">Cancel</a>
-                <button class="btn btn-primary" ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)" ng-click="ctrl.saveDriver()">
-                Save
-            </button>
+                <button class="btn btn-primary"
+                        ng-disabled="driverForm.$invalid || vehicleForm.$invalid || (driverForm.$pristine && vehicleForm.$pristine)"
+                        ng-click="ctrl.saveDriver()">
+                    Save
+                </button>
             </div>
         </div>
     </div>

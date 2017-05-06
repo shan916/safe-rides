@@ -8,6 +8,6 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RegisterCtrl', function() {
+    .controller('RegisterCtrl', function () {
 
     });
