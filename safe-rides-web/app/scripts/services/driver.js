@@ -12,6 +12,7 @@ angular.module('safeRidesWebApp')
 
         function Driver(data) {
             this.csusId = undefined;
+            this.password = undefined;
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
             this.phoneNumber = undefined;

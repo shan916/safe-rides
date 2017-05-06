@@ -77,7 +77,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="state">DL State</label>
                             <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState"
@@ -111,7 +111,7 @@
                         <div class="form-group">
                             <label for="insuranceCompany">Insurance Company</label>
                             <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control"
-                                   required placeholder="Enter the driver's insurance company"
+                                   required placeholder="Enter driver's insurance company"
                                    ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
                             <div ng-messages="driverForm.insuranceCompany.$dirty && driverForm.insuranceCompany.$error">
                                 <div class="input-error" ng-message="required">* required</div>
@@ -119,6 +119,18 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                      <div class="form-group">
+                          <label for="driverPassword">Password</label>
+                          <input id="driverPassword" name="driverPassword" type="password" class="form-control" required
+                                 ng-model="ctrl.driver.password" placeholder="Enter the driver's password">
+                          <div ng-messages="driverForm.driverPassword.$dirty && driverForm.driverPassword.$error">
+                              <div class="input-error" ng-message="required">* required</div>
+                          </div>
+                      </div>
+                  </div>
                 </div>
             </form>
         </div>
