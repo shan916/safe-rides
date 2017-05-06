@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,7 +139,7 @@ public class Util {
     public static RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
-            if (ride.getRequestDate().after(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant()))) {
+            if (ride.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) >= 0) {
                 return ride;
             } else {
                 return null;
@@ -156,11 +157,11 @@ public class Util {
      * @return null if all rides are old. the rides that are current
      * @throws IllegalStateException
      */
-    public Iterable<RideRequest> filterPastRides(Configuration configuration, List<RideRequest> rides) throws IllegalStateException {
+    public static Iterable<RideRequest> filterPastRides(Configuration configuration, Collection<RideRequest> rides) throws IllegalStateException {
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
             // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date
-            rides.removeIf(r -> r.getRequestDate().before(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())));
+            rides.removeIf(r -> r.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) < 0);
             return rides;
         } else {
             throw new IllegalStateException("Configuration is missing");
