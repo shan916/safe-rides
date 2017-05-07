@@ -51,35 +51,44 @@ angular.module('safeRidesWebApp')
         function getRide() {
             vm.loading = true;
             MyRideService.get().$promise.then(function (response) {
-                if (response && response !== '') {
+                // if a ride exists
+                if (response.$status !== 204) {
                     vm.existingRide = new RideRequest(response);
 
+                    // if ride was cancelled, allow for requesting a new one
                     if (vm.existingRide.status === 'CANCELEDBYRIDER' || vm.existingRide.status === 'CANCELEDBYCOORDINATOR' || vm.existingRide.status === 'CANCELEDBYOTHER') {
                         vm.existingRide = undefined;
-                    }
-
-                    // set refresh interval only if ride has been requested
-                    if (!rideRefresher) {
-                        rideRefresher = $interval(getRide, REFRESH_INTERVAL);
+                    } else {
+                        // set refresh interval only if ride has been requested
+                        if (!rideRefresher) {
+                            rideRefresher = $interval(getRide, REFRESH_INTERVAL);
+                        }
                     }
                 }
 
                 console.log(response);
                 vm.loading = false;
             }, function (error) {
-                console.log(error);
+                console.log('Failed to get ride:', error);
                 vm.loading = false;
             });
         }
 
         /*
-         * Destroy refresh interval on exit
+         * Cancel refresh interval on exit
          * */
         $scope.$on('$destroy', function () {
+            cancelInterval();
+        });
+
+        /**
+         * Cancels refresh interval
+         */
+        function cancelInterval() {
             if (rideRefresher) {
                 $interval.cancel(rideRefresher);
             }
-        });
+        }
 
         /*
          * Login driver after one card id has been entered
@@ -151,8 +160,9 @@ angular.module('safeRidesWebApp')
             // cancel confirmed
             if (vm.existingRide.status === 'UNASSIGNED') {
                 MyRideService.cancel().$promise.then(function (response) {
+                    cancelInterval();
                     getRide();
-                    console.log('Ride canceled:', response);
+                    console.log('Ride cancelled:', response);
                     Notification.info({
                         message: 'Your ride has been cancelled',
                         positionX: 'center',

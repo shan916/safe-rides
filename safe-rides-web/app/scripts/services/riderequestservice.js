@@ -22,7 +22,18 @@ angular.module('safeRidesWebApp')
     })
 
     .factory('MyRideService', function ($resource, ENV) {
-        return $resource(ENV.apiEndpoint + 'rides/mine', null, {
+        return $resource(ENV.apiEndpoint + 'rides/mine', {}, {
+            get: {
+                method: 'GET',
+                // add http response to returned object
+                interceptor: {
+                    response: function (response) {
+                        var result = response.resource;
+                        result.$status = response.status;
+                        return result;
+                    }
+                }
+            },
             cancel: {
                 method: 'POST',
                 url: ENV.apiEndpoint + 'rides/mine/cancel'
