@@ -1,5 +1,13 @@
 <span us-spinner ng-show="ctrl.loading"></span>
 <div class="container" ng-hide="ctrl.loading">
+    <div class="row" ng-show="!ctrl.AcceptingNewRides">
+        <div class="col-sm-12">
+            <div class="alert alert-warning" role="alert">
+                <strong>Operation Status</strong> It is currently outside of SafeRides' normal operating hours
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12">
             <h4 ng-show="ctrl.loggedIn">OneCard ID: {{ctrl.oneCardId}}</h4>
@@ -29,7 +37,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default" ng-show="ctrl.loggedIn && !ctrl.existingRide">
+    <div class="panel panel-default" ng-show="ctrl.loggedIn && !ctrl.existingRide && ctrl.AcceptingNewRides">
         <div class="panel-heading">
             <h3 class="panel-title">Request a Ride</h3>
         </div>
