@@ -157,7 +157,7 @@ public class Util {
      * @return null if all rides are old. the rides that are current
      * @throws IllegalStateException
      */
-    public static Iterable<RideRequest> filterPastRides(Configuration configuration, Collection<RideRequest> rides) throws IllegalStateException {
+    public static Collection<RideRequest> filterPastRides(Configuration configuration, Collection<RideRequest> rides) throws IllegalStateException {
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
             // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date

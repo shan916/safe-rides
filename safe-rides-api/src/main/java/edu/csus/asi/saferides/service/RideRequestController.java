@@ -8,11 +8,11 @@ import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +47,12 @@ public class RideRequestController {
     private RideRequestRepository rideRequestRepository;
 
     /**
+     * a singleton for the ConfigurationRepository
+     */
+    @Autowired
+    private ConfigurationRepository configurationRepository;
+
+    /**
      * a singleton for the GeocodingService
      */
     @Autowired
@@ -57,12 +63,6 @@ public class RideRequestController {
      */
     @Autowired
     private RideRequestMapper rideRequestMapper;
-
-    /**
-     * a singleton for the ConfigurationRepository
-     */
-    @Autowired
-    private ConfigurationRepository configurationRepository;
 
     /**
      * HTTP header that stores the JWT, defined in application.yaml
@@ -144,10 +144,17 @@ public class RideRequestController {
     public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
         String authToken = request.getHeader(this.tokenHeader);
 
-        // if oneCardId is null or empty then grab the OneCardId from the authToken(if not null)
-        if (StringUtils.isEmpty(rideRequest.getOneCardId()) && authToken != null) {
-            String username = jwtTokenUtil.getUsernameFromToken(authToken);
-            rideRequest.setOneCardId(username);
+        if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_DRIVER)) { // if requestor is a rider
+            // enforce the SafeRides time window range (only for riders). if not accepting new rides, return bad request
+            if (!Util.isAcceptingRideRequests(configurationRepository.findOne(1))) {    // not accepting rides right now
+                return ResponseEntity.badRequest().body(new ResponseMessage("SafeRides has stopped accepting new rides."));
+            } else {
+                // set the OneCard ID in the auth token to be the request's OneCard ID
+                String username = jwtTokenUtil.getUsernameFromToken(authToken);
+                rideRequest.setOneCardId(username);
+            }
+        } else if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_COORDINATOR)) { // if not a coordinator or admin or rider
+            return ResponseEntity.badRequest().body(new ResponseMessage("Only riders or coordinators can submit a ride request!"));
         }
 
         // oneCardId is required
@@ -261,6 +268,9 @@ public class RideRequestController {
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
         RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+
+        // filter ride request
+        rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
 
         if (rideRequest == null) {
             return ResponseEntity.badRequest().body(new ResponseMessage("No ride found for user"));
