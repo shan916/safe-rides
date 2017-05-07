@@ -11,12 +11,12 @@ angular.module('safeRidesWebApp')
     .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification) {
         var vm = this;
 
-        vm.activeDrivers = [];
-        vm.inactiveDrivers = [];
+        vm.activeCoordinators = [];
+        vm.inactiveCoordinators = [];
         vm.searchString = undefined;
 
-        vm.loadingActiveDrivers = true;
-        vm.loadingInactiveDrivers = true;
+        vm.loadingActiveCoordinators = true;
+        vm.loadingInactiveCoordinators = true;
 
         /*
          * Kick user out if not authenticated or if not a coordinator
@@ -39,24 +39,24 @@ angular.module('safeRidesWebApp')
         }
 
         function getDrivers() {
-            vm.loadingActiveDrivers = true;
-            vm.loadingInactiveDrivers = true;
+            vm.loadingActiveCoordinators = true;
+            vm.loadingInactiveCoordinators = true;
 
             DriverService.query({active: true}).$promise.then(function (response) {
-                vm.loadingActiveDrivers = false;
-                vm.activeDrivers = response;
+                vm.loadingActiveCoordinators = false;
+                vm.activeCoordinators = response;
                 console.log('got active drivers:', response);
             }, function (error) {
-                vm.loadingActiveDrivers = false;
+                vm.loadingActiveCoordinators = false;
                 console.log('error getting active drivers:', error);
             });
 
             DriverService.query({active: false}).$promise.then(function (response) {
-                vm.loadingInactiveDrivers = false;
-                vm.inactiveDrivers = response;
+                vm.loadingInactiveCoordinators = false;
+                vm.inactiveCoordinators = response;
                 console.log('got inactive drivers:', response);
             }, function (error) {
-                vm.loadingInactiveDrivers = false;
+                vm.loadingInactiveCoordinators = false;
                 console.log('error getting inactive drivers:', error);
             });
         }
@@ -81,7 +81,7 @@ angular.module('safeRidesWebApp')
             });
         };
 
-        vm.openConfirmChangeDriverActiveModal = function (driver) {
+        vm.openConfirmChangeCoordinatorActiveModal = function (driver) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/confirmchangedriveractivemodal.html',
                 controller: 'ConfirmChangeDriverActiveModalCtrl',

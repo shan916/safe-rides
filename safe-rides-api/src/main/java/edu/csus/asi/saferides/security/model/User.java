@@ -50,17 +50,10 @@ public class User {
     private String password;
 
     /**
-     * Email
-     */
-    @Column(nullable = false)
-    @Size(min = 2, max = 50)
-    private String email;
-
-    /**
      * Enabled / active flag
      */
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean active;
 
     /**
      * Timestamp of last password reset
@@ -91,15 +84,13 @@ public class User {
      * @param firstName first name
      * @param lastName  last name
      * @param password  password (in plaintext)
-     * @param email     email
      */
-    public User(String username, String firstName, String lastName, String password, String email) {
+    public User(String username, String firstName, String lastName, String password) {
         this.username = username;
         this.firstname = firstName;
         this.lastname = lastName;
         setPassword(password);
-        this.email = email;
-        enabled = true;
+        active = true;
     }
 
     /**
@@ -113,7 +104,7 @@ public class User {
         this.username = username;
         this.firstname = firstName;
         this.lastname = lastName;
-        enabled = true;
+        active = true;
     }
 
     /**
@@ -149,7 +140,7 @@ public class User {
      * @param username of user
      */
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.toLowerCase();
     }
 
     /**
@@ -198,39 +189,21 @@ public class User {
     }
 
     /**
-     * Get user's email
-     *
-     * @return of user
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Set user's email
-     *
-     * @param email of user
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Get user's enabled / active flag
+     * Get user's active / active flag
      *
      * @return user's status
      */
-    public Boolean getEnabled() {
-        return enabled;
+    public Boolean getActive() {
+        return active;
     }
 
     /**
-     * Set user's enabled / active flag
+     * Set user's active / active flag
      *
-     * @param enabled of user
+     * @param active of user
      */
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     /**
@@ -278,4 +251,5 @@ public class User {
         ArgonPasswordEncoder passwordEncoder = new ArgonPasswordEncoder();
         this.password = passwordEncoder.encode(password);
     }
+
 }

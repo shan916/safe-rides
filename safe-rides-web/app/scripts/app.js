@@ -97,43 +97,37 @@ angular
                 templateUrl: 'views/main.html',
                 controller: 'MainCtrl',
                 controllerAs: 'ctrl'
-            });
-        $stateProvider
+            })
             .state('about', {
                 url: '/about',
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl',
                 controllerAs: 'about'
-            });
-        $stateProvider
+            })
             .state('login', {
                 url: '/login',
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 controllerAs: 'ctrl'
-            });
-        $stateProvider
+            })
             .state('register', {
                 url: '/register',
                 templateUrl: 'views/register.html',
                 controller: 'RegisterCtrl',
                 controllerAs: 'ctrl'
-            });
-        $stateProvider
+            })
             .state('resetpasswordrequest', {
                 url: '/resetpasswordrequest',
                 templateUrl: 'views/resetpasswordrequest.html',
                 controller: 'ResetpasswordrequestCtrl',
                 controllerAs: 'ctrl'
-            });
-        $stateProvider
+            })
             .state('resetpassword', {
                 url: '/resetpassword',
                 templateUrl: 'views/resetpassword.html',
                 controller: 'ResetpasswordCtrl',
                 controllerAs: 'ctrl'
-            });
-        $stateProvider
+            })
             .state('coordinatordashboard', {
                 url: '/coordinatordashboard',
                 templateUrl: 'views/coordinatordashboard.html',
@@ -143,8 +137,7 @@ angular
                     requireLogin: true,
                     requiresLogin: true
                 }
-            });
-        $stateProvider
+            })
             .state('coordinatorreport', {
                 url: '/coordinatorreport',
                 templateUrl: 'views/coordinatorreport.html',
@@ -154,8 +147,7 @@ angular
                     requireLogin: true,
                     requiresLogin: true
                 }
-            });
-        $stateProvider
+            })
             .state('editdriver', {
                 url: '/editdriver/:driverId?',
                 templateUrl: 'views/editdriver.html',
@@ -165,8 +157,7 @@ angular
                     requireLogin: true,
                     requiresLogin: true
                 }
-            });
-        $stateProvider
+            })
             .state('driverdashboard', {
                 url: '/driverdashboard',
                 templateUrl: 'views/driverdashboard.html',
@@ -176,32 +167,27 @@ angular
                     requireLogin: true,
                     requiresLogin: true
                 }
-            });
-        $stateProvider
+            })
             .state('riderdashboard', {
                 url: '/riderdashboard',
                 templateUrl: 'views/riderdashboard.html',
                 controller: 'RiderdashboardCtrl',
                 controllerAs: 'ctrl'
-            });
-
-            $stateProvider
-                .state('managecoordinators', {
-                    url: '/managecoordinators',
-                    templateUrl: 'views/managecoordinators.html',
-                    controller: 'ManageCoordinatorsCtrl',
-                    controllerAs: 'ctrl',
-                    data: {
-                        requireLogin: true,
-                        requiresLogin: true
-                    }
-                });
-
-        $stateProvider
+            })
             .state('managedrivers', {
                 url: '/managedrivers',
                 templateUrl: 'views/managedrivers.html',
                 controller: 'ManagedriversCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
+            })
+            .state('managecoordinators', {
+                url: '/managecoordinators',
+                templateUrl: 'views/managecoordinators.html',
+                controller: 'ManageCoordinatorsCtrl',
                 controllerAs: 'ctrl',
                 data: {
                     requireLogin: true,

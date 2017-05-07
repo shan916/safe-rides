@@ -9,9 +9,11 @@ import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +58,7 @@ public class UserController {
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    @RequestMapping(value = "/retrieveAll", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of users...")
     @ApiResponses(value = {
@@ -70,9 +72,9 @@ public class UserController {
 
         if (active != null) {
             if (active) {
-                users = userRepository.findByEnabled(true);
+                users = userRepository.findByActive(true);
             } else {
-                users = userRepository.findByEnabled(false);
+                users = userRepository.findByActive(false);
             }
         } else {
             users = userRepository.findAll();
@@ -142,32 +144,6 @@ public class UserController {
         }
 
         return user;
-    }
-
-    /**
-     * Create a new user
-     *
-     * @param user to create
-     * @return result
-     */
-    @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        user.setUsername(user.getUsername().toLowerCase());
-        User result = userRepository.save(user);
-
-        // create URI of where the user was created
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
-
-        return ResponseEntity.created(location).body(result);
     }
 
     /**
@@ -243,11 +219,52 @@ public class UserController {
     }
 
     /**
-     * Update a user
+     * Creates a new user
+     * <p>
+     * Returns HTTP status 400 if password does not meet security requirements
      *
-     * @param username of user to update
-     * @param user     details to set
-     * @return status
+     * @param user Request body containing user to create
+     * @return newly created user and location
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        if (user.getPassword() == null || !Util.isPasswordValid(user.getPassword())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Password does not meet security requirements"));
+        }
+
+        User result = userRepository.save(user);
+
+        // create URI of where the user was created
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{username}")
+                .buildAndExpand(result.getUsername()).toUri();
+
+        return ResponseEntity.created(location).body(result);
+    }
+
+    /**
+     * Updates the given user
+     * <p>
+     * Returns HTTP status 400 under the following conditions:
+     * <ul>
+     * <li>
+     * Username in path does not match username in request body
+     * </li>
+     * <li>
+     * New password does not meet security requirements
+     * </li>
+     * </ul>
+     *
+     * @param username path parameter of username to update
+     * @param user     request body containing user to update
+     * @return updated user or error if any
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -258,12 +275,23 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
-        if (userRepository.findByUsername(username.toLowerCase()).getUsername() != user.getUsername().toLowerCase()) {
+        User existingUser = userRepository.findByUsernameIgnoreCase(username);
+
+        // update user if username in path and username of user object are equal
+        if (existingUser != null && existingUser.getUsername().equalsIgnoreCase(user.getUsername())) {
+
+            // if new password is empty or null, keep existing password
+            if (StringUtils.isEmpty(user.getPassword())) {
+                user.setPassword(existingUser.getPassword());
+            } else if (!Util.isPasswordValid(user.getPassword())) { // else new password must meet security requirements
+                return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
+            }
+
+            User result = userRepository.save(user);
+            return ResponseEntity.ok(result);
+        } else {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username mismatch"));
         }
-        user.setUsername(user.getUsername().toLowerCase());
-        User result = userRepository.save(user);
-
-        return ResponseEntity.ok(result);
     }
+
 }

@@ -33,7 +33,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @param username the username of the user to search by
      * @return user with the specified username
      */
-    User findByUsername(String username);
+    User findByUsernameIgnoreCase(String username);
 
-    List<User> findByEnabled(boolean enabled);
+    List<User> findByActive(boolean active);
 }

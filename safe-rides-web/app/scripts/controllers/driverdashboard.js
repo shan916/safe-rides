@@ -9,7 +9,7 @@
  */
 angular.module('safeRidesWebApp')
     .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
+                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -41,7 +41,7 @@ angular.module('safeRidesWebApp')
                 $state.go('/');
                 console.log('Not a driver');
             } else {
-                UserService.getAuthUserInfo().then(function (response) {
+                AuthService.getAuthUserInfo().then(function (response) {
                     vm.driver = response.data;
                 }, function (error) {
                     console.log('error getting the driver name', error);

@@ -179,7 +179,7 @@ public class Driver {
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
         this.active = active;
-        this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
+        this.user = new User(csusId, driverFirstName, driverLastName, "pass");
     }
 
     /**

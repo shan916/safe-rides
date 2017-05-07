@@ -14,7 +14,6 @@ angular.module('safeRidesWebApp')
             this.username = undefined;
             this.firstname = undefined;
             this.lastname = undefined;
-            this.email = undefined;
             this.authorities = undefined;
 
             if (data) {

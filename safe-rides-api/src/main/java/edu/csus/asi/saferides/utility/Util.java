@@ -25,4 +25,9 @@ public class Util {
                 .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
                 .collect(Collectors.toList());
     }
+
+    public static boolean isPasswordValid(String password) {
+        return (password.length() > 8);
+    }
+
 }
