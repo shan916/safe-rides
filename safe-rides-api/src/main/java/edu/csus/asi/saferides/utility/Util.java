@@ -46,13 +46,13 @@ public class Util {
     }
 
     /**
-     * Check if a current date & time is valid for requesting a ride
+     * Check if a current datetime is valid for requesting a ride
      *
-     * @param currentDateTime the current date & time
+     * @param currentDateTime the current datetime
      * @param startTime       the application's start time
      * @param endTime         the application's end time
      * @param dayOfWeeks      the application's active days
-     * @return whether the date & time during operating hours
+     * @return whether the datetime during operating hours
      */
     public static boolean validRideRequestDateTime(LocalDateTime currentDateTime, LocalTime startTime, LocalTime endTime, List<DayOfWeek> dayOfWeeks) {
         LocalDateTime[] localDateTimes = getRangeDateTime(currentDateTime, startTime, endTime);
@@ -67,8 +67,9 @@ public class Util {
     /**
      * Check if application is accepting new ride requests
      *
+     * @param configuration the application configuration settings from the database
      * @return whether the current time is during operating hours
-     * @throws IllegalStateException
+     * @throws IllegalStateException thrown when configuration is null
      */
     public static boolean isAcceptingRideRequests(Configuration configuration) throws IllegalStateException {
         if (configuration == null) {
@@ -90,9 +91,9 @@ public class Util {
     }
 
     /**
-     * Calculate a start date time and an end date time
+     * Calculate a start datetime and an end datetime
      *
-     * @param currentDateTime the current date & time
+     * @param currentDateTime the current datetime
      * @param startTime       the application's start time
      * @param endTime         the application's end time
      * @return a start and end datetime
@@ -132,12 +133,13 @@ public class Util {
      * Filter old ride. 'Current' rides are any rides that were requested after the start time of the current day
      * even if the current day is not selected to be an active Safe Rides day
      *
-     * @param ride the ride to check if old
+     * @param ride          the ride to check if old
+     * @param configuration the application configuration settings from the database
      * @return null if the ride is old. the ride if current
-     * @throws IllegalStateException
+     * @throws IllegalStateException thrown if configuration is null
      */
     public static RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
-        if(ride == null){
+        if (ride == null) {
             return null;
         }
         if (configuration != null) {
@@ -156,12 +158,13 @@ public class Util {
      * Filter old rides. 'Current' rides are any rides that were requested after the start time of the current day
      * even if the current day is not selected to be an active Safe Rides day
      *
-     * @param rides the rides to check if old
+     * @param rides         the rides to check if old
+     * @param configuration the application configuration settings from the database
      * @return null if all rides are old. the rides that are current
-     * @throws IllegalStateException
+     * @throws IllegalStateException thrown if configuration is null
      */
     public static Collection<RideRequest> filterPastRides(Configuration configuration, Collection<RideRequest> rides) throws IllegalStateException {
-        if(rides.size() == 0){
+        if (rides.size() == 0) {
             return null;
         }
         if (configuration != null) {

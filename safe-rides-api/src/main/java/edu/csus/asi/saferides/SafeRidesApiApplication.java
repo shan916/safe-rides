@@ -40,6 +40,7 @@ public class SafeRidesApiApplication {
 
     /**
      * The main method
+     *
      * @param args application arguments
      */
     public static void main(String[] args) {
@@ -48,11 +49,13 @@ public class SafeRidesApiApplication {
 
     /**
      * Demo data for the initial start of the application
-     * @param driverRepository  driver repository
-     * @param rideRequestRepository ride request repository
-     * @param userRepository user repository
-     * @param authorityRepository authority repository
+     *
+     * @param driverRepository         driver repository
+     * @param rideRequestRepository    ride request repository
+     * @param userRepository           user repository
+     * @param authorityRepository      authority repository
      * @param driverLocationRepository driver location repository
+     * @param configurationRepository  configuration repository
      * @return CommandLineRunner
      */
     @Bean
@@ -477,6 +480,7 @@ public class SafeRidesApiApplication {
 
     /**
      * Configures swagger
+     *
      * @return Docket
      */
     @Bean
