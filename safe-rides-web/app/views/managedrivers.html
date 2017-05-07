@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div clas="row">
-        <span us-spinner ng-show="ctrl.loadingActiveCoordinators || ctrl.loadingInactiveCoordinators"></span>
+        <span us-spinner ng-show="ctrl.loadingActiveDrivers || ctrl.loadingInactiveDrivers"></span>
         <div class="col-sm-12">
             <!-- Start of Active Drivers -->
             <div class="panel panel-primary">
@@ -20,7 +20,7 @@
                         <th class="col-xs-3">Actions</th>
 
                         <tbody>
-                        <tr ng-repeat="driver in ctrl.activeCoordinators">
+                        <tr ng-repeat="driver in ctrl.activeDrivers">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                             <td>{{driver.phoneNumber | phone}}</td>
                             <td>{{driver.csusId}}</td>
@@ -34,7 +34,7 @@
                                         ng-disabled="driver.status !== 'AVAILABLE'">Delete
                                 </button>
                                 <button type="button" class="btn btn-warning"
-                                        ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(driver)"
+                                        ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)"
                                         ng-disabled="driver.status !== 'AVAILABLE'">Deactivate
                                 </button>
                             </td>
@@ -76,7 +76,7 @@
                                 <th class="col-xs-1">DL Number</th>
                                 <th class="col-xs-3">Actions</th>
                                 <tbody>
-                                <tr ng-repeat="driver in ctrl.inactiveCoordinators | filter: ctrl.searchString | limitTo: 25">
+                                <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
                                     <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                                     <td>{{driver.phoneNumber | phone}}</td>
                                     <td>{{driver.csusId}}</td>
@@ -88,7 +88,7 @@
                                                 ng-click="ctrl.openConfirmDeleteModal(driver)">Delete
                                         </button>
                                         <button type="button" class="btn btn-warning"
-                                                ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(driver)">Activate
+                                                ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate
                                         </button>
                                     </td>
                                 </tr>
