@@ -13,16 +13,17 @@
                     <h3 class="panel-title">Enter your OneCard ID</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="form-group">
-                        <label for="oneCardId">OneCard ID</label>
-                        <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
-                               ng-model="ctrl.oneCardId" ui-mask="999999999" ui-mask-placeholder
-                               ui-mask-placeholder-char="_" placeholder="9 digit ID">
-                        <div ng-messages="rideRequestForm.oneCardId.$dirty && rideRequestForm.oneCardId.$error">
-                            <div class="input-error" ng-message="required">* required</div>
+                    <form name="loginForm">
+                        <div class="form-group">
+                            <label for="oneCardId">OneCard ID</label>
+                            <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
+                                   ng-model="ctrl.oneCardId" ui-mask="999999999" ui-mask-placeholder
+                                   ui-mask-placeholder-char="_" placeholder="9 digit ID">
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary pull-right" ng-click="ctrl.login()">Submit</button>
+                        <button type="submit" class="btn btn-primary pull-right" ng-click="ctrl.login()"
+                                ng-disabled="loginForm.$invalid">Submit
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -228,7 +229,7 @@
 
         <div class="row margin-bottom-15">
             <div class="col-sm-12 text-center">
-                <a href="tel:9160000000" class="btn btn-success">
+                <a href="tel:9162788294" class="btn btn-success">
                     <span class="glyphicon glyphicon-earphone"></span> Call
                 </a>
             </div>
