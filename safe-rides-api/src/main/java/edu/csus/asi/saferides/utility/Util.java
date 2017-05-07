@@ -130,7 +130,7 @@ public class Util {
 
     /**
      * Filter old ride. 'Current' rides are any rides that were requested after the start time of the current day
-     * even if the current day is not selected to be an active saferides day
+     * even if the current day is not selected to be an active Safe Rides day
      *
      * @param ride the ride to check if old
      * @return null if the ride is old. the ride if current
@@ -154,7 +154,7 @@ public class Util {
 
     /**
      * Filter old rides. 'Current' rides are any rides that were requested after the start time of the current day
-     * even if the current day is not selected to be an active saferides day
+     * even if the current day is not selected to be an active Safe Rides day
      *
      * @param rides the rides to check if old
      * @return null if all rides are old. the rides that are current

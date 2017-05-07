@@ -145,7 +145,7 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
 
         if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_DRIVER)) { // if requestor is a rider
-            // enforce the SafeRides time window range (only for riders). if not accepting new rides, return bad request
+            // enforce the Safe Rides time window range (only for riders). if not accepting new rides, return bad request
             if (!Util.isAcceptingRideRequests(configurationRepository.findOne(1))) {    // not accepting rides right now
                 return ResponseEntity.badRequest().body(new ResponseMessage("SafeRides has stopped accepting new rides."));
             } else {
