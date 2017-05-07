@@ -16,12 +16,14 @@
                     <div class="col-xs-6">
                         <div class="pull-right">
                             <label>Start Time</label>
-                            <div uib-timepicker ng-model="ctrl.startTime" ng-change="ctrl.changedTime()" hour-step="1" minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                            <div uib-timepicker ng-model="ctrl.startTime" ng-change="ctrl.changedTime()" hour-step="1"
+                                 minute-step="1" show-meridian="ctrl.isMeridian"></div>
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <label>End Time</label>
-                        <div uib-timepicker ng-model="ctrl.endTime" ng-change="ctrl.changedTime()" hour-step="1" minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                        <div uib-timepicker ng-model="ctrl.endTime" ng-change="ctrl.changedTime()" hour-step="1"
+                             minute-step="1" show-meridian="ctrl.isMeridian"></div>
                     </div>
                 </div>
                 <div class="row margin-bottom-15">
@@ -33,9 +35,10 @@
                 <div class="row margin-bottom-15">
                     <div class="col-md-12">
                         <label>Days of week active (start day)</label>
-                        <br />
+                        <br/>
                         <label class="checkbox-inline" ng-repeat="day in ctrl.daysOfWeek">
-                            <input type="checkbox" name="selectedDays[]" ng-model="day.selected" ng-change="ctrl.changedDay()"> {{day.name}}
+                            <input type="checkbox" name="selectedDays[]" ng-model="day.selected"
+                                   ng-change="ctrl.changedDay()"> {{day.name}}
                         </label>
                     </div>
                 </div>
@@ -45,14 +48,17 @@
                         <label class="checkbox-inline">
                             <input type="checkbox" name="active" ng-model="ctrl.settings.active"> Normal operation
                         </label>
-                        <p class="small">Uncheck to prevent new ride requests from being submitted, overriding the settings above.</p>
+                        <p class="small">Uncheck to prevent new ride requests from being submitted, overriding the
+                            settings above.</p>
                     </div>
                 </div>
                 <hr>
                 <div class="row margin-bottom-15">
                     <div class="col-md-12">
                         <div class="pull-right">
-                            <button class="btn btn-primary" ng-click="ctrl.saveSettings()" ng-disabled="ctrl.hours === 0 && ctrl.minutes === 0">Save</button>
+                            <button class="btn btn-primary" ng-click="ctrl.saveSettings()"
+                                    ng-disabled="ctrl.hours === 0 && ctrl.minutes === 0">Save
+                            </button>
                         </div>
                     </div>
                 </div>

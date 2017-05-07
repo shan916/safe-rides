@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('SettingsCtrl', function(SettingsService, Settings, authManager, AuthTokenService, $state, Notification) {
+    .controller('SettingsCtrl', function (SettingsService, Settings, authManager, AuthTokenService, $state, Notification) {
         var vm = this;
         vm.settingsLoading = true;
         vm.settings = undefined;
@@ -17,9 +17,9 @@ angular.module('safeRidesWebApp')
         vm.isMeridian = true;
         vm.hours = undefined;
         vm.daysOfWeek = [{
-                name: 'Monday',
-                selected: false
-            },
+            name: 'Monday',
+            selected: false
+        },
             {
                 name: 'Tuesday',
                 selected: false
@@ -67,23 +67,23 @@ angular.module('safeRidesWebApp')
             console.log('Not authenticated');
         }
 
-        vm.changedTime = function() {
+        vm.changedTime = function () {
             updateTimes();
         };
 
-        vm.changedDay = function() {
+        vm.changedDay = function () {
             updateDays();
         };
 
-        vm.toggleMode = function() {
+        vm.toggleMode = function () {
             vm.isMeridian = !vm.isMeridian;
         };
 
         /**
          * Persist data to server
          */
-        vm.saveSettings = function() {
-            SettingsService.update(vm.settings).then(function() {
+        vm.saveSettings = function () {
+            SettingsService.update(vm.settings).then(function () {
                 Notification.success({
                     message: 'Application settings updated.',
                     positionX: 'center',
@@ -91,7 +91,7 @@ angular.module('safeRidesWebApp')
                     replaceMessage: true
                 });
                 loadData();
-            }, function() {
+            }, function () {
                 Notification.error({
                     message: 'An error occured with updating the application settings. Please try again at a later time.',
                     positionX: 'center',
@@ -130,9 +130,9 @@ angular.module('safeRidesWebApp')
             // clear old var
             vm.settings.daysOfWeek = [];
             // re-set values
-            vm.daysOfWeek.filter(function(d) {
+            vm.daysOfWeek.filter(function (d) {
                 return d.selected === true;
-            }).forEach(function(day) {
+            }).forEach(function (day) {
                 switch (day.name) {
                     case 'Monday':
                         vm.settings.daysOfWeek.push('MONDAY');
@@ -164,7 +164,7 @@ angular.module('safeRidesWebApp')
         function loadData() {
             vm.settingsLoading = true;
             // get current settings
-            SettingsService.current().then(function(response) {
+            SettingsService.current().then(function (response) {
                     vm.settings = new Settings(response.data);
 
                     // set times
@@ -180,40 +180,40 @@ angular.module('safeRidesWebApp')
                     // set dates
                     // not checking array bounds as there SHOULD be a result no matter what
                     // the days are defined at the top of the controller.
-                    vm.settings.daysOfWeek.forEach(function(day) {
+                    vm.settings.daysOfWeek.forEach(function (day) {
                         switch (day) {
                             case 'MONDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Monday';
                                 })[0].selected = true;
                                 break;
                             case 'TUESDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Tuesday';
                                 })[0].selected = true;
                                 break;
                             case 'WEDNESDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Wednesday';
                                 })[0].selected = true;
                                 break;
                             case 'THURSDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Thursday';
                                 })[0].selected = true;
                                 break;
                             case 'FRIDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Friday';
                                 })[0].selected = true;
                                 break;
                             case 'SATURDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Saturday';
                                 })[0].selected = true;
                                 break;
                             case 'SUNDAY':
-                                vm.daysOfWeek.filter(function(d) {
+                                vm.daysOfWeek.filter(function (d) {
                                     return d.name === 'Sunday';
                                 })[0].selected = true;
                         }
@@ -222,7 +222,7 @@ angular.module('safeRidesWebApp')
                     vm.settingsLoading = false;
 
                 },
-                function() {
+                function () {
                     Notification.error({
                         message: 'An error occured with retreiving the latest application settings. Please try again at a later time.',
                         positionX: 'center',

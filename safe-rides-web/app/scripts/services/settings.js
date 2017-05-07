@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('Settings', function() {
+    .factory('Settings', function () {
         function Settings(data) {
             this.id = undefined;
             this.startTime = undefined;

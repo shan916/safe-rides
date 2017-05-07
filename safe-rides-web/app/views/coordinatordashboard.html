@@ -1,14 +1,16 @@
 <div class="container-fluid">
-    <!-- Start of Refresh Drop Down list -->
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div class="alert alert-success" role="alert" ng-show="ctrl.active !== undefined && ctrl.active">
-                <strong>System Status</strong> Currently accepting new ride requests.
+                <strong>Operational Status</strong> Currently accepting new ride requests.
             </div>
-            <div class="alert alert-danger" role="alert" ng-show="ctrl.active !== undefined && !ctrl.active">
-                <strong>System Status</strong> New rides are not being accepted.
+            <div class="alert alert-warning" role="alert" ng-show="ctrl.active !== undefined && !ctrl.active">
+                <strong>Operational Status</strong> New rides are not being accepted.
             </div>
         </div>
+    </div>
+    <!-- Start of Refresh Drop Down list -->
+    <div class="row">
         <div class="col-sm-2 pull-right">
             <div class="row">
                 <div class="panel-body">

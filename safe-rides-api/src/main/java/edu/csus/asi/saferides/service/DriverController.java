@@ -459,8 +459,11 @@ public class DriverController {
 
             // filter requests
             requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
-
-            requests.removeIf((RideRequest req) -> req.getStatus() != status);
+            if (requests == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                requests.removeIf((RideRequest req) -> req.getStatus() != status);
+            }
 
             return ResponseEntity.ok(requests);
         } else {
@@ -468,8 +471,11 @@ public class DriverController {
 
             // filter requests
             requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
-
-            return ResponseEntity.ok(requests);
+            if (requests == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(requests);
+            }
         }
     }
 }

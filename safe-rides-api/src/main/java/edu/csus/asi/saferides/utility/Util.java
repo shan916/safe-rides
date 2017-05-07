@@ -137,6 +137,9 @@ public class Util {
      * @throws IllegalStateException
      */
     public static RideRequest filterPastRide(Configuration configuration, RideRequest ride) throws IllegalStateException {
+        if(ride == null){
+            return null;
+        }
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
             if (ride.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) >= 0) {
@@ -158,6 +161,9 @@ public class Util {
      * @throws IllegalStateException
      */
     public static Collection<RideRequest> filterPastRides(Configuration configuration, Collection<RideRequest> rides) throws IllegalStateException {
+        if(rides.size() == 0){
+            return null;
+        }
         if (configuration != null) {
             LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
             // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date

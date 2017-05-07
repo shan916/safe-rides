@@ -8,25 +8,25 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('SettingsService', function($http, ENV) {
+    .factory('SettingsService', function ($http, ENV) {
         /**
          * Get a booolean response whether the API is accepting new Ride Requests
          */
-        this.isLive = function() {
+        this.isLive = function () {
             return $http.get(ENV.apiEndpoint + 'config/isLive');
         };
 
         /**
          * Get the current application configuration
          */
-        this.current = function() {
+        this.current = function () {
             return $http.get(ENV.apiEndpoint + 'config/current');
         };
 
         /**
          * Update the application configuration
          */
-        this.update = function(settings) {
+        this.update = function (settings) {
             return $http.put(ENV.apiEndpoint + 'config/update', settings);
         };
 
