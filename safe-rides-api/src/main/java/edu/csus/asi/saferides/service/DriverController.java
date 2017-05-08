@@ -1,12 +1,14 @@
 package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Rest API controller for the Driver resource
@@ -47,6 +49,12 @@ public class DriverController {
      */
     @Autowired
     private DriverLocationRepository driverLocationRepository;
+
+    /**
+     * a singleton for the ConfigurationRepository
+     */
+    @Autowired
+    private ConfigurationRepository configurationRepository;
 
     /**
      * HTTP header that stores the JWT, defined in application.yaml
@@ -237,7 +245,7 @@ public class DriverController {
     /**
      * GET /drivers/{id}/rides
      *
-     * @param id - id of driver to get rides for
+     * @param id     - id of driver to get rides for
      * @param status status to filter rides by
      * @return list of rides for driver with specified id and filtered with specified status
      */
@@ -251,26 +259,16 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> retrieveRide(@PathVariable Long id,
                                           @RequestParam(value = "status", required = false) RideRequestStatus status) {
-        Driver result = driverRepository.findOne(id);
+        Driver driver = driverRepository.findOne(id);
 
-        if (result == null) {
-            return ResponseEntity.noContent().build();
-        } else if (status != null) {
-            Set<RideRequest> requests = result.getRides();
-            requests.removeIf((RideRequest req) -> req.getStatus() != status);
-
-            return ResponseEntity.ok(requests);
-
-        } else {
-            return ResponseEntity.ok(result.getRides());
-        }
+        return filterDriverRidesByStatus(driver, status);
     }
 
     /**
      * GET /drivers/rides
      *
      * @param request HTTP servlet request
-     * @param status status to filter rides by
+     * @param status  status to filter rides by
      * @return list of rides for the authenticated driver, filtered by the specified status
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rides")
@@ -290,17 +288,7 @@ public class DriverController {
 
         Driver driver = driverRepository.findByUser(user);
 
-        if (driver == null) {
-            return ResponseEntity.noContent().build();
-        } else if (status != null) {
-            Set<RideRequest> requests = driver.getRides();
-            requests.removeIf((RideRequest req) -> req.getStatus() != status);
-
-            return ResponseEntity.ok(requests);
-
-        } else {
-            return ResponseEntity.ok(driver.getRides());
-        }
+        return filterDriverRidesByStatus(driver, status);
     }
 
     /**
@@ -328,7 +316,11 @@ public class DriverController {
         if (driver == null || driver.getStatus() == null || driver.getStatus() == DriverStatus.AVAILABLE) {
             return ResponseEntity.noContent().build();
         } else {
-            Set<RideRequest> requests = driver.getRides();
+            Collection<RideRequest> requests = driver.getRides();
+
+            // filter requests
+            requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
+
             for (RideRequest req : requests) {
                 if (req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
                         || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF) {
@@ -450,5 +442,40 @@ public class DriverController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(loc);
+    }
+
+    /**
+     * Helper function to filter a drivers rides by status
+     *
+     * @param driver the driver that has the rides to be filtered
+     * @param status the status of the riders to select
+     * @return a ResponseEntity with the list of rides
+     */
+    private ResponseEntity<?> filterDriverRidesByStatus(Driver driver, RideRequestStatus status) {
+        if (driver == null) {
+            return ResponseEntity.noContent().build();
+        } else if (status != null) {
+            Collection<RideRequest> requests = driver.getRides();
+
+            // filter requests
+            requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
+            if (requests == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                requests.removeIf((RideRequest req) -> req.getStatus() != status);
+            }
+
+            return ResponseEntity.ok(requests);
+        } else {
+            Collection<RideRequest> requests = driver.getRides();
+
+            // filter requests
+            requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
+            if (requests == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(requests);
+            }
+        }
     }
 }

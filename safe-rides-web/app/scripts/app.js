@@ -194,4 +194,15 @@ angular
                     requiresLogin: true
                 }
             });
+        $stateProvider
+            .state('settings', {
+                url: '/settings',
+                templateUrl: 'views/settings.html',
+                controller: 'SettingsCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
+            });
     });
