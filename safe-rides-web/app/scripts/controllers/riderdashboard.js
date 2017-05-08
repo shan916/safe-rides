@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (UserService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService) {
+    .controller('RiderdashboardCtrl', function (UserService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -17,6 +17,7 @@ angular.module('safeRidesWebApp')
         vm.rideRequest = new RideRequest();
         vm.existingRide = undefined;
         vm.cancelPressed = undefined;
+        vm.AcceptingNewRides = undefined;
 
         var REFRESH_INTERVAL = 30000;
         var rideRefresher;
@@ -35,10 +36,23 @@ angular.module('safeRidesWebApp')
                 console.log('Not a requestor');
                 return;
             } else {
-                vm.loading = false;
-                vm.loggedIn = true;
-                vm.oneCardId = AuthTokenService.getUsername();
-                getRide();
+                // check if new rides are being accepted
+                SettingsService.isLive().then(function (response) {
+                        if (response.data !== undefined) {
+                            vm.AcceptingNewRides = response.data;
+                        }
+                        vm.loading = false;
+                        vm.loggedIn = true;
+                        vm.oneCardId = AuthTokenService.getUsername();
+                        getRide();
+                    },
+                    function () {
+                        Notification.error({
+                            message: 'Failed to retreive SafeRides\' operation hours.',
+                            positionX: 'center',
+                            delay: 10000
+                        });
+                    });
             }
         } else {
             vm.loading = false;

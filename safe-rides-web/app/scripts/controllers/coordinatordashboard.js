@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, UserService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -54,6 +54,17 @@ var app = angular.module('safeRidesWebApp')
         function loadData() {
             getDrivers();
             getRideRequests();
+
+            SettingsService.isLive().then(function(response) {
+                vm.active = response.data;
+            }, function() {
+                Notification.error({
+                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    positionX: 'center',
+                    delay: 10000,
+                    replaceMessage: true
+                });
+            });
         }
 
         vm.refreshIntervalChange = function () {
