@@ -195,6 +195,17 @@ angular
                     requiresLogin: true
                 }
             });
+			$stateProvider
+	            .state('reports', {
+	                url: '/reports',
+	                templateUrl: 'views/reportsdashboard.html',
+	                controller: 'ReportsdashboardCtrl',
+	                controllerAs: 'ctrl',
+	                data: {
+	                    requireLogin: true,
+	                    requiresLogin: true
+	                }
+	            });
         $stateProvider
             .state('settings', {
                 url: '/settings',
