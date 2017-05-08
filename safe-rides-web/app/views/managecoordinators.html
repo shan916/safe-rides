@@ -1,1 +1,97 @@
-<p>This is the managecoordinators view.</p>
+<div class="container">
+    <div clas="row">
+        <span us-spinner ng-show="ctrl.loadingActiveCoordinators || ctrl.loadingInactiveCoordinators"></span>
+        <div class="col-sm-12">
+            <!-- Start of Active Coordinators -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Active Coordinators</h3>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="col-xs-3">First Name</th>
+                        <th class="col-xs-3">Last Name</th>
+                        <th class="col-xs-3">Username</th>
+                        <th class="col-xs-3">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="coordinator in ctrl.activeCoordinators">
+                        <td>{{coordinator.firstname}}</td>
+                        <td>{{coordinator.lastname}}</td>
+                        <td>{{coordinator.username}}</td>
+                        <td>
+                            <a ui-sref="editcoordinator({username: coordinator.username})"
+                               class="btn btn-primary">Edit</a>
+                            <button type="button" class="btn btn-danger"
+                                    ng-click="ctrl.openConfirmDeleteModal(coordinator)">
+                                Delete
+                            </button>
+                            <button type="button" class="btn btn-warning"
+                                    ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(coordinator)">
+                                Deactivate
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- End of Active Coordinators -->
+
+            <!-- Start of Inactive Coordinators -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Inactive Coordinators</h3>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="col-xs-3">First Name</th>
+                                <th class="col-xs-3">Last Name</th>
+                                <th class="col-xs-3">Username</th>
+                                <th class="col-xs-3">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
+                                <td>{{coordinator.firstname}}</td>
+                                <td>{{coordinator.lastname}}</td>
+                                <td>{{coordinator.username}}</td>
+                                <td>
+                                    <a ui-sref="editcoordinator({username: coordinator.username})"
+                                       class="btn btn-primary">Edit</a>
+                                    <button type="button" class="btn btn-danger"
+                                            ng-click="ctrl.openConfirmDeleteModal(coordinator)">
+                                        Delete
+                                    </button>
+                                    <button type="button" class="btn btn-warning"
+                                            ng-click="ctrl.openConfirmChangeCoordinatorActiveModal(coordinator)">
+                                        Deactivate
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Inactive Coordinators -->
+
+            <!-- Start of Add New Coordinator -->
+            <div class="row form-group margin-top-15 margin-bottom-15">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <a class="btn btn-primary" ui-sref="editcoordinator()">Add New Coordinator</a>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Add New Coordinator -->
+
+        </div>
+    </div>
+</div>

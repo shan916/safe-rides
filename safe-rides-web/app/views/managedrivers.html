@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div clas="row">
+    <div class="row">
         <span us-spinner ng-show="ctrl.loadingActiveDrivers || ctrl.loadingInactiveDrivers"></span>
         <div class="col-sm-12">
             <!-- Start of Active Drivers -->
@@ -11,13 +11,16 @@
                 <div style="max-height:450px; overflow: auto;">
                     <table class="table table-responsive">
                         <thead>
-                        <th class="col-xs-2">Name</th>
-                        <th class="col-xs-2">Phone #</th>
-                        <th class="col-xs-1">OneCard ID</th>
-                        <th class="col-xs-1">DL State</th>
-                        <th class="col-xs-1">DL Number</th>
-                        <th class="col-xs-1">Status</th>
-                        <th class="col-xs-3">Actions</th>
+                        <tr>
+                            <th class="col-xs-2">Name</th>
+                            <th class="col-xs-2">Phone #</th>
+                            <th class="col-xs-1">OneCard ID</th>
+                            <th class="col-xs-1">DL State</th>
+                            <th class="col-xs-1">DL Number</th>
+                            <th class="col-xs-1">Status</th>
+                            <th class="col-xs-3">Actions</th>
+                        </tr>
+                        </thead>
 
                         <tbody>
                         <tr ng-repeat="driver in ctrl.activeDrivers">
@@ -40,14 +43,13 @@
                             </td>
                         </tr>
                         </tbody>
-                        </thead>
                     </table>
                 </div>
             </div>
             <!-- End of Active Drivers -->
 
             <!-- Start of Inactive Drivers -->
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-sm-12">
                     <div class="panel panel-danger">
                         <div class="panel-heading">
@@ -69,12 +71,15 @@
                         <div style="max-height:450px; overflow: auto;">
                             <table class="table table-responsive">
                                 <thead>
-                                <th class="col-xs-2">Name</th>
-                                <th class="col-xs-2">Phone #</th>
-                                <th class="col-xs-1">OneCard ID</th>
-                                <th class="col-xs-1">DL State</th>
-                                <th class="col-xs-1">DL Number</th>
-                                <th class="col-xs-3">Actions</th>
+                                <tr>
+                                    <th class="col-xs-2">Name</th>
+                                    <th class="col-xs-2">Phone #</th>
+                                    <th class="col-xs-1">OneCard ID</th>
+                                    <th class="col-xs-1">DL State</th>
+                                    <th class="col-xs-1">DL Number</th>
+                                    <th class="col-xs-3">Actions</th>
+                                </tr>
+                                </thead>
                                 <tbody>
                                 <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
                                     <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
@@ -93,7 +98,6 @@
                                     </td>
                                 </tr>
                                 </tbody>
-                                </thead>
                             </table>
                         </div>
                     </div>
@@ -113,5 +117,4 @@
 
         </div>
     </div>
-</div>
 </div>

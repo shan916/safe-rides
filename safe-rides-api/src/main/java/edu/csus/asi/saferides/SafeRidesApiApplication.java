@@ -36,7 +36,7 @@ import java.util.Date;
 public class SafeRidesApiApplication {
 
     @Autowired
-    GeocodingService geocodingService;
+    private GeocodingService geocodingService;
 
     /**
      * The main method
