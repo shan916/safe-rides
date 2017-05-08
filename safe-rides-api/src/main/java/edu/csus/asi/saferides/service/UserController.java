@@ -104,6 +104,30 @@ public class UserController {
     }
 
     /**
+     * Returns user with given username
+     *
+     * @param username - username of user to find
+     * @return user with given username
+     */
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a user with the given username")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = User.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> retrieve(@PathVariable String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(user);
+        }
+    }
+
+    /**
      * Get information on authenticated user
      *
      * @param request HTTP servlet request

@@ -87,8 +87,6 @@ angular
         });
         $httpProvider.interceptors.push('jwtInterceptor');
 
-        //$httpProvider.interceptors.push('APIInterceptor');
-
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
@@ -184,17 +182,26 @@ angular
                     requiresLogin: true
                 }
             })
-            .state('managecoordinators', {
-                url: '/managecoordinators',
-                templateUrl: 'views/managecoordinators.html',
+            .state('manageCoordinators', {
+                url: '/manage-coordinators',
+                templateUrl: 'views/manage-coordinators.html',
                 controller: 'ManageCoordinatorsCtrl',
                 controllerAs: 'ctrl',
                 data: {
                     requireLogin: true,
                     requiresLogin: true
                 }
-            });
-        $stateProvider
+            })
+            .state('editCoordinator', {
+                url: '/edit-coordinator/:username?',
+                templateUrl: 'views/edit-coordinator.html',
+                controller: 'EditCoordinatorCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
+            })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'views/settings.html',

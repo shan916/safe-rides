@@ -1,0 +1,95 @@
+<span us-spinner ng-show="ctrl.loading"></span>
+<div class="container" ng-hide="ctrl.loading">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Coordinator Information</h3>
+        </div>
+        <div class="panel-body">
+            <form name="coordinatorForm" novalidate>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input id="firstName" name="firstName" type="text" class="form-control" required
+                                   placeholder="Enter the coordinator's first name"
+                                   ng-model="ctrl.coordinator.firstName"
+                                   ng-minlength="2" ng-maxlength="30">
+                            <div ng-messages="coordinatorForm.firstName.$dirty && coordinatorForm.firstName.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
+                                <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input id="lastName" name="lastName" type="text" class="form-control" required
+                                   placeholder="Enter the coordinator's last name" ng-model="ctrl.coordinator.lastName"
+                                   ng-minlength="2" ng-maxlength="30">
+                            <div ng-messages="coordinatorForm.lastName.$dirty && coordinatorForm.lastName.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
+                                <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input id="username" name="username" type="text" class="form-control"
+                                   ng-model="ctrl.coordinator.username" ng-minlength="2" ng-maxlength="30">
+                            <div ng-messages="coordinatorForm.username.$dirty && coordinatorForm.username.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
+                                <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input id="password" name="password" type="password" class="form-control"
+                                   placeholder="New password" ng-model="ctrl.coordinator.password" ng-minlength="8">
+                            <div ng-messages="coordinatorForm.password.$dirty && coordinatorForm.password.$error">
+                                <div class="input-error" ng-message="minlength">* must be at least 8 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
+                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword">
+                            <div
+                                ng-messages="coordinatorForm.confirmPassword.$dirty && coordinatorForm.confirmPassword.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="row margin-top-15 margin-bottom-15">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <a ui-sref="manageCoordinators" class="btn btn-default">Cancel</a>
+                <button class="btn btn-primary" ng-disabled="coordinatorForm.$invalid || coordinatorForm.$pristine"
+                        ng-click="ctrl.saveCoordinator()">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

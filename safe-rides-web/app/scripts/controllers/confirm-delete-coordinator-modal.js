@@ -2,13 +2,13 @@
 
 /**
 * @ngdoc function
-* @name safeRidesWebApp.controller:ConfirmDeleteDriverModalCtrl
+* @name safeRidesWebApp.controller:ConfirmDeleteCoordinatorModalCtrl
 * @description
-* # ConfirmDeleteDriverModalCtrl
+* # ConfirmDeleteCoordinatorModalCtrl
 * Controller of the safeRidesWebApp
 */
 angular.module('safeRidesWebApp')
-.controller('ConfirmDeleteDriverModalCtrl', function (user, $uibModalInstance) {
+.controller('ConfirmDeleteCoordinatorModalCtrl', function (user, $uibModalInstance) {
     var vm = this;
     vm.user = user;
 

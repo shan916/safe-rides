@@ -32,14 +32,14 @@ public class User {
      */
     @Column(nullable = false)
     @Size(min = 2, max = 30)
-    private String firstname;
+    private String firstName;
 
     /**
      * Last name
      */
     @Column(nullable = false)
     @Size(min = 2, max = 30)
-    private String lastname;
+    private String lastName;
 
     /**
      * Password
@@ -87,8 +87,8 @@ public class User {
      */
     public User(String username, String firstName, String lastName, String password) {
         this.username = username;
-        this.firstname = firstName;
-        this.lastname = lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         setPassword(password);
         active = true;
     }
@@ -102,8 +102,8 @@ public class User {
      */
     public User(String username, String firstName, String lastName) {
         this.username = username;
-        this.firstname = firstName;
-        this.lastname = lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         active = true;
     }
 
@@ -148,17 +148,17 @@ public class User {
      *
      * @return first name of user
      */
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
      * Set user's first name
      *
-     * @param firstname of user
+     * @param firstName of user
      */
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     /**
@@ -166,17 +166,17 @@ public class User {
      *
      * @return last name of user
      */
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     /**
      * Set user's last name
      *
-     * @param lastname of user
+     * @param lastName of user
      */
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**

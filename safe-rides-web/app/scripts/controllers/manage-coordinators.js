@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-  .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService) {
+  .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService, $uibModal) {
       var vm = this;
 
       vm.activeCoordinators = [];
@@ -62,7 +62,7 @@ angular.module('safeRidesWebApp')
 
       vm.openConfirmDeleteModal = function (coordinator) {
           var modalInstance = $uibModal.open({
-              templateUrl: 'views/confirmdeletecoordinatormodal.html',
+              templateUrl: 'views/confirm-delete-coordinator-modal.html',
               controller: 'ConfirmDeleteCoordinatorModalCtrl',
               controllerAs: 'ctrl',
               resolve: {
@@ -82,7 +82,7 @@ angular.module('safeRidesWebApp')
 
       vm.openConfirmChangeCoordinatorActiveModal = function (coordinator) {
           var modalInstance = $uibModal.open({
-              templateUrl: 'views/confirmchangecoordinatoractivemodal.html',
+              templateUrl: 'views/confirm-change-coordinator-active-modal.html',
               controller: 'ConfirmChangeCoordinatorActiveModalCtrl',
               controllerAs: 'ctrl',
               resolve: {

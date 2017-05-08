@@ -1,5 +1,5 @@
 <div class="container">
-    <div clas="row">
+    <div class="row">
         <span us-spinner ng-show="ctrl.loadingActiveCoordinators || ctrl.loadingInactiveCoordinators"></span>
         <div class="col-sm-12">
             <!-- Start of Active Coordinators -->
@@ -19,11 +19,11 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="coordinator in ctrl.activeCoordinators">
-                        <td>{{coordinator.firstname}}</td>
-                        <td>{{coordinator.lastname}}</td>
+                        <td>{{coordinator.firstName}}</td>
+                        <td>{{coordinator.lastName}}</td>
                         <td>{{coordinator.username}}</td>
                         <td>
-                            <a ui-sref="editcoordinator({username: coordinator.username})"
+                            <a ui-sref="editCoordinator({username: coordinator.username})"
                                class="btn btn-primary">Edit</a>
                             <button type="button" class="btn btn-danger"
                                     ng-click="ctrl.openConfirmDeleteModal(coordinator)">
@@ -58,12 +58,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
-                                <td>{{coordinator.firstname}}</td>
-                                <td>{{coordinator.lastname}}</td>
+                            <tr ng-repeat="coordinator in ctrl.inactiveCoordinators">
+                                <td>{{coordinator.firstName}}</td>
+                                <td>{{coordinator.lastName}}</td>
                                 <td>{{coordinator.username}}</td>
                                 <td>
-                                    <a ui-sref="editcoordinator({username: coordinator.username})"
+                                    <a ui-sref="editCoordinator({username: coordinator.username})"
                                        class="btn btn-primary">Edit</a>
                                     <button type="button" class="btn btn-danger"
                                             ng-click="ctrl.openConfirmDeleteModal(coordinator)">
@@ -86,7 +86,7 @@
             <div class="row form-group margin-top-15 margin-bottom-15">
                 <div class="col-sm-12">
                     <div class="pull-right">
-                        <a class="btn btn-primary" ui-sref="editcoordinator()">Add New Coordinator</a>
+                        <a class="btn btn-primary" ui-sref="editCoordinator()">Add New Coordinator</a>
                     </div>
                 </div>
             </div>
