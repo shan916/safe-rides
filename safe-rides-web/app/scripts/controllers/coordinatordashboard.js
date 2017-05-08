@@ -59,14 +59,14 @@ var app = angular.module('safeRidesWebApp')
                 vm.active = response.data;
             }, function() {
                 Notification.error({
-                    message: 'An error occured with retreiving the ride request acceptance status.',
+                    message: 'Failed to retreive SafeRides\' operation hours.',
                     positionX: 'center',
                     delay: 10000,
                     replaceMessage: true
                 });
             });
         }
-        
+
         vm.refreshIntervalChange = function () {
             $interval.cancel(vm.timeInterval);
             vm.timeInterval = $interval(loadData, getRefreshRate(vm.selectedRefreshInterval));

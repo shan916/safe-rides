@@ -2,22 +2,8 @@
 <div class="container" ng-hide="ctrl.loading">
     <div class="row" ng-show="!ctrl.AcceptingNewRides">
         <div class="col-md-4 col-md-offset-4 col-sm-12">
-            <div class="alert alert-warning" role="alert">
-                <strong>Operational Status</strong> It is currently outside of Safe Rides' normal operating hours
-            </div>
-        </div>
-    </div>
-
-    <div class="row" ng-show="!ctrl.AcceptingNewRides">
-        <div class="col-md-4 col-md-offset-4 col-sm-12">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Operational Status</h3>
-                </div>
-                <div class="panel-body">
-                    <p>It is now past SafeRide's operating hours. The application is no longer accepting new ride requests.</p>
-                    <p>If there are any questions, please call the Safe Rides office by pressing the call button below.</p>
-                </div>
+            <div class="alert alert-info" role="alert">
+                <strong>Operational Status</strong> It is currently outside of Safe Rides' normal operating hours. The application is no longer accepting new ride requests.
             </div>
         </div>
     </div>

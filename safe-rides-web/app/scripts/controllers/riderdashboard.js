@@ -41,15 +41,10 @@ angular.module('safeRidesWebApp')
                         if (response.data !== undefined) {
                             vm.AcceptingNewRides = response.data;
                         }
-                        if (vm.AcceptingNewRides) {
-                            vm.loading = false;
-                            vm.loggedIn = true;
-                            vm.oneCardId = AuthTokenService.getUsername();
-                            getRide();
-                        } else {
-                            vm.loading = false;
-                            vm.loggedIn = false;
-                        }
+                        vm.loading = false;
+                        vm.loggedIn = true;
+                        vm.oneCardId = AuthTokenService.getUsername();
+                        getRide();
                     },
                     function () {
                         Notification.error({
