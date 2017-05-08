@@ -40,6 +40,7 @@ module.exports = function(config) {
             'bower_components/angular-spinner/dist/angular-spinner.min.js',
             'bower_components/angular-jwt/dist/angular-jwt.js',
             'bower_components/angular-ui-notification/dist/angular-ui-notification.js',
+            'bower_components/angular-google-chart/ng-google-chart.js',
             'bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'app/scripts/**/*.js',
