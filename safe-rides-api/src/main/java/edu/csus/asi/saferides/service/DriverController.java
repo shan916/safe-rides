@@ -143,7 +143,7 @@ public class DriverController {
      * <p>
      * Creates the given driver in database
      *
-     * @param driver request body containing the driver to create
+     * @param driverDto request body containing the driver to create and password to create a user
      * @return ResponseEntity containing the created driver and it's location
      */
     
@@ -180,7 +180,7 @@ public class DriverController {
      * </ul>
      *
      * @param id     path parameter for id of driver to update
-     * @param driver request body containing the driver to update
+     * @param driverDto request body containing the driver and password to update
      * @return the updated driver or error message
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
@@ -190,7 +190,8 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@PathVariable Long id, @RequestBody Driver driver) {
+    public ResponseEntity<?> save(@PathVariable Long id, @RequestBody DriverCreationDto driverDto) {
+        Driver driver = driverUserMapper.map(driverDto, Driver.class);
         if (driver.getId() != null && driver.getId().equals(id)) {
             Driver result = driverRepository.findOne(id);
 
@@ -199,6 +200,10 @@ public class DriverController {
                 return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
             }
 
+            User user = userRepository.findByUsername(driver.getCsusId());
+            user.setFirstname(driverDto.getDriverFirstName());
+            user.setLastname(driverDto.getDriverLastName());
+            user.setPassword(driverDto.getPassword());
             result = driverRepository.save(driver);
             return ResponseEntity.ok(result);
         } else {
