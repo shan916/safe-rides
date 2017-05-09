@@ -1,10 +1,14 @@
 package edu.csus.asi.saferides.security.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -63,8 +67,9 @@ public class User {
     /**
      * Timestamp of last password reset
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastPasswordResetDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime lastPasswordResetDate;
 
     /**
      * M-M relationship join table for authorities / roles
@@ -236,7 +241,7 @@ public class User {
      *
      * @return user's lastPasswordReset date
      */
-    public Date getLastPasswordResetDate() {
+    public LocalDateTime getLastPasswordResetDate() {
         return lastPasswordResetDate;
     }
 
@@ -245,7 +250,7 @@ public class User {
      *
      * @param lastPasswordResetDate of user
      */
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+    public void setLastPasswordResetDate(LocalDateTime lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 

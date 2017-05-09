@@ -5,7 +5,8 @@ import edu.csus.asi.saferides.security.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,13 +95,13 @@ public class Driver {
      */
     @JsonIgnore
     @Column(updatable = false)
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     /**
      * Date of modification
      */
     @JsonIgnore
-    private Date modifiedDate;
+    private LocalDateTime modifiedDate;
 
     /**
      * One-to-one relationship for vehicle
@@ -142,9 +143,10 @@ public class Driver {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        modifiedDate = new Date();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        modifiedDate = now;
         if (createdDate == null) {
-            createdDate = new Date();
+            createdDate = now;
         }
     }
 
@@ -376,7 +378,7 @@ public class Driver {
      *
      * @return creation date of the driver
      */
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
@@ -385,7 +387,7 @@ public class Driver {
      *
      * @param createdDate the creation date of the driver
      */
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -394,7 +396,7 @@ public class Driver {
      *
      * @return last modified date
      */
-    public Date getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
 
@@ -403,7 +405,7 @@ public class Driver {
      *
      * @param modifiedDate modified date of driver
      */
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

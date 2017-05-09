@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
@@ -79,11 +82,11 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return date the token was created
      */
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
+    public LocalDateTime getCreatedDateFromToken(String token) {
+        LocalDateTime created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
+            created = LocalDateTime.ofEpochSecond((Long) claims.get(CLAIM_KEY_CREATED), 0, ZoneOffset.of(ZoneId.systemDefault().getId()));
         } catch (Exception e) {
             created = null;
         }
@@ -153,8 +156,8 @@ public class JwtTokenUtil implements Serializable {
      * @param lastPasswordReset date user password changed
      * @return whether created date occurred before password change date (invalid)
      */
-    private boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
+    private boolean isCreatedBeforeLastPasswordReset(LocalDateTime created, LocalDateTime lastPasswordReset) {
+        return (lastPasswordReset != null && created.compareTo(lastPasswordReset) < 0);
     }
 
     /**
@@ -192,8 +195,8 @@ public class JwtTokenUtil implements Serializable {
      * @param lastPasswordReset date user password last changed
      * @return whether a token cna be refreshed
      */
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = getCreatedDateFromToken(token);
+    public Boolean canTokenBeRefreshed(String token, LocalDateTime lastPasswordReset) {
+        final LocalDateTime created = getCreatedDateFromToken(token);
         return isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(created, lastPasswordReset);
     }
 

@@ -6,9 +6,11 @@ import edu.csus.asi.saferides.security.model.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +87,7 @@ public class Util {
         LocalTime endTime = configuration.getEndTime();
         List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneOffset.UTC);
 
         return validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
@@ -143,8 +145,8 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
-            if (ride.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) >= 0) {
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneOffset.UTC), configuration.getStartTime(), configuration.getEndTime())[0];
+            if (ride.getRequestDate().compareTo(startDateTime) >= 0) {
                 return ride;
             } else {
                 return null;
@@ -168,9 +170,8 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
-            // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date
-            rides.removeIf(r -> r.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) < 0);
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneOffset.UTC), configuration.getStartTime(), configuration.getEndTime())[0];
+            rides.removeIf(r -> r.getRequestDate().compareTo(startDateTime) < 0);
             return rides;
         } else {
             throw new IllegalStateException("Configuration is missing");

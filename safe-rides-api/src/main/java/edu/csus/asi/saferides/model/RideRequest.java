@@ -1,9 +1,15 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeSerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * A RideRequest holds rider info, the time the request was made, last modified, assigned,
@@ -39,19 +45,25 @@ public class RideRequest {
      * The date the ride was requested
      */
     @Column(updatable = false)
-    private Date requestDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime requestDate;
 
     /**
      * The last modified timestamp for the ride
      */
     @Column
-    private Date lastModified;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
     @Column
-    private Date assignedDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime assignedDate;
 
     /**
      * Ride requestor's first name
@@ -186,7 +198,7 @@ public class RideRequest {
                        String dropoffLine1, String dropoffCity) {
         super();
         this.oneCardId = oneCardId;
-        this.requestDate = new Date();
+        this.requestDate = LocalDateTime.now(ZoneOffset.UTC);
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.requestorPhoneNumber = requestorPhoneNumber;
@@ -214,14 +226,16 @@ public class RideRequest {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        lastModified = new Date();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+
+        lastModified = now;
 
         if (status == RideRequestStatus.ASSIGNED) {
-            assignedDate = new Date();
+            assignedDate = now;
         }
 
         if (requestDate == null) {
-            requestDate = new Date();
+            requestDate = now;
         }
     }
 
@@ -302,7 +316,7 @@ public class RideRequest {
      *
      * @return the date the ride was requested
      */
-    public Date getRequestDate() {
+    public LocalDateTime getRequestDate() {
         return requestDate;
     }
 
@@ -311,7 +325,7 @@ public class RideRequest {
      *
      * @param requestDate the date the ride was requested
      */
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(LocalDateTime requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -320,7 +334,7 @@ public class RideRequest {
      *
      * @return the last modified timestamp for the ride
      */
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
@@ -329,7 +343,7 @@ public class RideRequest {
      *
      * @param lastModified the last modified timestamp for the ride
      */
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -680,7 +694,7 @@ public class RideRequest {
      *
      * @return the time the ride was assigned to a driver
      */
-    public Date getAssignedDate() {
+    public LocalDateTime getAssignedDate() {
         return assignedDate;
     }
 
@@ -689,7 +703,7 @@ public class RideRequest {
      *
      * @param assignedDate the time the ride was assigned to a driver
      */
-    public void setAssignedDate(Date assignedDate) {
+    public void setAssignedDate(LocalDateTime assignedDate) {
         this.assignedDate = assignedDate;
     }
 

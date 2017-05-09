@@ -2,7 +2,7 @@ package edu.csus.asi.saferides.model.dto;
 
 import edu.csus.asi.saferides.model.RideRequestStatus;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Data Transfer Object for RideRequest.
@@ -33,12 +33,12 @@ public class RideRequestDto {
     /**
      * The last modified timestamp for the ride
      */
-    private Date lastModified;
+    private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
-    private Date assignedDate;
+    private LocalDateTime assignedDate;
 
     /**
      * The first name of the driver assigned to the ride
@@ -255,7 +255,7 @@ public class RideRequestDto {
      *
      * @return the last modified timestamp for the ride
      */
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
@@ -264,7 +264,7 @@ public class RideRequestDto {
      *
      * @param lastModified the last modified timestamp for the ride
      */
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -273,7 +273,7 @@ public class RideRequestDto {
      *
      * @return the time the ride was assigned to a driver
      */
-    public Date getAssignedDate() {
+    public LocalDateTime getAssignedDate() {
         return assignedDate;
     }
 
@@ -282,7 +282,7 @@ public class RideRequestDto {
      *
      * @param assignedDate the time the ride was assigned to a driver
      */
-    public void setAssignedDate(Date assignedDate) {
+    public void setAssignedDate(LocalDateTime assignedDate) {
         this.assignedDate = assignedDate;
     }
 

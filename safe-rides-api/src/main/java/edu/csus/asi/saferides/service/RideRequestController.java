@@ -22,8 +22,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Rest API controller for the RideRequest resource
@@ -162,7 +163,7 @@ public class RideRequestController {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
         }
 
-        rideRequest.setRequestDate(new Date());    // default to current datetime
+        rideRequest.setRequestDate(LocalDateTime.now(ZoneOffset.UTC));    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         geocodingService.setCoordinates(rideRequest);
