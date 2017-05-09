@@ -13,15 +13,16 @@ angular.module('safeRidesWebApp')
 
         vm.coordinator = new User();
         vm.loading = false;
+        vm.existingUser = !!$stateParams.id;
 
-        if ($stateParams.username) {
-            getCoordinator($stateParams.username);
+        if (vm.existingUser) {
+            getCoordinator($stateParams.id);
         }
 
-        function getCoordinator(username) {
+        function getCoordinator(id) {
             vm.loading = true;
             UserService.get({
-                username: username
+                id: id
             }).$promise.then(function (response) {
                 vm.loading = false;
                 vm.coordinator = new User(response);
@@ -34,7 +35,7 @@ angular.module('safeRidesWebApp')
 
         function updateCoordinator() {
             UserService.update({
-                username: vm.coordinator.username
+                id: vm.coordinator.id
             }, vm.coordinator).$promise.then(function (response) {
                 console.log('updated coordinator:', response);
                 $state.go('manageCoordinators');
@@ -44,11 +45,10 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveCoordinator = function () {
-            if ($stateParams.username) {
+            if ($stateParams.id) {
                 updateCoordinator();
             } else {
                 vm.coordinator.active = true;
-                vm.coordinator.authorities = ['ROLE_COORDINATOR', 'ROLE_DRIVER', 'ROLE_RIDER'];
 
                 UserService.save(vm.coordinator).$promise.then(function (response) {
                     console.log('saved coordinator:', response);

@@ -2,6 +2,8 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.security.*;
+import edu.csus.asi.saferides.security.dto.UserDto;
+import edu.csus.asi.saferides.security.mapper.UserMapper;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -9,6 +11,7 @@ import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
+import edu.csus.asi.saferides.security.service.UserService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -58,6 +61,12 @@ public class UserController {
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of users...")
@@ -66,64 +75,40 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public List<User> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
-                                  @RequestParam(value = "role", required = false) AuthorityName role) {
-        List<User> users;
+    public List<UserDto> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
+                                     @RequestParam(value = "role", required = false) AuthorityName role) {
 
-        if (active != null) {
-            if (active) {
-                users = userRepository.findByActive(true);
-            } else {
-                users = userRepository.findByActive(false);
-            }
-        } else {
-            users = userRepository.findAll();
+        List<User> users = userService.getUsers(active, role);
+
+        ArrayList<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            userDtos.add(userMapper.map(user, UserDto.class));
         }
 
-        if (role != null) {
-            // get all drivers
-            if (role == AuthorityName.ROLE_DRIVER) {
-                // remove anyone not a driver (coordinator and higher)
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                users.removeIf(u -> u.getAuthorities().contains(coord));
-            }   // get all coordinators
-            else if (role == AuthorityName.ROLE_COORDINATOR) {
-                // remove anyone not a coordinator
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> !u.getAuthorities().contains(coord) || u.getAuthorities().contains(admin)); // remove if not coord or is admin
-            } // get all admins
-            else if (role == AuthorityName.ROLE_ADMIN) {
-                // remove anyone not an admin
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> !u.getAuthorities().contains(admin));
-            }
-        }
-
-        return users;
+        return userDtos;
     }
 
     /**
-     * Returns user with given username
+     * Returns user with given id
      *
-     * @param username - username of user to find
-     * @return user with given username
+     * @param id - id of user to find
+     * @return user with given id
      */
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a user with the given username")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a user with the given id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = User.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> retrieve(@PathVariable String username) {
-        User user = userRepository.findByUsernameIgnoreCase(username);
+    public ResponseEntity<?> retrieve(@PathVariable Long id) {
+        User user = userRepository.findOne(id);
 
         if (user == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(userMapper.map(user, UserDto.class));
         }
     }
 
@@ -157,7 +142,7 @@ public class UserController {
                 // else create a new 'user'
                 User riderUser = new User(username, "anon_fname", "anon_lname");
 
-                ArrayList<Authority> authorityList = new ArrayList<Authority>();
+                ArrayList<Authority> authorityList = new ArrayList<>();
                 authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
                 riderUser.setAuthorities(authorityList);
 
@@ -230,7 +215,7 @@ public class UserController {
         User riderUser = new User(riderAuthenticationRequest.getOneCardId().toLowerCase(), "anon_fname", "anon_lname");
 
         // set roles for the new user to rider only
-        ArrayList<Authority> authorityList = new ArrayList<Authority>();
+        ArrayList<Authority> authorityList = new ArrayList<>();
         authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
         riderUser.setAuthorities(authorityList);
 
@@ -247,7 +232,7 @@ public class UserController {
      * <p>
      * Returns HTTP status 400 if password does not meet security requirements
      *
-     * @param user Request body containing user to create
+     * @param userDto Request body containing user to create
      * @return newly created user and location
      */
     @RequestMapping(method = RequestMethod.POST)
@@ -258,39 +243,39 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        if (user.getPassword() == null || !Util.isPasswordValid(user.getPassword())) {
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+        if (userDto.getPassword() == null || !Util.isPasswordValid(userDto.getPassword())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Password does not meet security requirements"));
         }
 
-        User result = userRepository.save(user);
+        User result = userService.createCoordinator(userDto);
 
         // create URI of where the user was created
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(result);
+        return ResponseEntity.created(location).body(userMapper.map(result, UserDto.class));
     }
 
     /**
-     * Updates the given user
+     * Updates the user with the given id
      * <p>
      * Returns HTTP status 400 under the following conditions:
      * <ul>
      * <li>
-     * Username in path does not match username in request body
+     * Id in path does not match id in request body
      * </li>
      * <li>
      * New password does not meet security requirements
      * </li>
      * </ul>
      *
-     * @param username path parameter of username to update
-     * @param user     request body containing user to update
+     * @param id      path parameter of id of user to update
+     * @param userDto request body containing user to update
      * @return updated user or error if any
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/{username}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "updateUser", nickname = "Update User", notes = "Updates a user")
     @ApiResponses(value = {
@@ -298,24 +283,29 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
-        User existingUser = userRepository.findByUsernameIgnoreCase(username);
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
 
-        // update user if username in path and username of user object are equal
-        if (existingUser != null && existingUser.getUsername().equalsIgnoreCase(user.getUsername())) {
-
-            // if new password is empty or null, keep existing password
-            if (StringUtils.isEmpty(user.getPassword())) {
-                user.setPassword(existingUser.getPassword());
-            } else if (!Util.isPasswordValid(user.getPassword())) { // else new password must meet security requirements
-                return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
-            }
-
-            User result = userRepository.save(user);
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Username mismatch"));
+        if (!userDto.getId().equals(id)) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Id mismatch"));
         }
+
+        User existingUser = userRepository.findOne(id);
+
+        if (existingUser == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
+        }
+
+        if (!existingUser.getUsername().equalsIgnoreCase(userDto.getUsername())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Username is not allowed to be modified"));
+        }
+
+        if (!StringUtils.isEmpty(userDto.getPassword()) && !Util.isPasswordValid(userDto.getPassword())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
+        }
+
+        User result = userService.updateCoordinator(userDto);
+
+        return ResponseEntity.ok(userMapper.map(result, UserDto.class));
     }
 
 }

@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -140,7 +139,7 @@ public class User {
      * @param username of user
      */
     public void setUsername(String username) {
-        this.username = username.toLowerCase();
+        this.username = username.replaceAll("\\s+", "").toLowerCase();
     }
 
     /**
@@ -243,13 +242,12 @@ public class User {
     }
 
     /**
-     * Set user's password. Encodes the password input
+     * Set user's password
      *
      * @param password of user in plaintext
      */
     public void setPassword(String password) {
-        ArgonPasswordEncoder passwordEncoder = new ArgonPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
 }

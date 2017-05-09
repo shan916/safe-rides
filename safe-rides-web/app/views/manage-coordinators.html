@@ -23,7 +23,7 @@
                         <td>{{coordinator.lastName}}</td>
                         <td>{{coordinator.username}}</td>
                         <td>
-                            <a ui-sref="editCoordinator({username: coordinator.username})"
+                            <a ui-sref="editCoordinator({id: coordinator.id})"
                                class="btn btn-primary">Edit</a>
                             <button type="button" class="btn btn-danger"
                                     ng-click="ctrl.openConfirmDeleteModal(coordinator)">
@@ -63,7 +63,7 @@
                                 <td>{{coordinator.lastName}}</td>
                                 <td>{{coordinator.username}}</td>
                                 <td>
-                                    <a ui-sref="editCoordinator({username: coordinator.username})"
+                                    <a ui-sref="editCoordinator({id: coordinator.id})"
                                        class="btn btn-primary">Edit</a>
                                     <button type="button" class="btn btn-danger"
                                             ng-click="ctrl.openConfirmDeleteModal(coordinator)">

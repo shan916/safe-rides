@@ -193,7 +193,7 @@ angular
                 }
             })
             .state('editCoordinator', {
-                url: '/edit-coordinator/:username?',
+                url: '/edit-coordinator/:id?',
                 templateUrl: 'views/edit-coordinator.html',
                 controller: 'EditCoordinatorCtrl',
                 controllerAs: 'ctrl',

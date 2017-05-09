@@ -1,6 +1,6 @@
 <span us-spinner ng-show="ctrl.loading"></span>
 <div class="container" ng-hide="ctrl.loading">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">Coordinator Information</h3>
         </div>
@@ -43,7 +43,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input id="username" name="username" type="text" class="form-control"
+                            <input id="username" name="username" type="text" class="form-control" ng-disabled="ctrl.existingUser"
                                    ng-model="ctrl.coordinator.username" ng-minlength="2" ng-maxlength="30">
                             <div ng-messages="coordinatorForm.username.$dirty && coordinatorForm.username.$error">
                                 <div class="input-error" ng-message="required">* required</div>
