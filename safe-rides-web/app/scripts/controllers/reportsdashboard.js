@@ -68,6 +68,7 @@ angular.module('safeRidesWebApp')
 						Bar Chart
 		*********************************************************/
 		vm.showBarChart = function() {
+			vm.isBarChartGenerated = false;
 			vm.test =[{date: undefined}, {number: undefined}];
 
 			var data = new google.visualization.DataTable();
@@ -148,6 +149,7 @@ angular.module('safeRidesWebApp')
 			var chart = new google.charts.Bar(document.getElementById('monthly_barchart'));
 
 	        chart.draw(data, google.charts.Bar.convertOptions(options));
+			vm.isBarChartGenerated =true;
 		};
 
     });
