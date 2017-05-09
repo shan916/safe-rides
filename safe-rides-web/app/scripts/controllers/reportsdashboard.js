@@ -8,8 +8,13 @@
  * Controller of the Reports view
  */
 angular.module('safeRidesWebApp')
-    .controller('ReportsdashboardCtrl', function (ReportsMonthService, authManager, $state, AuthTokenService, Notification) {
+    .controller('ReportsdashboardCtrl', function (MonthlyStats, authManager, $state, AuthTokenService, Notification) {
         var vm = this;
+
+
+
+
+
 
 
     });
