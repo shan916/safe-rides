@@ -12,11 +12,14 @@ import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -152,12 +155,19 @@ public class UserController {
 
             // Reload password post-security so we can generate token
             final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername().toLowerCase());
+
             final String token = jwtTokenUtil.generateToken(userDetails);
 
             // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
         } catch (AuthenticationException exception) {
-            return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
+            if (exception.getClass().equals(DisabledException.class)) {
+                return ResponseEntity.status(422).body(new ResponseMessage("Account is deactivated"));
+            } else if (exception.getClass().equals(BadCredentialsException.class)) {
+                return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
+            } else {
+                return ResponseEntity.status(422).body(new ResponseMessage("Authentication error"));
+            }
         }
     }
 
@@ -177,7 +187,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> authenticateRider(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest) throws AuthenticationException {
         // validate onecard (not null)
-        if (riderAuthenticationRequest.getOneCardId() == null) {
+        if (StringUtils.isNumeric(riderAuthenticationRequest.getOneCardId()) && StringUtils.length(riderAuthenticationRequest.getOneCardId()) != 9) {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
 
