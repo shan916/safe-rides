@@ -11,6 +11,7 @@ angular.module('safeRidesWebApp')
     .controller('ReportsdashboardCtrl', function (MonthlyStats, authManager, $state, AuthTokenService, Notification) {
         var vm = this;
 		vm.userSelected = undefined;
+		vm.isBarChartGenerated = false;
 		vm.barChartOptions = ['Total Requests', 'Total Distance', 'Total Completion Time', 'Total Campus - Pickup location',
 							'Average Distance', 'Average Completion Time', 'Average Campus - Pickup location'];
 		google.charts.load('current', {'packages':['table', 'bar']});
@@ -36,7 +37,10 @@ angular.module('safeRidesWebApp')
 				[new Date(2017, 1, 15), 21, 4, 39, 98, 69, 54, 76],
 				[new Date(2017, 1, 16), 22, 4, 39, 98, 7, 54, 70]
 		];
-		//vm.showTable =
+
+		/********************************************************
+								Sortable Table
+		*********************************************************/
 		function drawTable() {
 		        var data = new google.visualization.DataTable();
 				data.addColumn('date', 'Date');
@@ -51,7 +55,7 @@ angular.module('safeRidesWebApp')
 
 				var numRows = vm.monthTableTest.length;
 				for(var i = 0; i < numRows;i++) {
-					data.addRow(vm.monthTableTest[i]);					
+					data.addRow(vm.monthTableTest[i]);
 				}
 
 		        var table = new google.visualization.Table(document.getElementById('monthly_table'));
@@ -59,6 +63,10 @@ angular.module('safeRidesWebApp')
 		        table.draw(data, {showRowNumber: false, width: '100%', height: '100%'});
 		}
 
+
+/********************************************************
+						Bar Chart
+*********************************************************/
 		vm.showBarChart = function() {
 			vm.test =[{date: undefined}, {number: undefined}];
 
