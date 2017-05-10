@@ -12,7 +12,7 @@ import java.time.ZoneId;
 
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
     @Override
-    public LocalDateTime deserialize(JsonParser arg0, DeserializationContext arg1) throws IOException, JsonProcessingException {
+    public LocalDateTime deserialize(JsonParser arg0, DeserializationContext arg1) throws IOException {
         return Instant.ofEpochMilli(arg0.getLongValue()).atZone(ZoneId.of("America/Los_Angeles")).toLocalDateTime();
     }
 }
