@@ -49,7 +49,7 @@ angular.module('safeRidesWebApp')
 
         vm.saveRideRequest = function () {
             //TODO if the ride request exists already?
-            //if($routeParams.csusid)
+            //if($routeParams.oneCardId)
             RideRequestService.save(vm.riderequest).$promise.then(function (response) {
                 console.log('saved riderequest:', response);
                 $uibModalInstance.dismiss();
