@@ -188,7 +188,7 @@ public class User {
     }
 
     /**
-     * Get user's active / active flag
+     * Get user's active flag
      *
      * @return user's status
      */
