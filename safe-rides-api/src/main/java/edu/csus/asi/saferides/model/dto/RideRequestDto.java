@@ -11,16 +11,6 @@ import java.time.LocalDateTime;
 public class RideRequestDto {
 
     /**
-     * Ride requestor's first name
-     */
-    private String requestorFirstName;
-
-    /**
-     * Ride requestor's last name
-     */
-    private String requestorLastName;
-
-    /**
      * The status of the ride. eg. UNASSIGNED, ASSIGNED, etc.
      */
     private RideRequestStatus status;
@@ -69,42 +59,6 @@ public class RideRequestDto {
      * The license plate of the vehicle for the driver assigned to the rider
      */
     private String vehicleLicensePlate;
-
-    /**
-     * Gets the ride requestor's first name
-     *
-     * @return the ride requestor's first name
-     */
-    public String getRequestorFirstName() {
-        return requestorFirstName;
-    }
-
-    /**
-     * Sets the ride requestor's first name
-     *
-     * @param requestorFirstName the ride requestor's first name
-     */
-    public void setRequestorFirstName(String requestorFirstName) {
-        this.requestorFirstName = requestorFirstName;
-    }
-
-    /**
-     * Gets the ride requestor's last name
-     *
-     * @return the ride requestor's last name
-     */
-    public String getRequestorLastName() {
-        return requestorLastName;
-    }
-
-    /**
-     * Sets the ride requestor's last name
-     *
-     * @param requestorLastName the ride requestor's last name
-     */
-    public void setRequestorLastName(String requestorLastName) {
-        this.requestorLastName = requestorLastName;
-    }
 
     /**
      * Gets the status of the ride request
@@ -293,8 +247,7 @@ public class RideRequestDto {
      */
     @Override
     public String toString() {
-        return "RideRequestDto{" + "requestorFirstName='" + requestorFirstName + '\'' + ", requestorLastName='"
-                + requestorLastName + '\'' + ", status=" + status + ", estimatedTime='" + estimatedTime + '\''
+        return "RideRequestDto{" + "status=" + status + ", estimatedTime='" + estimatedTime + '\''
                 + ", lastModified=" + lastModified + ", assignedDate=" + assignedDate + ", driverName='" + driverName
                 + '\'' + ", vehicleColor='" + vehicleColor + '\'' + ", vehicleYear='" + vehicleYear + '\''
                 + ", vehicleMake='" + vehicleMake + '\'' + ", vehicleModel='" + vehicleModel + '\''

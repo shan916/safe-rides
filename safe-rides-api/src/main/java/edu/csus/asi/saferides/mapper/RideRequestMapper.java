@@ -18,8 +18,6 @@ public class RideRequestMapper extends ConfigurableMapper {
     @Override
     protected void configure(MapperFactory factory) {
         factory.classMap(RideRequest.class, RideRequestDto.class)
-                .field("requestorFirstName", "requestorFirstName")
-                .field("requestorLastName", "requestorLastName")
                 .field("status", "status")
                 .field("estimatedTime", "estimatedTime")
                 .field("lastModified", "lastModified")
