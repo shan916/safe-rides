@@ -1,5 +1,9 @@
 package edu.csus.asi.saferides.model.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.Serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 
 import java.time.LocalDateTime;
@@ -23,11 +27,15 @@ public class RideRequestDto {
     /**
      * The last modified timestamp for the ride
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime assignedDate;
 
     /**
