@@ -2,8 +2,8 @@ package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import edu.csus.asi.saferides.Serialization.LocalDateTimeDeserializer;
-import edu.csus.asi.saferides.Serialization.LocalDateTimeSerializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
