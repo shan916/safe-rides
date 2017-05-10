@@ -1,9 +1,11 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -21,24 +23,48 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * The class that bootstraps the application
+ * Sets the default database state and configures swagger
+ */
 @SpringBootApplication
 @EnableSwagger2
 public class SafeRidesApiApplication {
 
     @Autowired
-    GeocodingService geocodingService;
+    private GeocodingService geocodingService;
 
+    /**
+     * The main method
+     *
+     * @param args application arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(SafeRidesApiApplication.class, args);
     }
 
+    /**
+     * Demo data for the initial start of the application
+     *
+     * @param driverRepository         driver repository
+     * @param rideRequestRepository    ride request repository
+     * @param userRepository           user repository
+     * @param authorityRepository      authority repository
+     * @param driverLocationRepository driver location repository
+     * @param configurationRepository  configuration repository
+     * @return CommandLineRunner
+     */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository) {
+                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
+                                  ConfigurationRepository configurationRepository, ArgonPasswordEncoder argonPasswordEncoder) {
         return (args) -> {
+
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", true, "Farmers", true);
             Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", "CA", "E1111111", true, "Farmers", true);
@@ -347,8 +373,13 @@ public class SafeRidesApiApplication {
             geocodingService.setCoordinates(rideRequest19);
 
             User driver = new User("driver", "Driver", "Long", "hunter2");
+            driver.setPassword(argonPasswordEncoder.encode(driver.getPassword()));
+
             User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2");
+            coordinator.setPassword(argonPasswordEncoder.encode(coordinator.getPassword()));
+
             User admin = new User("admin", "Admin", "Smith", "hunter2");
+            admin.setPassword(argonPasswordEncoder.encode(admin.getPassword()));
 
             ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
             ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();
@@ -441,9 +472,25 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest17);
             rideRequestRepository.save(rideRequest18);
             rideRequestRepository.save(rideRequest19);
+
+            LocalTime startTime = LocalTime.of(20, 00, 0);
+            LocalTime endTime = LocalTime.of(02, 00, 0);
+            Configuration newConfig = new Configuration(startTime, endTime);
+            ArrayList<DayOfWeek> dayOfWeeks = new ArrayList<DayOfWeek>();
+            dayOfWeeks.add(DayOfWeek.WEDNESDAY);
+            dayOfWeeks.add(DayOfWeek.THURSDAY);
+            dayOfWeeks.add(DayOfWeek.FRIDAY);
+            dayOfWeeks.add(DayOfWeek.SATURDAY);
+            newConfig.setDaysOfWeek(dayOfWeeks);
+            configurationRepository.save(newConfig);
         };
     }
 
+    /**
+     * Configures swagger
+     *
+     * @return Docket
+     */
     @Bean
     public Docket swaggerSettings() {
         return new Docket(DocumentationType.SWAGGER_2)

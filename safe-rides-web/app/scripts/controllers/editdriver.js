@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function ($stateParams, $location, DriverService, Driver) {
+    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -46,7 +46,7 @@ angular.module('safeRidesWebApp')
                 id: vm.driver.id
             }, vm.driver).$promise.then(function (response) {
                 console.log('updated driver:', response);
-                $location.path('/managedrivers');
+                $state.go('managedrivers');
             }, function (error) {
                 console.log('error updating driver:', error);
             });
@@ -66,7 +66,7 @@ angular.module('safeRidesWebApp')
             } else {
                 DriverService.save(vm.driver).$promise.then(function (response) {
                     console.log('saved driver:', response);
-                    $location.path('/managedrivers');
+                    $state.go('managedrivers');
                 }, function (error) {
                     console.log('error saving driver:', error);
                 });

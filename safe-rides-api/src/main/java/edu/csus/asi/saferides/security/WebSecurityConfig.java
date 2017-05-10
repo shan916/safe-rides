@@ -39,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Dependency injection and specify which userdetails service and password encoder to use
      *
-     * @param authenticationManagerBuilder
-     * @throws Exception
+     * @param authenticationManagerBuilder SecurityBuilder used to create an AuthenticationManager
+     * @throws Exception if an error occurs when configuring authentication
      */
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -50,9 +50,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Set ArgonPasswordEncoder as the PasswordEncoder
+     * Get PasswordEncoder bean
+     * Sets ArgonPasswordEncoder as the PasswordEncoder
      *
-     * @return PasswordEncoder
+     * @return ArgonPasswordEncoder instance
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,10 +61,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Set AuthenticationTokenFilter
+     * Get AuthenticationTokenFilter bean
      *
-     * @return JWTAuthenticationTokenFilter
-     * @throws Exception
+     * @return JWTAuthenticationTokenFilter instance from bean
+     * @throws Exception if an error occurs with creating a new JwtAuthenticationTokenFilter
      */
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
@@ -73,8 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Configure the api security
      *
-     * @param httpSecurity
-     * @throws Exception
+     * @param httpSecurity It allows configuring web based security for specific http request
+     * @throws Exception if an error occurs with the configuration of the security
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -96,7 +97,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // allow POST to /users/auth
                 .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider").permitAll()
-                // allow OPTIONS to /rides
+
+                // allow GET to /config/isLive
+                .antMatchers(HttpMethod.GET, "/config/isLive").permitAll()
+
+                // allow OPTIONS to All
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // allow access to the swagger api documentation
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()

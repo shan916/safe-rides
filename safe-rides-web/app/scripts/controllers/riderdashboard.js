@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (UserService, $http, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification) {
+    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -16,6 +16,8 @@ angular.module('safeRidesWebApp')
         vm.oneCardId = undefined;
         vm.rideRequest = new RideRequest();
         vm.existingRide = undefined;
+        vm.cancelPressed = undefined;
+        vm.AcceptingNewRides = undefined;
 
         var REFRESH_INTERVAL = 30000;
         var rideRefresher;
@@ -34,10 +36,23 @@ angular.module('safeRidesWebApp')
                 console.log('Not a requestor');
                 return;
             } else {
-                vm.loading = false;
-                vm.loggedIn = true;
-                vm.oneCardId = AuthTokenService.getUsername();
-                getRide();
+                // check if new rides are being accepted
+                SettingsService.isLive().then(function (response) {
+                        if (response.data !== undefined) {
+                            vm.AcceptingNewRides = response.data;
+                        }
+                        vm.loading = false;
+                        vm.loggedIn = true;
+                        vm.oneCardId = AuthTokenService.getUsername();
+                        getRide();
+                    },
+                    function () {
+                        Notification.error({
+                            message: 'Failed to retreive SafeRides\' operation hours.',
+                            positionX: 'center',
+                            delay: 10000
+                        });
+                    });
             }
         } else {
             vm.loading = false;
@@ -49,39 +64,52 @@ angular.module('safeRidesWebApp')
          * */
         function getRide() {
             vm.loading = true;
-            $http.get(ENV.apiEndpoint + 'rides/mine').then(function (response) {
-                if (response.data && response.data !== '') {
-                    vm.existingRide = new RideRequest(response.data);
+            MyRideService.get().$promise.then(function (response) {
+                // if a ride exists
+                if (response.$status !== 204) {
+                    vm.existingRide = new RideRequest(response);
 
-                    // set refresh interval only if ride has been requested
-                    if (!rideRefresher) {
-                        rideRefresher = $interval(getRide, REFRESH_INTERVAL);
+                    // if ride was cancelled, allow for requesting a new one
+                    if (vm.existingRide.status === 'CANCELEDBYRIDER' || vm.existingRide.status === 'CANCELEDBYCOORDINATOR' || vm.existingRide.status === 'CANCELEDBYOTHER') {
+                        vm.existingRide = undefined;
+                    } else {
+                        // set refresh interval only if ride has been requested
+                        if (!rideRefresher) {
+                            rideRefresher = $interval(getRide, REFRESH_INTERVAL);
+                        }
                     }
                 }
 
-                console.log(response.data);
+                console.log(response);
                 vm.loading = false;
             }, function (error) {
-                console.log(error);
+                console.log('Failed to get ride:', error);
                 vm.loading = false;
             });
         }
 
         /*
-         * Destroy refresh interval on exit
+         * Cancel refresh interval on exit
          * */
         $scope.$on('$destroy', function () {
+            cancelInterval();
+        });
+
+        /**
+         * Cancels refresh interval
+         */
+        function cancelInterval() {
             if (rideRefresher) {
                 $interval.cancel(rideRefresher);
             }
-        });
+        }
 
         /*
          * Login driver after one card id has been entered
          * */
         vm.login = function () {
             vm.loading = true;
-            UserService.riderAuthentication(vm.oneCardId).then(function (response) {
+            AuthService.riderAuthentication(vm.oneCardId).then(function (response) {
                 vm.loggedIn = true;
                 AuthTokenService.setToken(response.data.token);
                 getRide();
@@ -130,6 +158,38 @@ angular.module('safeRidesWebApp')
                 return vm.existingRide.estimatedTime;
             } else {
                 return vm.existingRide.estimatedTime + ' minutes';
+            }
+        };
+
+        /**
+         * Cancels the current ride if it is still UNASSIGNED
+         */
+        vm.cancelRide = function () {
+            // first time pressing cancel
+            if (!vm.cancelPressed) {
+                vm.cancelPressed = true;
+                return;
+            }
+
+            // cancel confirmed
+            if (vm.existingRide.status === 'UNASSIGNED') {
+                MyRideService.cancel().$promise.then(function (response) {
+                    cancelInterval();
+                    getRide();
+                    console.log('Ride cancelled:', response);
+                    Notification.info({
+                        message: 'Your ride has been cancelled',
+                        positionX: 'center',
+                        delay: 6000
+                    });
+                }, function (error) {
+                    Notification.error({
+                        message: 'Your ride could not be cancelled. Please contact the Safe Rides office.',
+                        positionX: 'center',
+                        delay: 60000
+                    });
+                    console.log('Ride cancellation failed:', error);
+                });
             }
         };
 

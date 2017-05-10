@@ -21,7 +21,7 @@
                     <!-- Start of driver's first name -->
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="name">First Name</label>
+                            <label for="firstName">First Name</label>
                             <input id="firstName" name="firstName" type="text" class="form-control" required
                                    placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName"
                                    ng-minlength="2" ng-maxlength="30">
@@ -37,7 +37,7 @@
                     <!-- Start of driver's last name -->
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="name">Last Name</label>
+                            <label for="lastName">Last Name</label>
                             <input id="lastName" name="lastName" type="text" class="form-control" required
                                    placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName"
                                    ng-minlength="2" ng-maxlength="30">
@@ -54,8 +54,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlnum">Phone Number</label>
-                            <input id="dlnum" name="phoneNumber" type="text" class="form-control"
+                            <label for="phoneNumber">Phone Number</label>
+                            <input id="phoneNumber" name="phoneNumber" type="text" class="form-control"
                                    ng-model="ctrl.driver.phoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder
                                    ui-mask-placeholder-char="_">
                             <div ng-messages="driverForm.phoneNumber.$dirty && driverForm.phoneNumber.$error">
@@ -66,7 +66,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlnum">DL Number</label>
+                            <label for="dlNum">DL Number</label>
                             <input id="dlNum" name="dlNum" type="text" class="form-control" required
                                    placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber"
                                    ng-minlength="2">
