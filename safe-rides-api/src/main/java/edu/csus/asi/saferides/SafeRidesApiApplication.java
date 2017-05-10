@@ -435,17 +435,6 @@ public class SafeRidesApiApplication {
             userRepository.save(driver7.getUser());
             userRepository.save(driver8.getUser());
             userRepository.save(driver9.getUser());
-            
-            userRepository.save(driver0.getUser());
-            userRepository.save(driver1.getUser());
-            userRepository.save(driver2.getUser());
-            userRepository.save(driver3.getUser());
-            userRepository.save(driver4.getUser());
-            userRepository.save(driver5.getUser());
-            userRepository.save(driver6.getUser());
-            userRepository.save(driver7.getUser());
-            userRepository.save(driver8.getUser());
-            userRepository.save(driver9.getUser());
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
