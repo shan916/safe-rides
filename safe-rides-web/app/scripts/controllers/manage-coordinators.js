@@ -95,7 +95,7 @@ angular.module('safeRidesWebApp')
 
           modalInstance.result.then(function () {
               coordinator.active = !coordinator.active;
-              UserService.update({username: coordinator.username}, coordinator).$promise.then(function (response) {
+              UserService.update({id: coordinator.id}, coordinator).$promise.then(function (response) {
                   console.log('updated coordinator, now refreshing', response);
                   getCoordinators();
               }, function (error) {
@@ -108,7 +108,7 @@ angular.module('safeRidesWebApp')
 
       function deleteCoordinator(coordinator) {
           UserService.remove({
-              username: coordinator.username
+              id: coordinator.id
           }).$promise.then(function (response) {
               console.log('deleted coordinator:', response);
               getCoordinators();

@@ -8,12 +8,14 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditCoordinatorCtrl', function($stateParams, $state, UserService, User) {
+    .controller('EditCoordinatorCtrl', function($stateParams, $state, UserService, User, Notification) {
         var vm = this;
 
         vm.coordinator = new User();
         vm.loading = false;
         vm.existingUser = !!$stateParams.id;
+
+        vm.USERNAME_REGEX = /^[a-z0-9]+$/i;
 
         if (vm.existingUser) {
             getCoordinator($stateParams.id);
@@ -40,7 +42,11 @@ angular.module('safeRidesWebApp')
                 console.log('updated coordinator:', response);
                 $state.go('manageCoordinators');
             }, function (error) {
-                console.log('error updating coordinator:', error);
+                Notification.error({
+                    message: error.data.message,
+                    positionX: 'center',
+                    delay: 10000
+                });
             });
         }
 

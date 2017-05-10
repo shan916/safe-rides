@@ -19,7 +19,7 @@ public class UserMapper extends ConfigurableMapper {
                 .field("username", "username")
                 .field("firstName", "firstName")
                 .field("lastName", "lastName")
-                .fieldMap("password", "password").mapNulls(false).mapNullsInReverse(false).add()
+                .field("password", "password")
                 .field("active", "active")
                 .byDefault()
                 .register();

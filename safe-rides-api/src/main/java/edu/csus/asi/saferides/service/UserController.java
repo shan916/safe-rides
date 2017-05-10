@@ -103,7 +103,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> retrieve(@PathVariable Long id) {
-        User user = userRepository.findOne(id);
+        User user = userService.getUserById(id);
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -169,7 +169,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest) {
         // Perform the security
         try {
             final Authentication authentication = authenticationManager.authenticate(
@@ -248,7 +248,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Password does not meet security requirements"));
         }
 
-        User result = userService.createCoordinator(userDto);
+        User result = userService.createCoordinatorUser(userDto);
 
         // create URI of where the user was created
         URI location = ServletUriComponentsBuilder
@@ -303,9 +303,31 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
         }
 
-        User result = userService.updateCoordinator(userDto);
+        User result = userService.updateCoordinatorUser(userDto);
 
         return ResponseEntity.ok(userMapper.map(result, UserDto.class));
+    }
+
+    /**
+     * Deletes the user with the given id
+     *
+     * @param id path parameter of id of user to delete
+     * @return HTTP 204 if deleted, 400 if user with id doesn't exist
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "deleteUser", nickname = "Delete User", notes = "Deletes a user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        if (userService.deleteCoordinator(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
+        }
     }
 
 }

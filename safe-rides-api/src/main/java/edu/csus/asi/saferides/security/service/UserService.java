@@ -44,8 +44,11 @@ public class UserService {
     }
 
     /**
+     * Returns list of users with given criteria
      *
-     *
+     * @param active whether users are active or not
+     * @param role role to search by
+     * @return list of users with given criteria
      */
     public List<User> getUsers(Boolean active, AuthorityName role) {
 
@@ -85,13 +88,17 @@ public class UserService {
 
     }
 
+    public User getUserById(Long id) {
+        return userRepository.findOne(id);
+    }
+
     /**
      * Creates the given user as a coordinator in the User persistence
      *
      * @param userDto the user to save
      * @return the created coordinator user
      */
-    public User createCoordinator(UserDto userDto) {
+    public User createCoordinatorUser(UserDto userDto) {
         User user = userMapper.map(userDto, User.class);
 
         user.setPassword(this.hashPassword(userDto.getPassword()));
@@ -108,7 +115,7 @@ public class UserService {
      * @param userDto the user to update
      * @return the updated coordinator user
      */
-    public User updateCoordinator(UserDto userDto) {
+    public User updateCoordinatorUser(UserDto userDto) {
         User existingUser = userRepository.findOne(userDto.getId());
 
         User newUser = userMapper.map(userDto, User.class);
@@ -122,6 +129,31 @@ public class UserService {
         }
 
         return userRepository.save(newUser);
+    }
+
+    /**
+     * Deletes the coordinator with the given id
+     *
+     * @param id id of coordinator to delete
+     * @return true if deleted, false if user with id doesn't exist
+     */
+    public boolean deleteCoordinator(Long id) {
+        if (userRepository.findOne(id) == null) {
+            return false;
+        } else {
+            userRepository.delete(id);
+            return true;
+        }
+    }
+
+    public User createDriverUser() {
+        // TODO - create driver user
+        return null;
+    }
+
+    public User updateDriverUser() {
+        // TODO - update driver user
+        return null;
     }
 
     /**

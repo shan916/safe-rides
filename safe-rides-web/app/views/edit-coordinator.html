@@ -1,4 +1,4 @@
-<span us-spinner ng-show="ctrl.loading"></span>
+<span us-spinner ng-show="ctrl.loading" xmlns="http://www.w3.org/1999/html"></span>
 <div class="container" ng-hide="ctrl.loading">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -43,11 +43,13 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input id="username" name="username" type="text" class="form-control" ng-disabled="ctrl.existingUser"
-                                   ng-model="ctrl.coordinator.username" ng-minlength="2" ng-maxlength="30">
+                            <input id="username" name="username" type="text" class="form-control"
+                                   ng-disabled="ctrl.existingUser" ng-pattern="ctrl.USERNAME_REGEX"
+                                   ng-model="ctrl.coordinator.username" ng-minlength="6" ng-maxlength="30">
                             <div ng-messages="coordinatorForm.username.$dirty && coordinatorForm.username.$error">
                                 <div class="input-error" ng-message="required">* required</div>
-                                <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
+                                <div class="input-error" ng-message="pattern">* can only contain alphanumeric characters</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 6 characters</div>
                                 <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
                             </div>
                         </div>
@@ -68,10 +70,10 @@
                         <div class="form-group">
                             <label for="confirmPassword">Confirm New Password</label>
                             <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
-                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword">
+                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword" compare-to="ctrl.coordinator.password">
                             <div
-                                ng-messages="coordinatorForm.confirmPassword.$dirty && coordinatorForm.confirmPassword.$error">
-                                <div class="input-error" ng-message="required">* required</div>
+                                ng-messages="coordinatorForm.confirmPassword.$error">
+                                <div class="input-error" ng-message="compareTo">* Password fields must match</div>
                             </div>
                         </div>
                     </div>
