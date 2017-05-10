@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (UserService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
+    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -109,7 +109,7 @@ angular.module('safeRidesWebApp')
          * */
         vm.login = function () {
             vm.loading = true;
-            UserService.riderAuthentication(vm.oneCardId).then(function (response) {
+            AuthService.riderAuthentication(vm.oneCardId).then(function (response) {
                 vm.loggedIn = true;
                 AuthTokenService.setToken(response.data.token);
                 getRide();

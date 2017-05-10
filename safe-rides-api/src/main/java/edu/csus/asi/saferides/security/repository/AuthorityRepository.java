@@ -36,4 +36,12 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
      */
     Authority findByName(AuthorityName name);
 
+    /**
+     * Find list of authorities with given authority names.
+     *
+     * @param names authority names to search by
+     * @return list of authorities with specified authority names
+     */
+    List<Authority> findByNameIn(List<AuthorityName> names);
+
 }

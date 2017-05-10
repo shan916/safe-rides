@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.User;
 
 import javax.persistence.*;
@@ -179,7 +180,8 @@ public class Driver {
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
         this.active = active;
-        this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
+        this.user = new User(csusId, driverFirstName, driverLastName);
+        this.user.setPassword((new ArgonPasswordEncoder().encode("pass")));
     }
 
     /**

@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class Authority {
      * List of users in authority / role
      */
     @ManyToMany(mappedBy = "authorities", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<User> users;
 
     /**
