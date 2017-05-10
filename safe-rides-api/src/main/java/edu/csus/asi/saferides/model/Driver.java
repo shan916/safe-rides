@@ -25,11 +25,11 @@ public class Driver {
     private Long id;
 
     /**
-     * CSUS ID of driver
+     * OneCard ID of driver
      */
     @Column(nullable = false, unique = true, length = 9)
     @Size(min = 9, max = 9)
-    private String csusId;
+    private String oneCardId;
 
     /**
      * First name of the driver
@@ -159,7 +159,7 @@ public class Driver {
     /**
      * Constructor for creating a driver object
      *
-     * @param csusId           the CSUS ID of the driver
+     * @param oneCardId        the OneCard ID of the driver
      * @param driverFirstName  the driver's first name
      * @param driverLastName   the driver's last name
      * @param phoneNumber      the phone number for the driver
@@ -169,10 +169,10 @@ public class Driver {
      * @param insuranceCompany the driver's insurance company
      * @param active           indicates if the driver is active
      */
-    public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
+    public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
                   String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
         super();
-        this.csusId = csusId;
+        this.oneCardId = oneCardId;
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
         this.phoneNumber = phoneNumber;
@@ -181,7 +181,7 @@ public class Driver {
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
         this.active = active;
-        this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
+        this.user = new User(oneCardId, driverFirstName, driverLastName, "pass", "driver@null.null");
     }
 
     /**
@@ -203,21 +203,21 @@ public class Driver {
     }
 
     /**
-     * Get the CSUS ID of the driver
+     * Get the OneCard ID of the driver
      *
-     * @return the CSUS ID of the driver
+     * @return the OneCard ID of the driver
      */
-    public String getCsusId() {
-        return csusId;
+    public String getOneCardId() {
+        return oneCardId;
     }
 
     /**
-     * Set the CSUS ID of the driver
+     * Set the OneCard ID of the driver
      *
-     * @param csusId the CSUS ID of the driver
+     * @param oneCardId the OneCard ID of the driver
      */
-    public void setCsusId(String csusId) {
-        this.csusId = csusId;
+    public void setOneCardId(String oneCardId) {
+        this.oneCardId = oneCardId;
     }
 
     /**
@@ -545,7 +545,7 @@ public class Driver {
     public String toString() {
         return "Driver{" +
                 "id=" + id +
-                ", csusId='" + csusId + '\'' +
+                ", oneCardId='" + oneCardId + '\'' +
                 ", driverFirstName='" + driverFirstName + '\'' +
                 ", driverLastName='" + driverLastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +

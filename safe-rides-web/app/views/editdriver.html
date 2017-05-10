@@ -9,11 +9,11 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="csusid">OneCard ID</label>
-                            <input id="csusid" name="csusid" type="text" class="form-control" required
-                                   ng-model="ctrl.driver.csusId" ui-mask="999999999" ui-mask-placeholder
-                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit CSUS ID">
-                            <div ng-messages="driverForm.csusid.$dirty && driverForm.csusid.$error">
+                            <label for="oneCardId">OneCard ID</label>
+                            <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
+                                   ng-model="ctrl.driver.oneCardId" ui-mask="999999999" ui-mask-placeholder
+                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit OneCard ID">
+                            <div ng-messages="driverForm.oneCardId.$dirty && driverForm.oneCardId.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                     <!-- Start of driver's first name -->
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="name">First Name</label>
+                            <label for="firstName">First Name</label>
                             <input id="firstName" name="firstName" type="text" class="form-control" required
                                    placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName"
                                    ng-minlength="2" ng-maxlength="30">
@@ -37,7 +37,7 @@
                     <!-- Start of driver's last name -->
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="name">Last Name</label>
+                            <label for="lastName">Last Name</label>
                             <input id="lastName" name="lastName" type="text" class="form-control" required
                                    placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName"
                                    ng-minlength="2" ng-maxlength="30">

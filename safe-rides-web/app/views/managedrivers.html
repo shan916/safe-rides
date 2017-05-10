@@ -23,7 +23,7 @@
                         <tr ng-repeat="driver in ctrl.activeDrivers">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                             <td>{{driver.phoneNumber | phone}}</td>
-                            <td>{{driver.csusId}}</td>
+                            <td>{{driver.oneCardId}}</td>
                             <td>{{driver.dlState}}</td>
                             <td>{{driver.dlNumber}}</td>
                             <td>{{driver.status}}</td>
@@ -79,7 +79,7 @@
                                 <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
                                     <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                                     <td>{{driver.phoneNumber | phone}}</td>
-                                    <td>{{driver.csusId}}</td>
+                                    <td>{{driver.oneCardId}}</td>
                                     <td>{{driver.dlState}}</td>
                                     <td>{{driver.dlNumber}}</td>
                                     <td>
