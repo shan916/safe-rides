@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 /**
  * A RideRequest holds rider info, the time the request was made, last modified, assigned,
@@ -198,7 +198,7 @@ public class RideRequest {
                        String dropoffLine1, String dropoffCity) {
         super();
         this.oneCardId = oneCardId;
-        this.requestDate = LocalDateTime.now(ZoneOffset.UTC);
+        this.requestDate = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.requestorPhoneNumber = requestorPhoneNumber;
@@ -226,7 +226,7 @@ public class RideRequest {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
 
         lastModified = now;
 

@@ -6,7 +6,7 @@ import edu.csus.asi.saferides.security.model.User;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -143,7 +143,7 @@ public class Driver {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
         modifiedDate = now;
         if (createdDate == null) {
             createdDate = now;

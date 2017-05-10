@@ -25,7 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 /**
@@ -316,7 +316,7 @@ public class SafeRidesApiApplication {
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest3.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest3.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest3.setEstimatedTime("15");
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
@@ -324,29 +324,29 @@ public class SafeRidesApiApplication {
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest6.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest6.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest6.setEstimatedTime("30");
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest8.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest8.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest8.setEstimatedTime("45");
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest9.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest9.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest9.setEstimatedTime("1 hour");
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest10.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest10.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest10.setEstimatedTime("> 1 hour");
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest11.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest11.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest11.setEstimatedTime("15");
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest12.setAssignedDate(LocalDateTime.now(ZoneOffset.UTC));
+            rideRequest12.setAssignedDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             rideRequest12.setEstimatedTime("30");
 
             geocodingService.setCoordinates(rideRequest0);
@@ -493,5 +493,4 @@ public class SafeRidesApiApplication {
                 .build()
                 .pathMapping("/");
     }
-
 }

@@ -3,8 +3,11 @@ package edu.csus.asi.saferides.mapper;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.converter.builtin.PassThroughConverter;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * Maps a RideRequest object to a RideRequestDto object
@@ -29,6 +32,7 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("driver.vehicle.licensePlate", "vehicleLicensePlate")
                 .byDefault()
                 .register();
+        factory.getConverterFactory().registerConverter(new PassThroughConverter(LocalDateTime.class));
     }
 
 }

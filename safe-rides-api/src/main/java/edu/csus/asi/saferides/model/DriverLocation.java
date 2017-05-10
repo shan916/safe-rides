@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 /**
  * A DriverLocation contains the longitude and latitude of a driver.
@@ -50,7 +50,7 @@ public class DriverLocation {
      */
     @PrePersist
     public void updateTimeStamps() {
-        createdDate = LocalDateTime.now(ZoneOffset.UTC);
+        createdDate = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
     }
 
     /**

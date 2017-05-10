@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +87,7 @@ public class Util {
         LocalTime endTime = configuration.getEndTime();
         List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
 
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
 
         return validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
@@ -145,7 +145,7 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneOffset.UTC), configuration.getStartTime(), configuration.getEndTime())[0];
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")), configuration.getStartTime(), configuration.getEndTime())[0];
             if (ride.getRequestDate().compareTo(startDateTime) >= 0) {
                 return ride;
             } else {
@@ -170,7 +170,7 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneOffset.UTC), configuration.getStartTime(), configuration.getEndTime())[0];
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")), configuration.getStartTime(), configuration.getEndTime())[0];
             rides.removeIf(r -> r.getRequestDate().compareTo(startDateTime) < 0);
             return rides;
         } else {
