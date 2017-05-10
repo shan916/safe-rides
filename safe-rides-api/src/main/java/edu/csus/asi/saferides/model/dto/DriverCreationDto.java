@@ -1,15 +1,11 @@
 package edu.csus.asi.saferides.model.dto;
 
-/*
- * @author Zeeshan Khaliq
- *
- * Data Transfer Object for RideRequest
- * */
-
-
-
+/**
+ *  Data transfer object for creation of drivers
+ */
 public class DriverCreationDto {
 
+    private Long id;
 	private String csusId;
 	private String driverFirstName;
 	private String driverLastName;
@@ -22,10 +18,10 @@ public class DriverCreationDto {
     private String password;
 
     public DriverCreationDto(){}
-    
+
     public DriverCreationDto(String csusId, String driverFirstName, String driverLastName, String phoneNumber,
-			String dlState, String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active,
-			String password) {
+							 String dlState, String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active,
+							 String password) {
 		super();
 		this.csusId = csusId;
 		this.driverFirstName = driverFirstName;
@@ -119,6 +115,10 @@ public class DriverCreationDto {
 		this.password = password;
 	}
 
+    public Long getId() { return id; }
+
+	public void setId(Long id) { this.id = id; }
+
 	@Override
 	public String toString() {
 		return "DriverCreationDto [csusId=" + csusId + ", driverFirstName=" + driverFirstName + ", driverLastName="
@@ -126,6 +126,6 @@ public class DriverCreationDto {
 				+ ", insuranceChecked=" + insuranceChecked + ", insuranceCompany=" + insuranceCompany + ", active="
 				+ active + ", password=" + password + "]";
 	}
-    
-    
+
+
 }

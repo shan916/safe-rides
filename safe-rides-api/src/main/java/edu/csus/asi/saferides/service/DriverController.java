@@ -156,11 +156,11 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@RequestBody DriverCreationDto driverDto) {
     	Driver driver = driverUserMapper.map(driverDto, Driver.class);
-        Driver result = driverRepository.save(driver);
-        
+
         User user = new User(driverDto.getCsusId(), driverDto.getDriverFirstName(), driverDto.getDriverLastName(), driverDto.getPassword());
         userRepository.save(user);
-
+        driver.setUser(user);
+        Driver result = driverRepository.save(driver);
         // create URI of where the driver was created
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId())
                 .toUri();
@@ -191,21 +191,23 @@ public class DriverController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody DriverCreationDto driverDto) {
-        Driver driver = driverUserMapper.map(driverDto, Driver.class);
-        if (driver.getId() != null && driver.getId().equals(id)) {
-            Driver result = driverRepository.findOne(id);
+        Driver updatedDriver = driverUserMapper.map(driverDto, Driver.class);
+        if (updatedDriver.getId() != null && updatedDriver.getId().equals(id)) {
+            Driver existingDriver = driverRepository.findOne(id);
 
             // return 400 if trying to deactivate a driver that's not AVAILABLE
-            if (!driver.getActive() && result.getStatus() != DriverStatus.AVAILABLE) {
+            if (!updatedDriver.getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
                 return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
             }
-
-            User user = userRepository.findByUsername(driver.getCsusId());
-            user.setFirstname(driverDto.getDriverFirstName());
-            user.setLastname(driverDto.getDriverLastName());
-            user.setPassword(driverDto.getPassword());
-            result = driverRepository.save(driver);
-            return ResponseEntity.ok(result);
+            if(updatedDriver.getUser() == null) {
+                updatedDriver.setUser(existingDriver.getUser());
+                userRepository.save(existingDriver.getUser());
+            }
+            if(updatedDriver.getVehicle() == null)
+                updatedDriver.setVehicle(existingDriver.getVehicle());
+            existingDriver = driverRepository.save(updatedDriver);
+            userRepository.save(existingDriver.getUser());
+            return ResponseEntity.ok(existingDriver);
         } else {
             return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
         }

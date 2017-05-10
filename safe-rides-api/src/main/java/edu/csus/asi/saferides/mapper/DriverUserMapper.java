@@ -12,16 +12,17 @@ public class DriverUserMapper extends ConfigurableMapper {
 	@Override
 	protected void configure(MapperFactory factory) {
 	    factory.classMap(Driver.class, DriverCreationDto.class)
-	    .field("csusId","csusId")
-		.field("driverFirstName", "driverFirstName")
-		.field("driverLastName", "driverLastName")
-		.field("phoneNumber", "phoneNumber")
-		.field("dlState", "dlState")
-	    .field("dlNumber", "dlNumber")
-	    .field("insuranceChecked", "insuranceChecked")
-	    .field("insuranceCompany", "insuranceCompany")
-	    .field("active", "active")
-	    .byDefault()
-        .register();
+				.field("id", "id")
+				.field("csusId","csusId")
+				.field("driverFirstName", "driverFirstName")
+				.field("driverLastName", "driverLastName")
+				.field("phoneNumber", "phoneNumber")
+				.field("dlState", "dlState")
+				.field("dlNumber", "dlNumber")
+				.field("insuranceChecked", "insuranceChecked")
+				.field("insuranceCompany", "insuranceCompany")
+				.field("active", "active")
+				.byDefault()
+				.register();
 	    }
 }

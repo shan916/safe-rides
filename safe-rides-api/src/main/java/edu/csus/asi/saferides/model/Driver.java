@@ -539,7 +539,7 @@ public class Driver {
      *
      * @return Driver string object
      */
-    @Override
+/*    @Override
     public String toString() {
         return "Driver{" +
                 "id=" + id +
@@ -562,4 +562,5 @@ public class Driver {
                 ", endOfNightOdo=" + endOfNightOdo +
                 '}';
     }
+    */
 }
