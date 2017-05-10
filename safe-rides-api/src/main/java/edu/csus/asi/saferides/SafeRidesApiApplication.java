@@ -420,7 +420,6 @@ public class SafeRidesApiApplication {
             driver7.getUser().setAuthorities(driverAuthorityList);
             driver8.getUser().setAuthorities(driverAuthorityList);
             driver9.getUser().setAuthorities(driverAuthorityList);
-            
 
             userRepository.save(admin);
             userRepository.save(coordinator);
@@ -447,8 +446,6 @@ public class SafeRidesApiApplication {
             userRepository.save(driver7.getUser());
             userRepository.save(driver8.getUser());
             userRepository.save(driver9.getUser());
-            
- 
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
@@ -460,8 +457,6 @@ public class SafeRidesApiApplication {
             driverRepository.save(driver7);
             driverRepository.save(driver8);
             driverRepository.save(driver9);
-            
-
 
             driverLocationRepository.save(loc0);
             driverLocationRepository.save(loc1);
