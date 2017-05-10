@@ -163,7 +163,7 @@ public class RideRequestController {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
         }
 
-        rideRequest.setRequestDate(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));    // default to current datetime
+        rideRequest.setRequestDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         geocodingService.setCoordinates(rideRequest);

@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -144,7 +145,7 @@ public class Driver {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
         modifiedDate = now;
         if (createdDate == null) {
             createdDate = now;

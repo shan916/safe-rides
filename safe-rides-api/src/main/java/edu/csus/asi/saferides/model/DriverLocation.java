@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -50,7 +51,7 @@ public class DriverLocation {
      */
     @PrePersist
     public void updateTimeStamps() {
-        createdDate = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+        createdDate = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
     }
 
     /**

@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.serialization;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import edu.csus.asi.saferides.utility.Util;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -23,6 +24,6 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
      */
     @Override
     public LocalDateTime deserialize(JsonParser arg0, DeserializationContext arg1) throws IOException {
-        return Instant.ofEpochMilli(arg0.getLongValue()).atZone(ZoneId.of("America/Los_Angeles")).toLocalDateTime();
+        return Instant.ofEpochMilli(arg0.getLongValue()).atZone(ZoneId.of(Util.APPLICATION_TIME_ZONE)).toLocalDateTime();
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
+import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -198,7 +199,7 @@ public class RideRequest {
                        String dropoffLine1, String dropoffCity) {
         super();
         this.oneCardId = oneCardId;
-        this.requestDate = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+        this.requestDate = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.requestorPhoneNumber = requestorPhoneNumber;
@@ -226,7 +227,7 @@ public class RideRequest {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
 
         lastModified = now;
 

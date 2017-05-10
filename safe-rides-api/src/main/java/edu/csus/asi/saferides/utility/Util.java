@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
  */
 public class Util {
 
+    public static final String APPLICATION_TIME_ZONE = "America/Los_Angeles";
+
     /**
      * Concatenate address parts together
      *
@@ -98,7 +100,7 @@ public class Util {
         LocalTime endTime = configuration.getEndTime();
         List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
 
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
 
         return validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
@@ -156,7 +158,7 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")), configuration.getStartTime(), configuration.getEndTime())[0];
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)), configuration.getStartTime(), configuration.getEndTime())[0];
             if (ride.getRequestDate().compareTo(startDateTime) >= 0) {
                 return ride;
             } else {
@@ -181,7 +183,7 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")), configuration.getStartTime(), configuration.getEndTime())[0];
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)), configuration.getStartTime(), configuration.getEndTime())[0];
             rides.removeIf(r -> r.getRequestDate().compareTo(startDateTime) < 0);
             return rides;
         } else {
