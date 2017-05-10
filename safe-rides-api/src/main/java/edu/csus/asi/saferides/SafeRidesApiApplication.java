@@ -5,6 +5,7 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 public class SafeRidesApiApplication {
 
     @Autowired
-    GeocodingService geocodingService;
+    private GeocodingService geocodingService;
 
     /**
      * The main method
@@ -61,8 +62,10 @@ public class SafeRidesApiApplication {
      */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository, ConfigurationRepository configurationRepository) {
+                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
+                                  ConfigurationRepository configurationRepository, ArgonPasswordEncoder argonPasswordEncoder) {
         return (args) -> {
+        	
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", true, "Farmers", true);
             Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", "CA", "E1111111", true, "Farmers", true);
@@ -370,9 +373,14 @@ public class SafeRidesApiApplication {
             geocodingService.setCoordinates(rideRequest18);
             geocodingService.setCoordinates(rideRequest19);
 
-            User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
-            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
-            User admin = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
+            User driver = new User("driver", "Driver", "Long", "hunter2");
+            driver.setPassword(argonPasswordEncoder.encode(driver.getPassword()));
+
+            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2");
+            coordinator.setPassword(argonPasswordEncoder.encode(coordinator.getPassword()));
+
+            User admin = new User("admin", "Admin", "Smith", "hunter2");
+            admin.setPassword(argonPasswordEncoder.encode(admin.getPassword()));
 
             ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
             ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();

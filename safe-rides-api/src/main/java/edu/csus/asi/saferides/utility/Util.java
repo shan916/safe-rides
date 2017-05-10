@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.utility;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.security.model.Authority;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -45,6 +46,16 @@ public class Util {
         return authorities.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks whether password meets security requirements
+     *
+     * @param password the password to check
+     * @return true if password greater than or equal to 8 characters, false otherwise
+     */
+    public static boolean isPasswordValid(String password) {
+        return (!StringUtils.isBlank(password) && StringUtils.length(password) >= 8);
     }
 
     /**

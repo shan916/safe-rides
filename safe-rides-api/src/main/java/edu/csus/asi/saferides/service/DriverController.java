@@ -205,7 +205,7 @@ public class DriverController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         Driver tempDriver = driverRepository.findByUser(user);
 
@@ -284,7 +284,7 @@ public class DriverController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         Driver driver = driverRepository.findByUser(user);
 
@@ -309,7 +309,7 @@ public class DriverController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         Driver driver = driverRepository.findByUser(user);
         //if the driver has no status or is Available, then there is no current ride, return empty
@@ -349,7 +349,7 @@ public class DriverController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         Driver driver = driverRepository.findByUser(user);
 
@@ -408,7 +408,7 @@ public class DriverController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
 
         Driver driver = driverRepository.findByUser(user);
 

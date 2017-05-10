@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * Maps a RideRequest object to a RideRequestDto object
+ * Maps a RideRequest object to a RideRequestDto object and vice-versa
  */
 @Component
 public class RideRequestMapper extends ConfigurableMapper {

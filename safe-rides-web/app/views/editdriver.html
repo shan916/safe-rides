@@ -54,8 +54,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlnum">Phone Number</label>
-                            <input id="dlnum" name="phoneNumber" type="text" class="form-control"
+                            <label for="phoneNumber">Phone Number</label>
+                            <input id="phoneNumber" name="phoneNumber" type="text" class="form-control"
                                    ng-model="ctrl.driver.phoneNumber" ui-mask="(999) 999-9999" ui-mask-placeholder
                                    ui-mask-placeholder-char="_">
                             <div ng-messages="driverForm.phoneNumber.$dirty && driverForm.phoneNumber.$error">
@@ -66,7 +66,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlnum">DL Number</label>
+                            <label for="dlNum">DL Number</label>
                             <input id="dlNum" name="dlNum" type="text" class="form-control" required
                                    placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber"
                                    ng-minlength="2">
