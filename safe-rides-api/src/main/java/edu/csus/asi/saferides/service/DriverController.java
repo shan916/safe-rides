@@ -180,7 +180,7 @@ public class DriverController {
             errorMessages.add("Invalid seat count");
         }
 
-        if(errorMessages.size() > 0){
+        if (errorMessages.size() > 0) {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
@@ -254,7 +254,7 @@ public class DriverController {
                 errorMessages.add("Invalid seat count");
             }
 
-            if(errorMessages.size() > 0){
+            if (errorMessages.size() > 0) {
                 return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
             }
 
