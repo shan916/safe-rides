@@ -14,6 +14,7 @@ import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -52,7 +54,9 @@ public class DriverController {
     @Autowired
     private DriverLocationRepository driverLocationRepository;
 
-
+    /**
+     * a singleton for the DriverUserMapper
+     */
     @Autowired
     private DriverUserMapper driverUserMapper;
 
@@ -141,7 +145,6 @@ public class DriverController {
      * @param driverDto request body containing the driver to create and password to create a user
      * @return ResponseEntity containing the created driver and it's location
      */
-
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
     @ApiResponses(value = {
@@ -149,6 +152,46 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<?> save(@RequestBody Driver driver) {
+        ArrayList<String> errorMessages = new ArrayList<>();
+        if (!StringUtils.isNumeric(driver.getOneCardId()) || StringUtils.length(driver.getOneCardId()) != 9) {
+            errorMessages.add("Invalid OneCardID");
+        }
+        if (StringUtils.isEmpty(driver.getDriverFirstName()) || StringUtils.isEmpty(driver.getDriverLastName())) {
+            errorMessages.add("Driver name cannot be empty");
+        }
+        if (!StringUtils.isNumeric(driver.getPhoneNumber()) || StringUtils.length(driver.getPhoneNumber()) != 10) {
+            errorMessages.add("Invalid phone number");
+        }
+        if (StringUtils.isEmpty(driver.getDlState())) {
+            errorMessages.add("Driver license state cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getInsuranceCompany())) {
+            errorMessages.add("Insurance cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getVehicle().getMake())) {
+            errorMessages.add("Vehicle make cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getVehicle().getModel())) {
+            errorMessages.add("Vehicle model cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getVehicle().getYear())) {
+            errorMessages.add("Vehicle year cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getVehicle().getLicensePlate())) {
+            errorMessages.add("Vehicle license plate cannot be empty");
+        }
+        if (StringUtils.isEmpty(driver.getVehicle().getColor())) {
+            errorMessages.add("Vehicle color cannot be empty");
+        }
+        if (driver.getVehicle().getSeats() < 1 || driver.getVehicle().getSeats() > 3) {
+            errorMessages.add("Invalid seat count");
+        }
+
+        if (errorMessages.size() > 0) {
+            return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
+        }
+
     public ResponseEntity<?> save(@RequestBody DriverCreationDto driverDto) {
     	Driver driver = driverUserMapper.map(driverDto, Driver.class);
 
@@ -156,6 +199,7 @@ public class DriverController {
         userRepository.save(user);
         driver.setUser(user);
         Driver result = driverRepository.save(driver);
+
         // create URI of where the driver was created
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId())
                 .toUri();
@@ -190,18 +234,60 @@ public class DriverController {
         if (updatedDriver.getId() != null && updatedDriver.getId().equals(id)) {
             Driver existingDriver = driverRepository.findOne(id);
 
+            ArrayList<String> errorMessages = new ArrayList<>();
+            if (!StringUtils.isNumeric(driver.getOneCardId()) || StringUtils.length(driver.getOneCardId()) != 9) {
+                errorMessages.add("Invalid OneCardID");
+            }
+            if (StringUtils.isEmpty(driver.getDriverFirstName()) || StringUtils.isEmpty(driver.getDriverLastName())) {
+                errorMessages.add("Driver name cannot be empty");
+            }
+            if (!StringUtils.isNumeric(driver.getPhoneNumber()) || StringUtils.length(driver.getPhoneNumber()) != 10) {
+                errorMessages.add("Invalid phone number");
+            }
+            if (StringUtils.isEmpty(driver.getDlState())) {
+                errorMessages.add("Driver license state cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getInsuranceCompany())) {
+                errorMessages.add("Insurance cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getVehicle().getMake())) {
+                errorMessages.add("Vehicle make cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getVehicle().getModel())) {
+                errorMessages.add("Vehicle model cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getVehicle().getYear())) {
+                errorMessages.add("Vehicle year cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getVehicle().getLicensePlate())) {
+                errorMessages.add("Vehicle license plate cannot be empty");
+            }
+            if (StringUtils.isEmpty(driver.getVehicle().getColor())) {
+                errorMessages.add("Vehicle color cannot be empty");
+            }
+            if (driver.getVehicle().getSeats() < 1 || driver.getVehicle().getSeats() > 3) {
+                errorMessages.add("Invalid seat count");
+            }
+
+            if (errorMessages.size() > 0) {
+                return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
+            }
+
             // return 400 if trying to deactivate a driver that's not AVAILABLE
             if (!updatedDriver.getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
                 return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
             }
+
             if(updatedDriver.getUser() == null) {
                 updatedDriver.setUser(existingDriver.getUser());
                 userRepository.save(existingDriver.getUser());
             }
+
             if(updatedDriver.getVehicle() == null)
                 updatedDriver.setVehicle(existingDriver.getVehicle());
             existingDriver = driverRepository.save(updatedDriver);
             userRepository.save(existingDriver.getUser());
+
             return ResponseEntity.ok(existingDriver);
         } else {
             return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
@@ -390,6 +476,12 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
         Driver driver = driverRepository.findOne(id);
+        if (driver == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver could not be found"));
+        }
+        if (driver.getStatus() != DriverStatus.AVAILABLE) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("The driver is not available to be assigned"));
+        }
         RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
 
         rideReq.setStatus(RideRequestStatus.ASSIGNED);

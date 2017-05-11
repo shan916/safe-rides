@@ -12,6 +12,7 @@ import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.service.GeocodingService;
+import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,9 +25,10 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * The class that bootstraps the application
@@ -318,7 +320,7 @@ public class SafeRidesApiApplication {
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest3.setAssignedDate(new Date());
+            rideRequest3.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest3.setEstimatedTime("15");
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
@@ -326,29 +328,29 @@ public class SafeRidesApiApplication {
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest6.setAssignedDate(new Date());
+            rideRequest6.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest6.setEstimatedTime("30");
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest8.setAssignedDate(new Date());
+            rideRequest8.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest8.setEstimatedTime("45");
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest9.setAssignedDate(new Date());
+            rideRequest9.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest9.setEstimatedTime("1 hour");
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest10.setAssignedDate(new Date());
+            rideRequest10.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest10.setEstimatedTime("> 1 hour");
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest11.setAssignedDate(new Date());
+            rideRequest11.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest11.setEstimatedTime("15");
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest12.setAssignedDate(new Date());
+            rideRequest12.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest12.setEstimatedTime("30");
 
             geocodingService.setCoordinates(rideRequest0);
@@ -500,5 +502,4 @@ public class SafeRidesApiApplication {
                 .build()
                 .pathMapping("/");
     }
-
 }

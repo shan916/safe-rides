@@ -44,6 +44,8 @@ angular.module('safeRidesWebApp')
                     console.log('login error: ', response.data);
                     if (response.status === 422 && response.data.message === 'Bad credentials') {
                         vm.message = 'Bad credentials';
+                    } else if (response.status === 422 && response.data.message === 'Account is deactivated') {
+                        vm.message = 'Account is deactivated';
                     }
                 });
         };

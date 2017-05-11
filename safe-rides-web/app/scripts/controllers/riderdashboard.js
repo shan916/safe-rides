@@ -36,28 +36,29 @@ angular.module('safeRidesWebApp')
                 console.log('Not a requestor');
                 return;
             } else {
-                // check if new rides are being accepted
-                SettingsService.isLive().then(function (response) {
-                        if (response.data !== undefined) {
-                            vm.AcceptingNewRides = response.data;
-                        }
-                        vm.loading = false;
-                        vm.loggedIn = true;
-                        vm.oneCardId = AuthTokenService.getUsername();
-                        getRide();
-                    },
-                    function () {
-                        Notification.error({
-                            message: 'Failed to retreive SafeRides\' operation hours.',
-                            positionX: 'center',
-                            delay: 10000
-                        });
-                    });
+                vm.loading = false;
+                vm.loggedIn = true;
+                vm.oneCardId = AuthTokenService.getUsername();
+                getRide();
             }
         } else {
             vm.loading = false;
             vm.loggedIn = false;
         }
+
+        // check if new rides are being accepted
+        SettingsService.isLive().then(function (response) {
+                if (response.data !== undefined) {
+                    vm.AcceptingNewRides = response.data;
+                }
+            },
+            function () {
+                Notification.error({
+                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    positionX: 'center',
+                    delay: 10000
+                });
+            });
 
         /*
          * Gets the rider's current ride

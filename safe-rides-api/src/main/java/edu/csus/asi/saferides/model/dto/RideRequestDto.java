@@ -1,24 +1,18 @@
 package edu.csus.asi.saferides.model.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Data Transfer Object for RideRequest.
  * Contains a limited subset of the RideRequestObject.
  */
 public class RideRequestDto {
-
-    /**
-     * Ride requestor's first name
-     */
-    private String requestorFirstName;
-
-    /**
-     * Ride requestor's last name
-     */
-    private String requestorLastName;
 
     /**
      * The status of the ride. eg. UNASSIGNED, ASSIGNED, etc.
@@ -33,12 +27,16 @@ public class RideRequestDto {
     /**
      * The last modified timestamp for the ride
      */
-    private Date lastModified;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
-    private Date assignedDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime assignedDate;
 
     /**
      * The first name of the driver assigned to the ride
@@ -69,42 +67,6 @@ public class RideRequestDto {
      * The license plate of the vehicle for the driver assigned to the rider
      */
     private String vehicleLicensePlate;
-
-    /**
-     * Gets the ride requestor's first name
-     *
-     * @return the ride requestor's first name
-     */
-    public String getRequestorFirstName() {
-        return requestorFirstName;
-    }
-
-    /**
-     * Sets the ride requestor's first name
-     *
-     * @param requestorFirstName the ride requestor's first name
-     */
-    public void setRequestorFirstName(String requestorFirstName) {
-        this.requestorFirstName = requestorFirstName;
-    }
-
-    /**
-     * Gets the ride requestor's last name
-     *
-     * @return the ride requestor's last name
-     */
-    public String getRequestorLastName() {
-        return requestorLastName;
-    }
-
-    /**
-     * Sets the ride requestor's last name
-     *
-     * @param requestorLastName the ride requestor's last name
-     */
-    public void setRequestorLastName(String requestorLastName) {
-        this.requestorLastName = requestorLastName;
-    }
 
     /**
      * Gets the status of the ride request
@@ -255,7 +217,7 @@ public class RideRequestDto {
      *
      * @return the last modified timestamp for the ride
      */
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
@@ -264,7 +226,7 @@ public class RideRequestDto {
      *
      * @param lastModified the last modified timestamp for the ride
      */
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -273,7 +235,7 @@ public class RideRequestDto {
      *
      * @return the time the ride was assigned to a driver
      */
-    public Date getAssignedDate() {
+    public LocalDateTime getAssignedDate() {
         return assignedDate;
     }
 
@@ -282,7 +244,7 @@ public class RideRequestDto {
      *
      * @param assignedDate the time the ride was assigned to a driver
      */
-    public void setAssignedDate(Date assignedDate) {
+    public void setAssignedDate(LocalDateTime assignedDate) {
         this.assignedDate = assignedDate;
     }
 
@@ -293,8 +255,7 @@ public class RideRequestDto {
      */
     @Override
     public String toString() {
-        return "RideRequestDto{" + "requestorFirstName='" + requestorFirstName + '\'' + ", requestorLastName='"
-                + requestorLastName + '\'' + ", status=" + status + ", estimatedTime='" + estimatedTime + '\''
+        return "RideRequestDto{" + "status=" + status + ", estimatedTime='" + estimatedTime + '\''
                 + ", lastModified=" + lastModified + ", assignedDate=" + assignedDate + ", driverName='" + driverName
                 + '\'' + ", vehicleColor='" + vehicleColor + '\'' + ", vehicleYear='" + vehicleYear + '\''
                 + ", vehicleMake='" + vehicleMake + '\'' + ", vehicleModel='" + vehicleModel + '\''

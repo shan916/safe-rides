@@ -11,7 +11,7 @@ angular.module('safeRidesWebApp')
     .factory('Driver', function (Vehicle) {
 
         function Driver(data) {
-            this.csusId = undefined;
+            this.oneCardId = undefined;
             this.password = undefined;
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
