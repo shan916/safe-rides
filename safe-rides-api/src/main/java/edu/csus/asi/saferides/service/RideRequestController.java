@@ -13,6 +13,7 @@ import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -159,8 +160,12 @@ public class RideRequestController {
         }
 
         // oneCardId is required
-        if (rideRequest.getOneCardId() == null) {
+        if (!StringUtils.isNumeric(rideRequest.getOneCardId()) || StringUtils.length(rideRequest.getOneCardId()) != 9) {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
+        }
+
+        if (!StringUtils.isNumeric(rideRequest.getRequestorPhoneNumber()) || StringUtils.length(rideRequest.getOneCardId()) != 10) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Phone number is in an incorrect format"));
         }
 
         rideRequest.setRequestDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));    // default to current datetime
@@ -196,6 +201,10 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+        if ((rideRequest.getStatus().equals(RideRequestStatus.CANCELEDBYCOORDINATOR) || rideRequest.getStatus().equals(RideRequestStatus.CANCELEDBYRIDER) || rideRequest.getStatus().equals(RideRequestStatus.CANCELEDOTHER)) && StringUtils.length(rideRequest.getCancelMessage()) < 5) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Canceled message cannot be empty or less than 5 characters."));
+        }
+
         geocodingService.setCoordinates(rideRequest);
 
         RideRequest result = rideRequestRepository.save(rideRequest);

@@ -216,7 +216,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> authenticateRider(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest) throws AuthenticationException {
         // validate onecard (not null)
-        if (StringUtils.isNumeric(riderAuthenticationRequest.getOneCardId()) && StringUtils.length(riderAuthenticationRequest.getOneCardId()) != 9) {
+        if (!StringUtils.isNumeric(riderAuthenticationRequest.getOneCardId()) || StringUtils.length(riderAuthenticationRequest.getOneCardId()) != 9) {
             return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
         }
 
