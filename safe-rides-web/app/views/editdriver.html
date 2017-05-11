@@ -12,7 +12,8 @@
                             <label for="oneCardId">OneCard ID</label>
                             <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
                                    ng-model="ctrl.driver.oneCardId" ui-mask="999999999" ui-mask-placeholder
-                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit OneCard ID" ng-disabled="ctrl.existingDriver">
+                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit OneCard ID"
+                                   ng-disabled="ctrl.existingDriver">
                             <div ng-messages="driverForm.oneCardId.$dirty && driverForm.oneCardId.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -68,7 +69,7 @@
                         <div class="form-group">
                             <label for="dlChecked">DL Checked</label>
                             <input id="dlChecked" name="dlChecked" type="checkbox" required
-                                 ng-model="ctrl.driver.dlChecked">
+                                   ng-model="ctrl.driver.dlChecked">
                             <div ng-messages="driverForm.dlChecked.$dirty && driverForm.dlChecked.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -118,7 +119,8 @@
                         <div class="form-group">
                             <label for="confirmPassword">Confirm New Password</label>
                             <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
-                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword" compare-to="ctrl.driver.password">
+                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword"
+                                   compare-to="ctrl.driver.password">
                             <div
                                 ng-messages="driverForm.confirmPassword.$error">
                                 <div class="input-error" ng-message="compareTo">* Password fields must match</div>

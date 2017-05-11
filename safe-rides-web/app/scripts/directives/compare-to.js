@@ -11,9 +11,9 @@ angular.module('safeRidesWebApp')
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function(scope, element, attrs, ctrl) {
+            link: function (scope, element, attrs, ctrl) {
 
-                ctrl.$validators.compareTo = function(val) {
+                ctrl.$validators.compareTo = function (val) {
                     var compareTo = scope.$eval(attrs.compareTo);
 
                     // valid if both fields null
@@ -24,7 +24,7 @@ angular.module('safeRidesWebApp')
                     return val === compareTo;
                 };
 
-                scope.$watch(attrs.compareTo, function() {
+                scope.$watch(attrs.compareTo, function () {
                     ctrl.$validate();
                 });
             }

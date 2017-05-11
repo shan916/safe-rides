@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditCoordinatorCtrl', function($stateParams, $state, UserService, User, Notification) {
+    .controller('EditCoordinatorCtrl', function ($stateParams, $state, UserService, User, Notification) {
         var vm = this;
 
         vm.coordinator = new User();
