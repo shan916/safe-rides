@@ -372,6 +372,12 @@ public class DriverController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
         Driver driver = driverRepository.findOne(id);
+        if (driver == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Driver could not be found"));
+        }
+        if (driver.getStatus() != DriverStatus.AVAILABLE) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("The driver is not available to be assigned"));
+        }
         RideRequest rideReq = rideRequestRepository.findOne(rideRequest.getId());
 
         rideReq.setStatus(RideRequestStatus.ASSIGNED);
