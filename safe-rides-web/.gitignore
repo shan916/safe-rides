@@ -1,0 +1,13 @@
+/node_modules
+/dist
+/.tmp
+/.sass-cache
+/bower_components
+.DS_Store
+npm-debug.log
+
+#Ignore IntelliJ files
+*.iml
+*.iws
+*.ipr
+.idea/

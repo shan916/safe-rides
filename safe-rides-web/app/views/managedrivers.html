@@ -1,0 +1,120 @@
+<div class="container">
+    <div class="row">
+        <span us-spinner ng-show="ctrl.loadingActiveDrivers || ctrl.loadingInactiveDrivers"></span>
+        <div class="col-sm-12">
+            <!-- Start of Active Drivers -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Active Drivers</h3>
+                </div>
+
+                <div style="max-height:450px; overflow: auto;">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-2">Name</th>
+                            <th class="col-xs-2">Phone #</th>
+                            <th class="col-xs-1">OneCard ID</th>
+                            <th class="col-xs-1">DL State</th>
+                            <th class="col-xs-1">DL Checked</th>
+                            <th class="col-xs-1">Status</th>
+                            <th class="col-xs-3">Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="driver in ctrl.activeDrivers">
+                            <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                            <td>{{driver.phoneNumber | phone}}</td>
+                            <td>{{driver.oneCardId}}</td>
+                            <td>{{driver.dlState}}</td>
+                            <td>{{driver.dlChecked}}</td>
+                            <td>{{driver.status}}</td>
+                            <td>
+                                <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                                <button type="button" class="btn btn-danger"
+                                        ng-click="ctrl.openConfirmDeleteModal(driver)"
+                                        ng-disabled="driver.status !== 'AVAILABLE'">Delete
+                                </button>
+                                <button type="button" class="btn btn-warning"
+                                        ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)"
+                                        ng-disabled="driver.status !== 'AVAILABLE'">Deactivate
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End of Active Drivers -->
+
+            <!-- Start of Inactive Drivers -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Inactive Drivers</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-8 col-sm-4 col-md-4">
+                                    <label for="search">Filter:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                                        <input type="text" id="search" class="form-control" placeholder="Search"
+                                               ng-model="ctrl.searchString">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="max-height:450px; overflow: auto;">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-2">Name</th>
+                                    <th class="col-xs-2">Phone #</th>
+                                    <th class="col-xs-1">OneCard ID</th>
+                                    <th class="col-xs-1">DL State</th>
+                                    <th class="col-xs-1">DL Checked</th>
+                                    <th class="col-xs-3">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
+                                    <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
+                                    <td>{{driver.phoneNumber | phone}}</td>
+                                    <td>{{driver.oneCardId}}</td>
+                                    <td>{{driver.dlState}}</td>
+                                    <td>{{driver.dlChecked}}</td>
+                                    <td>
+                                        <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
+                                        <button type="button" class="btn btn-danger"
+                                                ng-click="ctrl.openConfirmDeleteModal(driver)">Delete
+                                        </button>
+                                        <button type="button" class="btn btn-warning"
+                                                ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Inactive Drivers -->
+
+            <!-- Start of Add New Driver -->
+            <div class="row form-group margin-top-15 margin-bottom-15">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <a class="btn btn-primary" ui-sref="editdriver()">Add New Driver</a>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Add New Driver -->
+
+        </div>
+    </div>
+</div>

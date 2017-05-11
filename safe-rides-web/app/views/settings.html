@@ -1,0 +1,68 @@
+<div class="container">
+    <div clas="row">
+        <span us-spinner="{radius:30, width:8, length: 16}" ng-show="ctrl.settingsLoading"></span>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Safe Rides Settings</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Operational Hours</h4>
+                <p>Select the time range and days to accept new ride requests</p>
+                <div ng-if="ctrl.hours !== undefined && ctrl.minutes !== undefined">
+                    <p class="mark">Active program time: {{ctrl.hours}} hours and {{ctrl.minutes}} minutes.</p>
+                </div>
+                <hr>
+                <div class="row margin-bottom-15">
+                    <div class="col-xs-6">
+                        <div class="pull-right">
+                            <label>Start Time</label>
+                            <div uib-timepicker ng-model="ctrl.startTime" ng-change="ctrl.changedTime()" hour-step="1"
+                                 minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label>End Time</label>
+                        <div uib-timepicker ng-model="ctrl.endTime" ng-change="ctrl.changedTime()" hour-step="1"
+                             minute-step="1" show-meridian="ctrl.isMeridian"></div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-info" ng-click="ctrl.toggleMode()">12H / 24H</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-12">
+                        <label>Days of week active (start day)</label>
+                        <br/>
+                        <label class="checkbox-inline" ng-repeat="day in ctrl.daysOfWeek">
+                            <input type="checkbox" name="selectedDays[]" ng-model="day.selected"
+                                   ng-change="ctrl.changedDay()"> {{day.name}}
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="active" ng-model="ctrl.settings.active"> Normal operation
+                        </label>
+                        <p class="small">Uncheck to prevent new ride requests from being submitted, overriding the
+                            settings above.</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <button class="btn btn-primary" ng-click="ctrl.saveSettings()"
+                                    ng-disabled="ctrl.hours === 0 && ctrl.minutes === 0">Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

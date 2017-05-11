@@ -1,0 +1,296 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-success" role="alert" ng-show="ctrl.active !== undefined && ctrl.active">
+                <strong>Operational Status</strong> Currently accepting new ride requests.
+            </div>
+            <div class="alert alert-info" role="alert" ng-show="ctrl.active !== undefined && !ctrl.active">
+                <strong>Operational Status</strong> New rides are not being accepted.
+            </div>
+        </div>
+    </div>
+    <!-- Start of Refresh Drop Down list -->
+    <div class="row">
+        <div class="col-sm-2 pull-right">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="refreshTables">Refresh Rate?</label>
+                        <select id="refreshTables" name="refreshTables" class="form-control"
+                                ng-options="option for option in ctrl.refreshIntervalOptions"
+                                ng-model="ctrl.selectedRefreshInterval" ng-change="ctrl.refreshIntervalChange()">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Refresh Drop Down list -->
+
+    <div class="row">
+        <div class="col-sm-7">
+            <!-- Start of Google Map API -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Map</h3>
+                        </div>
+                        <div map-lazy-load="https://maps.google.com/maps/api/js"
+                             map-lazy-load-params="{{ctrl.googleMapsUrl}}">
+                            <ng-map center="38.56,-121.41" zoom="11" style="height:650px;" scrollwheel="false">
+                                <shape name="circle" stroke-color="#FFFF00" stroke-opacity="0.8" stroke-weight="2"
+                                       fill-color="#FFFF00" fill-opacity="0.35" center="38.559146,-121.4234905"
+                                       radius="16093.44">
+                                </shape>
+                                <marker icon="{url: 'images/red-dot.png'}"
+                                        title='{{r.requestorFirstName}} {{r.requestorLastName}}'
+                                        on-click='ctrl.mapPinClick({{r.id}})'
+                                        ng-repeat="r in ctrl.rideRequests | filter: {status: 'UNASSIGNED'} : true"
+                                        position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
+                                <marker icon="{url: 'images/orange-dot.png'}"
+                                        title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}'
+                                        on-click='ctrl.mapPinClick({{r.id}})'
+                                        ng-repeat="r in ctrl.rideRequests | filter: {status: 'ASSIGNED'} : true"
+                                        position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
+                                <marker icon="{url: 'images/yellow-dot.png'}"
+                                        title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}'
+                                        on-click='ctrl.mapPinClick({{r.id}})'
+                                        ng-repeat="r in ctrl.rideRequests | filter: {status: 'PICKINGUP'} : true"
+                                        position="{{r.pickupLatitude +','+ r.pickupLongitude}}"></marker>
+                                <marker icon="{url: 'images/green-dot.png'}"
+                                        title='{{r.requestorFirstName}} {{r.requestorLastName}} - {{r.driver.driverFirstName}} {{r.driver.driverLastName}}'
+                                        on-click='ctrl.mapPinClick({{r.id}})'
+                                        ng-repeat="r in ctrl.rideRequests | filter: {status: 'DROPPINGOFF'} : true"
+                                        position="{{r.dropoffLatitude +','+ r.dropoffLongitude}}"></marker>
+                                <marker icon="{url: 'images/blue-dot.png'}"
+                                        title='{{d.driver.driverFirstName}} {{d.driver.driverLastName}}'
+                                        on-click='ctrl.mapDriverPinClick({{d.driver.id}})'
+                                        ng-repeat="d in ctrl.driversLocation"
+                                        position="{{d.latitude +','+ d.longitude}}"></marker>
+                            </ng-map>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Google Map API -->
+
+            <!-- Start of custom color key -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Color Keys for Ride Requests and Drivers Status</h3>
+                        </div>
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="/images/red-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of
+                                                    <em>unassigned</em> ride
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="/images/orange-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of <em>assigned</em>
+                                                    ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/yellow-dot.png"></td>
+                                                <td class="color-key-text-padding">Pickup location of <em>in
+                                                    progress</em> ride
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="/images/green-dot.png"></td>
+                                                <td class="color-key-text-padding">Dropoff location of <em>picked
+                                                    up</em> ride
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
+
+                                            <tr>
+                                                <td><img src="/images/blue-dot.png"></td>
+                                                <td class="color-key-text-padding">Last available driver location</td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of custom color key -->
+        </div>
+
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Ride Requests</h3>
+                        </div>
+                        <div style="max-height:450px; overflow: auto;">
+                                <span us-spinner="{radius:30, width:8, length: 16}"
+                                      ng-show="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers"></span>
+                            <table class="table table-responsive"
+                                   ng-hide="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers">
+                                <thead>
+                                <tr>
+                                    <th>Rider Name</th>
+                                    <th>Status</th>
+                                    <th>Riders</th>
+                                    <th>Time Requested</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-click="ctrl.showRequestDetails(req)"
+                                    ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
+                                  warning: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) < ctrl.DANGER_ZONE)),
+                                  info: req.status === 'ASSIGNED' || req.status === 'PICKINGUP' || req.status === 'DROPPINGOFF' || req.status === 'ATPICKUPLOCATION',
+                                  success: req.status === 'COMPLETE'}">
+                                    <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
+                                    <td>{{req.status | FriendlyStatusName}}</td>
+                                    <td>{{req.numPassengers}}</td>
+                                    <td>{{req.requestDate | date:'h:mma'}}</td>
+                                    <td>
+                                        <button ng-show="req.status === 'UNASSIGNED'"
+                                                ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();"
+                                                class="btn btn-primary">Assign Driver
+                                        </button>
+                                        <button
+                                            ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'"
+                                            ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();"
+                                            class="btn btn-danger">Cancel
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-body">
+                            <button ng-click="ctrl.showRideRequest();" id="addNewRideButton" type="submit"
+                                    class="btn btn-primary btn-block">Add New Ride Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Drivers</h3>
+                        </div>
+                        <div style="max-height:450px; overflow: auto;">
+                                <span us-spinner="{radius:30, width:8, length: 16}"
+                                      ng-show="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests"></span>
+                            <table class="table table-responsive"
+                                   ng-hide="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests">
+                                <thead>
+                                <tr>
+                                    <th>Driver Name</th>
+                                    <th>Status</th>
+                                    <th>Seats Available</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-click="ctrl.showDriverDetails(driver)"
+                                    ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
+                                    ng-class="{success: driver.status === 'AVAILABLE',
+                                                info: driver.status === 'PICKINGUP' || driver.status === 'DROPPINGOFF' || driver.status === 'ASSIGNED' || driver.status === 'ATPICKUPLOCATION'}">
+                                    <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
+                                    <td>{{driver.status | FriendlyStatusName}}</td>
+                                    <td>{{driver.vehicle.seats}}</td>
+                                    <td>
+                                        <button ng-show="driver.status === 'AVAILABLE'"
+                                                ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();"
+                                                class="btn btn-primary">Assign Request
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-body">
+                            <a ui-sref="managedrivers" class="btn btn-primary btn-block">Manage Drivers</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Color Keys for Ride Requests and Drivers Status</h3>
+                        </div>
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h4>Ride Request Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-warning color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is unassigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is complete.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h4>Driver Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is available.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

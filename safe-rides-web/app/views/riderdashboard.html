@@ -1,0 +1,248 @@
+<span us-spinner ng-show="ctrl.loading"></span>
+<div class="container" ng-hide="ctrl.loading">
+    <div class="row" ng-show="!ctrl.AcceptingNewRides">
+        <div class="col-md-4 col-md-offset-4 col-sm-12">
+            <div class="alert alert-info" role="alert">
+                <strong>Operational Status</strong> It is currently outside of Safe Rides' normal operating hours. The
+                application is no longer accepting new ride requests.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 ng-show="ctrl.loggedIn">OneCard ID: {{ctrl.oneCardId}}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 col-sm-12">
+            <div class="panel panel-default" ng-show="!ctrl.loggedIn">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Enter your OneCard ID</h3>
+                </div>
+                <div class="panel-body">
+                    <form name="loginForm">
+                        <div class="form-group">
+                            <label for="oneCardId">OneCard ID</label>
+                            <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
+                                   ng-model="ctrl.oneCardId" ui-mask="999999999" ui-mask-placeholder
+                                   ui-mask-placeholder-char="_" placeholder="9 digit ID">
+                        </div>
+                        <button type="submit" class="btn btn-primary pull-right" ng-click="ctrl.login()"
+                                ng-disabled="loginForm.$invalid">Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" ng-show="ctrl.loggedIn && !ctrl.existingRide && ctrl.AcceptingNewRides">
+        <div class="panel-heading">
+            <h3 class="panel-title">Request a Ride</h3>
+        </div>
+        <div class="panel-body">
+            <form name="rideRequestForm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Rider Info</h3>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label for="requestorFirstName">First Name</label>
+                            <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control"
+                                   required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
+                            <div
+                                ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div>  <!-- First name -->
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label for="requestorLastName">Last Name</label>
+                            <input id="requestorLastName" name="requestorLastName" type="text" class="form-control"
+                                   required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
+                            <div
+                                ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div> <!-- Last name -->
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            <label for="requestorPhoneNumber">Phone</label>
+                            <input id="requestorPhoneNumber" name="requestorPhoneNumber" type="text"
+                                   class="form-control" required ng-model="ctrl.rideRequest.requestorPhoneNumber"
+                                   ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
+                            <div
+                                ng-messages="rideRequestForm.requestorPhoneNumber.$dirty && rideRequestForm.requestorPhoneNumber.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div>  <!-- Phone number -->
+                    <div class="col-sm-12 col-md-2">
+                        <div class="form-group">
+                            <label for="numPassengers">Number of Riders</label>
+                            <select name="numPassengers" id="numPassengers" class="form-control" required
+                                    ng-model="ctrl.rideRequest.numPassengers">
+                                <option ng-repeat="count in ctrl.maxRidersCount" value="{{count}}">{{count}}</option>
+                            </select>
+                            <div
+                                ng-messages="rideRequestForm.numPassengers.$dirty && rideRequestForm.numPassengers.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div> <!-- Number of riders -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <h3>Pickup Address</h3>
+                        <div class="form-group">
+                            <label for="pickupLine1">Line 1</label>
+                            <input id="pickupLine1" name="pickupLine1" type="text" class="form-control" required
+                                   placeholder="Pickup Line 1" ng-model="ctrl.rideRequest.pickupLine1">
+                            <div ng-messages="rideRequestForm.pickupLine1.$dirty && rideRequestForm.pickupLine1.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pickupLine2">Line 2</label>
+                            <input id="pickupLine2" name="pickupLine2" type="text" class="form-control"
+                                   placeholder="Pickup Line 2" ng-model="ctrl.rideRequest.pickupLine2">
+                        </div>
+                        <div class="form-group">
+                            <label for="pickupCity">City</label>
+                            <input id="pickupCity" name="pickupCity" type="text" class="form-control" required
+                                   placeholder="Pickup City" ng-model="ctrl.rideRequest.pickupCity">
+                            <div ng-messages="rideRequestForm.pickupCity.$dirty && rideRequestForm.pickupCity.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div> <!-- Pickup Address -->
+
+                    <div class="col-md-6 col-sm-12">
+                        <h3>Drop-off Address</h3>
+                        <div class="form-group">
+                            <label for="dropoffLine1">Line 1</label>
+                            <input id="dropoffLine1" name="dropoffLine1" type="text" class="form-control" required
+                                   placeholder="Drop-off Line 1" ng-model="ctrl.rideRequest.dropoffLine1">
+                            <div
+                                ng-messages="rideRequestForm.dropoffLine1.$dirty && rideRequestForm.dropoffLine1.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoffLine2">Line 2</label>
+                            <input id="dropoffLine2" name="dropoffLine2" type="text" class="form-control"
+                                   placeholder="Drop-off Line 2" ng-model="ctrl.rideRequest.dropoffLine2">
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoffCity">City</label>
+                            <input id="dropoffCity" name="dropoffCity" type="text" class="form-control" required
+                                   placeholder="Drop-off City" ng-model="ctrl.rideRequest.dropoffCity">
+                            <div ng-messages="rideRequestForm.dropoffCity.$dirty && rideRequestForm.dropoffCity.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div> <!-- Dropoff Address -->
+                </div>
+            </form>
+
+            <button class="btn btn-primary btn-block" ng-disabled="rideRequestForm.$invalid"
+                    ng-click="ctrl.submitRideRequest()">Request Ride
+            </button>
+        </div>
+    </div> <!-- Ride Request panel-->
+
+    <div class="panel panel-info" ng-show="ctrl.existingRide">
+        <div class="panel-heading">
+            <h3 class="panel-title">Ride Status</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row margin-bottom-15">
+                <div class="col-sm-12 text-center">
+                    <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a
+                        driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup
+                        location</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup
+                        location</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
+                    <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
+                    <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
+                        <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
+                    </p>
+                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED' || ctrl.existingRide.status === 'PICKINGUP'">
+                        Your driver should arrive in approximately {{ctrl.getEstimatedTime()}}
+                        <small>(as of {{ctrl.existingRide.assignedDate | date: 'shortTime'}})</small>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-15">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status === 'UNASSIGNED'"
+                            ng-click="ctrl.cancelRide()">
+                        <span ng-hide="ctrl.cancelPressed">Cancel Ride</span>
+                        <span ng-show="ctrl.cancelPressed">Confirm Cancellation</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-success" ng-show="ctrl.existingRide && ctrl.existingRide.status !== 'UNASSIGNED'">
+        <div class="panel-heading">
+            <h3 class="panel-title">Driver Information</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <th class="col-xs-3">Driver Name</th>
+                    <td>{{ctrl.existingRide.driverName}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Year</th>
+                    <td>{{ctrl.existingRide.vehicleYear}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Color</th>
+                    <td>{{ctrl.existingRide.vehicleColor}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3"> Vehicle Make</th>
+                    <td>{{ctrl.existingRide.vehicleMake}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle Model</th>
+                    <td>{{ctrl.existingRide.vehicleModel}}</td>
+                </tr>
+                <tr>
+                    <th class="col-xs-3">Vehicle License Plate</th>
+                    <td>{{ctrl.existingRide.vehicleLicensePlate}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="row margin-bottom-15">
+            <div class="col-sm-12 text-center">
+                Questions? Call the Safe Rides office and talk to a representative.
+            </div>
+        </div>
+
+        <div class="row margin-bottom-15">
+            <div class="col-sm-12 text-center">
+                <a href="tel:9162788294" class="btn btn-success">
+                    <span class="glyphicon glyphicon-earphone"></span> Call
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
