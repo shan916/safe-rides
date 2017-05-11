@@ -15,8 +15,8 @@ public class DriverDto {
 	private String driverLastName;
 	private String phoneNumber;
 	private String dlState;
-    private String dlChecked;
-    private Boolean insuranceChecked;
+	private Boolean dlChecked;
+	private Boolean insuranceChecked;
 	private String insuranceCompany;
 	private Boolean active;
 
@@ -69,13 +69,13 @@ public class DriverDto {
 		this.dlState = dlState;
 	}
 
-    public String getDlChecked() {
-        return dlChecked;
-    }
+	public Boolean getDlChecked() {
+		return dlChecked;
+	}
 
-    public void setDlChecked(String dlChecked) {
-        this.dlChecked = dlChecked;
-    }
+	public void setDlChecked(Boolean dlChecked) {
+		this.dlChecked = dlChecked;
+	}
 
 	public Boolean getInsuranceChecked() {
 		return insuranceChecked;
@@ -109,7 +109,7 @@ public class DriverDto {
 		this.password = password;
 	}
 
-    public Long getId() { return id; }
+	public Long getId() { return id; }
 
 	public void setId(Long id) { this.id = id; }
 
