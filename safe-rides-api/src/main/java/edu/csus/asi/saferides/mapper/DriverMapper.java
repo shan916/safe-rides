@@ -9,23 +9,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class DriverMapper extends ConfigurableMapper {
 
-	@Override
-	protected void configure(MapperFactory factory) {
-		factory.classMap(Driver.class, DriverDto.class)
-				.field("id", "id")
-				.field("oneCardId", "oneCardId")
-				.field("driverFirstName", "driverFirstName")
-				.field("driverLastName", "driverLastName")
-				.field("phoneNumber", "phoneNumber")
-				.field("dlState", "dlState")
+    @Override
+    protected void configure(MapperFactory factory) {
+        factory.classMap(Driver.class, DriverDto.class)
+                .field("id", "id")
+                .field("oneCardId", "oneCardId")
+                .field("driverFirstName", "driverFirstName")
+                .field("driverLastName", "driverLastName")
+                .field("phoneNumber", "phoneNumber")
+                .field("dlState", "dlState")
                 .field("dlChecked", "dlChecked")
                 .field("insuranceChecked", "insuranceChecked")
-				.field("insuranceCompany", "insuranceCompany")
-				.field("active", "active")
-				.field("status", "status")
-				.field("vehicle", "vehicle")
-				.field("endOfNightOdo", "endOfNightOdo")
-				.byDefault()
-				.register();
-	    }
+                .field("insuranceCompany", "insuranceCompany")
+                .field("active", "active")
+                .field("status", "status")
+                .field("vehicle", "vehicle")
+                .field("endOfNightOdo", "endOfNightOdo")
+                .byDefault()
+                .register();
+    }
 }

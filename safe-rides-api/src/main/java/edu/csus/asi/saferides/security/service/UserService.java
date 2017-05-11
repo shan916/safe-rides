@@ -51,7 +51,7 @@ public class UserService {
      * Returns list of users with given criteria
      *
      * @param active whether users are active or not
-     * @param role role to search by
+     * @param role   role to search by
      * @return list of users with given criteria
      */
     public List<User> getUsers(Boolean active, AuthorityName role) {
