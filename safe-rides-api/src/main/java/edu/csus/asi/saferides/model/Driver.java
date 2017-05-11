@@ -63,8 +63,8 @@ public class Driver {
     /**
      * Driver's license number
      */
-    @Column(nullable = false, unique = true, length = 20)
-    private String dlNumber;
+    @Column(nullable = false)
+    private Boolean dlChecked;
 
     /**
      * Is insurance checked
@@ -166,20 +166,20 @@ public class Driver {
      * @param driverLastName   the driver's last name
      * @param phoneNumber      the phone number for the driver
      * @param dlState          the driver license state abbreviation
-     * @param dlNumber         the driver license number
+     * @param dlChecked         the driver license number
      * @param insuranceChecked indicates if insurance has been checked for the drive
      * @param insuranceCompany the driver's insurance company
      * @param active           indicates if the driver is active
      */
     public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-                  String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+                  Boolean dlChecked, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
         super();
         this.oneCardId = oneCardId;
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
         this.phoneNumber = phoneNumber;
         this.dlState = dlState;
-        this.dlNumber = dlNumber;
+        this.dlChecked = dlChecked;
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
         this.active = active;
@@ -300,17 +300,17 @@ public class Driver {
      *
      * @return driver's license number
      */
-    public String getDlNumber() {
-        return dlNumber;
+    public Boolean getDlChecked() {
+        return dlChecked;
     }
 
     /**
      * Set driver's license number
      *
-     * @param dlNumber driver's license number
+     * @param dlChecked driver's license number
      */
-    public void setDlNumber(String dlNumber) {
-        this.dlNumber = dlNumber;
+    public void setDlNumber(Boolean dlChecked) {
+        this.dlChecked = dlChecked;
     }
 
     /**
@@ -553,7 +553,7 @@ public class Driver {
                 ", driverLastName='" + driverLastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", dlState='" + dlState + '\'' +
-                ", dlNumber='" + dlNumber + '\'' +
+                ", dlChecked='" + dlChecked + '\'' +
                 ", insuranceChecked=" + insuranceChecked +
                 ", insuranceCompany='" + insuranceCompany + '\'' +
                 ", active=" + active +
