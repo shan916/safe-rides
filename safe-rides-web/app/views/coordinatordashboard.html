@@ -85,29 +85,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <table>
-                                            <tbody>
-                                            <tr>
-                                                <td class="bg-warning color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is unassigned.</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-info color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is assigned. Driver is
-                                                    assigned.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-success color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is complete. Driver is
-                                                    available.
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <table>
                                             <tbody>
                                             <tr>
@@ -116,6 +94,12 @@
                                                     <em>unassigned</em> ride
                                                 </td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
                                             <tr>
                                                 <td><img src="/images/orange-dot.png"></td>
                                                 <td class="color-key-text-padding">Pickup location of <em>assigned</em>
@@ -134,10 +118,20 @@
                                                     up</em> ride
                                                 </td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
+
                                             <tr>
                                                 <td><img src="/images/blue-dot.png"></td>
                                                 <td class="color-key-text-padding">Last available driver location</td>
                                             </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -245,6 +239,55 @@
                                 </table>
                             </div>
                             <a ui-sref="managedrivers" class="btn btn-primary btn-block">Manage Drivers</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Color Keys for Ride Requests and Drivers Status</h3>
+                        </div>
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h4>Ride Request Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-warning color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is unassigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is complete.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h4>Driver Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is available.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
