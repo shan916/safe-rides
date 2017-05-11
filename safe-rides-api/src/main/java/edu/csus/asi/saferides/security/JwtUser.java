@@ -1,6 +1,10 @@
 package edu.csus.asi.saferides.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,6 +24,9 @@ public class JwtUser implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean enabled;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime lastPasswordResetDate;
 
     /**

@@ -1,5 +1,6 @@
 'use strict';
 
+//noinspection JSAnnotator
 /**
  * @ngdoc function
  * @name safeRidesWebApp.controller:EditdriverCtrl
@@ -18,6 +19,8 @@ angular.module('safeRidesWebApp')
         vm.yearChoices = [];
 
         vm.loading = false;
+
+        vm.existingDriver = !!$stateParams.driverId;
 
         vm.stateChoices = [
             'CA', 'AL', 'AK', 'AZ', 'AR', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
@@ -52,7 +55,7 @@ angular.module('safeRidesWebApp')
             });
         }
 
-        if ($stateParams.driverId) {
+        if (vm.existingDriver) {
             getDriver($stateParams.driverId);
         }
 
@@ -61,7 +64,7 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveDriver = function () {
-            if ($stateParams.driverId) {
+            if (vm.existingDriver) {
                 updateDriver();
             } else {
                 DriverService.save(vm.driver).$promise.then(function (response) {

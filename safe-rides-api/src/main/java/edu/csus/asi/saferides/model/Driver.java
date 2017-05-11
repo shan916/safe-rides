@@ -90,7 +90,7 @@ public class Driver {
      * be persisted in the database because they have different meanings.
      */
     @Transient
-    DriverStatus status;
+    private DriverStatus status;
 
     /**
      * Date of creation

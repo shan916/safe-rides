@@ -1,19 +1,19 @@
 package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.Driver;
-import edu.csus.asi.saferides.model.dto.DriverCreationDto;
+import edu.csus.asi.saferides.model.dto.DriverDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DriverUserMapper extends ConfigurableMapper {
+public class DriverMapper extends ConfigurableMapper {
 
 	@Override
 	protected void configure(MapperFactory factory) {
-	    factory.classMap(Driver.class, DriverCreationDto.class)
+		factory.classMap(Driver.class, DriverDto.class)
 				.field("id", "id")
-				.field("csusId","csusId")
+				.field("oneCardId", "oneCardId")
 				.field("driverFirstName", "driverFirstName")
 				.field("driverLastName", "driverLastName")
 				.field("phoneNumber", "phoneNumber")
@@ -22,6 +22,9 @@ public class DriverUserMapper extends ConfigurableMapper {
 				.field("insuranceChecked", "insuranceChecked")
 				.field("insuranceCompany", "insuranceCompany")
 				.field("active", "active")
+				.field("status", "status")
+				.field("vehicle", "vehicle")
+				.field("endOfNightOdo", "endOfNightOdo")
 				.byDefault()
 				.register();
 	    }

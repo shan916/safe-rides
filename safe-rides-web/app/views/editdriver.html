@@ -12,7 +12,7 @@
                             <label for="oneCardId">OneCard ID</label>
                             <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
                                    ng-model="ctrl.driver.oneCardId" ui-mask="999999999" ui-mask-placeholder
-                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit OneCard ID">
+                                   ui-mask-placeholder-char="_" placeholder="Enter the driver's 9 digit OneCard ID" ng-disabled="ctrl.existingDriver">
                             <div ng-messages="driverForm.oneCardId.$dirty && driverForm.oneCardId.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>
@@ -91,6 +91,44 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="insuranceCompany">Insurance Company</label>
+                            <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control"
+                                   required placeholder="Enter driver's insurance company"
+                                   ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
+                            <div ng-messages="driverForm.insuranceCompany.$dirty && driverForm.insuranceCompany.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                                <div class="input-error" ng-message="minlength">* must be at least 3 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input id="password" name="password" type="password" class="form-control"
+                                   placeholder="New password" ng-model="ctrl.driver.password" ng-minlength="8">
+                            <div ng-messages="driverForm.password.$dirty && driverForm.password.$error">
+                                <div class="input-error" ng-message="minlength">* must be at least 8 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
+                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword" compare-to="ctrl.driver.password">
+                            <div
+                                ng-messages="driverForm.confirmPassword.$error">
+                                <div class="input-error" ng-message="compareTo">* Password fields must match</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" ng-hide="ctrl.driver.insuranceChecked">
                     <div class="col-sm-4">
                         <div class="checkbox">
@@ -105,32 +143,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="insuranceCompany">Insurance Company</label>
-                            <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control"
-                                   required placeholder="Enter driver's insurance company"
-                                   ng-model="ctrl.driver.insuranceCompany" ng-minlength="3">
-                            <div ng-messages="driverForm.insuranceCompany.$dirty && driverForm.insuranceCompany.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                                <div class="input-error" ng-message="minlength">* must be at least 3 characters</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-4">
-                      <div class="form-group">
-                          <label for="driverPassword">Password</label>
-                          <input id="driverPassword" name="driverPassword" type="password" class="form-control" required
-                                 ng-model="ctrl.driver.password" placeholder="Enter the driver's password">
-                          <div ng-messages="driverForm.driverPassword.$dirty && driverForm.driverPassword.$error">
-                              <div class="input-error" ng-message="required">* required</div>
-                          </div>
-                      </div>
-                  </div>
                 </div>
             </form>
         </div>
