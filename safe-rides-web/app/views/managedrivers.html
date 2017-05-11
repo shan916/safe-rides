@@ -16,7 +16,7 @@
                             <th class="col-xs-2">Phone #</th>
                             <th class="col-xs-1">OneCard ID</th>
                             <th class="col-xs-1">DL State</th>
-                            <th class="col-xs-1">DL Number</th>
+                            <th class="col-xs-1">DL Checked</th>
                             <th class="col-xs-1">Status</th>
                             <th class="col-xs-3">Actions</th>
                         </tr>
@@ -28,7 +28,7 @@
                             <td>{{driver.phoneNumber | phone}}</td>
                             <td>{{driver.oneCardId}}</td>
                             <td>{{driver.dlState}}</td>
-                            <td>{{driver.dlNumber}}</td>
+                            <td>{{driver.dlChecked}}</td>
                             <td>{{driver.status}}</td>
                             <td>
                                 <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
@@ -76,7 +76,7 @@
                                     <th class="col-xs-2">Phone #</th>
                                     <th class="col-xs-1">OneCard ID</th>
                                     <th class="col-xs-1">DL State</th>
-                                    <th class="col-xs-1">DL Number</th>
+                                    <th class="col-xs-1">DL Checked</th>
                                     <th class="col-xs-3">Actions</th>
                                 </tr>
                                 </thead>
@@ -86,7 +86,7 @@
                                     <td>{{driver.phoneNumber | phone}}</td>
                                     <td>{{driver.oneCardId}}</td>
                                     <td>{{driver.dlState}}</td>
-                                    <td>{{driver.dlNumber}}</td>
+                                    <td>{{driver.dlChecked}}</td>
                                     <td>
                                         <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
                                         <button type="button" class="btn btn-danger"

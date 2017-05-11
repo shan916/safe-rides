@@ -66,13 +66,11 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlNum">DL Number</label>
-                            <input id="dlNum" name="dlNum" type="text" class="form-control" required
-                                   placeholder="Enter the driver's license number" ng-model="ctrl.driver.dlNumber"
-                                   ng-minlength="2">
-                            <div ng-messages="driverForm.dlNum.$dirty && driverForm.dlNum.$error">
+                            <label for="dlChecked">DL Checked</label>
+                            <input id="dlChecked" name="dlChecked" type="checkbox" required
+                                 ng-model="ctrl.driver.dlChecked">
+                            <div ng-messages="driverForm.dlChecked.$dirty && driverForm.dlChecked.$error">
                                 <div class="input-error" ng-message="required">* required</div>
-                                <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
                             </div>
                         </div>
                     </div>
