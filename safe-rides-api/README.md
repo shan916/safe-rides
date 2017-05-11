@@ -44,7 +44,7 @@ An embedded Tomcat server is automatically started on port 8080.
 	    "id": 2,
 	    "firstName": "Ryan",
 	    "lastName": "Long",
-	    "dlNumber": "E1111111",
+	    "dlChecked": "E1111111",
 	    "insuranceChecked": true,
 	    "active": false
 	  },
@@ -52,7 +52,7 @@ An embedded Tomcat server is automatically started on port 8080.
 	    "id": 3,
 	    "firstName": "Bryce",
 	    "lastName": "Hairabedian",
-	    "dlNumber": "E2222222",
+	    "dlChecked": "E2222222",
 	    "insuranceChecked": true,
 	    "active": true
 	  },
@@ -60,7 +60,7 @@ An embedded Tomcat server is automatically started on port 8080.
 	    "id": 4,
 	    "firstName": "Edward",
 	    "lastName": "Ozeruga",
-	    "dlNumber": "E3333333",
+	    "dlChecked": "E3333333",
 	    "insuranceChecked": true,
 	    "active": false
 	  },
@@ -68,7 +68,7 @@ An embedded Tomcat server is automatically started on port 8080.
 	    "id": 5,
 	    "firstName": "Justin",
 	    "lastName": "Mendiguarin",
-	    "dlNumber": "E4444444",
+	    "dlChecked": "E4444444",
 	    "insuranceChecked": true,
 	    "active": true
 	  },
@@ -76,7 +76,7 @@ An embedded Tomcat server is automatically started on port 8080.
 	    "id": 6,
 	    "firstName": "Nik",
 	    "lastName": "Sorvari",
-	    "dlNumber": "E5555555",
+	    "dlChecked": "E5555555",
 	    "insuranceChecked": true,
 	    "active": false
 	  }
