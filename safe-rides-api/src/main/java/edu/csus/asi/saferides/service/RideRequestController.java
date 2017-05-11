@@ -164,7 +164,7 @@ public class RideRequestController {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
         }
 
-        if (!StringUtils.isNumeric(rideRequest.getRequestorPhoneNumber()) || StringUtils.length(rideRequest.getOneCardId()) != 10) {
+        if (!StringUtils.isNumeric(rideRequest.getRequestorPhoneNumber()) || StringUtils.length(rideRequest.getRequestorPhoneNumber()) != 10) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Phone number is in an incorrect format"));
         }
 
