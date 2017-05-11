@@ -61,7 +61,7 @@ public class Driver {
     private String dlState;
 
     /**
-     * Driver's license number
+     * Indicates if driver's license has been checked
      */
     @Column(nullable = false)
     private Boolean dlChecked;
@@ -90,7 +90,7 @@ public class Driver {
      * be persisted in the database because they have different meanings.
      */
     @Transient
-    DriverStatus status;
+    private DriverStatus status;
 
     /**
      * Date of creation
@@ -166,7 +166,7 @@ public class Driver {
      * @param driverLastName   the driver's last name
      * @param phoneNumber      the phone number for the driver
      * @param dlState          the driver license state abbreviation
-     * @param dlChecked         the driver license number
+     * @param dlChecked        indicates if driver's license has been checked
      * @param insuranceChecked indicates if insurance has been checked for the drive
      * @param insuranceCompany the driver's insurance company
      * @param active           indicates if the driver is active
@@ -296,20 +296,20 @@ public class Driver {
     }
 
     /**
-     * Get driver's license number
+     * Get whether driver's license has been checked
      *
-     * @return driver's license number
+     * @return whether driver's license has been checked
      */
     public Boolean getDlChecked() {
         return dlChecked;
     }
 
     /**
-     * Set driver's license number
+     * Set whether driver's license has been checked
      *
-     * @param dlChecked driver's license number
+     * @param dlChecked whether driver's license has been checked
      */
-    public void setDlNumber(Boolean dlChecked) {
+    public void setDlChecked(Boolean dlChecked) {
         this.dlChecked = dlChecked;
     }
 
@@ -544,7 +544,7 @@ public class Driver {
      *
      * @return Driver string object
      */
-    @Override
+/*    @Override
     public String toString() {
         return "Driver{" +
                 "id=" + id +
@@ -567,4 +567,5 @@ public class Driver {
                 ", endOfNightOdo=" + endOfNightOdo +
                 '}';
     }
+    */
 }

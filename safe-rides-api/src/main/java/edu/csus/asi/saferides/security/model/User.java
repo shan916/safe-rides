@@ -1,11 +1,11 @@
 package edu.csus.asi.saferides.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -93,7 +93,7 @@ public class User {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        setPassword(password);
+        this.password = password;
         active = true;
     }
 
@@ -202,7 +202,7 @@ public class User {
     }
 
     /**
-     * Set user's active / active flag
+     * Set user's active flag
      *
      * @param active of user
      */

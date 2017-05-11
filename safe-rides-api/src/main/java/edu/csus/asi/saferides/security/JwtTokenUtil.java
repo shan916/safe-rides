@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.security;
 
 import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.utility.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 
 /**
@@ -65,7 +66,7 @@ public class JwtTokenUtil implements Serializable {
         try {
             final Claims claims = getClaimsFromToken(token);
             // cast claims to ArrayList
-            ArrayList authorityClaimsArray = (ArrayList) claims.get(CLAIM_KEY_AUTHORITIES);
+            ArrayList<AuthorityName> authorityClaimsArray = (ArrayList<AuthorityName>) claims.get(CLAIM_KEY_AUTHORITIES);
             // get authority item and add it to the authorityNames arraylist
             for (Object el : authorityClaimsArray) {
                 authorityNames.add(Enum.valueOf(AuthorityName.class, ((LinkedHashMap<String, String>) el).get("authority")));
@@ -86,7 +87,7 @@ public class JwtTokenUtil implements Serializable {
         LocalDateTime created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = LocalDateTime.ofEpochSecond((Long) claims.get(CLAIM_KEY_CREATED), 0, ZoneOffset.of(ZoneId.systemDefault().getId()));
+            created = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) claims.get(CLAIM_KEY_CREATED)), ZoneId.of(Util.APPLICATION_TIME_ZONE));
         } catch (Exception e) {
             created = null;
         }
@@ -157,7 +158,7 @@ public class JwtTokenUtil implements Serializable {
      * @return whether created date occurred before password change date (invalid)
      */
     private boolean isCreatedBeforeLastPasswordReset(LocalDateTime created, LocalDateTime lastPasswordReset) {
-        return (lastPasswordReset != null && created.compareTo(lastPasswordReset) < 0);
+        return (lastPasswordReset != null && lastPasswordReset.compareTo(created) > 0);
     }
 
     /**

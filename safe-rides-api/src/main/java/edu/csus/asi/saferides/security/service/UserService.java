@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.security.service;
 
+import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.dto.UserDto;
 import edu.csus.asi.saferides.security.mapper.UserMapper;
@@ -8,10 +9,13 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.utility.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,6 +130,7 @@ public class UserService {
             newUser.setPassword(existingUser.getPassword());
         } else {
             newUser.setPassword(argonPasswordEncoder.encode(newUser.getPassword()));
+            newUser.setLastPasswordResetDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE))); // invalidate existing token
         }
 
         return userRepository.save(newUser);
@@ -146,14 +151,27 @@ public class UserService {
         }
     }
 
-    public User createDriverUser() {
-        // TODO - create driver user
-        return null;
+    /**
+     * Creates a driver user from the given DriverDto
+     *
+     * @param driverDto the driverDto containing info for the driver
+     * @return the created user
+     */
+    public User createDriverUser(DriverDto driverDto) {
+        User user = new User(driverDto.getOneCardId(), driverDto.getDriverFirstName(), driverDto.getDriverLastName(), hashPassword(driverDto.getPassword()));
+
+        List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
+        user.setAuthorities(authorities);
+
+        return userRepository.save(user);
     }
 
-    public User updateDriverUser() {
-        // TODO - update driver user
-        return null;
+    public User updateDriverUser(DriverDto driverDto) {
+        User user = userRepository.findByUsernameIgnoreCase(driverDto.getOneCardId());
+        user.setFirstName(driverDto.getDriverFirstName());
+        user.setLastName(driverDto.getDriverLastName());
+        user.setPassword(hashPassword(driverDto.getPassword()));
+        return userRepository.save(user);
     }
 
     /**

@@ -42,41 +42,41 @@ An embedded Tomcat server is automatically started on port 8080.
 	[
 	  {
 	    "id": 2,
-	    "firstName": "Ryan",
-	    "lastName": "Long",
-	    "dlNumber": "E1111111",
+	    "driverFirstName": "Ryan",
+	    "driverLastName": "Long",
+	    "dlChecked": true,
 	    "insuranceChecked": true,
 	    "active": false
 	  },
 	  {
 	    "id": 3,
-	    "firstName": "Bryce",
-	    "lastName": "Hairabedian",
-	    "dlNumber": "E2222222",
+	    "driverFirstName": "Bryce",
+	    "driverLastName": "Hairabedian",
+	    "dlChecked": true,
 	    "insuranceChecked": true,
 	    "active": true
 	  },
 	  {
 	    "id": 4,
-	    "firstName": "Edward",
-	    "lastName": "Ozeruga",
-	    "dlNumber": "E3333333",
+	    "driverFirstName": "Edward",
+	    "driverLastName": "Ozeruga",
+	    "dlChecked": true,
 	    "insuranceChecked": true,
 	    "active": false
 	  },
 	  {
 	    "id": 5,
-	    "firstName": "Justin",
-	    "lastName": "Mendiguarin",
-	    "dlNumber": "E4444444",
+	    "driverFirstName": "Justin",
+	    "driverLastName": "Mendiguarin",
+	    "dlChecked": true,
 	    "insuranceChecked": true,
 	    "active": true
 	  },
 	  {
 	    "id": 6,
-	    "firstName": "Nik",
-	    "lastName": "Sorvari",
-	    "dlNumber": "E5555555",
+	    "driverFirstName": "Nik",
+	    "driverLastName": "Sorvari",
+	    "dlChecked": true,
 	    "insuranceChecked": true,
 	    "active": false
 	  }

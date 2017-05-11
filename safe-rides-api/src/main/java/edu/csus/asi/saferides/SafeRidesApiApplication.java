@@ -66,7 +66,7 @@ public class SafeRidesApiApplication {
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
                                   ConfigurationRepository configurationRepository, ArgonPasswordEncoder argonPasswordEncoder) {
         return (args) -> {
-        	
+
             // save a few drivers
             Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", true, true, "Farmers", true);
             Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", "CA", true, true, "Farmers", true);
