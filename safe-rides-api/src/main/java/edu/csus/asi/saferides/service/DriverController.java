@@ -143,7 +143,7 @@ public class DriverController {
         if (result == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(driverMapper.map(result, DriverDto.class));
         }
     }
 
@@ -428,7 +428,7 @@ public class DriverController {
         if (driver == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(driver);
+            return ResponseEntity.ok(driverMapper.map(driver, DriverDto.class));
         }
     }
 
