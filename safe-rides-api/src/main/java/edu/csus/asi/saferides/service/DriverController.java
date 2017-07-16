@@ -109,15 +109,15 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public Iterable<Driver> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
+    public Iterable<DriverDto> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
         if (active != null) {
             if (active) {
-                return driverRepository.findByActiveTrueOrderByModifiedDateDesc();
+                return mapDriverListToDtoList(driverRepository.findByActiveTrueOrderByModifiedDateDesc());
             } else {
-                return driverRepository.findByActiveFalseOrderByModifiedDateDesc();
+                return mapDriverListToDtoList(driverRepository.findByActiveFalseOrderByModifiedDateDesc());
             }
         } else {
-            return driverRepository.findAllByOrderByModifiedDateDesc();
+            return mapDriverListToDtoList(driverRepository.findAllByOrderByModifiedDateDesc());
         }
     }
 
@@ -596,6 +596,14 @@ public class DriverController {
         }
 
         return errorMessages;
+    }
+
+    private List<DriverDto> mapDriverListToDtoList(List<Driver> driverList) {
+        List<DriverDto> dtoList = new ArrayList<>();
+        for(int i = 0; i < driverList.size(); i++) {
+            dtoList.add(driverMapper.map(driverList.get(i), DriverDto.class));
+        }
+        return dtoList;
     }
 
 }
