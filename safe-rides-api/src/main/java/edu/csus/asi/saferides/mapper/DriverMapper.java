@@ -17,7 +17,6 @@ public class DriverMapper extends ConfigurableMapper {
                 .field("driverFirstName", "driverFirstName")
                 .field("driverLastName", "driverLastName")
                 .field("phoneNumber", "phoneNumber")
-                .field("dlState", "dlState")
                 .field("dlChecked", "dlChecked")
                 .field("insuranceChecked", "insuranceChecked")
                 .field("insuranceCompany", "insuranceCompany")

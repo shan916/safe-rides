@@ -570,9 +570,6 @@ public class DriverController {
         if (!StringUtils.isNumeric(driver.getPhoneNumber()) || StringUtils.length(driver.getPhoneNumber()) != 10) {
             errorMessages.add("Invalid phone number");
         }
-        if (StringUtils.isEmpty(driver.getDlState())) {
-            errorMessages.add("Driver license state cannot be empty");
-        }
         if (StringUtils.isEmpty(driver.getInsuranceCompany())) {
             errorMessages.add("Insurance cannot be empty");
         }

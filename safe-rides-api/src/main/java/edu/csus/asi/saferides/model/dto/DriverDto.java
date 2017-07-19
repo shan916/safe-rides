@@ -14,7 +14,6 @@ public class DriverDto {
     private String driverFirstName;
     private String driverLastName;
     private String phoneNumber;
-    private String dlState;
     private Boolean dlChecked;
     private Boolean insuranceChecked;
     private String insuranceCompany;
@@ -59,14 +58,6 @@ public class DriverDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getDlState() {
-        return dlState;
-    }
-
-    public void setDlState(String dlState) {
-        this.dlState = dlState;
     }
 
     public Boolean getDlChecked() {
