@@ -1,7 +1,9 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.mapper.ConfigurationMapper;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.ResponseMessage;
+import edu.csus.asi.saferides.model.dto.ConfigurationDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
@@ -10,9 +12,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 /**
  * Rest API controller for the Configuration resource
@@ -24,6 +25,12 @@ public class ConfigurationController {
 
     @Autowired
     ConfigurationRepository configurationRepository;
+
+    /**
+     * a singleton for the RideRequestMapper
+     */
+    @Autowired
+    private ConfigurationMapper configurationMapper;
 
     /**
      * Check if the application is accepting ride requests at this time
@@ -54,15 +61,17 @@ public class ConfigurationController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> current() {
-        return ResponseEntity.ok(configurationRepository.findOne(1));
+    public ResponseEntity<ConfigurationDto> current() {
+        Configuration configuration = configurationRepository.findOne(1);
+        ConfigurationDto configurationDto = configurationMapper.map(configuration, ConfigurationDto.class);
+        return ResponseEntity.ok(configurationDto);
     }
 
     /**
      * Update configuration properties
      *
-     * @param configuration of the application to be updated to
-     * @return whether the application is accepting ride requests
+     * @param configurationDto configuration of the application to be updated to
+     * @return configuration update status
      */
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('COORDINATOR')")
@@ -72,31 +81,11 @@ public class ConfigurationController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> updateConfiguration(@RequestBody Configuration configuration) {
-        // Validate
-        boolean valid = true;
-        ArrayList<String> validationMessages = new ArrayList<String>();
+    public ResponseEntity<?> updateConfiguration(@Validated @RequestBody ConfigurationDto configurationDto) {
+        Configuration configuration = configurationMapper.map(configurationDto, Configuration.class);
 
-        if (configuration.getStartTime() == null) {
-            valid = false;
-            validationMessages.add("Start time cannot be empty.");
-        }
-        if (configuration.getEndTime() == null) {
-            valid = false;
-            validationMessages.add("End time cannot be empty.");
-        }
-        if (configuration.getDaysOfWeek() == null || configuration.getDaysOfWeek().size() == 0) {
-            valid = false;
-            validationMessages.add("Days of week cannot be empty.");
-        }
-        if (configuration.getStartTime() != null && configuration.getEndTime() != null &&
-                configuration.getStartTime().compareTo(configuration.getEndTime()) == 0) {
-            valid = false;
-            validationMessages.add("Start date cannot match end date.");
-        }
-        if (!valid) {
-            return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", validationMessages)));
-        }
+        // the configuration item should always be at id 1. there should not be any other rows
+        configuration.setId(1);
 
         configurationRepository.save(configuration);
 
