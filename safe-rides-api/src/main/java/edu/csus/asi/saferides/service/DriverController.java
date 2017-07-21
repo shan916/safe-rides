@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -109,7 +110,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public Iterable<DriverDto> retrieveAll(@RequestParam(value = "active", required = false) Boolean active) {
+    public Iterable<DriverDto> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
         if (active != null) {
             if (active) {
                 return mapDriverListToDtoList(driverRepository.findByActiveTrueOrderByModifiedDateDesc());
@@ -162,7 +163,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@RequestBody DriverDto driverDto) {
+    public ResponseEntity<?> save(@Validated @RequestBody DriverDto driverDto) {
         Driver driver = driverMapper.map(driverDto, Driver.class);
 
         List<String> errorMessages = validateDriver(driver);
@@ -211,7 +212,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(@PathVariable Long id, @RequestBody DriverDto driverDto) {
+    public ResponseEntity<?> save(@PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
         Driver updatedDriver = driverMapper.map(driverDto, Driver.class);
 
         if (!updatedDriver.getId().equals(id)) {
@@ -271,7 +272,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> endOfNight(HttpServletRequest request, @RequestBody Long endNightOdo) {
+    public ResponseEntity<?> endOfNight(HttpServletRequest request, @Validated @RequestBody Long endNightOdo) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
@@ -432,8 +433,11 @@ public class DriverController {
         }
     }
 
-    /*
+    /**
      * POST /drivers/{id}/rides
+     *
+     * @param id ID of driver who is being assigned a ride
+     * @return URI to updated driver or a message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{id}/rides")
     @ApiOperation(value = "assignRideRequest", nickname = "assignRideRequest", notes = "Assigns a ride request to the driver")
@@ -442,7 +446,7 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+    public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @Validated @RequestBody RideRequest rideRequest) {
         Driver driver = driverRepository.findOne(id);
         if (driver == null) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Driver could not be found"));
@@ -597,7 +601,7 @@ public class DriverController {
 
     private List<DriverDto> mapDriverListToDtoList(List<Driver> driverList) {
         List<DriverDto> dtoList = new ArrayList<>();
-        for(int i = 0; i < driverList.size(); i++) {
+        for (int i = 0; i < driverList.size(); i++) {
             dtoList.add(driverMapper.map(driverList.get(i), DriverDto.class));
         }
         return dtoList;

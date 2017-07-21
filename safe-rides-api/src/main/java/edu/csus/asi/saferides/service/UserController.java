@@ -29,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -252,7 +253,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@Validated @RequestBody UserDto userDto) {
         if (userDto.getPassword() == null || !Util.isPasswordValid(userDto.getPassword())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Password does not meet security requirements"));
         }
@@ -292,7 +293,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @Validated @RequestBody UserDto userDto) {
 
         if (!userDto.getId().equals(id)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Id mismatch"));
