@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * CANCELEDBYRIDER: ride request is cancelled by the rider.
  * CANCELEDOTHER: ride request is cancelled by another authority.
  */
-
 public enum RideRequestStatus {
     UNASSIGNED,
     ASSIGNED,
@@ -26,9 +25,9 @@ public enum RideRequestStatus {
     CANCELEDOTHER;
 
     /**
-     * Deserializes json value
+     * Deserializes Json value
      *
-     * @param value the json value
+     * @param value the Json value
      * @return the RideRequestStatus for the given value
      */
     @JsonCreator
@@ -45,4 +44,5 @@ public enum RideRequestStatus {
 
         return null;
     }
+
 }

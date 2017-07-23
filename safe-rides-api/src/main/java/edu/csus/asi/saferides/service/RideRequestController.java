@@ -1,10 +1,12 @@
 package edu.csus.asi.saferides.service;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
+import edu.csus.asi.saferides.model.views.JsonViews;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
@@ -222,6 +224,7 @@ public class RideRequestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/mine")
     @PreAuthorize("hasRole('RIDER')")
+    @JsonView(JsonViews.Rider.class)
     @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns authenticated user's current ride request...")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
