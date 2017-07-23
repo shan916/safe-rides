@@ -16,13 +16,13 @@ public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
     /**
      * serialization implementation
      *
-     * @param arg0 LocalDateTime object to serialize; can not be null
-     * @param arg1 JsonGenerator used to output resulting Json content
-     * @param arg2 SerializerProvider that can be used to get serializers for serializing Objects value contains, if any
+     * @param localDateTime LocalDateTime object to serialize; can not be null
+     * @param jsonGenerator JsonGenerator used to output resulting Json content
+     * @param serializerProvider SerializerProvider that can be used to get serializers for serializing Objects value contains, if any
      * @throws IOException IOException
      */
     @Override
-    public void serialize(LocalDateTime arg0, JsonGenerator arg1, SerializerProvider arg2) throws IOException {
-        arg1.writeNumber(arg0.toInstant(ZoneId.of(Util.APPLICATION_TIME_ZONE).getRules().getOffset(arg0)).toEpochMilli());
+    public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeNumber(localDateTime.toInstant(ZoneId.of(Util.APPLICATION_TIME_ZONE).getRules().getOffset(localDateTime)).toEpochMilli());
     }
 }

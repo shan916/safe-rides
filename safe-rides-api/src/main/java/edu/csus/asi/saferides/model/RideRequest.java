@@ -1,14 +1,8 @@
 package edu.csus.asi.saferides.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
-import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -39,67 +33,59 @@ public class RideRequest {
     /**
      * The ride requestor's One Card ID
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 9)
     private String oneCardId;
 
     /**
      * The date the ride was requested
      */
     @Column(updatable = false)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime requestDate;
 
     /**
      * The last modified timestamp for the ride
      */
     @Column
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
     @Column
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime assignedDate;
 
     /**
      * Ride requestor's first name
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String requestorFirstName;
 
     /**
      * Ride requestor's last name
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String requestorLastName;
 
     /**
      * Ride requestor's phone number
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String requestorPhoneNumber;
 
     /**
      * Number of passengers including the ride requestor
      */
     @Column(nullable = false)
-    @Min(1)
-    @Max(3)
     private int numPassengers;
 
     /**
-     * The driver's start odometer at the time of assignment
+     * The odometer reading of the driver's vehicle at the beginning of the ride
      */
     @Column
     private int startOdometer;
 
     /**
-     * The driver's end odometer at the time of ride completion
+     * The odometer reading of the driver's vehicle at the time of ride completion
      */
     @Column
     private int endOdometer;
@@ -108,36 +94,42 @@ public class RideRequest {
      * Line 1 of rider's pickup address
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String pickupLine1;
 
     /**
      * Line 2 of rider's pickup address
      */
     @Column
+    // TODO: length of column?
     private String pickupLine2;
 
     /**
      * City of rider's pickup location
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String pickupCity;
 
     /**
      * Line 1 of rider's drop-off address
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String dropoffLine1;
 
     /**
      * Line 2 of rider's drop-off address
      */
     @Column
+    // TODO: length of column?
     private String dropoffLine2;
 
     /**
      * City of rider's dropoff location
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String dropoffCity;
 
     /**
@@ -150,18 +142,21 @@ public class RideRequest {
      * Reason for cancellation if ride request is cancelled
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String cancelMessage;
 
     /**
      * Optional message to driver
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String messageToDriver;
 
     /**
      * The estimated time for the driver to arrive at the pickup location after the ride has been ASSIGNED
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String estimatedTime;
 
     /**

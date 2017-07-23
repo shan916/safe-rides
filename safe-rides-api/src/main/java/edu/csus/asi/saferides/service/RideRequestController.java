@@ -241,7 +241,6 @@ public class RideRequestController {
             return ResponseEntity.noContent().build();
         } else {
             // TODO this can return a ride request that is old. (but will be the latest)
-            // ALSO TODO change the response to a DTO rather than the full ride request
             RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
             return ResponseEntity.ok(dto);
         }
