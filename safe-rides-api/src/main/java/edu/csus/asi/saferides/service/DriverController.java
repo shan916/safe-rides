@@ -141,7 +141,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Driver.class),
+            @ApiResponse(code = 200, message = "Success", response = DriverDto.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
@@ -422,7 +422,7 @@ public class DriverController {
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "getDriver", nickname = "getDriver", notes = "Retrieves current driver to the authenticated driver")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
+            @ApiResponse(code = 200, message = "Success", response = DriverDto.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
