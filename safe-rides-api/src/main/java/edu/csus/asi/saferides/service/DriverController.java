@@ -1,8 +1,10 @@
 package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.mapper.DriverLocationMapper;
 import edu.csus.asi.saferides.mapper.DriverMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
+import edu.csus.asi.saferides.model.dto.DriverLocationDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
@@ -64,6 +66,12 @@ public class DriverController {
      */
     @Autowired
     private DriverMapper driverMapper;
+
+    /**
+     * a singleton for the DriverLocationMapper
+     */
+    @Autowired
+    private DriverLocationMapper driverLocationMapper;
 
     /**
      * a singleton for the ConfigurationRepository
@@ -474,8 +482,8 @@ public class DriverController {
     /**
      * POST /drivers/location
      *
-     * @param request        client request (contains the Authorization header)
-     * @param driverLocation the new driver location
+     * @param request           client request (contains the Authorization header)
+     * @param driverLocationDto the new driver location
      * @return the updated driver location or a message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/location")
@@ -486,8 +494,8 @@ public class DriverController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> setDriverLocation(HttpServletRequest request, @RequestBody DriverLocation
-            driverLocation) {
+    public ResponseEntity<?> setDriverLocation(HttpServletRequest request, @Validated @RequestBody DriverLocationDto
+            driverLocationDto) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
@@ -495,13 +503,15 @@ public class DriverController {
 
         Driver driver = driverRepository.findByUser(user);
 
+        DriverLocation driverLocation = driverLocationMapper.map(driverLocationDto, DriverLocation.class);
+
         if (driver == null) {
             return ResponseEntity.badRequest().body(new ResponseMessage("You cannot update your location as you are not a driver."));
         } else {
             driverLocation.setDriver(driver);
             driverLocationRepository.save(driverLocation);
 
-            return ResponseEntity.ok(driverLocation);
+            return ResponseEntity.ok(driverLocationDto);
         }
     }
 
@@ -514,7 +524,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
     @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 200, message = "Success", response = DriverLocationDto.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
@@ -524,7 +534,10 @@ public class DriverController {
         if (loc == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(loc);
+
+        DriverLocationDto driverLocationDto = driverLocationMapper.map(loc, DriverLocationDto.class);
+
+        return ResponseEntity.ok(driverLocationDto);
     }
 
     /**
