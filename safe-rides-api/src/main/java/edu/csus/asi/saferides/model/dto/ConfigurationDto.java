@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -13,25 +15,29 @@ public class ConfigurationDto {
     /**
      * When to start accepting new ride requests
      */
-    @NotNull
+    @ApiModelProperty(value = "The start time when ride requests will be accepted.", required = true)
+    @NotNull(message = "The start time cannot be null.")
     private LocalTime startTime;
 
     /**
      * When to stop accepting new ride requests
      */
-    @NotNull
+    @ApiModelProperty(value = "The time when ride requests will no longer be accepted.", required = true)
+    @NotNull(message = "The end time cannot be null.")
     private LocalTime endTime;
 
     /**
      * Days of week program is active
      */
-    @NotNull
+    @ApiModelProperty(value = "A list of the days of the week the program will start accepting rides on.", required = true)
+    @NotNull(message = "The days of week the Safe Rides program will be active on cannot be null.")
     private List<DayOfWeek> daysOfWeek;
 
     /**
      * active flag for a manual override
      */
-    @NotNull
+    @ApiModelProperty(value = "Signifies normal operation. If active is false, then Safe Rides is not accepting ride requests even if it is during an active time range.", required = true)
+    @NotNull(message = "The active flag cannot be null.")
     private Boolean active;
 
     /**

@@ -7,8 +7,6 @@ import edu.csus.asi.saferides.model.dto.ConfigurationDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,11 +37,6 @@ public class ConfigurationController {
      */
     @RequestMapping(value = "/isLive", method = RequestMethod.GET)
     @ApiOperation(value = "isLive", nickname = "Accepting Ride Requests?", notes = "Check if a ride can be requested at this time")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = boolean.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public boolean isLive() {
         return Util.isAcceptingRideRequests(configurationRepository.findOne(1));
     }
@@ -56,11 +49,6 @@ public class ConfigurationController {
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     @PreAuthorize("hasRole('COORDINATOR')")
     @ApiOperation(value = "current", nickname = "Current configuration", notes = "Get the application's current configuration")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = boolean.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<ConfigurationDto> current() {
         Configuration configuration = configurationRepository.findOne(1);
         ConfigurationDto configurationDto = configurationMapper.map(configuration, ConfigurationDto.class);
@@ -76,11 +64,6 @@ public class ConfigurationController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('COORDINATOR')")
     @ApiOperation(value = "updateConfiguration", nickname = "Update configuration", notes = "Update the application configuration")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = boolean.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> updateConfiguration(@Validated @RequestBody ConfigurationDto configurationDto) {
         Configuration configuration = configurationMapper.map(configurationDto, Configuration.class);
 
