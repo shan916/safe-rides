@@ -15,8 +15,6 @@ import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.UserService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,11 +111,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Driver.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public Iterable<DriverDto> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
         if (active != null) {
             if (active) {
@@ -140,12 +133,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = DriverDto.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> retrieve(@PathVariable Long id) {
         Driver result = driverRepository.findOne(id);
 
@@ -166,11 +153,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@Validated @RequestBody DriverDto driverDto) {
         Driver driver = driverMapper.map(driverDto, Driver.class);
 
@@ -215,11 +197,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates a driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
         Driver updatedDriver = driverMapper.map(driverDto, Driver.class);
 
@@ -275,11 +252,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.PUT, value = "/endofnight")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "saveEndNightOdo", nickname = "saveEndNightOdo", notes = "Updates a driver's end of night odometer")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> endOfNight(HttpServletRequest request, @Validated @RequestBody Long endNightOdo) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
@@ -307,11 +279,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     @ApiOperation(value = "delete", nickname = "delete", notes = "Deletes a driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (driverRepository.findOne(id) == null) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Driver does not exist"));
@@ -331,11 +298,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/rides")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to a driver with the given id")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> retrieveRide(@PathVariable Long id,
                                           @RequestParam(value = "status", required = false) RideRequestStatus status) {
         Driver driver = driverRepository.findOne(id);
@@ -353,11 +315,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/rides")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to the authenticated driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> retrieveRides(HttpServletRequest request,
                                            @RequestParam(value = "status", required = false) RideRequestStatus status) {
         String authToken = request.getHeader(this.tokenHeader);
@@ -379,11 +336,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/currentride")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "currentRide", nickname = "currentRide", notes = "Retrieves currently assigned ride to the authenticated driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> getDriverCurrentRide(HttpServletRequest request) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
@@ -421,11 +373,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/me")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "getDriver", nickname = "getDriver", notes = "Retrieves current driver to the authenticated driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = DriverDto.class, responseContainer = "List"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> getMe(HttpServletRequest request) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
@@ -449,11 +396,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/{id}/rides")
     @ApiOperation(value = "assignRideRequest", nickname = "assignRideRequest", notes = "Assigns a ride request to the driver")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> assignRideRequest(@PathVariable Long id, @Validated @RequestBody RideRequest rideRequest) {
         Driver driver = driverRepository.findOne(id);
         if (driver == null) {
@@ -489,11 +431,6 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.POST, value = "/location")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "setDriverLocation", nickname = "setDriverLocation", notes = "Authenticated driver updates their latest/current location.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> setDriverLocation(HttpServletRequest request, @Validated @RequestBody DriverLocationDto
             driverLocationDto) {
         String authToken = request.getHeader(this.tokenHeader);
@@ -523,11 +460,6 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
     @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = DriverLocationDto.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> getDriverLocation(@PathVariable Long id) {
         Driver driver = driverRepository.findOne(id);
         DriverLocation loc = driverLocationRepository.findTop1ByDriverOrderByCreatedDateDesc(driver);
