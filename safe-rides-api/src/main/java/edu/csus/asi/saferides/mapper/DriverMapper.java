@@ -6,6 +6,9 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
 
+/**
+ * Maps a Driver object to a DriverDto object and vice-versa
+ */
 @Component
 public class DriverMapper extends ConfigurableMapper {
 
@@ -17,7 +20,6 @@ public class DriverMapper extends ConfigurableMapper {
                 .field("driverFirstName", "driverFirstName")
                 .field("driverLastName", "driverLastName")
                 .field("phoneNumber", "phoneNumber")
-                .field("dlState", "dlState")
                 .field("dlChecked", "dlChecked")
                 .field("insuranceChecked", "insuranceChecked")
                 .field("insuranceCompany", "insuranceCompany")

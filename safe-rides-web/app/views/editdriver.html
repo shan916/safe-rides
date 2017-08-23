@@ -67,32 +67,6 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="dlChecked">DL Checked</label>
-                            <input id="dlChecked" name="dlChecked" type="checkbox" required
-                                   ng-model="ctrl.driver.dlChecked">
-                            <div ng-messages="driverForm.dlChecked.$dirty && driverForm.dlChecked.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="state">DL State</label>
-                            <select name="state" id="state" class="form-control" ng-model="ctrl.driver.dlState"
-                                    required>
-                                <option ng-repeat="state in ctrl.stateChoices" value={{state}}>{{state}}</option>
-                            </select>
-                            <div ng-messages="driverForm.state.$dirty && driverForm.state.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label for="insuranceCompany">Insurance Company</label>
                             <input id="insuranceCompany" name="insuranceCompany" type="text" class="form-control"
                                    required placeholder="Enter driver's insurance company"
@@ -106,6 +80,17 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
+                            <label for="dlChecked">DL Checked</label>
+                            <input id="dlChecked" name="dlChecked" type="checkbox" required
+                                   ng-model="ctrl.driver.dlChecked">
+                            <div ng-messages="driverForm.dlChecked.$dirty && driverForm.dlChecked.$error">
+                                <div class="input-error" ng-message="required">* required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
                             <label for="password">New Password</label>
                             <input id="password" name="password" type="password" class="form-control"
                                    placeholder="New password" ng-model="ctrl.driver.password" ng-minlength="8">
@@ -115,7 +100,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label for="confirmPassword">Confirm New Password</label>
                             <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
@@ -128,6 +113,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <div class="row" ng-hide="ctrl.driver.insuranceChecked">
                     <div class="col-sm-4">

@@ -10,7 +10,6 @@
 angular.module('safeRidesWebApp')
     .factory('Settings', function () {
         function Settings(data) {
-            this.id = undefined;
             this.startTime = undefined;
             this.endTime = undefined;
             this.daysOfWeek = undefined;
