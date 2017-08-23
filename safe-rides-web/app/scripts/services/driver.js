@@ -16,7 +16,6 @@ angular.module('safeRidesWebApp')
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
             this.phoneNumber = undefined;
-            this.dlState = undefined;
             this.dlChecked = undefined;
             this.insuranceChecked = undefined;
             this.insuranceCompany = undefined;

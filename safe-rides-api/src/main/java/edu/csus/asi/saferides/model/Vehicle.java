@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * Model object for Vehicle Entity
@@ -30,6 +31,7 @@ public class Vehicle {
      * Vehicle's make
      */
     @Column(nullable = false)
+    @Size(min = 3)
     private String make;
 
     /**
@@ -42,6 +44,7 @@ public class Vehicle {
      * Vehicle's year
      */
     @Column(nullable = false, length = 4)
+    @Size(min = 4, max = 4)
     private String year;
 
     /**
@@ -54,6 +57,7 @@ public class Vehicle {
      * Vehicle's color
      */
     @Column(nullable = false)
+    @Size(min = 3, max = 30)
     private String color;
 
     /**
