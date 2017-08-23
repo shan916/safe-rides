@@ -55,12 +55,6 @@ public class Driver {
     private String phoneNumber;
 
     /**
-     * Abbreviation name of the U.S. state on the driver's license
-     */
-    @Column(nullable = false, length = 2)
-    private String dlState;
-
-    /**
      * Indicates if driver's license has been checked
      */
     @Column(nullable = false)
@@ -165,20 +159,18 @@ public class Driver {
      * @param driverFirstName  the driver's first name
      * @param driverLastName   the driver's last name
      * @param phoneNumber      the phone number for the driver
-     * @param dlState          the driver license state abbreviation
      * @param dlChecked        indicates if driver's license has been checked
      * @param insuranceChecked indicates if insurance has been checked for the drive
      * @param insuranceCompany the driver's insurance company
      * @param active           indicates if the driver is active
      */
-    public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
+    public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber,
                   Boolean dlChecked, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
         super();
         this.oneCardId = oneCardId;
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
         this.phoneNumber = phoneNumber;
-        this.dlState = dlState;
         this.dlChecked = dlChecked;
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
@@ -275,24 +267,6 @@ public class Driver {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    /**
-     * Get abbreviation name of the U.S. state on the driver's license
-     *
-     * @return abbreviation name of the U.S. state on the driver's license
-     */
-    public String getDlState() {
-        return dlState;
-    }
-
-    /**
-     * Set abbreviation name of the U.S. state on the driver's license
-     *
-     * @param dlState abbreviation name of the U.S. state on the driver's license
-     */
-    public void setDlState(String dlState) {
-        this.dlState = dlState;
     }
 
     /**
