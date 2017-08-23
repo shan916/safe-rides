@@ -2,6 +2,7 @@ package edu.csus.asi.saferides.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.views.JsonViews;
 import io.swagger.annotations.ApiModelProperty;
@@ -41,6 +42,7 @@ public class RideRequestDto {
 
     @ApiModelProperty(value = "The date the ride was requested", readOnly = true)
     @JsonView(JsonViews.Rider.class)
+    @JsonDeserialize
     private LocalDateTime requestDate;
 
     @ApiModelProperty(value = "The date the ride request was last modified", readOnly = true)
@@ -56,26 +58,26 @@ public class RideRequestDto {
     @ApiModelProperty(value = "The ride requestor's first name")
     @NotNull(message = "requestorFirstName must not be null")
     @Size(min = 1, max = 30, message = "requestorFirstName must be between 1 and 30 characters")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String requestorFirstName;
 
     @ApiModelProperty(value = "The ride requestor's last name")
     @NotNull(message = "requestorLastName must not be null")
     @Size(min = 1, max = 30, message = "requestorLastName must be between 1 and 30 characters")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String requestorLastName;
 
     @ApiModelProperty(value = "The ride requestor's 10 digit phone number", example = "9161234567")
     @NotNull(message = "requestorPhoneNumber must not be null")
     @Size(min = 10, max = 10, message = "requestorPhoneNumber must be 10 digits")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String requestorPhoneNumber;
 
     @ApiModelProperty(value = "The number of passengers including the ride requestor", allowableValues = "range[1, 3]")
     @NotNull(message = "numPassengers must not be null")
     @Min(value = 1, message = "numPassengers must be greater than or equal to 1")
     @Max(value = 3, message = "numPassenger must be less than or equal to 3")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private Integer numPassengers;
 
     // TODO: min, max values?
@@ -90,33 +92,33 @@ public class RideRequestDto {
 
     @ApiModelProperty(value = "Line 1 of rider's pickup address")
     @NotNull(message = "pickupLine1 must not be null")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     // TODO: min, max size?
     private String pickupLine1;
 
     @ApiModelProperty(value = "Line 2 of rider's pickup address")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String pickupLine2;
 
     @ApiModelProperty(value = "City of rider's pickup location")
     @NotNull(message = "pickupCity must not be null")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     // TODO: min, max size?
     private String pickupCity;
 
     @ApiModelProperty(value = "Line 1 of rider's dropoff address")
     @NotNull(message = "dropoffLine1 must not be null")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     // TODO: min, max size?
     private String dropoffLine1;
 
     @ApiModelProperty(value = "Line 2 of rider's dropoff address")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String dropoffLine2;
 
     @ApiModelProperty(value = "City of rider's dropoff location")
     @NotNull(message = "dropoffCity must not be null")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     // TODO: min, max size?
     private String dropoffCity;
 
@@ -128,7 +130,7 @@ public class RideRequestDto {
 
     @ApiModelProperty(value = "The reason for cancellation if ride request is cancelled")
     @Size(max = 255, message = "cancelMessage must be less than 255 characters")
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String cancelMessage;
 
     @ApiModelProperty(value = "An optional message to the driver")
@@ -159,6 +161,36 @@ public class RideRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(JsonViews.Coordinator.class)
     private Double dropoffLongitude;
+
+    @ApiModelProperty(value = "The assigned driver's first name", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String driverName;
+
+    @ApiModelProperty(value = "The assigned driver's vehicle year", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String vehicleYear;
+
+    @ApiModelProperty(value = "The assigned driver's vehicle color", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String vehicleColor;
+
+    @ApiModelProperty(value = "The assigned driver's vehicle make", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String vehicleMake;
+
+    @ApiModelProperty(value = "The assigned driver's vehicle model", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String vehicleModel;
+
+    @ApiModelProperty(value = "The assigned driver's vehicle license plate", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String vehicleLicensePlate;
 
     public Long getId() {
         return id;
@@ -406,6 +438,54 @@ public class RideRequestDto {
 
     public void setDropoffLongitude(Double dropoffLongitude) {
         this.dropoffLongitude = dropoffLongitude;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getVehicleYear() {
+        return vehicleYear;
+    }
+
+    public void setVehicleYear(String vehicleYear) {
+        this.vehicleYear = vehicleYear;
+    }
+
+    public String getVehicleColor() {
+        return vehicleColor;
+    }
+
+    public void setVehicleColor(String vehicleColor) {
+        this.vehicleColor = vehicleColor;
+    }
+
+    public String getVehicleMake() {
+        return vehicleMake;
+    }
+
+    public void setVehicleMake(String vehicleMake) {
+        this.vehicleMake = vehicleMake;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public String getVehicleLicensePlate() {
+        return vehicleLicensePlate;
+    }
+
+    public void setVehicleLicensePlate(String vehicleLicensePlate) {
+        this.vehicleLicensePlate = vehicleLicensePlate;
     }
 
     @Override

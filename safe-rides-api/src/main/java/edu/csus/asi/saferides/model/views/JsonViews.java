@@ -8,10 +8,10 @@ public class JsonViews {
     public interface Rider {
     }
 
-    public interface Driver {
+    public interface Driver extends Rider {
     }
 
-    public interface Coordinator {
+    public interface Coordinator extends Driver {
     }
 
 }

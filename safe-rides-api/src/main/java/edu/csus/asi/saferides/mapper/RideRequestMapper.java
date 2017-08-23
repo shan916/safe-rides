@@ -44,6 +44,12 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("pickupLongitude", "pickupLongitude")
                 .field("dropoffLatitude", "dropoffLatitude")
                 .field("dropoffLongitude", "dropoffLongitude")
+                .field("driver.driverFirstName", "driverName")
+                .field("driver.vehicle.year", "vehicleYear")
+                .field("driver.vehicle.color", "vehicleColor")
+                .field("driver.vehicle.make", "vehicleMake")
+                .field("driver.vehicle.model", "vehicleModel")
+                .field("driver.vehicle.licensePlate", "vehicleLicensePlate")
                 .byDefault()
                 .register();
         factory.getConverterFactory().registerConverter(new PassThroughConverter(LocalDateTime.class));
