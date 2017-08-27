@@ -1,0 +1,68 @@
+<div class="container">
+
+	<!-- Yearly stats section -->
+	<div class="row">
+		<h1 align="center">Yearly Totals as of: </h1>
+		<div class="col-md-4">
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">
+					Total Rides
+				</div>
+				<div class="panel-body text-center">
+					<h2>226</h2>
+				</div>
+			</div><!--end panel-->
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-warning ">
+				<div class="panel-heading text-center">
+					Total Miles
+				</div>
+				<div class="panel-body text-center">
+					<h2>420</h2>
+				</div>
+			</div><!--end panel-->
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-danger ">
+				<div class="panel-heading text-center">
+					Total Drivers
+				</div>
+				<div class="panel-body text-center">
+					<h2>32</h2>
+				</div>
+			</div><!--end panel-->
+		</div>
+
+	</div><!-- end yearly stats-->
+
+	<hr>
+
+	<!-- Monthly stats section -->
+	<div class="row">
+
+		<h1 align="center">Monthly</h1>
+		<div id="monthly_table"></div>
+		<div>
+			<h2>Select a field from table to view on bar graph</h2>
+
+			<div class="form-group text-center">
+				<select name="barChartDropdown" id="barChartDropdown" class="form-control"
+						ng-model="ctrl.userSelected">
+					<option ng-repeat="option in ctrl.barChartOptions" value="{{option}}">{{option}}</option>
+				</select>
+				<button class="btn btn-primary" ng-click="ctrl.showBarChart()">Submit</button>
+			</div>
+
+			<div id="monthly_barchart" style="width: 1200px; height: 600px;"></div>
+		</div>
+	</div>	<!-- end Monthly stats section -->
+
+	<hr>
+
+	<!-- Driver Stats section -->
+	<div class="row">
+		<h1 align="center">Drivers</h1>
+	</div>	<!-- end Driver Stats section -->
+
+</div><!-- end container -->

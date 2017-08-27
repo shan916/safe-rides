@@ -182,6 +182,16 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('reports', {
+                url: '/reports',
+                templateUrl: 'views/reportsdashboard.html',
+                controller: 'ReportsdashboardCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
+            })
             .state('manageCoordinators', {
                 url: '/manage-coordinators',
                 templateUrl: 'views/manage-coordinators.html',
