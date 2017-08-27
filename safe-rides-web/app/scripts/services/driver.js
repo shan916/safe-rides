@@ -11,12 +11,12 @@ angular.module('safeRidesWebApp')
     .factory('Driver', function (Vehicle) {
 
         function Driver(data) {
-            this.csusId = undefined;
+            this.oneCardId = undefined;
+            this.password = undefined;
             this.driverFirstName = undefined;
             this.driverLastName = undefined;
             this.phoneNumber = undefined;
-            this.dlState = undefined;
-            this.dlNumber = undefined;
+            this.dlChecked = undefined;
             this.insuranceChecked = undefined;
             this.insuranceCompany = undefined;
             this.active = true;

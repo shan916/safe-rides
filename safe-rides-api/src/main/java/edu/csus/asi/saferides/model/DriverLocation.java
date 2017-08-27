@@ -1,9 +1,11 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * A DriverLocation contains the longitude and latitude of a driver.
@@ -36,7 +38,7 @@ public class DriverLocation {
      */
     @JsonIgnore
     @Column(updatable = false)
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     /**
      * The driver that this location is mapped to
@@ -49,7 +51,7 @@ public class DriverLocation {
      */
     @PrePersist
     public void updateTimeStamps() {
-        createdDate = new Date();
+        createdDate = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
     }
 
     /**
@@ -128,7 +130,7 @@ public class DriverLocation {
      *
      * @return the date the drive location was saved to the database
      */
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
@@ -137,7 +139,7 @@ public class DriverLocation {
      *
      * @param createdDate of the driver location
      */
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

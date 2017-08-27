@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * Model object for Vehicle Entity
@@ -30,6 +31,7 @@ public class Vehicle {
      * Vehicle's make
      */
     @Column(nullable = false)
+    @Size(min = 3)
     private String make;
 
     /**
@@ -42,6 +44,7 @@ public class Vehicle {
      * Vehicle's year
      */
     @Column(nullable = false, length = 4)
+    @Size(min = 4, max = 4)
     private String year;
 
     /**
@@ -54,6 +57,7 @@ public class Vehicle {
      * Vehicle's color
      */
     @Column(nullable = false)
+    @Size(min = 3, max = 30)
     private String color;
 
     /**
@@ -72,13 +76,13 @@ public class Vehicle {
     /**
      * Constructor for creating a vehicle object
      *
-     * @param driver - the driver that owns the vehicle
-     * @param make the make of the vehicle
-     * @param model the model of the vehicle
-     * @param year the year of the vehicle
+     * @param driver       - the driver that owns the vehicle
+     * @param make         the make of the vehicle
+     * @param model        the model of the vehicle
+     * @param year         the year of the vehicle
      * @param licensePlate the license plate of the vehicle
-     * @param color the color of the vehicle
-     * @param seats the number of seats in the vehicle including the driver seat
+     * @param color        the color of the vehicle
+     * @param seats        the number of seats in the vehicle including the driver seat
      */
     public Vehicle(Driver driver, String make, String model, String year, String licensePlate, String color,
                    Integer seats) {

@@ -67,20 +67,6 @@
     </div>
 </div>
 
-
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-<script>
-    !function (A, n, g, u, l, a, r) {
-        A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
-                (A[l].q = A[l].q || []).push(arguments)
-            }, A[l].l = +new Date, a = n.createElement(g),
-            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
-    }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');
-</script>
-
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -131,6 +117,7 @@
 <script src="scripts/controllers/confirmcancelrequestmodal.js"></script>
 <script src="scripts/controllers/addriderequestmodal.js"></script>
 <script src="scripts/controllers/driverdetailsmodal.js"></script>
+<script src="scripts/controllers/manage-coordinators.js"></script>
 <script src="scripts/services/driver.js"></script>
 <script src="scripts/services/vehicle.js"></script>
 <script src="scripts/services/riderequestservice.js"></script>
@@ -140,17 +127,23 @@
 <script src="scripts/controllers/confirmdeletedrivermodal.js"></script>
 <script src="scripts/controllers/confirmchangedriveractivemodal.js"></script>
 <script src="scripts/services/apiinterceptor.js"></script>
-<script src="scripts/services/user-service.js"></script>
+<script src="scripts/services/auth-service.js"></script>
 <script src="scripts/services/user-registration-service.js"></script>
 <script src="scripts/services/user.js"></script>
 <script src="scripts/services/auth-token-service.js"></script>
 <script src="scripts/services/geolocation-service.js"></script>
+<script src="scripts/services/user-service.js"></script>
+<script src="scripts/services/settings-service.js"></script>
+<script src="scripts/controllers/confirm-change-coordinator-active-modal.js"></script>
+<script src="scripts/controllers/confirm-delete-coordinator-modal.js"></script>
+<script src="scripts/controllers/edit-coordinator.js"></script>
+<script src="scripts/directives/compare-to.js"></script>
 <script src="scripts/controllers/settings.js"></script>
 <script src="scripts/services/settings.js"></script>
-<script src="scripts/services/settings-service.js"></script>
 <script src="scripts/services/reportmonthlyservice.js"></script>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- endbuild -->
+
 </body>
 
 </html>

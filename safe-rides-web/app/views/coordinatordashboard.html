@@ -85,29 +85,7 @@
                         <div class="row">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <table>
-                                            <tbody>
-                                            <tr>
-                                                <td class="bg-warning color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is unassigned.</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-info color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is assigned. Driver is
-                                                    assigned.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-success color-key-box"></td>
-                                                <td class="color-key-text-padding">*Ride request is complete. Driver is
-                                                    available.
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <table>
                                             <tbody>
                                             <tr>
@@ -116,6 +94,12 @@
                                                     <em>unassigned</em> ride
                                                 </td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
                                             <tr>
                                                 <td><img src="/images/orange-dot.png"></td>
                                                 <td class="color-key-text-padding">Pickup location of <em>assigned</em>
@@ -134,10 +118,20 @@
                                                     up</em> ride
                                                 </td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <table>
+                                            <tbody>
+
                                             <tr>
                                                 <td><img src="/images/blue-dot.png"></td>
                                                 <td class="color-key-text-padding">Last available driver location</td>
                                             </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -157,46 +151,46 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Ride Requests</h3>
                         </div>
-                        <div class="panel-body">
-                            <div style="max-height:450px; overflow: auto;">
+                        <div style="max-height:450px; overflow: auto;">
                                 <span us-spinner="{radius:30, width:8, length: 16}"
                                       ng-show="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers"></span>
-                                <table class="table table-responsive"
-                                       ng-hide="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers">
-                                    <thead>
-                                    <tr>
-                                        <th>Rider Name</th>
-                                        <th>Status</th>
-                                        <th>Riders</th>
-                                        <th>Time Requested</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-click="ctrl.showRequestDetails(req)"
-                                        ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
+                            <table class="table table-responsive"
+                                   ng-hide="ctrl.loadingRideRequests || ctrl.loadingCoordinatorDrivers">
+                                <thead>
+                                <tr>
+                                    <th>Rider Name</th>
+                                    <th>Status</th>
+                                    <th>Riders</th>
+                                    <th>Time Requested</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-click="ctrl.showRequestDetails(req)"
+                                    ng-repeat="req in ctrl.rideRequests | orderBy: 'statusOrderValue()'" ng-class="{    danger: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) >= ctrl.DANGER_ZONE)),
                                   warning: ((req.status === 'UNASSIGNED') && (ctrl.requestAgeInMinutes(req.requestDate) < ctrl.DANGER_ZONE)),
                                   info: req.status === 'ASSIGNED' || req.status === 'PICKINGUP' || req.status === 'DROPPINGOFF' || req.status === 'ATPICKUPLOCATION',
                                   success: req.status === 'COMPLETE'}">
-                                        <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
-                                        <td>{{req.status | FriendlyStatusName}}</td>
-                                        <td>{{req.numPassengers}}</td>
-                                        <td>{{req.requestDate | date:'h:mma'}}</td>
-                                        <td>
-                                            <button ng-show="req.status === 'UNASSIGNED'"
-                                                    ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();"
-                                                    class="btn btn-primary">Assign Driver
-                                            </button>
-                                            <button
-                                                ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'"
-                                                ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();"
-                                                class="btn btn-danger">Cancel
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    <td>{{req.requestorFirstName}} {{req.requestorLastName}}</td>
+                                    <td>{{req.status | FriendlyStatusName}}</td>
+                                    <td>{{req.numPassengers}}</td>
+                                    <td>{{req.requestDate | date:'h:mma'}}</td>
+                                    <td>
+                                        <button ng-show="req.status === 'UNASSIGNED'"
+                                                ng-click="ctrl.showAssignDriver(req); $event.stopPropagation();"
+                                                class="btn btn-primary">Assign Driver
+                                        </button>
+                                        <button
+                                            ng-show="req.status === 'UNASSIGNED' || req.status === 'ASSIGNED' || req.status === 'PICKINGUP'"
+                                            ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();"
+                                            class="btn btn-danger">Cancel
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-body">
                             <button ng-click="ctrl.showRideRequest();" id="addNewRideButton" type="submit"
                                     class="btn btn-primary btn-block">Add New Ride Request
                             </button>
@@ -211,40 +205,88 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Drivers</h3>
                         </div>
-
-                        <div class="panel-body">
-                            <div style="max-height:450px; overflow: auto;">
+                        <div style="max-height:450px; overflow: auto;">
                                 <span us-spinner="{radius:30, width:8, length: 16}"
                                       ng-show="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests"></span>
-                                <table class="table table-responsive"
-                                       ng-hide="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests">
-                                    <thead>
-                                    <tr>
-                                        <th>Driver Name</th>
-                                        <th>Status</th>
-                                        <th>Seats Available</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-click="ctrl.showDriverDetails(driver)"
-                                        ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
-                                        ng-class="{success: driver.status === 'AVAILABLE',
+                            <table class="table table-responsive"
+                                   ng-hide="ctrl.loadingCoordinatorDrivers || ctrl.loadingRideRequests">
+                                <thead>
+                                <tr>
+                                    <th>Driver Name</th>
+                                    <th>Status</th>
+                                    <th>Seats Available</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-click="ctrl.showDriverDetails(driver)"
+                                    ng-repeat="driver in ctrl.drivers | filter: {active: true} | orderBy: 'statusOrderValue()' "
+                                    ng-class="{success: driver.status === 'AVAILABLE',
                                                 info: driver.status === 'PICKINGUP' || driver.status === 'DROPPINGOFF' || driver.status === 'ASSIGNED' || driver.status === 'ATPICKUPLOCATION'}">
-                                        <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
-                                        <td>{{driver.status | FriendlyStatusName}}</td>
-                                        <td>{{driver.vehicle.seats}}</td>
-                                        <td>
-                                            <button ng-show="driver.status === 'AVAILABLE'"
-                                                    ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();"
-                                                    class="btn btn-primary">Assign Request
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    <td>{{driver.driverFirstName}} {{driver.driverLastName}}</td>
+                                    <td>{{driver.status | FriendlyStatusName}}</td>
+                                    <td>{{driver.vehicle.seats}}</td>
+                                    <td>
+                                        <button ng-show="driver.status === 'AVAILABLE'"
+                                                ng-click="ctrl.showAssignRequest(driver); $event.stopPropagation();"
+                                                class="btn btn-primary">Assign Request
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-body">
                             <a ui-sref="managedrivers" class="btn btn-primary btn-block">Manage Drivers</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Color Keys for Ride Requests and Drivers Status</h3>
+                        </div>
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h4>Ride Request Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-warning color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is unassigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Ride request is complete.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h4>Driver Status</h4>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="bg-info color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is assigned.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-success color-key-box"></td>
+                                                <td class="color-key-text-padding">Driver is available.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

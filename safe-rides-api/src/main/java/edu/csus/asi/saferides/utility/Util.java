@@ -3,12 +3,15 @@ package edu.csus.asi.saferides.utility;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.security.model.Authority;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
  * Provides common utility functions used in the application
  */
 public class Util {
+
+    public static final String APPLICATION_TIME_ZONE = "America/Los_Angeles";
 
     /**
      * Concatenate address parts together
@@ -43,6 +48,16 @@ public class Util {
         return authorities.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks whether password meets security requirements
+     *
+     * @param password the password to check
+     * @return true if password greater than or equal to 8 characters, false otherwise
+     */
+    public static boolean isPasswordValid(String password) {
+        return (!StringUtils.isBlank(password) && StringUtils.length(password) >= 8);
     }
 
     /**
@@ -85,7 +100,7 @@ public class Util {
         LocalTime endTime = configuration.getEndTime();
         List<DayOfWeek> dayOfWeeks = configuration.getDaysOfWeek();
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
 
         return validRideRequestDateTime(currentDateTime, startTime, endTime, dayOfWeeks);
     }
@@ -143,8 +158,8 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
-            if (ride.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) >= 0) {
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)), configuration.getStartTime(), configuration.getEndTime())[0];
+            if (ride.getRequestDate().compareTo(startDateTime) >= 0) {
                 return ride;
             } else {
                 return null;
@@ -168,9 +183,8 @@ public class Util {
             return null;
         }
         if (configuration != null) {
-            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(), configuration.getStartTime(), configuration.getEndTime())[0];
-            // this is part of the reason why to change to java.time.LocalDateTime rather than java.util.Date
-            rides.removeIf(r -> r.getRequestDate().compareTo(Date.from(ZonedDateTime.of(startDateTime, ZoneId.systemDefault()).toInstant())) < 0);
+            LocalDateTime startDateTime = Util.getRangeDateTime(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)), configuration.getStartTime(), configuration.getEndTime())[0];
+            rides.removeIf(r -> r.getRequestDate().compareTo(startDateTime) < 0);
             return rides;
         } else {
             throw new IllegalStateException("Configuration is missing");

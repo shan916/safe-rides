@@ -1,9 +1,10 @@
 package edu.csus.asi.saferides.model;
 
+import edu.csus.asi.saferides.utility.Util;
+
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * A RideRequest holds rider info, the time the request was made, last modified, assigned,
@@ -32,61 +33,59 @@ public class RideRequest {
     /**
      * The ride requestor's One Card ID
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 9)
     private String oneCardId;
 
     /**
      * The date the ride was requested
      */
     @Column(updatable = false)
-    private Date requestDate;
+    private LocalDateTime requestDate;
 
     /**
      * The last modified timestamp for the ride
      */
     @Column
-    private Date lastModified;
+    private LocalDateTime lastModified;
 
     /**
      * The time the ride was assigned to a driver
      */
     @Column
-    private Date assignedDate;
+    private LocalDateTime assignedDate;
 
     /**
      * Ride requestor's first name
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String requestorFirstName;
 
     /**
      * Ride requestor's last name
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String requestorLastName;
 
     /**
      * Ride requestor's phone number
      */
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String requestorPhoneNumber;
 
     /**
      * Number of passengers including the ride requestor
      */
     @Column(nullable = false)
-    @Min(1)
-    @Max(3)
     private int numPassengers;
 
     /**
-     * The driver's start odometer at the time of assignment
+     * The odometer reading of the driver's vehicle at the beginning of the ride
      */
     @Column
     private int startOdometer;
 
     /**
-     * The driver's end odometer at the time of ride completion
+     * The odometer reading of the driver's vehicle at the time of ride completion
      */
     @Column
     private int endOdometer;
@@ -95,36 +94,42 @@ public class RideRequest {
      * Line 1 of rider's pickup address
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String pickupLine1;
 
     /**
      * Line 2 of rider's pickup address
      */
     @Column
+    // TODO: length of column?
     private String pickupLine2;
 
     /**
      * City of rider's pickup location
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String pickupCity;
 
     /**
      * Line 1 of rider's drop-off address
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String dropoffLine1;
 
     /**
      * Line 2 of rider's drop-off address
      */
     @Column
+    // TODO: length of column?
     private String dropoffLine2;
 
     /**
      * City of rider's dropoff location
      */
     @Column(nullable = false)
+    // TODO: length of column?
     private String dropoffCity;
 
     /**
@@ -137,18 +142,21 @@ public class RideRequest {
      * Reason for cancellation if ride request is cancelled
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String cancelMessage;
 
     /**
      * Optional message to driver
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String messageToDriver;
 
     /**
      * The estimated time for the driver to arrive at the pickup location after the ride has been ASSIGNED
      */
     @Column(nullable = true)
+    // TODO: length of column?
     private String estimatedTime;
 
     /**
@@ -186,7 +194,7 @@ public class RideRequest {
                        String dropoffLine1, String dropoffCity) {
         super();
         this.oneCardId = oneCardId;
-        this.requestDate = new Date();
+        this.requestDate = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
         this.requestorFirstName = requestorFirstName;
         this.requestorLastName = requestorLastName;
         this.requestorPhoneNumber = requestorPhoneNumber;
@@ -214,14 +222,16 @@ public class RideRequest {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        lastModified = new Date();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
+
+        lastModified = now;
 
         if (status == RideRequestStatus.ASSIGNED) {
-            assignedDate = new Date();
+            assignedDate = now;
         }
 
         if (requestDate == null) {
-            requestDate = new Date();
+            requestDate = now;
         }
     }
 
@@ -302,7 +312,7 @@ public class RideRequest {
      *
      * @return the date the ride was requested
      */
-    public Date getRequestDate() {
+    public LocalDateTime getRequestDate() {
         return requestDate;
     }
 
@@ -311,7 +321,7 @@ public class RideRequest {
      *
      * @param requestDate the date the ride was requested
      */
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(LocalDateTime requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -320,7 +330,7 @@ public class RideRequest {
      *
      * @return the last modified timestamp for the ride
      */
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
@@ -329,7 +339,7 @@ public class RideRequest {
      *
      * @param lastModified the last modified timestamp for the ride
      */
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -680,7 +690,7 @@ public class RideRequest {
      *
      * @return the time the ride was assigned to a driver
      */
-    public Date getAssignedDate() {
+    public LocalDateTime getAssignedDate() {
         return assignedDate;
     }
 
@@ -689,7 +699,7 @@ public class RideRequest {
      *
      * @param assignedDate the time the ride was assigned to a driver
      */
-    public void setAssignedDate(Date assignedDate) {
+    public void setAssignedDate(LocalDateTime assignedDate) {
         this.assignedDate = assignedDate;
     }
 

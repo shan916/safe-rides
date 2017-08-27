@@ -1,29 +1,41 @@
 package edu.csus.asi.saferides.service;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
+import edu.csus.asi.saferides.model.views.JsonViews;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Rest API controller for the RideRequest resource
@@ -85,11 +97,17 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public Iterable<RideRequest> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
+    public Iterable<RideRequestDto> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
         if (status != null) {
-            return Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
+            List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
+            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+
+            return dtos;
         } else {
-            return Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
+            List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
+            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+
+            return dtos;
         }
     }
 
@@ -114,7 +132,7 @@ public class RideRequestController {
         if (result == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(rideRequestMapper.map(result, RideRequestDto.class));
         }
     }
 
@@ -144,7 +162,10 @@ public class RideRequestController {
     public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
         String authToken = request.getHeader(this.tokenHeader);
 
+        String view = "coordinator";
+
         if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_DRIVER)) { // if requestor is a rider
+            view = "rider";
             // enforce the Safe Rides time window range (only for riders). if not accepting new rides, return bad request
             if (!Util.isAcceptingRideRequests(configurationRepository.findOne(1))) {    // not accepting rides right now
                 return ResponseEntity.badRequest().body(new ResponseMessage("SafeRides has stopped accepting new rides."));
@@ -158,11 +179,15 @@ public class RideRequestController {
         }
 
         // oneCardId is required
-        if (rideRequest.getOneCardId() == null) {
+        if (!StringUtils.isNumeric(rideRequest.getOneCardId()) || StringUtils.length(rideRequest.getOneCardId()) != 9) {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCardID is null"));
         }
 
-        rideRequest.setRequestDate(new Date());    // default to current datetime
+        if (!StringUtils.isNumeric(rideRequest.getRequestorPhoneNumber()) || StringUtils.length(rideRequest.getRequestorPhoneNumber()) != 10) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Phone number is in an incorrect format"));
+        }
+
+        rideRequest.setRequestDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));    // default to current datetime
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         geocodingService.setCoordinates(rideRequest);
@@ -174,7 +199,23 @@ public class RideRequestController {
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(result.getId()).toUri();
 
-        return ResponseEntity.created(location).body(result);
+        RideRequestDto dto = rideRequestMapper.map(result, RideRequestDto.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+        objectMapper.registerModule(module);
+        try {
+            String response;
+            if (view.equals("coordinator")) {
+                response = objectMapper.writerWithView(JsonViews.Coordinator.class).writeValueAsString(dto);
+            } else {
+                response = objectMapper.writerWithView(JsonViews.Rider.class).writeValueAsString(dto);
+            }
+            return ResponseEntity.created(location).body(response);
+        } catch (JsonProcessingException test2) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**
@@ -195,11 +236,15 @@ public class RideRequestController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> save(@PathVariable Long id, @RequestBody RideRequest rideRequest) {
+        if ((rideRequest.getStatus().equals(RideRequestStatus.CANCELEDBYCOORDINATOR) || rideRequest.getStatus().equals(RideRequestStatus.CANCELEDBYRIDER) || rideRequest.getStatus().equals(RideRequestStatus.CANCELEDOTHER)) && StringUtils.length(rideRequest.getCancelMessage()) < 5) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Canceled message cannot be empty or less than 5 characters."));
+        }
+
         geocodingService.setCoordinates(rideRequest);
 
         RideRequest result = rideRequestRepository.save(rideRequest);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(rideRequestMapper.map(result, RideRequestDto.class));
     }
 
     /**
@@ -212,6 +257,7 @@ public class RideRequestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/mine")
     @PreAuthorize("hasRole('RIDER')")
+    @JsonView(JsonViews.Rider.class)
     @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns authenticated user's current ride request...")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = RideRequest.class, responseContainer = "List"),
@@ -231,9 +277,18 @@ public class RideRequestController {
             return ResponseEntity.noContent().build();
         } else {
             // TODO this can return a ride request that is old. (but will be the latest)
-            // ALSO TODO change the response to a DTO rather than the full ride request
             RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
-            return ResponseEntity.ok(dto);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+            objectMapper.registerModule(module);
+            try {
+                String response = objectMapper.writerWithView(JsonViews.Rider.class).writeValueAsString(dto);
+                return ResponseEntity.ok(response);
+            } catch (JsonProcessingException test2) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
         }
     }
 
@@ -284,4 +339,11 @@ public class RideRequestController {
 
     }
 
+    private List<RideRequestDto> mapRideRequestListToDtoList(List<RideRequest> rideRequestList) {
+        List<RideRequestDto> dtoList = new ArrayList<>();
+        for (int i = 0; i < rideRequestList.size(); i++) {
+            dtoList.add(rideRequestMapper.map(rideRequestList.get(i), RideRequestDto.class));
+        }
+        return dtoList;
+    }
 }

@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * Enum for possible driver statuses
  * AVAILABLE - Driver is available (no rides are assigned)
@@ -12,5 +14,27 @@ public enum DriverStatus {
     ASSIGNED,
     PICKINGUP,
     ATPICKUPLOCATION,
-    DROPPINGOFF
+    DROPPINGOFF;
+
+    /**
+     * Deserializes Json value
+     *
+     * @param value the Json value
+     * @return the DriverStatus for the given value
+     */
+    @JsonCreator
+    public static DriverStatus create(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        for (DriverStatus driverStatus : values()) {
+            if (value.equals(driverStatus.name())) {
+                return driverStatus;
+            }
+        }
+
+        return null;
+    }
+
 }

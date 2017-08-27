@@ -5,12 +5,14 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.service.GeocodingService;
+import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,9 +25,10 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * The class that bootstraps the application
@@ -36,7 +39,7 @@ import java.util.Date;
 public class SafeRidesApiApplication {
 
     @Autowired
-    GeocodingService geocodingService;
+    private GeocodingService geocodingService;
 
     /**
      * The main method
@@ -60,19 +63,21 @@ public class SafeRidesApiApplication {
      */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository, ConfigurationRepository configurationRepository) {
+                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
+                                  ConfigurationRepository configurationRepository, ArgonPasswordEncoder argonPasswordEncoder) {
         return (args) -> {
+
             // save a few drivers
-            Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", "CA", "E0000000", true, "Farmers", true);
-            Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", "CA", "E1111111", true, "Farmers", true);
-            Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", "CA", "E2222222", true, "Farmers", true);
-            Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", "CA", "E3333333", true, "Farmers", true);
-            Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", "CA", "E4444444", true, "Farmers", true);
-            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157", "CA", "E5555555", true, "Farmers", true);
-            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579", "CA", "E6666666", true, "Farmers", true);
-            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650", "CA", "E7777777", true, "Farmers", true);
-            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110", "CA", "E8888888", true, "Farmers", true);
-            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066", "CA", "E9999999", true, "Farmers", true);
+            Driver driver0 = new Driver("000000000", "Melanie", "Birdsell", "9165797607", true, true, "Farmers", true);
+            Driver driver1 = new Driver("000000001", "Jayne", "Knight", "9166675866", true, true, "Farmers", true);
+            Driver driver2 = new Driver("000000002", "Mary", "Rose", "9167471328", true, true, "Farmers", true);
+            Driver driver3 = new Driver("000000003", "Carl", "Wertz", "4053468560", true, true, "Farmers", true);
+            Driver driver4 = new Driver("000000004", "Keith", "Watts", "9166775773", true, true, "Farmers", true);
+            Driver driver5 = new Driver("000000005", "Bobby", "Obyrne", "9169062157", true, true, "Farmers", true);
+            Driver driver6 = new Driver("000000006", "Olivia", "Defreitas", "9162237579", true, true, "Farmers", true);
+            Driver driver7 = new Driver("000000007", "Kenny", "Rivera", "9164571650", true, true, "Farmers", true);
+            Driver driver8 = new Driver("000000008", "Sean", "Jenkins", "9164054110", true, true, "Farmers", true);
+            Driver driver9 = new Driver("000000009", "Robert", "Montoya", "9164802066", true, true, "Farmers", true);
 
             Vehicle vehicle0 = new Vehicle(driver0, "Honda", "CR-V", "2006", "AAAAAAA", "Magenta", 5);
             Vehicle vehicle1 = new Vehicle(driver1, "Lexus ", "LS", "2005", "BBBBBBB", "Purple", 7);
@@ -315,7 +320,7 @@ public class SafeRidesApiApplication {
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest3.setAssignedDate(new Date());
+            rideRequest3.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest3.setEstimatedTime("15");
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
@@ -323,29 +328,29 @@ public class SafeRidesApiApplication {
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest6.setAssignedDate(new Date());
+            rideRequest6.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest6.setEstimatedTime("30");
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest8.setAssignedDate(new Date());
+            rideRequest8.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest8.setEstimatedTime("45");
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest9.setAssignedDate(new Date());
+            rideRequest9.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest9.setEstimatedTime("1 hour");
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
-            rideRequest10.setAssignedDate(new Date());
+            rideRequest10.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest10.setEstimatedTime("> 1 hour");
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
-            rideRequest11.setAssignedDate(new Date());
+            rideRequest11.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest11.setEstimatedTime("15");
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
-            rideRequest12.setAssignedDate(new Date());
+            rideRequest12.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest12.setEstimatedTime("30");
 
             geocodingService.setCoordinates(rideRequest0);
@@ -369,9 +374,14 @@ public class SafeRidesApiApplication {
             geocodingService.setCoordinates(rideRequest18);
             geocodingService.setCoordinates(rideRequest19);
 
-            User driver = new User("driver", "Driver", "Long", "hunter2", "example@email.com");
-            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2", "example@email.com");
-            User admin = new User("admin", "Admin", "Smith", "hunter2", "example@email.com");
+            User driver = new User("driver", "Driver", "Long", "hunter2");
+            driver.setPassword(argonPasswordEncoder.encode(driver.getPassword()));
+
+            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2");
+            coordinator.setPassword(argonPasswordEncoder.encode(coordinator.getPassword()));
+
+            User admin = new User("admin", "Admin", "Smith", "hunter2");
+            admin.setPassword(argonPasswordEncoder.encode(admin.getPassword()));
 
             ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
             ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();
@@ -492,5 +502,4 @@ public class SafeRidesApiApplication {
                 .build()
                 .pathMapping("/");
     }
-
 }

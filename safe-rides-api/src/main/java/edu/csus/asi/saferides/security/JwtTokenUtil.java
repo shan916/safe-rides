@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.security;
 
 import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.utility.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -62,7 +66,7 @@ public class JwtTokenUtil implements Serializable {
         try {
             final Claims claims = getClaimsFromToken(token);
             // cast claims to ArrayList
-            ArrayList authorityClaimsArray = (ArrayList) claims.get(CLAIM_KEY_AUTHORITIES);
+            ArrayList<AuthorityName> authorityClaimsArray = (ArrayList<AuthorityName>) claims.get(CLAIM_KEY_AUTHORITIES);
             // get authority item and add it to the authorityNames arraylist
             for (Object el : authorityClaimsArray) {
                 authorityNames.add(Enum.valueOf(AuthorityName.class, ((LinkedHashMap<String, String>) el).get("authority")));
@@ -79,11 +83,11 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return date the token was created
      */
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
+    public LocalDateTime getCreatedDateFromToken(String token) {
+        LocalDateTime created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
+            created = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) claims.get(CLAIM_KEY_CREATED)), ZoneId.of(Util.APPLICATION_TIME_ZONE));
         } catch (Exception e) {
             created = null;
         }
@@ -153,8 +157,8 @@ public class JwtTokenUtil implements Serializable {
      * @param lastPasswordReset date user password changed
      * @return whether created date occurred before password change date (invalid)
      */
-    private boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
+    private boolean isCreatedBeforeLastPasswordReset(LocalDateTime created, LocalDateTime lastPasswordReset) {
+        return (lastPasswordReset != null && lastPasswordReset.compareTo(created) > 0);
     }
 
     /**
@@ -192,8 +196,8 @@ public class JwtTokenUtil implements Serializable {
      * @param lastPasswordReset date user password last changed
      * @return whether a token cna be refreshed
      */
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = getCreatedDateFromToken(token);
+    public Boolean canTokenBeRefreshed(String token, LocalDateTime lastPasswordReset) {
+        final LocalDateTime created = getCreatedDateFromToken(token);
         return isTokenExpired(token) && !isCreatedBeforeLastPasswordReset(created, lastPasswordReset);
     }
 

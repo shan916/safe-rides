@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * An enumerator for the statuses a RideRequest can hold.
  * UNASSIGNED: A ride request typically starts unassigned.
@@ -11,7 +13,6 @@ package edu.csus.asi.saferides.model;
  * CANCELEDBYRIDER: ride request is cancelled by the rider.
  * CANCELEDOTHER: ride request is cancelled by another authority.
  */
-
 public enum RideRequestStatus {
     UNASSIGNED,
     ASSIGNED,
@@ -21,5 +22,27 @@ public enum RideRequestStatus {
     COMPLETE,
     CANCELEDBYCOORDINATOR,
     CANCELEDBYRIDER,
-    CANCELEDOTHER
+    CANCELEDOTHER;
+
+    /**
+     * Deserializes Json value
+     *
+     * @param value the Json value
+     * @return the RideRequestStatus for the given value
+     */
+    @JsonCreator
+    public static RideRequestStatus create(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        for (RideRequestStatus rideRequestStatus : values()) {
+            if (value.equals(rideRequestStatus.name())) {
+                return rideRequestStatus;
+            }
+        }
+
+        return null;
+    }
+
 }

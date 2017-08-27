@@ -27,6 +27,8 @@ module.exports = function(grunt) {
 
     // load app config based on env
     grunt.loadNpmTasks('grunt-ng-constant');
+	
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     // Define the configuration for all the tasks
     grunt.initConfig({

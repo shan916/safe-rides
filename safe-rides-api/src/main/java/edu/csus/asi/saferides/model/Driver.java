@@ -1,11 +1,14 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,11 +27,11 @@ public class Driver {
     private Long id;
 
     /**
-     * CSUS ID of driver
+     * OneCard ID of driver
      */
     @Column(nullable = false, unique = true, length = 9)
     @Size(min = 9, max = 9)
-    private String csusId;
+    private String oneCardId;
 
     /**
      * First name of the driver
@@ -52,16 +55,10 @@ public class Driver {
     private String phoneNumber;
 
     /**
-     * Abbreviation name of the U.S. state on the driver's license
+     * Indicates if driver's license has been checked
      */
-    @Column(nullable = false, length = 2)
-    private String dlState;
-
-    /**
-     * Driver's license number
-     */
-    @Column(nullable = false, unique = true, length = 20)
-    private String dlNumber;
+    @Column(nullable = false)
+    private Boolean dlChecked;
 
     /**
      * Is insurance checked
@@ -87,20 +84,20 @@ public class Driver {
      * be persisted in the database because they have different meanings.
      */
     @Transient
-    DriverStatus status;
+    private DriverStatus status;
 
     /**
      * Date of creation
      */
     @JsonIgnore
     @Column(updatable = false)
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     /**
      * Date of modification
      */
     @JsonIgnore
-    private Date modifiedDate;
+    private LocalDateTime modifiedDate;
 
     /**
      * One-to-one relationship for vehicle
@@ -142,9 +139,10 @@ public class Driver {
     @PreUpdate
     @PrePersist
     public void updateTimeStamps() {
-        modifiedDate = new Date();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
+        modifiedDate = now;
         if (createdDate == null) {
-            createdDate = new Date();
+            createdDate = now;
         }
     }
 
@@ -157,29 +155,28 @@ public class Driver {
     /**
      * Constructor for creating a driver object
      *
-     * @param csusId           the CSUS ID of the driver
+     * @param oneCardId        the OneCard ID of the driver
      * @param driverFirstName  the driver's first name
      * @param driverLastName   the driver's last name
      * @param phoneNumber      the phone number for the driver
-     * @param dlState          the driver license state abbreviation
-     * @param dlNumber         the driver license number
+     * @param dlChecked        indicates if driver's license has been checked
      * @param insuranceChecked indicates if insurance has been checked for the drive
      * @param insuranceCompany the driver's insurance company
      * @param active           indicates if the driver is active
      */
-    public Driver(String csusId, String driverFirstName, String driverLastName, String phoneNumber, String dlState,
-                  String dlNumber, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
+    public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber,
+                  Boolean dlChecked, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
         super();
-        this.csusId = csusId;
+        this.oneCardId = oneCardId;
         this.driverFirstName = driverFirstName;
         this.driverLastName = driverLastName;
         this.phoneNumber = phoneNumber;
-        this.dlState = dlState;
-        this.dlNumber = dlNumber;
+        this.dlChecked = dlChecked;
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
         this.active = active;
-        this.user = new User(csusId, driverFirstName, driverLastName, "pass", "driver@null.null");
+        this.user = new User(oneCardId, driverFirstName, driverLastName);
+        this.user.setPassword((new ArgonPasswordEncoder().encode("pass")));
     }
 
     /**
@@ -201,21 +198,21 @@ public class Driver {
     }
 
     /**
-     * Get the CSUS ID of the driver
+     * Get the OneCard ID of the driver
      *
-     * @return the CSUS ID of the driver
+     * @return the OneCard ID of the driver
      */
-    public String getCsusId() {
-        return csusId;
+    public String getOneCardId() {
+        return oneCardId;
     }
 
     /**
-     * Set the CSUS ID of the driver
+     * Set the OneCard ID of the driver
      *
-     * @param csusId the CSUS ID of the driver
+     * @param oneCardId the OneCard ID of the driver
      */
-    public void setCsusId(String csusId) {
-        this.csusId = csusId;
+    public void setOneCardId(String oneCardId) {
+        this.oneCardId = oneCardId;
     }
 
     /**
@@ -273,39 +270,21 @@ public class Driver {
     }
 
     /**
-     * Get abbreviation name of the U.S. state on the driver's license
+     * Get whether driver's license has been checked
      *
-     * @return abbreviation name of the U.S. state on the driver's license
+     * @return whether driver's license has been checked
      */
-    public String getDlState() {
-        return dlState;
+    public Boolean getDlChecked() {
+        return dlChecked;
     }
 
     /**
-     * Set abbreviation name of the U.S. state on the driver's license
+     * Set whether driver's license has been checked
      *
-     * @param dlState abbreviation name of the U.S. state on the driver's license
+     * @param dlChecked whether driver's license has been checked
      */
-    public void setDlState(String dlState) {
-        this.dlState = dlState;
-    }
-
-    /**
-     * Get driver's license number
-     *
-     * @return driver's license number
-     */
-    public String getDlNumber() {
-        return dlNumber;
-    }
-
-    /**
-     * Set driver's license number
-     *
-     * @param dlNumber driver's license number
-     */
-    public void setDlNumber(String dlNumber) {
-        this.dlNumber = dlNumber;
+    public void setDlChecked(Boolean dlChecked) {
+        this.dlChecked = dlChecked;
     }
 
     /**
@@ -376,7 +355,7 @@ public class Driver {
      *
      * @return creation date of the driver
      */
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
@@ -385,7 +364,7 @@ public class Driver {
      *
      * @param createdDate the creation date of the driver
      */
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -394,7 +373,7 @@ public class Driver {
      *
      * @return last modified date
      */
-    public Date getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
 
@@ -403,7 +382,7 @@ public class Driver {
      *
      * @param modifiedDate modified date of driver
      */
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
@@ -539,16 +518,16 @@ public class Driver {
      *
      * @return Driver string object
      */
-    @Override
+/*    @Override
     public String toString() {
         return "Driver{" +
                 "id=" + id +
-                ", csusId='" + csusId + '\'' +
+                ", oneCardId='" + oneCardId + '\'' +
                 ", driverFirstName='" + driverFirstName + '\'' +
                 ", driverLastName='" + driverLastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", dlState='" + dlState + '\'' +
-                ", dlNumber='" + dlNumber + '\'' +
+                ", dlChecked='" + dlChecked + '\'' +
                 ", insuranceChecked=" + insuranceChecked +
                 ", insuranceCompany='" + insuranceCompany + '\'' +
                 ", active=" + active +
@@ -562,4 +541,5 @@ public class Driver {
                 ", endOfNightOdo=" + endOfNightOdo +
                 '}';
     }
+    */
 }

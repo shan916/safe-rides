@@ -1,5 +1,6 @@
 'use strict';
 
+//noinspection JSAnnotator
 /**
  * @ngdoc function
  * @name safeRidesWebApp.controller:EditdriverCtrl
@@ -8,7 +9,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function ($stateParams, $location, DriverService, Driver) {
+    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -19,13 +20,7 @@ angular.module('safeRidesWebApp')
 
         vm.loading = false;
 
-        vm.stateChoices = [
-            'CA', 'AL', 'AK', 'AZ', 'AR', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
-            'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-            'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-            'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-            'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-        ];
+        vm.existingDriver = !!$stateParams.driverId;
 
         function getDriver(driverId) {
             vm.loading = true;
@@ -46,13 +41,13 @@ angular.module('safeRidesWebApp')
                 id: vm.driver.id
             }, vm.driver).$promise.then(function (response) {
                 console.log('updated driver:', response);
-                $location.path('/managedrivers');
+                $state.go('managedrivers');
             }, function (error) {
                 console.log('error updating driver:', error);
             });
         }
 
-        if ($stateParams.driverId) {
+        if (vm.existingDriver) {
             getDriver($stateParams.driverId);
         }
 
@@ -61,12 +56,12 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveDriver = function () {
-            if ($stateParams.driverId) {
+            if (vm.existingDriver) {
                 updateDriver();
             } else {
                 DriverService.save(vm.driver).$promise.then(function (response) {
                     console.log('saved driver:', response);
-                    $location.path('/managedrivers');
+                    $state.go('managedrivers');
                 }, function (error) {
                     console.log('error saving driver:', error);
                 });

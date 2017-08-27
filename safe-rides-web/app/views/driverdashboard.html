@@ -126,21 +126,21 @@
             <div ng-show="ctrl.pickedUpButtonPressed">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                <!--  margin-top-20 -->
-                <form name="odoEndRideForm" class="form-vertical">
-                    <label for="odoEndRideForm">Enter your odometer reading in miles to End Ride: </label>
-                    <input id="odoEndRide" name="odoEndRide" type="number" class="form-control col-xs-4" required
-                           placeholder="100431" ng-model="ctrl.endOdo"
-                           ng-maxlength="6" ng-minlength="3" ng-min="100">
-                    <div ng-messages="odoEndRideForm.odoEndRide.$dirty && odoEndRideForm.odoEndRide.$error">
-                        <div class="input-error" ng-message="required">* required to end assigned ride</div>
-                    </div>
-                </form>
+                    <!--  margin-top-20 -->
+                    <form name="odoEndRideForm" class="form-vertical">
+                        <label for="odoEndRideForm">Enter your odometer reading in miles to End Ride: </label>
+                        <input id="odoEndRide" name="odoEndRide" type="number" class="form-control col-xs-4" required
+                               placeholder="100431" ng-model="ctrl.endOdo"
+                               ng-maxlength="6" ng-minlength="3" ng-min="100">
+                        <div ng-messages="odoEndRideForm.odoEndRide.$dirty && odoEndRideForm.odoEndRide.$error">
+                            <div class="input-error" ng-message="required">* required to end assigned ride</div>
+                        </div>
+                    </form>
 
-                <button margin-top="20" class="btn btn-default btn-danger"
-                        ng-disabled="odoEndRideForm.$invalid" ng-click="ctrl.endRide()">
-                    End Ride / Drop-Off
-                </button>
+                    <button margin-top="20" class="btn btn-default btn-danger"
+                            ng-disabled="odoEndRideForm.$invalid" ng-click="ctrl.endRide()">
+                        End Ride / Drop-Off
+                    </button>
                 </div>
                 <div class="col-md-3"></div>
             </div>

@@ -9,7 +9,7 @@
  */
 angular.module('safeRidesWebApp')
     .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, UserService, Notification) {
+                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -41,7 +41,7 @@ angular.module('safeRidesWebApp')
                 $state.go('/');
                 console.log('Not a driver');
             } else {
-                UserService.getAuthUserInfo().then(function (response) {
+                AuthService.getAuthUserInfo().then(function (response) {
                     vm.driver = response.data;
                 }, function (error) {
                     console.log('error getting the driver name', error);
@@ -55,17 +55,17 @@ angular.module('safeRidesWebApp')
         }
 
         /*
-        *   gets the currently assigned ride request
-        *   and assigns state of driver with booleans
-        *   isRideAssigned, pickedUpButtonPressed
-        */
+         *   gets the currently assigned ride request
+         *   and assigns state of driver with booleans
+         *   isRideAssigned, pickedUpButtonPressed
+         */
         function getCurrentRideRequest() {
             vm.isRideAssigned = false;
             //get the current ride request to driver
             GetDriverCurrentRideService.get().$promise.then(function (response) {
                 if (response !== undefined) {
                     vm.assignedRide = new RideRequest(response);
-                    if(vm.assignedRide.status !== undefined){
+                    if (vm.assignedRide.status !== undefined) {
                         vm.isRideAssigned = true;
                         vm.pickedUpButtonPressed = false;
                         if (vm.assignedRide.status === 'DROPPINGOFF') {
@@ -90,8 +90,8 @@ angular.module('safeRidesWebApp')
         }//end newgetCurrentRideRequest
 
         /*
-        *   Creates links for directions to pickup and dropoff addresses on google maps
-        */
+         *   Creates links for directions to pickup and dropoff addresses on google maps
+         */
         function buildDirectionButtons() {
             if (vm.assignedRide.pickupLine1 !== undefined) {
                 vm.pickupAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.pickupLine1 +
@@ -105,9 +105,9 @@ angular.module('safeRidesWebApp')
         }
 
         /*
-        *   updates currently assigned ride request
-        *   by passing the ride request id
-        */
+         *   updates currently assigned ride request
+         *   by passing the ride request id
+         */
         function updateRideRequest() {
             RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function (response) {
                 console.log('Driver, saved riderequest:', response);
@@ -118,11 +118,11 @@ angular.module('safeRidesWebApp')
 
 
         /*  enter odometer and view newly assigned ride
-        *   New Ride Assigned panel
-        *   When driver is assigned a ride this screen asks for the
-        *   Drivers odometer reading in order to reveal the pickup address
-        *   and current ride panel
-        */
+         *   New Ride Assigned panel
+         *   When driver is assigned a ride this screen asks for the
+         *   Drivers odometer reading in order to reveal the pickup address
+         *   and current ride panel
+         */
         vm.viewRide = function () {
             //Stop refresh when a new ride is assigned.
             //No new data
@@ -139,10 +139,10 @@ angular.module('safeRidesWebApp')
         };
 
         /*
-        *   When "pickedUp" button is pressed the Driver has signified
-        *   they have picked up the rider/passengers and is now heading
-        *   towards the dropoff location
-        */
+         *   When "pickedUp" button is pressed the Driver has signified
+         *   they have picked up the rider/passengers and is now heading
+         *   towards the dropoff location
+         */
         vm.pickedUp = function () {
             vm.assignedRide.status = 'DROPPINGOFF';
             vm.isRideAssigned = true;
@@ -151,9 +151,9 @@ angular.module('safeRidesWebApp')
         };
 
         /*
-        *   Ending the ride request requires the Driver enters the
-        *   ending odometer reading
-        */
+         *   Ending the ride request requires the Driver enters the
+         *   ending odometer reading
+         */
         vm.endRide = function () {
             vm.assignedRide.status = 'COMPLETE';
             //if(vm.assignedRide.startOdo > vm.endOdo){}
@@ -165,9 +165,9 @@ angular.module('safeRidesWebApp')
         };
 
         /*
-        *   changes the ride request status to notify the rider
-        *   the driver has arrived at their pickup location
-        */
+         *   changes the ride request status to notify the rider
+         *   the driver has arrived at their pickup location
+         */
         vm.notifyRider = function () {
             if (vm.assignedRide.status !== 'ATPICKUPLOCATION') {
                 vm.assignedRide.status = 'ATPICKUPLOCATION';
@@ -194,8 +194,8 @@ angular.module('safeRidesWebApp')
         };
 
         /*
-        * updates this drivers current location if allowed in browser
-        */
+         * updates this drivers current location if allowed in browser
+         */
         var updateLocation = function () {
             GeolocationService.getCurrentPosition().then(function (location) {
                 var coords = {

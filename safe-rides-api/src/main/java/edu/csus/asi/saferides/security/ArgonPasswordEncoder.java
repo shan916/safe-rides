@@ -3,12 +3,14 @@ package edu.csus.asi.saferides.security;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 /**
  * This class provides a wrapper to allow salting/hashing as well as verifying
  * passwords against previously salted/hashed passwords
  * https://github.com/phxql/argon2-jvm
  */
+@Component
 public class ArgonPasswordEncoder implements PasswordEncoder {
 
     // static variables to define size of salt and hash

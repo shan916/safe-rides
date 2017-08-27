@@ -1,10 +1,14 @@
 package edu.csus.asi.saferides.security.model;
 
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,40 +35,35 @@ public class User {
      */
     @Column(nullable = false)
     @Size(min = 2, max = 30)
-    private String firstname;
+    private String firstName;
 
     /**
      * Last name
      */
     @Column(nullable = false)
     @Size(min = 2, max = 30)
-    private String lastname;
+    private String lastName;
 
     /**
      * Password
      */
     @Column(nullable = false)
     @Size(min = 161, max = 161)
+    @JsonIgnore
     private String password;
-
-    /**
-     * Email
-     */
-    @Column(nullable = false)
-    @Size(min = 2, max = 50)
-    private String email;
 
     /**
      * Enabled / active flag
      */
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean active;
 
     /**
      * Timestamp of last password reset
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastPasswordResetDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime lastPasswordResetDate;
 
     /**
      * M-M relationship join table for authorities / roles
@@ -89,15 +88,13 @@ public class User {
      * @param firstName first name
      * @param lastName  last name
      * @param password  password (in plaintext)
-     * @param email     email
      */
-    public User(String username, String firstName, String lastName, String password, String email) {
+    public User(String username, String firstName, String lastName, String password) {
         this.username = username;
-        this.firstname = firstName;
-        this.lastname = lastName;
-        setPassword(password);
-        this.email = email;
-        enabled = true;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        active = true;
     }
 
     /**
@@ -109,9 +106,9 @@ public class User {
      */
     public User(String username, String firstName, String lastName) {
         this.username = username;
-        this.firstname = firstName;
-        this.lastname = lastName;
-        enabled = true;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        active = true;
     }
 
     /**
@@ -147,7 +144,7 @@ public class User {
      * @param username of user
      */
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.replaceAll("\\s+", "").toLowerCase();
     }
 
     /**
@@ -155,17 +152,17 @@ public class User {
      *
      * @return first name of user
      */
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
      * Set user's first name
      *
-     * @param firstname of user
+     * @param firstName of user
      */
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     /**
@@ -173,17 +170,17 @@ public class User {
      *
      * @return last name of user
      */
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
     /**
      * Set user's last name
      *
-     * @param lastname of user
+     * @param lastName of user
      */
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**
@@ -196,39 +193,21 @@ public class User {
     }
 
     /**
-     * Get user's email
-     *
-     * @return of user
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Set user's email
-     *
-     * @param email of user
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Get user's enabled / active flag
+     * Get user's active flag
      *
      * @return user's status
      */
-    public Boolean getEnabled() {
-        return enabled;
+    public Boolean getActive() {
+        return active;
     }
 
     /**
-     * Set user's enabled / active flag
+     * Set user's active flag
      *
-     * @param enabled of user
+     * @param active of user
      */
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     /**
@@ -236,7 +215,7 @@ public class User {
      *
      * @return user's lastPasswordReset date
      */
-    public Date getLastPasswordResetDate() {
+    public LocalDateTime getLastPasswordResetDate() {
         return lastPasswordResetDate;
     }
 
@@ -245,7 +224,7 @@ public class User {
      *
      * @param lastPasswordResetDate of user
      */
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+    public void setLastPasswordResetDate(LocalDateTime lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
@@ -268,12 +247,12 @@ public class User {
     }
 
     /**
-     * Set user's password. Encodes the password input
+     * Set user's password
      *
      * @param password of user in plaintext
      */
     public void setPassword(String password) {
-        ArgonPasswordEncoder passwordEncoder = new ArgonPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
+
 }

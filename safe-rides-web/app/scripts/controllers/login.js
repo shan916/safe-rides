@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('LoginCtrl', function ($http, $window, $cookies, $rootScope, $state, UserService, authManager, AuthTokenService) {
+    .controller('LoginCtrl', function ($http, $window, $cookies, $rootScope, $state, AuthService, authManager, AuthTokenService) {
         if (authManager.isAuthenticated()) {
             $state.go('/');
             return;
@@ -28,7 +28,7 @@ angular.module('safeRidesWebApp')
                 password: vm.password
             };
 
-            UserService.userAuthentication(credentials).then(function (response) {
+            AuthService.userAuthentication(credentials).then(function (response) {
                     vm.loading = false;
                     console.log(response.data.token);
                     AuthTokenService.setToken(response.data.token);
@@ -44,6 +44,8 @@ angular.module('safeRidesWebApp')
                     console.log('login error: ', response.data);
                     if (response.status === 422 && response.data.message === 'Bad credentials') {
                         vm.message = 'Bad credentials';
+                    } else if (response.status === 422 && response.data.message === 'Account is deactivated') {
+                        vm.message = 'Account is deactivated';
                     }
                 });
         };

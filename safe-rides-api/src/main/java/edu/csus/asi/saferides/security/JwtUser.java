@@ -1,11 +1,15 @@
 package edu.csus.asi.saferides.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
+import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * JWT user object that can be mapped to from an application user or rider to be used in generating a token
@@ -20,7 +24,10 @@ public class JwtUser implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean enabled;
-    private final Date lastPasswordResetDate;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private final LocalDateTime lastPasswordResetDate;
 
     /**
      * Instantiate a new JWTUser object
@@ -42,7 +49,7 @@ public class JwtUser implements UserDetails {
             String password,
             Collection<? extends GrantedAuthority> authorities,
             boolean enabled,
-            Date lastPasswordResetDate
+            LocalDateTime lastPasswordResetDate
     ) {
         this.id = id;
         this.username = username;
@@ -162,7 +169,7 @@ public class JwtUser implements UserDetails {
      * @return date last password change
      */
     @JsonIgnore
-    public Date getLastPasswordResetDate() {
+    public LocalDateTime getLastPasswordResetDate() {
         return lastPasswordResetDate;
     }
 }

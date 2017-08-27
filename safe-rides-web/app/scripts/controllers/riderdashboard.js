@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (UserService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
+    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -36,28 +36,29 @@ angular.module('safeRidesWebApp')
                 console.log('Not a requestor');
                 return;
             } else {
-                // check if new rides are being accepted
-                SettingsService.isLive().then(function (response) {
-                        if (response.data !== undefined) {
-                            vm.AcceptingNewRides = response.data;
-                        }
-                        vm.loading = false;
-                        vm.loggedIn = true;
-                        vm.oneCardId = AuthTokenService.getUsername();
-                        getRide();
-                    },
-                    function () {
-                        Notification.error({
-                            message: 'Failed to retreive SafeRides\' operation hours.',
-                            positionX: 'center',
-                            delay: 10000
-                        });
-                    });
+                vm.loading = false;
+                vm.loggedIn = true;
+                vm.oneCardId = AuthTokenService.getUsername();
+                getRide();
             }
         } else {
             vm.loading = false;
             vm.loggedIn = false;
         }
+
+        // check if new rides are being accepted
+        SettingsService.isLive().then(function (response) {
+                if (response.data !== undefined) {
+                    vm.AcceptingNewRides = response.data;
+                }
+            },
+            function () {
+                Notification.error({
+                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    positionX: 'center',
+                    delay: 10000
+                });
+            });
 
         /*
          * Gets the rider's current ride
@@ -109,7 +110,7 @@ angular.module('safeRidesWebApp')
          * */
         vm.login = function () {
             vm.loading = true;
-            UserService.riderAuthentication(vm.oneCardId).then(function (response) {
+            AuthService.riderAuthentication(vm.oneCardId).then(function (response) {
                 vm.loggedIn = true;
                 AuthTokenService.setToken(response.data.token);
                 getRide();
