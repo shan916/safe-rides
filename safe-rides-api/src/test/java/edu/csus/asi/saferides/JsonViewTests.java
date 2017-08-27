@@ -54,7 +54,7 @@ public class JsonViewTests {
                 .writerWithView(JsonViews.Rider.class)
                 .writeValueAsString(mockObject);
 
-        assertThat(json.contains(mockObject.getRequesterPhoneNumber())).isTrue();
+        assertThat(json.contains(mockObject.getRequesterPhoneNumber())).isFalse();
     }
 
     @Test
@@ -63,7 +63,7 @@ public class JsonViewTests {
                 .writerWithView(JsonViews.Driver.class)
                 .writeValueAsString(mockObject);
 
-        assertThat(json.contains(mockObject.getRequesterPhoneNumber())).isFalse();
+        assertThat(json.contains(mockObject.getRequesterPhoneNumber())).isTrue();
     }
 
 }
