@@ -16,8 +16,8 @@ public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
     /**
      * serialization implementation
      *
-     * @param localDateTime LocalDateTime object to serialize; can not be null
-     * @param jsonGenerator JsonGenerator used to output resulting Json content
+     * @param localDateTime      LocalDateTime object to serialize; can not be null
+     * @param jsonGenerator      JsonGenerator used to output resulting Json content
      * @param serializerProvider SerializerProvider that can be used to get serializers for serializing Objects value contains, if any
      * @throws IOException IOException
      */

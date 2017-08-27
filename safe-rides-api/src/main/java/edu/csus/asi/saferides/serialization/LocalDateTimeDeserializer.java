@@ -18,7 +18,7 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
      * Deserialization implementation
      *
      * @param jsonParser JsonParser used for reading JSON content
-     * @param context DeserializationContext that can be used to access information about this deserialization activity
+     * @param context    DeserializationContext that can be used to access information about this deserialization activity
      * @return Deserialized value
      * @throws IOException IOException
      */
