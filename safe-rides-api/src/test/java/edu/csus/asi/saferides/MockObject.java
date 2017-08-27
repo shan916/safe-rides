@@ -15,7 +15,7 @@ public class MockObject {
     @JsonView(JsonViews.Driver.class)
     private String messageToDriver;
 
-    @JsonView(JsonViews.Rider.class)
+    @JsonView(JsonViews.Driver.class)
     private String requesterPhoneNumber;
 
     public RideRequestStatus getRideRequestStatus() {
