@@ -17,13 +17,13 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
     /**
      * Deserialization implementation
      *
-     * @param arg0 JsonParser used for reading JSON content
-     * @param arg1 DeserializationContext that can be used to access information about this deserialization activity
+     * @param jsonParser JsonParser used for reading JSON content
+     * @param context DeserializationContext that can be used to access information about this deserialization activity
      * @return Deserialized value
      * @throws IOException IOException
      */
     @Override
-    public LocalDateTime deserialize(JsonParser arg0, DeserializationContext arg1) throws IOException {
-        return Instant.ofEpochMilli(arg0.getLongValue()).atZone(ZoneId.of(Util.APPLICATION_TIME_ZONE)).toLocalDateTime();
+    public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
+        return Instant.ofEpochMilli(jsonParser.getLongValue()).atZone(ZoneId.of(Util.APPLICATION_TIME_ZONE)).toLocalDateTime();
     }
 }
