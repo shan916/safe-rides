@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService, $uibModal) {
+    .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService, $uibModal, ENV, $window) {
         var vm = this;
 
         vm.activeCoordinators = [];
@@ -33,7 +33,7 @@ angular.module('safeRidesWebApp')
                 getCoordinators();
             }
         } else {
-            $state.go('login');
+            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
             console.log('Not authenticated');
         }
 

@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.security.controller;
 
+import edu.csus.asi.saferides.security.model.CasTuple;
 import io.swagger.annotations.ApiOperation;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * API controller for authenticating with CAS
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io", "http://codeteam6.io"})
 @RequestMapping("/cas")
 public class CasClientController {
 
@@ -22,20 +23,19 @@ public class CasClientController {
     private String casServerUrlPrefix;
 
     /**
-     * Check with CAS wether the service and ticket pair is correct. If so, authenticate the user.
+     * Check with CAS whether the service and ticket pair is correct. If so, authenticate the user.
      *
-     * @param service the service the ticket was generated for
-     * @param ticket  the ticket presented by CAS to the client
-     * @return JWT on success or 500 on failure
+     * @param casTuple service and ticket pair
+     * @return JWT on success or 400 on failure
      */
-    @RequestMapping(value = "/validate", method = RequestMethod.GET)
+    @RequestMapping(value = "/validate", method = RequestMethod.POST)
     @ApiOperation(value = "validate", nickname = "validate", notes = "Validate a ticket/service pair with the CAS server. Returns a JWT if valid.")
-    public ResponseEntity<?> validate(@RequestParam String service, @RequestParam String ticket) {
+    public ResponseEntity<?> validate(@RequestBody CasTuple casTuple) {
         AttributePrincipal principal = null;
         Cas30ServiceTicketValidator tv = new Cas30ServiceTicketValidator(casServerUrlPrefix);
 
         try {
-            Assertion a = tv.validate(ticket, service);
+            Assertion a = tv.validate(casTuple.getTicket(), casTuple.getService());
             principal = a.getPrincipal();
 
             return ResponseEntity.ok(principal.getName());

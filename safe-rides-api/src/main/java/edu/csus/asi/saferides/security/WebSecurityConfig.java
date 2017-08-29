@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // set up children for requests
                 .authorizeRequests()
                 // allow POST to /users/auth
-                .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider", "/cas/validate").permitAll()
 
                 // allow GET to /config/isLive
                 .antMatchers(HttpMethod.GET, "/config/isLive").permitAll()
@@ -104,7 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow OPTIONS to All
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // allow access to the swagger api documentation
-                .antMatchers(HttpMethod.GET, "/cas/validate", "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 // all other request need a JWT
                 .anyRequest().authenticated();
 

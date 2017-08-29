@@ -1,3 +1,5 @@
 {
-    "apiEndpoint": "http://localhost:8080/safe-rides-api/"
+    "apiEndpoint": "http://localhost:8080/safe-rides-api/",
+    "casServiceName": "http://codeteam6.io/",
+    "casLogin": "https://sacauth.csus.edu/csus.cas/login"
 }

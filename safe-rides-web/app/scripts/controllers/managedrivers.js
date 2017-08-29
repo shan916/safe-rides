@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification) {
+    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $window) {
         var vm = this;
 
         vm.activeDrivers = [];
@@ -34,7 +34,7 @@ angular.module('safeRidesWebApp')
                 getDrivers();
             }
         } else {
-            $state.go('login');
+            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
             console.log('Not authenticated');
         }
 
