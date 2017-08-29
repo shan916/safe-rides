@@ -104,7 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow OPTIONS to All
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // allow access to the swagger api documentation
-                .antMatchers(HttpMethod.GET, "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/cas/validate", "/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 // all other request need a JWT
                 .anyRequest().authenticated();
 

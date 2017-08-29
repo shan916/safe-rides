@@ -4,7 +4,8 @@ jwt:
   expiration: 43200
 api-keys:
   geocoding: AIzaSyBsvQDgFRvtFyInVOv0U_HrDaNsrnCuLhc
-
+cas:
+  server-url-prefix: https://sacauth.csus.edu/csus.cas/
 ---
 spring:
   profiles: default
