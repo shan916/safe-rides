@@ -21,28 +21,6 @@ import java.util.List;
 public interface DriverRepository extends CrudRepository<Driver, Long> {
 
     /**
-     * Finds drivers filtered by the active parameter
-     *
-     * @param active indicates if driver is active or not
-     * @return list of drivers filtered by the active parameter
-     */
-    List<Driver> findByActive(Boolean active);
-
-    /**
-     * Finds active drivers ordered by modified date in descending order
-     *
-     * @return list of active drivers ordered by modified date in descending order
-     */
-    List<Driver> findByActiveTrueOrderByModifiedDateDesc();
-
-    /**
-     * Finds inactive drivers ordered by modified date in descending order
-     *
-     * @return list of inactive drivers ordered by modified date in descending order
-     */
-    List<Driver> findByActiveFalseOrderByModifiedDateDesc();
-
-    /**
      * Finds all drivers ordered by modified date in descending order
      *
      * @return list of all drivers ordered by modified date in descending order

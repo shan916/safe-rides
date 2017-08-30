@@ -5,6 +5,8 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -63,7 +65,7 @@ public class SafeRidesApiApplication {
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
-                                  ConfigurationRepository configurationRepository) {
+                                  ConfigurationRepository configurationRepository, JwtTokenUtil jwtTokenUtil) {
         return (args) -> {
 
             // save a few drivers
@@ -402,17 +404,6 @@ public class SafeRidesApiApplication {
             userRepository.save(coordinator);
             userRepository.save(driver);
 
-            userRepository.save(driver0.getUser());
-            userRepository.save(driver1.getUser());
-            userRepository.save(driver2.getUser());
-            userRepository.save(driver3.getUser());
-            userRepository.save(driver4.getUser());
-            userRepository.save(driver5.getUser());
-            userRepository.save(driver6.getUser());
-            userRepository.save(driver7.getUser());
-            userRepository.save(driver8.getUser());
-            userRepository.save(driver9.getUser());
-
             driverRepository.save(driver0);
             driverRepository.save(driver1);
             driverRepository.save(driver2);
@@ -460,6 +451,9 @@ public class SafeRidesApiApplication {
             dayOfWeeks.add(DayOfWeek.SATURDAY);
             newConfig.setDaysOfWeek(dayOfWeeks);
             configurationRepository.save(newConfig);
+
+            final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(admin));
+            System.out.println(token);
         };
     }
 

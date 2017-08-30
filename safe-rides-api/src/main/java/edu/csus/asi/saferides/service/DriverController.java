@@ -29,6 +29,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Rest API controller for the Driver resource
@@ -110,14 +111,15 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
     public Iterable<DriverDto> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
+        List<Driver> drivers = driverRepository.findAllByOrderByModifiedDateDesc();
         if (active != null) {
             if (active) {
-                return mapDriverListToDtoList(driverRepository.findByActiveTrueOrderByModifiedDateDesc());
+                return mapDriverListToDtoList(drivers.stream().filter(driver -> driver.getUser().getActive()).collect(Collectors.toList()));
             } else {
-                return mapDriverListToDtoList(driverRepository.findByActiveFalseOrderByModifiedDateDesc());
+                return mapDriverListToDtoList(drivers.stream().filter(driver -> !driver.getUser().getActive()).collect(Collectors.toList()));
             }
         } else {
-            return mapDriverListToDtoList(driverRepository.findAllByOrderByModifiedDateDesc());
+            return mapDriverListToDtoList(drivers);
         }
     }
 
@@ -204,18 +206,13 @@ public class DriverController {
 
         Driver existingDriver = driverRepository.findOne(id);
 
-        // return 400 if OneCard ID is modified
-        if (!existingDriver.getOneCardId().equals(updatedDriver.getOneCardId())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("OneCard ID is not allowed to be modified"));
-        }
-
         // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
+        if (!updatedDriver.getUser().getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         }
 
         // deactivate user if driver deactivated
-        if (!updatedDriver.getActive()) {
+        if (!updatedDriver.getUser().getActive()) {
             existingDriver.getUser().setActive(false);
         } else {
             existingDriver.getUser().setActive(true);
@@ -492,10 +489,7 @@ public class DriverController {
     private List<String> validateDriver(Driver driver) {
         ArrayList<String> errorMessages = new ArrayList<>();
 
-        if (!StringUtils.isNumeric(driver.getOneCardId()) || StringUtils.length(driver.getOneCardId()) != 9) {
-            errorMessages.add("Invalid OneCardID");
-        }
-        if (StringUtils.isEmpty(driver.getDriverFirstName()) || StringUtils.isEmpty(driver.getDriverLastName())) {
+        if (StringUtils.isEmpty(driver.getUser().getFirstName()) || StringUtils.isEmpty(driver.getUser().getLastName())) {
             errorMessages.add("Driver name cannot be empty");
         }
         if (!StringUtils.isNumeric(driver.getPhoneNumber()) || StringUtils.length(driver.getPhoneNumber()) != 10) {
