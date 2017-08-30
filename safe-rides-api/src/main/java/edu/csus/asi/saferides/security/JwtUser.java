@@ -89,7 +89,7 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -100,7 +100,7 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -111,7 +111,7 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -140,7 +140,7 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public String getPassword() {
-        return password;
+        throw new UnsupportedOperationException();
     }
 
     /**

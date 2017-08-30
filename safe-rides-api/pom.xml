@@ -74,11 +74,6 @@
             <version>2.2.2</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>de.mkammerer</groupId>
-            <artifactId>argon2-jvm</artifactId>
-            <version>2.2</version>
-        </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

@@ -51,10 +51,6 @@ public class DriverDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private DriverStatus status;
 
-    @ApiModelProperty(value = "The driver's password")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
     @ApiModelProperty(value = "The driver's vehicle")
     private Vehicle vehicle;
 
@@ -123,14 +119,6 @@ public class DriverDto {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getId() {

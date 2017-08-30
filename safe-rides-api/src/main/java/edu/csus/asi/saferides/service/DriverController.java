@@ -26,8 +26,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -158,12 +156,6 @@ public class DriverController {
 
         List<String> errorMessages = validateDriver(driver);
 
-        if (StringUtils.isEmpty(driverDto.getPassword())) {
-            errorMessages.add("Password cannot be empty");
-        } else if (!Util.isPasswordValid(driverDto.getPassword())) {
-            errorMessages.add("Password does not meet security requirements");
-        }
-
         if (errorMessages.size() > 0) {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
@@ -217,19 +209,9 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage("OneCard ID is not allowed to be modified"));
         }
 
-        // return 400 if password does not meet security requirements
-        if (!StringUtils.isEmpty(driverDto.getPassword()) && !Util.isPasswordValid(driverDto.getPassword())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
-        }
-
         // return 400 if trying to deactivate a driver that's not AVAILABLE
         if (!updatedDriver.getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
-        }
-
-        if (!StringUtils.isEmpty(driverDto.getPassword())) {
-            existingDriver.getUser().setLastPasswordResetDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE))); // invalidate existing tokens
-            userService.updateDriverUser(driverDto);
         }
 
         // deactivate user if driver deactivated

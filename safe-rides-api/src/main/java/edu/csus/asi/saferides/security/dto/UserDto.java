@@ -1,7 +1,5 @@
 package edu.csus.asi.saferides.security.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,11 +21,6 @@ public class UserDto {
     @NotNull
     @Size(min = 2, max = 30)
     private String lastName;
-
-    @NotNull
-    @Size(min = 8)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
 
     @NotNull
     private boolean active;
@@ -102,24 +95,6 @@ public class UserDto {
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    /**
-     * Gets the password
-     *
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the password
-     *
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**

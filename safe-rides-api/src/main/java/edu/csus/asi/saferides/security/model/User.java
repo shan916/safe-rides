@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.security.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
@@ -45,14 +44,6 @@ public class User {
     private String lastName;
 
     /**
-     * Password
-     */
-    @Column(nullable = false)
-    @Size(min = 161, max = 161)
-    @JsonIgnore
-    private String password;
-
-    /**
      * Enabled / active flag
      */
     @Column(nullable = false)
@@ -79,22 +70,6 @@ public class User {
      * Constructor used by JPA
      */
     protected User() {
-    }
-
-    /**
-     * Constructor for creating a user object
-     *
-     * @param username  username
-     * @param firstName first name
-     * @param lastName  last name
-     * @param password  password (in plaintext)
-     */
-    public User(String username, String firstName, String lastName, String password) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        active = true;
     }
 
     /**
@@ -184,15 +159,6 @@ public class User {
     }
 
     /**
-     * Get user's encoded password
-     *
-     * @return password (encoded)
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
      * Get user's active flag
      *
      * @return user's status
@@ -245,14 +211,4 @@ public class User {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
-
-    /**
-     * Set user's password
-     *
-     * @param password of user in plaintext
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }

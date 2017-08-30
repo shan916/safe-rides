@@ -31,7 +31,7 @@ public final class JwtUserFactory {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getPassword(),
+                null,
                 mapToGrantedAuthorities(user.getAuthorities()),
                 user.getActive(),
                 user.getLastPasswordResetDate()

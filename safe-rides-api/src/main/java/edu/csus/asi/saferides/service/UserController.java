@@ -1,7 +1,9 @@
 package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.model.ResponseMessage;
-import edu.csus.asi.saferides.security.*;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.JwtUser;
+import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.security.dto.UserDto;
 import edu.csus.asi.saferides.security.mapper.UserMapper;
 import edu.csus.asi.saferides.security.model.Authority;
@@ -9,26 +11,16 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import edu.csus.asi.saferides.security.service.UserService;
-import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -159,85 +151,6 @@ public class UserController {
     }
 
     /**
-     * Processes authentication request for application users
-     *
-     * @param authenticationRequest POSTed authentication request
-     * @return JWT
-     * @throws AuthenticationException authentication exception
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/auth")
-    @ApiOperation(value = "authenticate", nickname = "Authenticate", notes = "User's authentication - Admin, Coordinator, Driver. Returns a JWT")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> authenticate(@RequestBody JwtAuthenticationRequest authenticationRequest) {
-        // Perform the security
-        try {
-            final Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getUsername().toLowerCase(),
-                            authenticationRequest.getPassword()
-                    )
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Reload password post-security so we can generate token
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername().toLowerCase());
-
-            final String token = jwtTokenUtil.generateToken(userDetails);
-
-            // Return the token
-            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-        } catch (AuthenticationException exception) {
-            if (exception.getClass().equals(DisabledException.class)) {
-                return ResponseEntity.status(422).body(new ResponseMessage("Account is deactivated"));
-            } else if (exception.getClass().equals(BadCredentialsException.class)) {
-                return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
-            } else {
-                return ResponseEntity.status(422).body(new ResponseMessage("Authentication error"));
-            }
-        }
-    }
-
-    /**
-     * Processes authentication request for riders
-     *
-     * @param riderAuthenticationRequest POSTed authentication request
-     * @return JWT
-     * @throws AuthenticationException authentication exception
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/authrider")
-    @ApiOperation(value = "authenticateRider", nickname = "Authenticate Rider", notes = "User's authentication - Rider. Returns a JWT")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> authenticateRider(@RequestBody JwtRiderAuthenticationRequest riderAuthenticationRequest) throws AuthenticationException {
-        // validate onecard (not null)
-        if (!StringUtils.isNumeric(riderAuthenticationRequest.getOneCardId()) || StringUtils.length(riderAuthenticationRequest.getOneCardId()) != 9) {
-            return ResponseEntity.status(422).body(new ResponseMessage("Bad credentials"));
-        }
-
-        // create a new user object for a rider
-        User riderUser = new User(riderAuthenticationRequest.getOneCardId().toLowerCase(), "anon_fname", "anon_lname");
-
-        // set roles for the new user to rider only
-        ArrayList<Authority> authorityList = new ArrayList<>();
-        authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
-        riderUser.setAuthorities(authorityList);
-
-        // create a token for the new user
-        UserDetails userDetails = JwtUserFactory.create(riderUser);
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-    }
-
-    /**
      * Creates a new user
      * <p>
      * Returns HTTP status 400 if password does not meet security requirements
@@ -254,10 +167,6 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity<?> createUser(@Validated @RequestBody UserDto userDto) {
-        if (userDto.getPassword() == null || !Util.isPasswordValid(userDto.getPassword())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Password does not meet security requirements"));
-        }
-
         User result = userService.createCoordinatorUser(userDto);
 
         // create URI of where the user was created
@@ -307,10 +216,6 @@ public class UserController {
 
         if (!existingUser.getUsername().equalsIgnoreCase(userDto.getUsername())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username is not allowed to be modified"));
-        }
-
-        if (!StringUtils.isEmpty(userDto.getPassword()) && !Util.isPasswordValid(userDto.getPassword())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
         }
 
         User result = userService.updateCoordinatorUser(userDto);
