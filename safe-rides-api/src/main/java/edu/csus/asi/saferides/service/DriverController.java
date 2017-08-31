@@ -193,10 +193,13 @@ public class DriverController {
     @ApiOperation(value = "save", nickname = "save", notes = "Updates a driver")
     public ResponseEntity<?> save(@PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
         Driver updatedDriver = driverMapper.map(driverDto, Driver.class);
+        User updatedUser = driverMapper.map(driverDto, User.class);
 
         if (!updatedDriver.getId().equals(id)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
         }
+
+        updatedDriver.setUser(updatedUser);
 
         List<String> errorMessages = validateDriver(updatedDriver);
 
@@ -204,24 +207,40 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
-        Driver existingDriver = driverRepository.findOne(id);
+        Driver driverFromDb = driverRepository.findOne(driverDto.getId());
+
 
         // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getUser().getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
+        if (!updatedDriver.getUser().getActive() && driverFromDb.getStatus() != DriverStatus.AVAILABLE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         }
 
-        // deactivate user if driver deactivated
-        if (!updatedDriver.getUser().getActive()) {
-            existingDriver.getUser().setActive(false);
-        } else {
-            existingDriver.getUser().setActive(true);
-        }
+        User userFromDb = driverFromDb.getUser();
+        Vehicle vehicleFromDb = driverFromDb.getVehicle();
 
-        updatedDriver.setUser(existingDriver.getUser());
-        driverRepository.save(updatedDriver);
+        driverFromDb.setDlChecked(updatedDriver.getDlChecked());
+        driverFromDb.setInsuranceChecked(updatedDriver.getInsuranceChecked());
+        driverFromDb.setInsuranceCompany(updatedDriver.getInsuranceCompany());
+        driverFromDb.setPhoneNumber(updatedDriver.getPhoneNumber());
 
-        return ResponseEntity.ok(driverMapper.map(updatedDriver, DriverDto.class));
+        vehicleFromDb.setMake(driverDto.getVehicle().getMake());
+        vehicleFromDb.setModel(driverDto.getVehicle().getModel());
+        vehicleFromDb.setYear(driverDto.getVehicle().getYear());
+        vehicleFromDb.setLicensePlate(driverDto.getVehicle().getLicensePlate());
+        vehicleFromDb.setColor(driverDto.getVehicle().getColor());
+        vehicleFromDb.setSeats(driverDto.getVehicle().getSeats());
+
+        userFromDb.setFirstName(updatedUser.getFirstName());
+        userFromDb.setLastName(updatedUser.getLastName());
+        userFromDb.setActive(updatedUser.getActive());
+
+
+        driverFromDb.setUser(userFromDb);
+        driverFromDb.setVehicle(vehicleFromDb);
+
+        Driver persistedDriver = driverRepository.save(driverFromDb);
+
+        return ResponseEntity.ok(driverMapper.map(persistedDriver, DriverDto.class));
     }
 
 

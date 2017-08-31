@@ -2,6 +2,7 @@ package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.dto.DriverDto;
+import edu.csus.asi.saferides.security.model.User;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
@@ -16,17 +17,24 @@ public class DriverMapper extends ConfigurableMapper {
     protected void configure(MapperFactory factory) {
         factory.classMap(Driver.class, DriverDto.class)
                 .field("id", "id")
-                .field("user.username", "oneCardId")
-                .field("user.firstName", "driverFirstName")
-                .field("user.lastName", "driverLastName")
+                .fieldAToB("user.username", "oneCardId")
+                .fieldAToB("user.firstName", "driverFirstName")
+                .fieldAToB("user.lastName", "driverLastName")
                 .field("phoneNumber", "phoneNumber")
                 .field("dlChecked", "dlChecked")
                 .field("insuranceChecked", "insuranceChecked")
                 .field("insuranceCompany", "insuranceCompany")
-                .field("user.active", "active")
-                .field("status", "status")
+                .fieldAToB("user.active", "active")
+                .fieldAToB("status", "status")
                 .field("vehicle", "vehicle")
-                .field("endOfNightOdo", "endOfNightOdo")
+                .fieldAToB("endOfNightOdo", "endOfNightOdo")
+                .byDefault()
+                .register();
+
+        factory.classMap(DriverDto.class, User.class)
+                .field("driverFirstName", "firstName")
+                .field("driverLastName", "lastName")
+                .field("active", "active")
                 .byDefault()
                 .register();
     }

@@ -69,7 +69,7 @@ public class User {
     /**
      * Constructor used by JPA
      */
-    protected User() {
+    public User() {
     }
 
     /**
@@ -211,4 +211,5 @@ public class User {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
+
 }
