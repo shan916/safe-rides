@@ -139,18 +139,11 @@ public class UserService {
      * @return the created user
      */
     public User createDriverUser(DriverDto driverDto) {
-        User user = new User(driverDto.getOneCardId(), driverDto.getDriverFirstName(), driverDto.getDriverLastName());
+        User user = new User(driverDto.getUsername(), driverDto.getDriverFirstName(), driverDto.getDriverLastName());
 
         List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
         user.setAuthorities(authorities);
 
-        return userRepository.save(user);
-    }
-
-    public User updateDriverUser(DriverDto driverDto) {
-        User user = userRepository.findByUsernameIgnoreCase(driverDto.getOneCardId());
-        user.setFirstName(driverDto.getDriverFirstName());
-        user.setLastName(driverDto.getDriverLastName());
         return userRepository.save(user);
     }
 }

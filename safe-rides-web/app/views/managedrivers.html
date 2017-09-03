@@ -14,7 +14,7 @@
                         <tr>
                             <th class="col-xs-2">Name</th>
                             <th class="col-xs-2">Phone #</th>
-                            <th class="col-xs-1">OneCard ID</th>
+                            <th class="col-xs-1">Username</th>
                             <th class="col-xs-1">DL Checked</th>
                             <th class="col-xs-1">Status</th>
                             <th class="col-xs-3">Actions</th>
@@ -25,7 +25,7 @@
                         <tr ng-repeat="driver in ctrl.activeDrivers">
                             <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                             <td>{{driver.phoneNumber | phone}}</td>
-                            <td>{{driver.oneCardId}}</td>
+                            <td>{{driver.username}}</td>
                             <td>{{driver.dlChecked}}</td>
                             <td>{{driver.status}}</td>
                             <td>
@@ -72,7 +72,7 @@
                                 <tr>
                                     <th class="col-xs-2">Name</th>
                                     <th class="col-xs-2">Phone #</th>
-                                    <th class="col-xs-1">OneCard ID</th>
+                                    <th class="col-xs-1">Username</th>
                                     <th class="col-xs-1">DL Checked</th>
                                     <th class="col-xs-3">Actions</th>
                                 </tr>
@@ -81,7 +81,7 @@
                                 <tr ng-repeat="driver in ctrl.inactiveDrivers | filter: ctrl.searchString | limitTo: 25">
                                     <td>{{driver.driverFirstName}}&nbsp;{{driver.driverLastName}}</td>
                                     <td>{{driver.phoneNumber | phone}}</td>
-                                    <td>{{driver.oneCardId}}</td>
+                                    <td>{{driver.username}}</td>
                                     <td>{{driver.dlChecked}}</td>
                                     <td>
                                         <a ui-sref="editdriver({driverId: driver.id})" class="btn btn-primary">Edit</a>
