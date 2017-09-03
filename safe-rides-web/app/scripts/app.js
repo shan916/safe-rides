@@ -39,7 +39,7 @@ angular
         'ui-notification'
     ])
 
-    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $location) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
@@ -52,6 +52,7 @@ angular
                     'ticket': window.location.search.substring(ticketParamStart)
                 }).then(function(response){
                     AuthTokenService.setToken(response.data.token);
+                    window.location.href =  window.location.href.split("?")[0];
                 });
             }
         });
