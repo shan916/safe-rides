@@ -157,24 +157,6 @@ public class User {
     }
 
     /**
-     * Get user's active flag
-     *
-     * @return user's status
-     */
-    public Boolean getActive() {
-        return active;
-    }
-
-    /**
-     * Set user's active flag
-     *
-     * @param active of user
-     */
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    /**
      * Get user's last password reset date
      *
      * @return user's lastPasswordReset date
@@ -210,4 +192,21 @@ public class User {
         this.authorities = authorities;
     }
 
+    /**
+     * Get user's active flag
+     *
+     * @return user's status
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Set user's active flag
+     *
+     * @param active of user
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

@@ -33,7 +33,7 @@ public final class JwtUserFactory {
                 user.getLastName(),
                 null,
                 mapToGrantedAuthorities(user.getAuthorities()),
-                user.getActive(),
+                user.isActive(),
                 user.getLastPasswordResetDate()
         );
     }

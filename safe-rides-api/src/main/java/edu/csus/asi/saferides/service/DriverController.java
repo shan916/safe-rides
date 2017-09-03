@@ -114,9 +114,9 @@ public class DriverController {
         List<Driver> drivers = driverRepository.findAllByOrderByModifiedDateDesc();
         if (active != null) {
             if (active) {
-                return driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().getActive()).collect(Collectors.toList()), DriverDto.class);
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
             } else {
-                return driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().getActive()).collect(Collectors.toList()), DriverDto.class);
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
             }
         } else {
             return driverMapper.mapAsList((drivers), DriverDto.class);
@@ -212,7 +212,7 @@ public class DriverController {
 
 
         // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getUser().getActive() && driverFromDb.getStatus() != DriverStatus.AVAILABLE) {
+        if (!updatedDriver.getUser().isActive() && driverFromDb.getStatus() != DriverStatus.AVAILABLE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         }
 
@@ -233,7 +233,7 @@ public class DriverController {
 
         userFromDb.setFirstName(updatedUser.getFirstName());
         userFromDb.setLastName(updatedUser.getLastName());
-        userFromDb.setActive(updatedUser.getActive());
+        userFromDb.setActive(updatedUser.isActive());
 
 
         driverFromDb.setUser(userFromDb);
