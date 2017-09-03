@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
  * Data transfer object for the Driver object
  */
 public class DriverDto {
-    @ApiModelProperty(value = "The id of the driver", required = true)
-    @NotNull(message = "id cannot be null")
+    @ApiModelProperty(value = "The id of the driver")
     private Long id;
 
     @ApiModelProperty(value = "The driver's One Card ID", required = true)

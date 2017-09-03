@@ -17,6 +17,7 @@ public class DriverMapper extends ConfigurableMapper {
     protected void configure(MapperFactory factory) {
         factory.classMap(Driver.class, DriverDto.class)
                 .field("id", "id")
+                .fieldBToA("oneCardId", "oneCardId")
                 .fieldAToB("user.username", "oneCardId")
                 .fieldAToB("user.firstName", "driverFirstName")
                 .fieldAToB("user.lastName", "driverLastName")

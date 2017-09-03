@@ -99,12 +99,12 @@ public class RideRequestController {
     public Iterable<RideRequestDto> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
         if (status != null) {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
-            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+            List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
             return dtos;
         } else {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
-            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+            List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
             return dtos;
         }
@@ -336,13 +336,5 @@ public class RideRequestController {
             return ResponseEntity.ok().build();
         }
 
-    }
-
-    private List<RideRequestDto> mapRideRequestListToDtoList(List<RideRequest> rideRequestList) {
-        List<RideRequestDto> dtoList = new ArrayList<>();
-        for (int i = 0; i < rideRequestList.size(); i++) {
-            dtoList.add(rideRequestMapper.map(rideRequestList.get(i), RideRequestDto.class));
-        }
-        return dtoList;
     }
 }

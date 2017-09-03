@@ -114,12 +114,12 @@ public class DriverController {
         List<Driver> drivers = driverRepository.findAllByOrderByModifiedDateDesc();
         if (active != null) {
             if (active) {
-                return mapDriverListToDtoList(drivers.stream().filter(driver -> driver.getUser().getActive()).collect(Collectors.toList()));
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().getActive()).collect(Collectors.toList()), DriverDto.class);
             } else {
-                return mapDriverListToDtoList(drivers.stream().filter(driver -> !driver.getUser().getActive()).collect(Collectors.toList()));
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().getActive()).collect(Collectors.toList()), DriverDto.class);
             }
         } else {
-            return mapDriverListToDtoList(drivers);
+            return driverMapper.mapAsList((drivers), DriverDto.class);
         }
     }
 
@@ -155,6 +155,8 @@ public class DriverController {
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
     public ResponseEntity<?> save(@Validated @RequestBody DriverDto driverDto) {
         Driver driver = driverMapper.map(driverDto, Driver.class);
+        User user = driverMapper.map(driverDto, User.class);
+        driver.setUser(user);
 
         List<String> errorMessages = validateDriver(driver);
 
@@ -162,16 +164,15 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
-        User user = userService.createDriverUser(driverDto);
+        User createdUser = userService.createDriverUser(driverDto);
 
-        driver.setUser(user);
+        driver.setUser(createdUser);
         Driver result = driverRepository.save(driver);
 
         // create URI of where the driver was created
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location).body(driverMapper.map(result, DriverDto.class));
-
     }
 
     /**
@@ -538,13 +539,4 @@ public class DriverController {
 
         return errorMessages;
     }
-
-    private List<DriverDto> mapDriverListToDtoList(List<Driver> driverList) {
-        List<DriverDto> dtoList = new ArrayList<>();
-        for (int i = 0; i < driverList.size(); i++) {
-            dtoList.add(driverMapper.map(driverList.get(i), DriverDto.class));
-        }
-        return dtoList;
-    }
-
 }
