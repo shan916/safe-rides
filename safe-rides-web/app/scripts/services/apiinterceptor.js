@@ -32,7 +32,6 @@ angular.module('safeRidesWebApp')
                     case 401:
                         $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
                         break;
-                    case -1:
                     default:
                         return $q.reject(rejection);
                 }

@@ -50,6 +50,8 @@ angular
                 casService.validate({
                     'service': ENV.casServiceName,
                     'ticket': window.location.search.substring(ticketParamStart)
+                }).then(function(response){
+                    AuthTokenService.setToken(response.data.token);
                 });
             }
         });
@@ -180,7 +182,11 @@ angular
                 url: '/riderdashboard',
                 templateUrl: 'views/riderdashboard.html',
                 controller: 'RiderdashboardCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
             })
             .state('managedrivers', {
                 url: '/managedrivers',

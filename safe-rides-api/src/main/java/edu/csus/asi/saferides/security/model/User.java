@@ -32,14 +32,12 @@ public class User {
     /**
      * First name
      */
-    @Column(nullable = false)
     @Size(min = 2, max = 30)
     private String firstName;
 
     /**
      * Last name
      */
-    @Column(nullable = false)
     @Size(min = 2, max = 30)
     private String lastName;
 
