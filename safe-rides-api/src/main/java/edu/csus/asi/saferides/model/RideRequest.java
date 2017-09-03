@@ -1,8 +1,12 @@
 package edu.csus.asi.saferides.model;
 
+import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -22,6 +26,12 @@ public class RideRequest {
      */
     @ManyToOne
     private Driver driver;
+
+    /**
+     * Many to one relationship between User and RideRequest so one User can request many rides
+     */
+    @ManyToOne
+    private User user;
 
     /**
      * Primary key
@@ -53,18 +63,6 @@ public class RideRequest {
      */
     @Column
     private LocalDateTime assignedDate;
-
-    /**
-     * Ride requestor's first name
-     */
-    @Column(nullable = false, length = 30)
-    private String requestorFirstName;
-
-    /**
-     * Ride requestor's last name
-     */
-    @Column(nullable = false, length = 30)
-    private String requestorLastName;
 
     /**
      * Ride requestor's phone number
@@ -189,14 +187,11 @@ public class RideRequest {
     protected RideRequest() {
     }
 
-    public RideRequest(String oneCardId, String requestorFirstName, String requestorLastName,
-                       String requestorPhoneNumber, int numPassengers, String pickupLine1, String pickupCity,
-                       String dropoffLine1, String dropoffCity) {
+    public RideRequest(String oneCardId, String requestorPhoneNumber, int numPassengers, String pickupLine1,
+                       String pickupCity, String dropoffLine1, String dropoffCity) {
         super();
         this.oneCardId = oneCardId;
         this.requestDate = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
-        this.requestorFirstName = requestorFirstName;
-        this.requestorLastName = requestorLastName;
         this.requestorPhoneNumber = requestorPhoneNumber;
         this.numPassengers = numPassengers;
         this.pickupLine1 = pickupLine1;
@@ -341,42 +336,6 @@ public class RideRequest {
      */
     public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
-    }
-
-    /**
-     * Gets the ride requestor's first name
-     *
-     * @return the ride requestor's first name
-     */
-    public String getRequestorFirstName() {
-        return requestorFirstName;
-    }
-
-    /**
-     * Sets the ride requestor's first name
-     *
-     * @param requestorFirstName the ride requestor's first name
-     */
-    public void setRequestorFirstName(String requestorFirstName) {
-        this.requestorFirstName = requestorFirstName;
-    }
-
-    /**
-     * Gets the ride requestor's last name
-     *
-     * @return the ride requestor's last name
-     */
-    public String getRequestorLastName() {
-        return requestorLastName;
-    }
-
-    /**
-     * Sets the ride requestor's last name
-     *
-     * @param requestorLastName the ride requestor's last name
-     */
-    public void setRequestorLastName(String requestorLastName) {
-        this.requestorLastName = requestorLastName;
     }
 
     /**
@@ -703,40 +662,11 @@ public class RideRequest {
         this.assignedDate = assignedDate;
     }
 
-    /**
-     * Gets the string representation of the RideRequest object
-     *
-     * @return the string representation of the RideRequest object
-     */
-    @Override
-    public String toString() {
-        return "RideRequest{" +
-                "driver=" + driver +
-                ", id=" + id +
-                ", oneCardId='" + oneCardId + '\'' +
-                ", requestDate=" + requestDate +
-                ", lastModified=" + lastModified +
-                ", assignedDate=" + assignedDate +
-                ", requestorFirstName='" + requestorFirstName + '\'' +
-                ", requestorLastName='" + requestorLastName + '\'' +
-                ", requestorPhoneNumber='" + requestorPhoneNumber + '\'' +
-                ", numPassengers=" + numPassengers +
-                ", startOdometer=" + startOdometer +
-                ", endOdometer=" + endOdometer +
-                ", pickupLine1='" + pickupLine1 + '\'' +
-                ", pickupLine2='" + pickupLine2 + '\'' +
-                ", pickupCity='" + pickupCity + '\'' +
-                ", dropoffLine1='" + dropoffLine1 + '\'' +
-                ", dropoffLine2='" + dropoffLine2 + '\'' +
-                ", dropoffCity='" + dropoffCity + '\'' +
-                ", status=" + status +
-                ", cancelMessage='" + cancelMessage + '\'' +
-                ", messageToDriver='" + messageToDriver + '\'' +
-                ", estimatedTime='" + estimatedTime + '\'' +
-                ", pickupLatitude=" + pickupLatitude +
-                ", pickupLongitude=" + pickupLongitude +
-                ", dropoffLatitude=" + dropoffLatitude +
-                ", dropoffLongitude=" + dropoffLongitude +
-                '}';
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

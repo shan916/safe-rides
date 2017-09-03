@@ -2,6 +2,7 @@ package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
+import edu.csus.asi.saferides.security.dto.UserDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.converter.builtin.PassThroughConverter;
 import ma.glasnost.orika.impl.ConfigurableMapper;
@@ -21,11 +22,12 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("id", "id")
                 .field("driver.id", "driverId")
                 .field("oneCardId", "oneCardId")
+                .fieldAToB("user.username", "user.username")
                 .field("requestDate", "requestDate")
                 .field("lastModified", "lastModified")
                 .field("assignedDate", "assignedDate")
-                .field("requestorFirstName", "requestorFirstName")
-                .field("requestorLastName", "requestorLastName")
+                .fieldAToB("user.firstName", "requestorFirstName")
+                .fieldAToB("user.lastName", "requestorLastName")
                 .field("requestorPhoneNumber", "requestorPhoneNumber")
                 .field("numPassengers", "numPassengers")
                 .field("startOdometer", "startOdometer")
@@ -44,7 +46,7 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("pickupLongitude", "pickupLongitude")
                 .field("dropoffLatitude", "dropoffLatitude")
                 .field("dropoffLongitude", "dropoffLongitude")
-                .field("driver.driverFirstName", "driverName")
+                .field("driver.user.firstName", "driverName")
                 .field("driver.vehicle.year", "vehicleYear")
                 .field("driver.vehicle.color", "vehicleColor")
                 .field("driver.vehicle.make", "vehicleMake")
@@ -54,5 +56,4 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .register();
         factory.getConverterFactory().registerConverter(new PassThroughConverter(LocalDateTime.class));
     }
-
 }

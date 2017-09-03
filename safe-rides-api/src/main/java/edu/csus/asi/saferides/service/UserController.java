@@ -126,26 +126,7 @@ public class UserController {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         ArrayList<AuthorityName> authoritiesFromToken = jwtTokenUtil.getAuthoritiesFromToken(token);
 
-        JwtUser user;
-
-        // if rider
-        if (authoritiesFromToken.size() == 1 && authoritiesFromToken.get(0).equals(AuthorityName.ROLE_RIDER)) {
-            try {
-                // try to load from riderequests
-                user = (JwtUser) userDetailsService.loadRiderByOnecard(username);
-            } catch (Exception e) {
-                // else create a new 'user'
-                User riderUser = new User(username, "anon_fname", "anon_lname");
-
-                ArrayList<Authority> authorityList = new ArrayList<>();
-                authorityList.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
-                riderUser.setAuthorities(authorityList);
-
-                user = JwtUserFactory.create(riderUser);
-            }
-        } else {
-            user = (JwtUser) userDetailsService.loadUserByUsername(username);
-        }
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
         return user;
     }

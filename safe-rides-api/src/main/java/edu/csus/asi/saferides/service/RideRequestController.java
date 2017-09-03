@@ -14,6 +14,8 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
@@ -74,6 +76,9 @@ public class RideRequestController {
      */
     @Autowired
     private RideRequestMapper rideRequestMapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * HTTP header that stores the JWT, defined in application.yaml
@@ -267,7 +272,9 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
 
         // filter ride request
         rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);

@@ -2,9 +2,11 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.mapper.DriverLocationMapper;
 import edu.csus.asi.saferides.mapper.DriverMapper;
+import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.model.dto.DriverLocationDto;
+import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
@@ -99,6 +101,9 @@ public class DriverController {
      */
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RideRequestMapper rideRequestMapper;
 
     /**
      * GET /drivers?active=
@@ -492,7 +497,7 @@ public class DriverController {
                 requests.removeIf((RideRequest req) -> req.getStatus() != status);
             }
 
-            return ResponseEntity.ok(requests);
+            return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
         } else {
             Collection<RideRequest> requests = driver.getRides();
 
@@ -501,7 +506,7 @@ public class DriverController {
             if (requests == null) {
                 return ResponseEntity.noContent().build();
             } else {
-                return ResponseEntity.ok(requests);
+                return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
             }
         }
     }

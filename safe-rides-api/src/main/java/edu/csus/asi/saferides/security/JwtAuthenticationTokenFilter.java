@@ -68,25 +68,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             log.info("checking authentication for user " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails;
-                // if rider
-                if (authoritiesFromToken.size() == 1 && authoritiesFromToken.get(0).equals(AuthorityName.ROLE_RIDER)) {
-                    try {
-                        // find rider in rides table
-                        userDetails = this.userDetailsService.loadRiderByOnecard(username);
-                    } catch (Exception e) {
-                        // else create a new 'user' with rider rights
-                        User riderUser = new User(username, "anon_fname", "anon_lname");
-
-                        ArrayList<Authority> authorities = new ArrayList<>();
-                        authorities.add(authorityRepository.findByName(AuthorityName.ROLE_RIDER));
-                        riderUser.setAuthorities(authorities);
-
-                        userDetails = JwtUserFactory.create(riderUser);
-                    }
-                } else {
-                    userDetails = this.userDetailsService.loadUserByUsername(username);
-                }
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
