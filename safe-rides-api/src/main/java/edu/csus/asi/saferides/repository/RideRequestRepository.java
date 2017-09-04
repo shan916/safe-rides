@@ -3,7 +3,6 @@ package edu.csus.asi.saferides.repository;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.UserRepository;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -32,14 +31,15 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      */
     List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 
-    /**
-     * Finds the latest ride requested that is associated with the specified OneCard id
-     * Returns null if no ride is associated with the specified OneCard id
-     *
-     * @param oneCardId the OneCard Id to search by
-     * @return latest ride requested that is associated with the specified OneCard id
-     */
+
     RideRequest findTop1ByOneCardIdOrderByRequestDateDesc(String oneCardId);
 
+    /**
+     * Finds the latest ride requested that is associated with the specified user
+     * Returns null if no ride is associated with the specified user
+     *
+     * @param user the user to search by
+     * @return latest ride requested that is associated with the specified user
+     */
     RideRequest findTop1ByUserOrderByRequestDateDesc(User user);
 }

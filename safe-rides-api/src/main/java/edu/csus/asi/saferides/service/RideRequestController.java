@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -152,7 +151,7 @@ public class RideRequestController {
      * </ul>
      *
      * @param request     the HTTP servlet request
-     * @param rideRequest request body containing the ride to create
+     * @param rideRequestDto request body containing the ride to create
      * @return ResponseEntity containing the created ride and its location
      */
     @RequestMapping(method = RequestMethod.POST)
@@ -163,10 +162,14 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
+    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequestDto rideRequestDto) {
         String authToken = request.getHeader(this.tokenHeader);
 
+        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
+
         String view = "coordinator";
+
+        User user = null;
 
         if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_DRIVER)) { // if requestor is a rider
             view = "rider";
@@ -174,12 +177,11 @@ public class RideRequestController {
             if (!Util.isAcceptingRideRequests(configurationRepository.findOne(1))) {    // not accepting rides right now
                 return ResponseEntity.badRequest().body(new ResponseMessage("SafeRides has stopped accepting new rides."));
             } else {
-                // set the OneCard ID in the auth token to be the request's OneCard ID
-                String username = jwtTokenUtil.getUsernameFromToken(authToken);
-                rideRequest.setOneCardId(username);
+                user = userRepository.findByUsernameIgnoreCase(jwtTokenUtil.getUsernameFromToken(authToken));
+                if (user == null) {
+                    return ResponseEntity.badRequest().build();
+                }
             }
-        } else if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_COORDINATOR)) { // if not a coordinator or admin or rider
-            return ResponseEntity.badRequest().body(new ResponseMessage("Only riders or coordinators can submit a ride request!"));
         }
 
         // oneCardId is required
@@ -196,6 +198,15 @@ public class RideRequestController {
 
         geocodingService.setCoordinates(rideRequest);
 
+        if (null != user) {
+            if((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))){
+                user.setFirstName(rideRequestDto.getRequestorFirstName());
+            }
+            if((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))){
+                user.setLastName(rideRequestDto.getRequestorLastName());
+            }
+            rideRequest.setUser(user);
+        }
         RideRequest result = rideRequestRepository.save(rideRequest);
 
         // create URI of where the rideRequest was created
@@ -328,7 +339,9 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
 
         // filter ride request
         rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);

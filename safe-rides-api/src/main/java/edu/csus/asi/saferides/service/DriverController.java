@@ -360,7 +360,7 @@ public class DriverController {
                 for (RideRequest req : requests) {
                     if (req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
                             || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF) {
-                        return ResponseEntity.ok(req);
+                        return ResponseEntity.ok(rideRequestMapper.map(req, RideRequestDto.class));
                     }
                 }
             }
