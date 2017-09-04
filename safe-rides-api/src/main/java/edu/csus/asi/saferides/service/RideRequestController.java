@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
+import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
@@ -207,6 +208,16 @@ public class RideRequestController {
             }
             rideRequest.setUser(user);
         }
+
+        // check if user already requested a ride during this period
+        Configuration configuration = configurationRepository.findOne(1);
+        RideRequest previousRideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(rideRequest.getOneCardId());
+        if(null != previousRideRequest){
+            if(null != Util.filterPastRide(configuration, previousRideRequest)){
+                return ResponseEntity.badRequest().body(new ResponseMessage("A ride has already been requested today."));
+            }
+        }
+
         RideRequest result = rideRequestRepository.save(rideRequest);
 
         // create URI of where the rideRequest was created
