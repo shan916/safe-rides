@@ -74,10 +74,10 @@ angular
 
         $rootScope.globalLogout = function () {
             AuthTokenService.removeToken();
-            $state.go('/');
             // update the user authentication state right away
             // angular-jwt uses $rootScope.isAuthenticated
             $rootScope.isAuthenticated = false;
+            $window.location.href = ENV.logoutRedirect;
         };
     })
 
