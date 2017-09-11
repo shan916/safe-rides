@@ -56,32 +56,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="password">New Password</label>
-                            <input id="password" name="password" type="password" class="form-control"
-                                   placeholder="New password" ng-model="ctrl.coordinator.password" ng-minlength="8">
-                            <div ng-messages="coordinatorForm.password.$dirty && coordinatorForm.password.$error">
-                                <div class="input-error" ng-message="minlength">* must be at least 8 characters</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm New Password</label>
-                            <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
-                                   placeholder="Confirm password" ng-model="ctrl.confirmPassword"
-                                   compare-to="ctrl.coordinator.password">
-                            <div
-                                ng-messages="coordinatorForm.confirmPassword.$error">
-                                <div class="input-error" ng-message="compareTo">* Password fields must match</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
             </form>
         </div>
     </div>

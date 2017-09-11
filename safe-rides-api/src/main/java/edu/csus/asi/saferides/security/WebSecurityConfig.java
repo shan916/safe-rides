@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -37,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUserDetailsServiceImpl userDetailsService;
 
     /**
-     * Dependency injection and specify which userdetails service and password encoder to use
+     * Dependency injection and specify which userdetails service to use
      *
      * @param authenticationManagerBuilder SecurityBuilder used to create an AuthenticationManager
      * @throws Exception if an error occurs when configuring authentication
@@ -45,19 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(this.userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-
-    /**
-     * Get PasswordEncoder bean
-     * Sets ArgonPasswordEncoder as the PasswordEncoder
-     *
-     * @return ArgonPasswordEncoder instance
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new ArgonPasswordEncoder();
+                .userDetailsService(this.userDetailsService);
     }
 
     /**
@@ -96,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // set up children for requests
                 .authorizeRequests()
                 // allow POST to /users/auth
-                .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/auth", "/users/authrider", "/cas/validate").permitAll()
 
                 // allow GET to /config/isLive
                 .antMatchers(HttpMethod.GET, "/config/isLive").permitAll()

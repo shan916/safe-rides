@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -47,7 +47,7 @@ var app = angular.module('safeRidesWebApp')
                 loadData();
             }
         } else {
-            $state.go('login');
+            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
             console.log('Not authenticated');
         }
 

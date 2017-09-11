@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.security.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.csus.asi.saferides.serialization.LocalDateTimeDeserializer;
@@ -33,24 +32,14 @@ public class User {
     /**
      * First name
      */
-    @Column(nullable = false)
     @Size(min = 2, max = 30)
     private String firstName;
 
     /**
      * Last name
      */
-    @Column(nullable = false)
     @Size(min = 2, max = 30)
     private String lastName;
-
-    /**
-     * Password
-     */
-    @Column(nullable = false)
-    @Size(min = 161, max = 161)
-    @JsonIgnore
-    private String password;
 
     /**
      * Enabled / active flag
@@ -78,23 +67,7 @@ public class User {
     /**
      * Constructor used by JPA
      */
-    protected User() {
-    }
-
-    /**
-     * Constructor for creating a user object
-     *
-     * @param username  username
-     * @param firstName first name
-     * @param lastName  last name
-     * @param password  password (in plaintext)
-     */
-    public User(String username, String firstName, String lastName, String password) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        active = true;
+    public User() {
     }
 
     /**
@@ -184,33 +157,6 @@ public class User {
     }
 
     /**
-     * Get user's encoded password
-     *
-     * @return password (encoded)
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Get user's active flag
-     *
-     * @return user's status
-     */
-    public Boolean getActive() {
-        return active;
-    }
-
-    /**
-     * Set user's active flag
-     *
-     * @param active of user
-     */
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    /**
      * Get user's last password reset date
      *
      * @return user's lastPasswordReset date
@@ -247,12 +193,20 @@ public class User {
     }
 
     /**
-     * Set user's password
+     * Get user's active flag
      *
-     * @param password of user in plaintext
+     * @return user's status
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public boolean isActive() {
+        return active;
     }
 
+    /**
+     * Set user's active flag
+     *
+     * @param active of user
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

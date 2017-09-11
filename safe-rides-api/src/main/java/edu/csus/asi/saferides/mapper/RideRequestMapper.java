@@ -2,6 +2,7 @@ package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
+import edu.csus.asi.saferides.security.dto.UserDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.converter.builtin.PassThroughConverter;
 import ma.glasnost.orika.impl.ConfigurableMapper;
@@ -21,12 +22,13 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("id", "id")
                 .field("driver.id", "driverId")
                 .field("oneCardId", "oneCardId")
+                .fieldAToB("user.username", "user.username")
                 .field("requestDate", "requestDate")
                 .field("lastModified", "lastModified")
                 .field("assignedDate", "assignedDate")
-                .field("requestorFirstName", "requestorFirstName")
-                .field("requestorLastName", "requestorLastName")
-                .field("requestorPhoneNumber", "requestorPhoneNumber")
+                .fieldAToB("user.firstName", "requestorFirstName")
+                .field("user.lastName", "requestorLastName")
+                .fieldAToB("requestorPhoneNumber", "requestorPhoneNumber")
                 .field("numPassengers", "numPassengers")
                 .field("startOdometer", "startOdometer")
                 .field("endOdometer", "endOdometer")
@@ -44,15 +46,14 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("pickupLongitude", "pickupLongitude")
                 .field("dropoffLatitude", "dropoffLatitude")
                 .field("dropoffLongitude", "dropoffLongitude")
-                .field("driver.driverFirstName", "driverName")
-                .field("driver.vehicle.year", "vehicleYear")
-                .field("driver.vehicle.color", "vehicleColor")
-                .field("driver.vehicle.make", "vehicleMake")
-                .field("driver.vehicle.model", "vehicleModel")
-                .field("driver.vehicle.licensePlate", "vehicleLicensePlate")
+                .fieldAToB("driver.user.firstName", "driverName")
+                .fieldAToB("driver.vehicle.year", "vehicleYear")
+                .fieldAToB("driver.vehicle.color", "vehicleColor")
+                .fieldAToB("driver.vehicle.make", "vehicleMake")
+                .fieldAToB("driver.vehicle.model", "vehicleModel")
+                .fieldAToB("driver.vehicle.licensePlate", "vehicleLicensePlate")
                 .byDefault()
                 .register();
         factory.getConverterFactory().registerConverter(new PassThroughConverter(LocalDateTime.class));
     }
-
 }

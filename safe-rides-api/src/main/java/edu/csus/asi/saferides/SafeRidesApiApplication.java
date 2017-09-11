@@ -5,7 +5,8 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
+import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.security.model.Authority;
 import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
@@ -64,7 +65,7 @@ public class SafeRidesApiApplication {
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                                   UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
-                                  ConfigurationRepository configurationRepository, ArgonPasswordEncoder argonPasswordEncoder) {
+                                  ConfigurationRepository configurationRepository, JwtTokenUtil jwtTokenUtil) {
         return (args) -> {
 
             // save a few drivers
@@ -113,8 +114,6 @@ public class SafeRidesApiApplication {
 
             RideRequest rideRequest0 = new RideRequest(
                     "146978572",
-                    "Kevin",
-                    "Winters",
                     "9162601900",
                     1,
                     "8535 La Riviera Dr",
@@ -123,8 +122,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest1 = new RideRequest(
                     "380256637",
-                    "Peter",
-                    "Skaggs",
                     "9165129630",
                     2,
                     "4041 C St",
@@ -132,9 +129,7 @@ public class SafeRidesApiApplication {
                     "6325 14th Ave",
                     "Sacramento");
             RideRequest rideRequest2 = new RideRequest(
-                    "017150500",
-                    "Kevin",
-                    "Winters",
+                    "146978572",
                     "9162601900",
                     3,
                     "4350 J St",
@@ -143,8 +138,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest3 = new RideRequest(
                     "353488787",
-                    "Jack",
-                    "Bonner",
                     "9167033428",
                     3,
                     "5540 Spilman Ave",
@@ -153,8 +146,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest4 = new RideRequest(
                     "454397082",
-                    "Daniel",
-                    "Reaves",
                     "9164321498",
                     1,
                     "9409 Mira Del Rio Dr",
@@ -163,8 +154,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest5 = new RideRequest(
                     "124796316",
-                    "James",
-                    "Miner",
                     "9169553182",
                     1,
                     "8213 Lake Forest Dr",
@@ -173,8 +162,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest6 = new RideRequest(
                     "012644411",
-                    "Jennifer",
-                    "Alexander",
                     "9165338593",
                     2,
                     "4631 Nickles Way",
@@ -183,8 +170,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest7 = new RideRequest(
                     "507271867",
-                    "Charlene",
-                    "Thomas",
                     "9162820006",
                     2,
                     "3805 Becerra Way",
@@ -193,8 +178,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest8 = new RideRequest(
                     "653902142",
-                    "Rolanda",
-                    "James",
                     "9167739687",
                     3,
                     "3340 Soda Way",
@@ -203,8 +186,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest9 = new RideRequest(
                     "393465734",
-                    "Debra",
-                    "Lang",
                     "9164712820",
                     1,
                     "8071 La Riviera Dr",
@@ -213,8 +194,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest10 = new RideRequest(
                     "227299993",
-                    "Sue",
-                    "Grantham",
                     "9164375577",
                     1,
                     "2780 Millcreek Dr",
@@ -223,8 +202,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest11 = new RideRequest(
                     "060116327",
-                    "Noemi",
-                    "Cox",
                     "9162422785",
                     1,
                     "505 10th St",
@@ -233,8 +210,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest12 = new RideRequest(
                     "645735866",
-                    "Joy",
-                    "Pence",
                     "9163505114",
                     3,
                     "2349 Fruitridge Rd",
@@ -243,8 +218,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest13 = new RideRequest(
                     "314246498",
-                    "Rochelle",
-                    "Rowell",
                     "9164639941",
                     2,
                     "4617 12th Ave",
@@ -253,8 +226,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest14 = new RideRequest(
                     "536200095",
-                    "Charles",
-                    "Tuttle",
                     "9166348237",
                     1,
                     "1403 V St",
@@ -263,8 +234,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest15 = new RideRequest(
                     "737128850",
-                    "Mario",
-                    "Tutt",
                     "9162213034",
                     3,
                     "455 Richards Blvd",
@@ -273,8 +242,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest16 = new RideRequest(
                     "748528850",
-                    "Wanda",
-                    "Scruggs",
                     "9162768046",
                     3,
                     "6141 Hall Ln",
@@ -283,8 +250,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest17 = new RideRequest(
                     "737159820",
-                    "Mercy",
-                    "Butler",
                     "9165360504",
                     3,
                     "5630 Roseville Rd",
@@ -293,8 +258,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest18 = new RideRequest(
                     "127128850",
-                    "Dennis",
-                    "Lopez",
                     "9168732659",
                     3,
                     "1570 Edgemore Ave",
@@ -303,8 +266,6 @@ public class SafeRidesApiApplication {
                     "Sacramento");
             RideRequest rideRequest19 = new RideRequest(
                     "257129650",
-                    "David",
-                    "Meyer",
                     "9167646255",
                     3,
                     "7300 Frasinetti Rd",
@@ -312,76 +273,93 @@ public class SafeRidesApiApplication {
                     "8637 Oakbank Way",
                     "Sacramento");
 
+            User user0 = new User("kwinters","Kevin","Winters");
+            User user1 = new User("pskaggs","Peter","Skaggs");
+            User user3 = new User("jbonner","Jack","Bonner");
+            User user4 = new User("dreaves","Daniel","Reaves");
+            User user5 = new User("jminer","James","Miner");
+            User user6 = new User("jalexander","Jennifer","Alexander");
+            User user7 = new User("cthomas","charlene","thomas");
+            User user8 = new User("rjames","Rolanda","James");
+            User user9 = new User("dlang","Debra","Lang");
+            User user10 = new User("sgrantham","Sue","Grantham");
+            User user11 = new User("ncox","Noemi","Cox");
+            User user12 = new User("jpence","Joy","Pence");
+            User user13 = new User("rrowell","Rochelle","Rowell");
+            User user14 = new User("ctuttle","Charles","Tuttle");
+            User user15 = new User("mtutt","Mario","Tutt");
+            User user16 = new User("wscruggs","Wanda","Scruggs");
+            User user17 = new User("mbutler","Mercy","Butler");
+            User user18 = new User("dlopez","Dennis","Lopez");
+            User user19 = new User("dmeyer","David","Meyer");
+
+            rideRequest0.setUser(user0);
             rideRequest0.setDriver(driver0);
             rideRequest0.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest1.setUser(user1);
             rideRequest1.setDriver(driver0);
             rideRequest1.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest2.setUser(user0);
             rideRequest2.setDriver(driver0);
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest3.setUser(user3);
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest3.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest3.setEstimatedTime("15");
+            rideRequest4.setUser(user4);
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest5.setUser(user5);
             rideRequest5.setDriver(driver1);
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest6.setUser(user6);
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest6.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest6.setEstimatedTime("30");
+            rideRequest7.setUser(user7);
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
+            rideRequest8.setUser(user8);
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
             rideRequest8.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest8.setEstimatedTime("45");
+            rideRequest9.setUser(user9);
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest9.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest9.setEstimatedTime("1 hour");
+            rideRequest10.setUser(user10);
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest10.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest10.setEstimatedTime("> 1 hour");
+            rideRequest11.setUser(user11);
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest11.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest11.setEstimatedTime("15");
+            rideRequest12.setUser(user12);
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
             rideRequest12.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest12.setEstimatedTime("30");
 
-            geocodingService.setCoordinates(rideRequest0);
-            geocodingService.setCoordinates(rideRequest1);
-            geocodingService.setCoordinates(rideRequest2);
-            geocodingService.setCoordinates(rideRequest3);
-            geocodingService.setCoordinates(rideRequest4);
-            geocodingService.setCoordinates(rideRequest5);
-            geocodingService.setCoordinates(rideRequest6);
-            geocodingService.setCoordinates(rideRequest7);
-            geocodingService.setCoordinates(rideRequest8);
-            geocodingService.setCoordinates(rideRequest9);
-            geocodingService.setCoordinates(rideRequest10);
-            geocodingService.setCoordinates(rideRequest11);
-            geocodingService.setCoordinates(rideRequest12);
-            geocodingService.setCoordinates(rideRequest13);
-            geocodingService.setCoordinates(rideRequest14);
-            geocodingService.setCoordinates(rideRequest15);
-            geocodingService.setCoordinates(rideRequest16);
-            geocodingService.setCoordinates(rideRequest17);
-            geocodingService.setCoordinates(rideRequest18);
-            geocodingService.setCoordinates(rideRequest19);
+            rideRequest13.setUser(user13);
+            rideRequest14.setUser(user14);
+            rideRequest15.setUser(user15);
+            rideRequest16.setUser(user16);
+            rideRequest17.setUser(user17);
+            rideRequest18.setUser(user18);
+            rideRequest19.setUser(user19);
 
-            User driver = new User("driver", "Driver", "Long", "hunter2");
-            driver.setPassword(argonPasswordEncoder.encode(driver.getPassword()));
+            User driver = new User("driver", "Driver", "Long");
 
-            User coordinator = new User("coordinator", "Coordinator", "Jones", "hunter2");
-            coordinator.setPassword(argonPasswordEncoder.encode(coordinator.getPassword()));
+            User coordinator = new User("coordinator", "Coordinator", "Jones");
 
-            User admin = new User("admin", "Admin", "Smith", "hunter2");
-            admin.setPassword(argonPasswordEncoder.encode(admin.getPassword()));
+            User admin = new User("admin", "Admin", "Smith");
 
             ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
             ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();
@@ -412,6 +390,26 @@ public class SafeRidesApiApplication {
             coordinator.setAuthorities(coordinatorAuthorityList);
             driver.setAuthorities(driverAuthorityList);
 
+            user0.setAuthorities(riderAuthorityList);
+            user1.setAuthorities(riderAuthorityList);
+            user3.setAuthorities(riderAuthorityList);
+            user4.setAuthorities(riderAuthorityList);
+            user5.setAuthorities(riderAuthorityList);
+            user6.setAuthorities(riderAuthorityList);
+            user7.setAuthorities(riderAuthorityList);
+            user8.setAuthorities(riderAuthorityList);
+            user9.setAuthorities(riderAuthorityList);
+            user10.setAuthorities(riderAuthorityList);
+            user11.setAuthorities(riderAuthorityList);
+            user12.setAuthorities(riderAuthorityList);
+            user13.setAuthorities(riderAuthorityList);
+            user14.setAuthorities(riderAuthorityList);
+            user15.setAuthorities(riderAuthorityList);
+            user16.setAuthorities(riderAuthorityList);
+            user17.setAuthorities(riderAuthorityList);
+            user18.setAuthorities(riderAuthorityList);
+            user19.setAuthorities(riderAuthorityList);
+
             driver0.getUser().setAuthorities(driverAuthorityList);
             driver1.getUser().setAuthorities(driverAuthorityList);
             driver2.getUser().setAuthorities(driverAuthorityList);
@@ -427,16 +425,25 @@ public class SafeRidesApiApplication {
             userRepository.save(coordinator);
             userRepository.save(driver);
 
-            userRepository.save(driver0.getUser());
-            userRepository.save(driver1.getUser());
-            userRepository.save(driver2.getUser());
-            userRepository.save(driver3.getUser());
-            userRepository.save(driver4.getUser());
-            userRepository.save(driver5.getUser());
-            userRepository.save(driver6.getUser());
-            userRepository.save(driver7.getUser());
-            userRepository.save(driver8.getUser());
-            userRepository.save(driver9.getUser());
+            userRepository.save(user0);
+            userRepository.save(user1);
+            userRepository.save(user3);
+            userRepository.save(user4);
+            userRepository.save(user5);
+            userRepository.save(user6);
+            userRepository.save(user7);
+            userRepository.save(user8);
+            userRepository.save(user9);
+            userRepository.save(user10);
+            userRepository.save(user11);
+            userRepository.save(user12);
+            userRepository.save(user13);
+            userRepository.save(user14);
+            userRepository.save(user15);
+            userRepository.save(user16);
+            userRepository.save(user17);
+            userRepository.save(user18);
+            userRepository.save(user19);
 
             driverRepository.save(driver0);
             driverRepository.save(driver1);
@@ -485,6 +492,12 @@ public class SafeRidesApiApplication {
             dayOfWeeks.add(DayOfWeek.SATURDAY);
             newConfig.setDaysOfWeek(dayOfWeeks);
             configurationRepository.save(newConfig);
+
+            final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(user6));
+            System.out.println(token);
+
+            final String token2 = jwtTokenUtil.generateToken(JwtUserFactory.create(admin));
+            System.out.println(token2);
         };
     }
 

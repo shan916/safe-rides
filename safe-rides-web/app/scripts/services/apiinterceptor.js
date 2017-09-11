@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('APIInterceptor', function ($injector, $window, $cookies, $q) {
+    .factory('APIInterceptor', function ($injector, $window, $cookies, $q, ENV) {
         var redirect = '/';
 
         return {
@@ -30,18 +30,7 @@ angular.module('safeRidesWebApp')
                 console.log(rejection);
                 switch (rejection.status) {
                     case 401:
-                        if (redirect !== 'riderdashboard') {
-                            state.go('login', {
-                                redirect: redirect
-                            });
-                        }
-                        break;
-                    case -1:
-                        if (redirect !== 'riderdashboard') {
-                            state.go('login', {
-                                redirect: redirect
-                            });
-                        }
+                        $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
                         break;
                     default:
                         return $q.reject(rejection);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
+import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.ResponseMessage;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
@@ -14,6 +15,8 @@ import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,6 +77,9 @@ public class RideRequestController {
     @Autowired
     private RideRequestMapper rideRequestMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * HTTP header that stores the JWT, defined in application.yaml
      */
@@ -99,12 +104,12 @@ public class RideRequestController {
     public Iterable<RideRequestDto> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
         if (status != null) {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
-            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+            List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
             return dtos;
         } else {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
-            List<RideRequestDto> dtos = mapRideRequestListToDtoList(rideRequests);
+            List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
             return dtos;
         }
@@ -147,7 +152,7 @@ public class RideRequestController {
      * </ul>
      *
      * @param request     the HTTP servlet request
-     * @param rideRequest request body containing the ride to create
+     * @param rideRequestDto request body containing the ride to create
      * @return ResponseEntity containing the created ride and its location
      */
     @RequestMapping(method = RequestMethod.POST)
@@ -158,10 +163,14 @@ public class RideRequestController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequest rideRequest) {
+    public ResponseEntity<?> save(HttpServletRequest request, @RequestBody RideRequestDto rideRequestDto) {
         String authToken = request.getHeader(this.tokenHeader);
 
+        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
+
         String view = "coordinator";
+
+        User user = null;
 
         if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_DRIVER)) { // if requestor is a rider
             view = "rider";
@@ -169,12 +178,11 @@ public class RideRequestController {
             if (!Util.isAcceptingRideRequests(configurationRepository.findOne(1))) {    // not accepting rides right now
                 return ResponseEntity.badRequest().body(new ResponseMessage("SafeRides has stopped accepting new rides."));
             } else {
-                // set the OneCard ID in the auth token to be the request's OneCard ID
-                String username = jwtTokenUtil.getUsernameFromToken(authToken);
-                rideRequest.setOneCardId(username);
+                user = userRepository.findByUsernameIgnoreCase(jwtTokenUtil.getUsernameFromToken(authToken));
+                if (user == null) {
+                    return ResponseEntity.badRequest().build();
+                }
             }
-        } else if (!jwtTokenUtil.getAuthoritiesFromToken(authToken).contains(AuthorityName.ROLE_COORDINATOR)) { // if not a coordinator or admin or rider
-            return ResponseEntity.badRequest().body(new ResponseMessage("Only riders or coordinators can submit a ride request!"));
         }
 
         // oneCardId is required
@@ -190,6 +198,25 @@ public class RideRequestController {
         rideRequest.setStatus(RideRequestStatus.UNASSIGNED);    // default to unassigned status
 
         geocodingService.setCoordinates(rideRequest);
+
+        if (null != user) {
+            if((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))){
+                user.setFirstName(rideRequestDto.getRequestorFirstName());
+            }
+            if((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))){
+                user.setLastName(rideRequestDto.getRequestorLastName());
+            }
+            rideRequest.setUser(user);
+        }
+
+        // check if user already requested a ride during this period
+        Configuration configuration = configurationRepository.findOne(1);
+        RideRequest previousRideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(rideRequest.getOneCardId());
+        if(null != previousRideRequest){
+            if(null != Util.filterPastRide(configuration, previousRideRequest)){
+                return ResponseEntity.badRequest().body(new ResponseMessage("A ride has already been requested today."));
+            }
+        }
 
         RideRequest result = rideRequestRepository.save(rideRequest);
 
@@ -267,7 +294,9 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
 
         // filter ride request
         rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
@@ -321,7 +350,9 @@ public class RideRequestController {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-        RideRequest rideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
 
         // filter ride request
         rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
@@ -336,13 +367,5 @@ public class RideRequestController {
             return ResponseEntity.ok().build();
         }
 
-    }
-
-    private List<RideRequestDto> mapRideRequestListToDtoList(List<RideRequest> rideRequestList) {
-        List<RideRequestDto> dtoList = new ArrayList<>();
-        for (int i = 0; i < rideRequestList.size(); i++) {
-            dtoList.add(rideRequestMapper.map(rideRequestList.get(i), RideRequestDto.class));
-        }
-        return dtoList;
     }
 }

@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides.security.service;
 
 import edu.csus.asi.saferides.model.dto.DriverDto;
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.dto.UserDto;
 import edu.csus.asi.saferides.security.mapper.UserMapper;
 import edu.csus.asi.saferides.security.model.Authority;
@@ -9,13 +8,9 @@ import edu.csus.asi.saferides.security.model.AuthorityName;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.security.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.utility.Util;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,23 +23,19 @@ public class UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;
     private AuthorityRepository authorityRepository;
-    private ArgonPasswordEncoder argonPasswordEncoder;
 
     /**
      * Inject dependencies
      *
-     * @param userRepository       singleton for UserRepository
-     * @param userMapper           singleton for UserMapper
-     * @param authorityRepository  singleton for AuthorityRepository
-     * @param argonPasswordEncoder singleton for ArgonPasswordEncoder
+     * @param userRepository      singleton for UserRepository
+     * @param userMapper          singleton for UserMapper
+     * @param authorityRepository singleton for AuthorityRepository
      */
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper, AuthorityRepository authorityRepository,
-                       ArgonPasswordEncoder argonPasswordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.authorityRepository = authorityRepository;
-        this.argonPasswordEncoder = argonPasswordEncoder;
     }
 
     /**
@@ -105,8 +96,6 @@ public class UserService {
     public User createCoordinatorUser(UserDto userDto) {
         User user = userMapper.map(userDto, User.class);
 
-        user.setPassword(this.hashPassword(userDto.getPassword()));
-
         List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_COORDINATOR, AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
         user.setAuthorities(authorities);
 
@@ -124,14 +113,6 @@ public class UserService {
 
         User newUser = userMapper.map(userDto, User.class);
         newUser.setAuthorities(existingUser.getAuthorities());
-
-        // TODO - blacklist passwords
-        if (StringUtils.isEmpty(newUser.getPassword())) {
-            newUser.setPassword(existingUser.getPassword());
-        } else {
-            newUser.setPassword(argonPasswordEncoder.encode(newUser.getPassword()));
-            newUser.setLastPasswordResetDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE))); // invalidate existing token
-        }
 
         return userRepository.save(newUser);
     }
@@ -158,30 +139,11 @@ public class UserService {
      * @return the created user
      */
     public User createDriverUser(DriverDto driverDto) {
-        User user = new User(driverDto.getOneCardId(), driverDto.getDriverFirstName(), driverDto.getDriverLastName(), hashPassword(driverDto.getPassword()));
+        User user = new User(driverDto.getUsername(), driverDto.getDriverFirstName(), driverDto.getDriverLastName());
 
         List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
         user.setAuthorities(authorities);
 
         return userRepository.save(user);
     }
-
-    public User updateDriverUser(DriverDto driverDto) {
-        User user = userRepository.findByUsernameIgnoreCase(driverDto.getOneCardId());
-        user.setFirstName(driverDto.getDriverFirstName());
-        user.setLastName(driverDto.getDriverLastName());
-        user.setPassword(hashPassword(driverDto.getPassword()));
-        return userRepository.save(user);
-    }
-
-    /**
-     * Hashes the given password using the ArgonPasswordEncoder
-     *
-     * @param password the password to hash
-     * @return the hashed password
-     */
-    private String hashPassword(String password) {
-        return argonPasswordEncoder.encode(password);
-    }
-
 }

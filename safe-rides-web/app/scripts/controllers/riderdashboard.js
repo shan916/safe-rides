@@ -13,7 +13,6 @@ angular.module('safeRidesWebApp')
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
         vm.loggedIn = false;
-        vm.oneCardId = undefined;
         vm.rideRequest = new RideRequest();
         vm.existingRide = undefined;
         vm.cancelPressed = undefined;
@@ -26,21 +25,9 @@ angular.module('safeRidesWebApp')
          * Kick user out if authenticated and higher than rider (driver, coordinator, admin,...)
          * */
         if (authManager.isAuthenticated()) {
-            if (AuthTokenService.isInRole('ROLE_DRIVER')) {
-                Notification.error({
-                    message: 'You must be a ride requestor to request a ride.',
-                    positionX: 'center',
-                    delay: 10000
-                });
-                $state.go('/');
-                console.log('Not a requestor');
-                return;
-            } else {
-                vm.loading = false;
-                vm.loggedIn = true;
-                vm.oneCardId = AuthTokenService.getUsername();
-                getRide();
-            }
+            vm.loading = false;
+            vm.loggedIn = true;
+            getRide();
         } else {
             vm.loading = false;
             vm.loggedIn = false;
@@ -104,31 +91,6 @@ angular.module('safeRidesWebApp')
                 $interval.cancel(rideRefresher);
             }
         }
-
-        /*
-         * Login driver after one card id has been entered
-         * */
-        vm.login = function () {
-            vm.loading = true;
-            AuthService.riderAuthentication(vm.oneCardId).then(function (response) {
-                vm.loggedIn = true;
-                AuthTokenService.setToken(response.data.token);
-                getRide();
-            }, function (error) {
-                console.log(error);
-                vm.loading = false;
-
-                if (error.status === 429) {
-                    Notification.error({
-                        message: 'Too many requests, please try again after 1 minute.',
-                        positionX: 'center',
-                        delay: 60000,
-                        closeOnClick: false,
-                        replaceMessage: true
-                    });
-                }
-            });
-        };
 
         /*
          * Submit the ride request

@@ -39,9 +39,23 @@ angular
         'ui-notification'
     ])
 
-    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $location) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
+
+        $rootScope.$on('$viewContentLoading', function () {
+            var ticketParamStart = window.location.search.indexOf('ticket=');
+            if (ticketParamStart >= 0) {
+                ticketParamStart += 7;
+                casService.validate({
+                    'service': ENV.casServiceName,
+                    'ticket': window.location.search.substring(ticketParamStart)
+                }).then(function(response){
+                    AuthTokenService.setToken(response.data.token);
+                    window.location.href =  window.location.href.split("?")[0];
+                });
+            }
+        });
 
         $rootScope.$on('tokenHasExpired', function () {
             AuthTokenService.removeToken();
@@ -65,16 +79,15 @@ angular
             // angular-jwt uses $rootScope.isAuthenticated
             $rootScope.isAuthenticated = false;
         };
-
-
     })
 
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+    .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: ['$state', function ($state) {
-                $state.go('login');
+            unauthenticatedRedirector: [ function () {
+                var $window = $windowProvider.$get();
+                $window.location.href = "https://sacauth.csus.edu/csus.cas/login" + "?service=" + "http://codeteam6.io/";
             }],
             tokenGetter: ['options', 'AuthTokenService', function (options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
@@ -170,7 +183,11 @@ angular
                 url: '/riderdashboard',
                 templateUrl: 'views/riderdashboard.html',
                 controller: 'RiderdashboardCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                data: {
+                    requireLogin: true,
+                    requiresLogin: true
+                }
             })
             .state('managedrivers', {
                 url: '/managedrivers',

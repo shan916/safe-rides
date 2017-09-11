@@ -11,13 +11,12 @@ import javax.validation.constraints.NotNull;
  * Data transfer object for the Driver object
  */
 public class DriverDto {
-    @ApiModelProperty(value = "The id of the driver", required = true)
-    @NotNull(message = "id cannot be null")
+    @ApiModelProperty(value = "The id of the driver")
     private Long id;
 
-    @ApiModelProperty(value = "The driver's One Card ID", required = true)
-    @NotNull(message = "oneCardId cannot be null")
-    private String oneCardId;
+    @ApiModelProperty(value = "The driver's username", required = true)
+    @NotNull(message = "username cannot be null")
+    private String username;
 
     @ApiModelProperty(value = "The driver's first name", required = true)
     @NotNull(message = "driverFirstName cannot be null")
@@ -51,22 +50,18 @@ public class DriverDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private DriverStatus status;
 
-    @ApiModelProperty(value = "The driver's password")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
     @ApiModelProperty(value = "The driver's vehicle")
     private Vehicle vehicle;
 
     @ApiModelProperty(value = "The driver's recorded odometer value at the end of the Safe Rides' night")
     private long endOfNightOdo;
 
-    public String getOneCardId() {
-        return oneCardId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setOneCardId(String oneCardId) {
-        this.oneCardId = oneCardId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getDriverFirstName() {
@@ -123,14 +118,6 @@ public class DriverDto {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getId() {

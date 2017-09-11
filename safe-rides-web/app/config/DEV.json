@@ -1,3 +1,5 @@
 {
-    "apiEndpoint": "https://codeteam6.io/api/"
+    "apiEndpoint": "https://codeteam6.io/api/",
+    "casServiceName": "http://codeteam6.io/",
+    "casLogin": "https://sacauth.csus.edu/csus.cas/login"
 }

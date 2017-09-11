@@ -9,7 +9,7 @@
  */
 angular.module('safeRidesWebApp')
     .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification) {
+                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -50,7 +50,7 @@ angular.module('safeRidesWebApp')
                 getCurrentRideRequest();
             }
         } else {
-            $state.go('login');
+            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
             console.log('Not authenticated');
         }
 

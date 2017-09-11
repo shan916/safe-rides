@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.views.JsonViews;
+import edu.csus.asi.saferides.security.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Max;
@@ -191,6 +192,8 @@ public class RideRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(JsonViews.Rider.class)
     private String vehicleLicensePlate;
+
+    private UserDto user;
 
     public Long getId() {
         return id;
@@ -488,36 +491,11 @@ public class RideRequestDto {
         this.vehicleLicensePlate = vehicleLicensePlate;
     }
 
-    @Override
-    public String toString() {
-        return "RideRequestDto{" +
-                "id=" + id +
-                ", driverId=" + driverId +
-                ", oneCardId='" + oneCardId + '\'' +
-                ", requestDate=" + requestDate +
-                ", lastModified=" + lastModified +
-                ", assignedDate=" + assignedDate +
-                ", requestorFirstName='" + requestorFirstName + '\'' +
-                ", requestorLastName='" + requestorLastName + '\'' +
-                ", requestorPhoneNumber='" + requestorPhoneNumber + '\'' +
-                ", numPassengers=" + numPassengers +
-                ", startOdometer=" + startOdometer +
-                ", endOdometer=" + endOdometer +
-                ", pickupLine1='" + pickupLine1 + '\'' +
-                ", pickupLine2='" + pickupLine2 + '\'' +
-                ", pickupCity='" + pickupCity + '\'' +
-                ", dropoffLine1='" + dropoffLine1 + '\'' +
-                ", dropoffLine2='" + dropoffLine2 + '\'' +
-                ", dropoffCity='" + dropoffCity + '\'' +
-                ", status=" + status +
-                ", cancelMessage='" + cancelMessage + '\'' +
-                ", messageToDriver='" + messageToDriver + '\'' +
-                ", estimatedTime='" + estimatedTime + '\'' +
-                ", pickupLatitude=" + pickupLatitude +
-                ", pickupLongitude=" + pickupLongitude +
-                ", dropoffLatitude=" + dropoffLatitude +
-                ", dropoffLongitude=" + dropoffLongitude +
-                '}';
+    public UserDto getUser() {
+        return user;
     }
 
+    public void setUser(UserDto user) {
+        this.user = user;
+    }
 }

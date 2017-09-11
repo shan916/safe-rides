@@ -2,9 +2,11 @@ package edu.csus.asi.saferides.service;
 
 import edu.csus.asi.saferides.mapper.DriverLocationMapper;
 import edu.csus.asi.saferides.mapper.DriverMapper;
+import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.model.dto.DriverLocationDto;
+import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.DriverLocationRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
@@ -26,11 +28,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Rest API controller for the Driver resource
@@ -101,6 +102,9 @@ public class DriverController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RideRequestMapper rideRequestMapper;
+
     /**
      * GET /drivers?active=
      * <p>
@@ -112,14 +116,15 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
     public Iterable<DriverDto> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
+        List<Driver> drivers = driverRepository.findAllByOrderByModifiedDateDesc();
         if (active != null) {
             if (active) {
-                return mapDriverListToDtoList(driverRepository.findByActiveTrueOrderByModifiedDateDesc());
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
             } else {
-                return mapDriverListToDtoList(driverRepository.findByActiveFalseOrderByModifiedDateDesc());
+                return driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
             }
         } else {
-            return mapDriverListToDtoList(driverRepository.findAllByOrderByModifiedDateDesc());
+            return driverMapper.mapAsList((drivers), DriverDto.class);
         }
     }
 
@@ -155,29 +160,24 @@ public class DriverController {
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
     public ResponseEntity<?> save(@Validated @RequestBody DriverDto driverDto) {
         Driver driver = driverMapper.map(driverDto, Driver.class);
+        User user = driverMapper.map(driverDto, User.class);
+        driver.setUser(user);
 
         List<String> errorMessages = validateDriver(driver);
-
-        if (StringUtils.isEmpty(driverDto.getPassword())) {
-            errorMessages.add("Password cannot be empty");
-        } else if (!Util.isPasswordValid(driverDto.getPassword())) {
-            errorMessages.add("Password does not meet security requirements");
-        }
 
         if (errorMessages.size() > 0) {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
-        User user = userService.createDriverUser(driverDto);
+        User createdUser = userService.createDriverUser(driverDto);
 
-        driver.setUser(user);
+        driver.setUser(createdUser);
         Driver result = driverRepository.save(driver);
 
         // create URI of where the driver was created
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location).body(driverMapper.map(result, DriverDto.class));
-
     }
 
     /**
@@ -199,10 +199,13 @@ public class DriverController {
     @ApiOperation(value = "save", nickname = "save", notes = "Updates a driver")
     public ResponseEntity<?> save(@PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
         Driver updatedDriver = driverMapper.map(driverDto, Driver.class);
+        User updatedUser = driverMapper.map(driverDto, User.class);
 
         if (!updatedDriver.getId().equals(id)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
         }
+
+        updatedDriver.setUser(updatedUser);
 
         List<String> errorMessages = validateDriver(updatedDriver);
 
@@ -210,39 +213,40 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
-        Driver existingDriver = driverRepository.findOne(id);
+        Driver driverFromDb = driverRepository.findOne(driverDto.getId());
 
-        // return 400 if OneCard ID is modified
-        if (!existingDriver.getOneCardId().equals(updatedDriver.getOneCardId())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("OneCard ID is not allowed to be modified"));
-        }
-
-        // return 400 if password does not meet security requirements
-        if (!StringUtils.isEmpty(driverDto.getPassword()) && !Util.isPasswordValid(driverDto.getPassword())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("New password does not meet security requirements"));
-        }
 
         // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getActive() && existingDriver.getStatus() != DriverStatus.AVAILABLE) {
+        if (!updatedDriver.getUser().isActive() && driverFromDb.getStatus() != DriverStatus.AVAILABLE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         }
 
-        if (!StringUtils.isEmpty(driverDto.getPassword())) {
-            existingDriver.getUser().setLastPasswordResetDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE))); // invalidate existing tokens
-            userService.updateDriverUser(driverDto);
-        }
+        User userFromDb = driverFromDb.getUser();
+        Vehicle vehicleFromDb = driverFromDb.getVehicle();
 
-        // deactivate user if driver deactivated
-        if (!updatedDriver.getActive()) {
-            existingDriver.getUser().setActive(false);
-        } else {
-            existingDriver.getUser().setActive(true);
-        }
+        driverFromDb.setDlChecked(updatedDriver.getDlChecked());
+        driverFromDb.setInsuranceChecked(updatedDriver.getInsuranceChecked());
+        driverFromDb.setInsuranceCompany(updatedDriver.getInsuranceCompany());
+        driverFromDb.setPhoneNumber(updatedDriver.getPhoneNumber());
 
-        updatedDriver.setUser(existingDriver.getUser());
-        driverRepository.save(updatedDriver);
+        vehicleFromDb.setMake(driverDto.getVehicle().getMake());
+        vehicleFromDb.setModel(driverDto.getVehicle().getModel());
+        vehicleFromDb.setYear(driverDto.getVehicle().getYear());
+        vehicleFromDb.setLicensePlate(driverDto.getVehicle().getLicensePlate());
+        vehicleFromDb.setColor(driverDto.getVehicle().getColor());
+        vehicleFromDb.setSeats(driverDto.getVehicle().getSeats());
 
-        return ResponseEntity.ok(driverMapper.map(updatedDriver, DriverDto.class));
+        userFromDb.setFirstName(updatedUser.getFirstName());
+        userFromDb.setLastName(updatedUser.getLastName());
+        userFromDb.setActive(updatedUser.isActive());
+
+
+        driverFromDb.setUser(userFromDb);
+        driverFromDb.setVehicle(vehicleFromDb);
+
+        Driver persistedDriver = driverRepository.save(driverFromDb);
+
+        return ResponseEntity.ok(driverMapper.map(persistedDriver, DriverDto.class));
     }
 
 
@@ -356,7 +360,7 @@ public class DriverController {
                 for (RideRequest req : requests) {
                     if (req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
                             || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF) {
-                        return ResponseEntity.ok(req);
+                        return ResponseEntity.ok(rideRequestMapper.map(req, RideRequestDto.class));
                     }
                 }
             }
@@ -493,7 +497,7 @@ public class DriverController {
                 requests.removeIf((RideRequest req) -> req.getStatus() != status);
             }
 
-            return ResponseEntity.ok(requests);
+            return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
         } else {
             Collection<RideRequest> requests = driver.getRides();
 
@@ -502,7 +506,7 @@ public class DriverController {
             if (requests == null) {
                 return ResponseEntity.noContent().build();
             } else {
-                return ResponseEntity.ok(requests);
+                return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
             }
         }
     }
@@ -510,10 +514,7 @@ public class DriverController {
     private List<String> validateDriver(Driver driver) {
         ArrayList<String> errorMessages = new ArrayList<>();
 
-        if (!StringUtils.isNumeric(driver.getOneCardId()) || StringUtils.length(driver.getOneCardId()) != 9) {
-            errorMessages.add("Invalid OneCardID");
-        }
-        if (StringUtils.isEmpty(driver.getDriverFirstName()) || StringUtils.isEmpty(driver.getDriverLastName())) {
+        if (StringUtils.isEmpty(driver.getUser().getFirstName()) || StringUtils.isEmpty(driver.getUser().getLastName())) {
             errorMessages.add("Driver name cannot be empty");
         }
         if (!StringUtils.isNumeric(driver.getPhoneNumber()) || StringUtils.length(driver.getPhoneNumber()) != 10) {
@@ -543,13 +544,4 @@ public class DriverController {
 
         return errorMessages;
     }
-
-    private List<DriverDto> mapDriverListToDtoList(List<Driver> driverList) {
-        List<DriverDto> dtoList = new ArrayList<>();
-        for (int i = 0; i < driverList.size(); i++) {
-            dtoList.add(driverMapper.map(driverList.get(i), DriverDto.class));
-        }
-        return dtoList;
-    }
-
 }

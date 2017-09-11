@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.ArgonPasswordEncoder;
 import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
 
@@ -25,27 +24,6 @@ public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    /**
-     * OneCard ID of driver
-     */
-    @Column(nullable = false, unique = true, length = 9)
-    @Size(min = 9, max = 9)
-    private String oneCardId;
-
-    /**
-     * First name of the driver
-     */
-    @Column(nullable = false)
-    @Size(min = 2, max = 30)
-    private String driverFirstName;
-
-    /**
-     * Last name of the driver
-     */
-    @Column(nullable = false)
-    @Size(min = 2, max = 30)
-    private String driverLastName;
 
     /**
      * Phone number of the driver
@@ -72,12 +50,6 @@ public class Driver {
     @Column(nullable = false)
     @Size(min = 3)
     private String insuranceCompany;
-
-    /**
-     * Is driver active
-     */
-    @Column(nullable = false)
-    private Boolean active;
 
     /**
      * JPA indicates not to serialized the status field, that is, it is not to
@@ -120,10 +92,10 @@ public class Driver {
     private Set<DriverLocation> locations;
 
     /**
-     * user field is hidden from other classes other than User class object
+     * The driver's user object
      */
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User user;
 
     /**
@@ -149,7 +121,9 @@ public class Driver {
     /**
      * Constructor used by JPA to construct a Driver entity
      */
-    protected Driver() {
+    public Driver() {
+        // set to public because orika attempts to initialize it for soem reason and the following is thrown:
+        // java.lang.IllegalAccessError: tried to access method edu.csus.asi.saferides.model.Driver.<init>()V from class edu.csus.asi.saferides.model.Driver_Driver_ObjectFactory252669379489596252677445534647$8
     }
 
     /**
@@ -167,16 +141,12 @@ public class Driver {
     public Driver(String oneCardId, String driverFirstName, String driverLastName, String phoneNumber,
                   Boolean dlChecked, Boolean insuranceChecked, String insuranceCompany, Boolean active) {
         super();
-        this.oneCardId = oneCardId;
-        this.driverFirstName = driverFirstName;
-        this.driverLastName = driverLastName;
         this.phoneNumber = phoneNumber;
         this.dlChecked = dlChecked;
         this.insuranceChecked = insuranceChecked;
         this.insuranceCompany = insuranceCompany;
-        this.active = active;
         this.user = new User(oneCardId, driverFirstName, driverLastName);
-        this.user.setPassword((new ArgonPasswordEncoder().encode("pass")));
+        this.user.setActive(active);
     }
 
     /**
@@ -195,60 +165,6 @@ public class Driver {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * Get the OneCard ID of the driver
-     *
-     * @return the OneCard ID of the driver
-     */
-    public String getOneCardId() {
-        return oneCardId;
-    }
-
-    /**
-     * Set the OneCard ID of the driver
-     *
-     * @param oneCardId the OneCard ID of the driver
-     */
-    public void setOneCardId(String oneCardId) {
-        this.oneCardId = oneCardId;
-    }
-
-    /**
-     * Get driver's first name
-     *
-     * @return the driver's first name
-     */
-    public String getDriverFirstName() {
-        return driverFirstName;
-    }
-
-    /**
-     * Set the driver's first name
-     *
-     * @param driverFirstName the driver's first name
-     */
-    public void setDriverFirstName(String driverFirstName) {
-        this.driverFirstName = driverFirstName;
-    }
-
-    /**
-     * Get the driver's last name
-     *
-     * @return the driver's last name
-     */
-    public String getDriverLastName() {
-        return driverLastName;
-    }
-
-    /**
-     * Set the driver's last name
-     *
-     * @param driverLastName the driver's last name
-     */
-    public void setDriverLastName(String driverLastName) {
-        this.driverLastName = driverLastName;
     }
 
     /**
@@ -321,24 +237,6 @@ public class Driver {
      */
     public void setInsuranceCompany(String insuranceCompany) {
         this.insuranceCompany = insuranceCompany;
-    }
-
-    /**
-     * Get boolean indicating whether driver is active or not
-     *
-     * @return whether driver is active or not
-     */
-    public Boolean getActive() {
-        return active;
-    }
-
-    /**
-     * Set boolean indicating whether driver is active or not
-     *
-     * @param active whether driver is active or not
-     */
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     /**
@@ -512,34 +410,4 @@ public class Driver {
     public void setUser(User user) {
         this.user = user;
     }
-
-    /**
-     * Gets a string object representing the values of the Driver Object
-     *
-     * @return Driver string object
-     */
-/*    @Override
-    public String toString() {
-        return "Driver{" +
-                "id=" + id +
-                ", oneCardId='" + oneCardId + '\'' +
-                ", driverFirstName='" + driverFirstName + '\'' +
-                ", driverLastName='" + driverLastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", dlState='" + dlState + '\'' +
-                ", dlChecked='" + dlChecked + '\'' +
-                ", insuranceChecked=" + insuranceChecked +
-                ", insuranceCompany='" + insuranceCompany + '\'' +
-                ", active=" + active +
-                ", status=" + status +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                ", vehicle=" + vehicle +
-                ", rides=" + rides +
-                ", locations=" + locations +
-                ", user=" + user +
-                ", endOfNightOdo=" + endOfNightOdo +
-                '}';
-    }
-    */
 }

@@ -1,3 +1,5 @@
 {
-    "apiEndpoint": ""
+    "apiEndpoint": "",
+    "casServiceName": "",
+    "casLogin": ""
 }
