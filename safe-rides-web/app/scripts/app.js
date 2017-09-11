@@ -39,7 +39,7 @@ angular
         'ui-notification'
     ])
 
-    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $location) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
@@ -50,9 +50,9 @@ angular
                 casService.validate({
                     'service': ENV.casServiceName,
                     'ticket': window.location.search.substring(ticketParamStart)
-                }).then(function(response){
+                }).then(function (response) {
                     AuthTokenService.setToken(response.data.token);
-                    window.location.href =  window.location.href.split("?")[0];
+                    window.location.href = window.location.href.split('?')[0];
                 });
             }
         });
@@ -85,9 +85,9 @@ angular
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: [ function () {
+            unauthenticatedRedirector: [function () {
                 var $window = $windowProvider.$get();
-                $window.location.href = "https://sacauth.csus.edu/csus.cas/login" + "?service=" + "http://codeteam6.io/";
+                $window.location.href = 'https://sacauth.csus.edu/csus.cas/login' + '?service=' + 'http://codeteam6.io/';
             }],
             tokenGetter: ['options', 'AuthTokenService', function (options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
@@ -109,43 +109,12 @@ angular
                 controller: 'MainCtrl',
                 controllerAs: 'ctrl'
             })
-            .state('about', {
-                url: '/about',
-                templateUrl: 'views/about.html',
-                controller: 'AboutCtrl',
-                controllerAs: 'about'
-            })
-            .state('login', {
-                url: '/login',
-                templateUrl: 'views/login.html',
-                controller: 'LoginCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('register', {
-                url: '/register',
-                templateUrl: 'views/register.html',
-                controller: 'RegisterCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('resetpasswordrequest', {
-                url: '/resetpasswordrequest',
-                templateUrl: 'views/resetpasswordrequest.html',
-                controller: 'ResetpasswordrequestCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('resetpassword', {
-                url: '/resetpassword',
-                templateUrl: 'views/resetpassword.html',
-                controller: 'ResetpasswordCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('coordinatordashboard', {
-                url: '/coordinatordashboard',
+            .state('coordinator', {
+                url: '/coordinator',
                 templateUrl: 'views/coordinatordashboard.html',
                 controller: 'CoordinatordashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -155,7 +124,6 @@ angular
                 controller: 'CoordinatorreportCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -165,27 +133,24 @@ angular
                 controller: 'EditdriverCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
-            .state('driverdashboard', {
-                url: '/driverdashboard',
+            .state('driver', {
+                url: '/driver',
                 templateUrl: 'views/driverdashboard.html',
                 controller: 'DriverdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
-            .state('riderdashboard', {
-                url: '/riderdashboard',
+            .state('request', {
+                url: '/request',
                 templateUrl: 'views/riderdashboard.html',
                 controller: 'RiderdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -195,7 +160,6 @@ angular
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -205,7 +169,6 @@ angular
                 controller: 'ReportsdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -215,7 +178,6 @@ angular
                 controller: 'ManageCoordinatorsCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -225,7 +187,6 @@ angular
                 controller: 'EditCoordinatorCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -235,7 +196,6 @@ angular
                 controller: 'SettingsCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             });

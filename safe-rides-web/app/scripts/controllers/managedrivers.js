@@ -34,7 +34,7 @@ angular.module('safeRidesWebApp')
                 getDrivers();
             }
         } else {
-            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
+            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
             console.log('Not authenticated');
         }
 

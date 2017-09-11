@@ -30,7 +30,7 @@ angular.module('safeRidesWebApp')
                 console.log(rejection);
                 switch (rejection.status) {
                     case 401:
-                        $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
+                        $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
                         break;
                     default:
                         return $q.reject(rejection);
