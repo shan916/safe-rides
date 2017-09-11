@@ -118,15 +118,6 @@ angular
                     requiresLogin: true
                 }
             })
-            .state('coordinatorreport', {
-                url: '/coordinatorreport',
-                templateUrl: 'views/coordinatorreport.html',
-                controller: 'CoordinatorreportCtrl',
-                controllerAs: 'ctrl',
-                data: {
-                    requiresLogin: true
-                }
-            })
             .state('editdriver', {
                 url: '/editdriver/:driverId?',
                 templateUrl: 'views/editdriver.html',
