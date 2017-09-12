@@ -39,7 +39,7 @@ angular
         'ui-notification'
     ])
 
-    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $log) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
@@ -59,7 +59,7 @@ angular
 
         $rootScope.$on('tokenHasExpired', function () {
             AuthTokenService.removeToken();
-            console.log('Your session has expired!');
+            $log.debug('Session has expired!');
         });
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
@@ -81,7 +81,9 @@ angular
         };
     })
 
-    .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+    .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider, $logProvider) {
+        $logProvider.debugEnabled(true);
+
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],

@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -42,13 +42,13 @@ var app = angular.module('safeRidesWebApp')
                     replaceMessage: true
                 });
                 $state.go('/');
-                console.log('Not a coordinator');
+                $log.debug('Not a coordinator');
             } else {
                 loadData();
             }
         } else {
             $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
-            console.log('Not authenticated');
+            $log.debug('Not authenticated');
         }
 
         function loadData() {
@@ -101,9 +101,9 @@ var app = angular.module('safeRidesWebApp')
                         id: driver.id
                     }).$promise.then(function (ridesResponse) {
                         driver.rides = ridesResponse;
-                        console.log('got driver\'s rides:', ridesResponse);
+                        $log.debug('got driver\'s rides:', ridesResponse);
                     }, function (ridesError) {
-                        console.log('error getting driver\'s rides:', ridesError);
+                        $log.debug('error getting driver\'s rides:', ridesError);
                     });
 
                     drivers[index] = driver;
@@ -111,11 +111,11 @@ var app = angular.module('safeRidesWebApp')
 
                 vm.loadingCoordinatorDrivers = false;
 
-                console.log('got drivers:', response);
+                $log.debug('got drivers:', response);
                 getDriversLocation();
             }, function (error) {
                 vm.loadingCoordinatorDrivers = false;
-                console.log('error getting drivers:', error);
+                $log.debug('error getting drivers:', error);
             });
         }
 
@@ -130,10 +130,10 @@ var app = angular.module('safeRidesWebApp')
 
                 vm.loadingRideRequests = false;
 
-                console.log('got ride requests:', response);
+                $log.debug('got ride requests:', response);
             }, function (error) {
                 vm.loadingRideRequests = false;
-                console.log('error getting ride requests:', error);
+                $log.debug('error getting ride requests:', error);
             });
         }
 
@@ -144,10 +144,10 @@ var app = angular.module('safeRidesWebApp')
                 }).$promise.then(function (response) {
                     if (response.id !== undefined) {
                         vm.driversLocation.push(response);
-                        console.log('got drivers location:', response);
+                        $log.debug('got drivers location:', response);
                     }
                 }, function (error) {
-                    console.log('error getting drivers location:', error);
+                    $log.debug('error getting drivers location:', error);
                 });
             });
         }
@@ -187,9 +187,9 @@ var app = angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function () {
-                console.log('ok');
+                $log.debug('ok');
             }, function () {
-                console.log('cancel');
+                $log.debug('cancel');
             });
         };
 
@@ -207,9 +207,9 @@ var app = angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function () {
-                console.log('ok');
+                $log.debug('ok');
             }, function () {
-                console.log('cancel');
+                $log.debug('cancel');
             });
         };
 
@@ -230,11 +230,11 @@ var app = angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function () {
-                console.log('ok clicked, refreshing drivers and rides');
+                $log.debug('ok clicked, refreshing drivers and rides');
                 getRideRequests();
                 getDrivers();
             }, function () {
-                console.log('cancel');
+                $log.debug('cancel');
             });
         };
 
@@ -255,11 +255,11 @@ var app = angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function () {
-                console.log('ok clicked, refreshing drivers and rides');
+                $log.debug('ok clicked, refreshing drivers and rides');
                 getRideRequests();
                 getDrivers();
             }, function () {
-                console.log('cancel');
+                $log.debug('cancel');
             });
         };
 
@@ -279,11 +279,11 @@ var app = angular.module('safeRidesWebApp')
                 size: 'lg'
             });
             modalInstance.result.then(function () {
-                console.log('cancelling ride, refreshing Ride Requests table');
+                $log.debug('cancelling ride, refreshing Ride Requests table');
                 getRideRequests();
                 getDrivers();
             }, function () {
-                console.log('cancel cancelling ride');
+                $log.debug('cancel cancelling ride');
             });
         };
 
@@ -297,10 +297,10 @@ var app = angular.module('safeRidesWebApp')
             });
 
             modalInstance.result.then(function () {
-                console.log('ok');
+                $log.debug('ok');
             }, function () {
                 getRideRequests();
-                console.log('cancel');
+                $log.debug('cancel');
             });
         }; //end showRideRequest function
     }); //End CoordinatordashboardCtrl

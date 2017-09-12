@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ConfirmCancelRequestModalCtrl', function ($uibModalInstance, request, drivers, $sanitize, RideRequestService) {
+    .controller('ConfirmCancelRequestModalCtrl', function ($uibModalInstance, request, drivers, $sanitize, RideRequestService, $log) {
         var vm = this;
         vm.drivers = drivers;
         vm.request = request;
@@ -33,12 +33,12 @@ angular.module('safeRidesWebApp')
                 vm.request.cancelMessage = vm.cancelMessage;
             }
 
-            console.log('Request cancelled by: ' + vm.reasonForCancellation + '  status: ' + vm.request.status);
+            $log.debug('Request cancelled by: ' + vm.reasonForCancellation + '  status: ' + vm.request.status);
             RideRequestService.update({id: vm.request.id}, vm.request).$promise.then(function (response) {
-                console.log('updated reasonForCancellation AND status: ', response);
+                $log.debug('updated reasonForCancellation AND status: ', response);
                 $uibModalInstance.close();
             }, function (error) {
-                console.log('error setting reasonForCancellation AND status: ', error);
+                $log.debug('error setting reasonForCancellation AND status: ', error);
             });
         };
 

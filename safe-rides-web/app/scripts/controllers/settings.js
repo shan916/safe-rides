@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('SettingsCtrl', function (SettingsService, Settings, authManager, AuthTokenService, $state, Notification, ENV, $window) {
+    .controller('SettingsCtrl', function (SettingsService, Settings, authManager, AuthTokenService, $state, Notification, ENV, $window, $log) {
         var vm = this;
         vm.settingsLoading = true;
         vm.settings = undefined;
@@ -58,13 +58,13 @@ angular.module('safeRidesWebApp')
                     replaceMessage: true
                 });
                 $state.go('/');
-                console.log('Not a coordinator or admin');
+                $log.debug('Not a coordinator or admin');
             } else {
                 loadData();
             }
         } else {
             $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
-            console.log('Not authenticated');
+            $log.debug('Not authenticated');
         }
 
         vm.changedTime = function () {

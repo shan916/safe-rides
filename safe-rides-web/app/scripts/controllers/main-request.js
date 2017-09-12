@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService) {
+    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService, $log) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -68,10 +68,10 @@ angular.module('safeRidesWebApp')
                     }
                 }
 
-                console.log(response);
+                $log.debug('got ride:', response);
                 vm.loading = false;
             }, function (error) {
-                console.log('Failed to get ride:', error);
+                $log.debug('Failed to get ride:', error);
                 vm.loading = false;
             });
         }
@@ -98,10 +98,10 @@ angular.module('safeRidesWebApp')
         vm.submitRideRequest = function () {
             vm.loading = true;
             RideRequestService.save(vm.rideRequest).$promise.then(function (response) {
-                console.log('ride saved:', response.data);
+                $log.debug('ride saved:', response.data);
                 getRide();
             }, function (error) {
-                console.log('error saving ride:', error);
+                $log.debug('error saving ride:', error);
                 vm.loading = false;
             });
         };
@@ -139,7 +139,7 @@ angular.module('safeRidesWebApp')
                 MyRideService.cancel().$promise.then(function (response) {
                     cancelInterval();
                     getRide();
-                    console.log('Ride cancelled:', response);
+                    $log.debug('Ride cancelled:', response);
                     Notification.info({
                         message: 'Your ride has been cancelled',
                         positionX: 'center',
@@ -151,7 +151,7 @@ angular.module('safeRidesWebApp')
                         positionX: 'center',
                         delay: 60000
                     });
-                    console.log('Ride cancellation failed:', error);
+                    $log.debug('Ride cancellation failed:', error);
                 });
             }
         };

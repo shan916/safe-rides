@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $window) {
+    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $window, $log) {
         var vm = this;
 
         vm.activeDrivers = [];
@@ -29,13 +29,13 @@ angular.module('safeRidesWebApp')
                     delay: 10000
                 });
                 $state.go('/');
-                console.log('Not a coordinator');
+                $log.debug('Not a coordinator');
             } else {
                 getDrivers();
             }
         } else {
             $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
-            console.log('Not authenticated');
+            $log.debug('Not authenticated');
         }
 
         function getDrivers() {
@@ -45,19 +45,19 @@ angular.module('safeRidesWebApp')
             DriverService.query({active: true}).$promise.then(function (response) {
                 vm.loadingActiveDrivers = false;
                 vm.activeDrivers = response;
-                console.log('got active drivers:', response);
+                $log.debug('got active drivers:', response);
             }, function (error) {
                 vm.loadingActiveDrivers = false;
-                console.log('error getting active drivers:', error);
+                $log.debug('error getting active drivers:', error);
             });
 
             DriverService.query({active: false}).$promise.then(function (response) {
                 vm.loadingInactiveDrivers = false;
                 vm.inactiveDrivers = response;
-                console.log('got inactive drivers:', response);
+                $log.debug('got inactive drivers:', response);
             }, function (error) {
                 vm.loadingInactiveDrivers = false;
-                console.log('error getting inactive drivers:', error);
+                $log.debug('error getting inactive drivers:', error);
             });
         }
 
@@ -97,10 +97,10 @@ angular.module('safeRidesWebApp')
             modalInstance.result.then(function () {
                 driver.active = !driver.active;
                 DriverService.update({id: driver.id}, driver).$promise.then(function (response) {
-                    console.log('updated driver, now refreshing', response);
+                    $log.debug('updated driver, now refreshing', response);
                     getDrivers();
                 }, function (error) {
-                    console.log('error updating driver:', error);
+                    $log.debug('error updating driver:', error);
                 });
             }, function () {
                 // cancel clicked
@@ -111,10 +111,10 @@ angular.module('safeRidesWebApp')
             DriverService.remove({
                 id: driver.id
             }).$promise.then(function (response) {
-                console.log('deleted driver:', response);
+                $log.debug('deleted driver:', response);
                 getDrivers();
             }, function (error) {
-                console.log('error deleting driver:', error);
+                $log.debug('error deleting driver:', error);
             });
         }
 
