@@ -111,7 +111,7 @@ angular
             })
             .state('coordinator', {
                 url: '/coordinator',
-                templateUrl: 'views/coordinatordashboard.html',
+                templateUrl: 'views/main-coordinator.html',
                 controller: 'CoordinatordashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
@@ -120,7 +120,7 @@ angular
             })
             .state('editdriver', {
                 url: '/editdriver/:driverId?',
-                templateUrl: 'views/editdriver.html',
+                templateUrl: 'views/edit-driver.html',
                 controller: 'EditdriverCtrl',
                 controllerAs: 'ctrl',
                 data: {
@@ -129,7 +129,7 @@ angular
             })
             .state('driver', {
                 url: '/driver',
-                templateUrl: 'views/driverdashboard.html',
+                templateUrl: 'views/main-driver.html',
                 controller: 'DriverdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
@@ -138,7 +138,7 @@ angular
             })
             .state('request', {
                 url: '/request',
-                templateUrl: 'views/riderdashboard.html',
+                templateUrl: 'views/main-request.html',
                 controller: 'RiderdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
@@ -147,7 +147,7 @@ angular
             })
             .state('managedrivers', {
                 url: '/managedrivers',
-                templateUrl: 'views/managedrivers.html',
+                templateUrl: 'views/manage-drivers.html',
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
                 data: {
@@ -156,7 +156,7 @@ angular
             })
             .state('reports', {
                 url: '/reports',
-                templateUrl: 'views/reportsdashboard.html',
+                templateUrl: 'views/reports.html',
                 controller: 'ReportsdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {

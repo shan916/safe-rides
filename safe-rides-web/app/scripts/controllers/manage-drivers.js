@@ -63,7 +63,7 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmDeleteModal = function (driver) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmdeletedrivermodal.html',
+                templateUrl: 'views/modal-confirm-delete-driver.html',
                 controller: 'ConfirmDeleteDriverModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -83,7 +83,7 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmChangeDriverActiveModal = function (driver) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmchangedriveractivemodal.html',
+                templateUrl: 'views/modal-confirm-change-driver-active.html',
                 controller: 'ConfirmChangeDriverActiveModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {

@@ -62,7 +62,7 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmDeleteModal = function (coordinator) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirm-delete-coordinator-modal.html',
+                templateUrl: 'views/modal-confirm-delete-coordinator.html',
                 controller: 'ConfirmDeleteCoordinatorModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -82,7 +82,7 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmChangeCoordinatorActiveModal = function (coordinator) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirm-change-coordinator-active-modal.html',
+                templateUrl: 'views/modal-confirm-change-coordinator-active.html',
                 controller: 'ConfirmChangeCoordinatorActiveModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {

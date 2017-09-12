@@ -175,7 +175,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.showRequestDetails = function (req) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/requestdetailsmodal.html',
+                templateUrl: 'views/modal-request-details.html',
                 controller: 'RequestDetailModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -195,7 +195,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.showDriverDetails = function (driver) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/driverdetailsmodal.html',
+                templateUrl: 'views/modal-driver-details.html',
                 controller: 'DriverDetailsModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -215,7 +215,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.showAssignDriver = function (req) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/assigndrivermodal.html',
+                templateUrl: 'views/modal-assign-driver.html',
                 controller: 'AssignDriverModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -240,7 +240,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.showAssignRequest = function (driver) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/assignrequestmodal.html',
+                templateUrl: 'views/modal-assign-request.html',
                 controller: 'AssignRequestModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -265,7 +265,7 @@ var app = angular.module('safeRidesWebApp')
 
         vm.confirmCancelRequest = function (request) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirmcancelmodal.html',
+                templateUrl: 'views/modal-confirm-cancel.html',
                 controller: 'ConfirmCancelRequestModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -290,7 +290,7 @@ var app = angular.module('safeRidesWebApp')
         /* Modal Add ride request */
         vm.showRideRequest = function () {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/addriderequestmodal.html',
+                templateUrl: 'views/modal-add-ride-request.html',
                 controller: 'AddriderequestmodalCtrl',
                 controllerAs: 'ctrl',
                 size: 'lg'
