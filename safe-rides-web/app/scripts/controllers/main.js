@@ -12,7 +12,7 @@ angular.module('safeRidesWebApp')
         if (authManager.isAuthenticated()) {
             if (AuthTokenService.isInRole('ROLE_ADMIN')) {
                 $log.debug('ADMIN');
-                $state.go('manageCoordinators');
+                $state.go('coordinator');
             } else if (AuthTokenService.isInRole('ROLE_COORDINATOR')) {
                 $log.debug('COORDINATOR');
                 $state.go('coordinator');

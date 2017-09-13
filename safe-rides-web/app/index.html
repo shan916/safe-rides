@@ -27,12 +27,17 @@
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<div class="header" >
+<div class="header" ng-controller="HeaderMenuCtrl as header">
     <div class="navbar navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
             </div>
+            <ul class="nav navbar-nav ng-cloak" bs-active-link>
+                <li ng-repeat="route in header.routes">
+                    <a href="{{route.path}}">{{route.text}}</a>
+                </li>
+            </ul>
 
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
                 <button ng-show="isAuthenticated && redirect !== 'riderdashboard'" ng-click="globalLogout()"
@@ -119,6 +124,8 @@
 <script src="scripts/services/report-monthly-service.js"></script>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="scripts/services/cas-service.js"></script>
+<script src="scripts/controllers/header-menu.js"></script>
+<script src="scripts/directives/bs-active-link.js"></script>
 <!-- endbuild -->
 
 </body>

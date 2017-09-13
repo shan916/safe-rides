@@ -148,7 +148,7 @@ angular
                 }
             })
             .state('managedrivers', {
-                url: '/managedrivers',
+                url: '/manage-drivers',
                 templateUrl: 'views/manage-drivers.html',
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
