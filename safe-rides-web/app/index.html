@@ -33,12 +33,11 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#!/" ng-click="header.setActive(header.routes[0])">ASI Safe Rides</a>
             </div>
-            <ul class="nav navbar-nav ng-cloak" bs-active-link>
+            <ul class="nav navbar-nav ng-cloak">
                 <li ng-repeat="route in header.routes">
-                    <a href="{{route.path}}">{{route.text}}</a>
+                    <a href="{{route.path}}" bs-active-link>{{route.text}}</a>
                 </li>
             </ul>
-
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
                 <button ng-show="isAuthenticated && redirect !== 'riderdashboard'" ng-click="globalLogout()"
                         class="btn btn-danger navbar-btn navbar-right">Logout
