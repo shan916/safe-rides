@@ -9,7 +9,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver) {
+    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver, $log) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -29,10 +29,10 @@ angular.module('safeRidesWebApp')
             }).$promise.then(function (response) {
                 vm.loading = false;
                 vm.driver = response;
-                console.log('got driver:', response);
+                $log.debug('got driver:', response);
             }, function (error) {
                 vm.loading = false;
-                console.log('error getting driver:', error);
+                $log.debug('error getting driver:', error);
             });
         }
 
@@ -40,10 +40,10 @@ angular.module('safeRidesWebApp')
             DriverService.update({
                 id: vm.driver.id
             }, vm.driver).$promise.then(function (response) {
-                console.log('updated driver:', response);
+                $log.debug('updated driver:', response);
                 $state.go('managedrivers');
             }, function (error) {
-                console.log('error updating driver:', error);
+                $log.debug('error updating driver:', error);
             });
         }
 
@@ -60,10 +60,10 @@ angular.module('safeRidesWebApp')
                 updateDriver();
             } else {
                 DriverService.save(vm.driver).$promise.then(function (response) {
-                    console.log('saved driver:', response);
+                    $log.debug('saved driver:', response);
                     $state.go('managedrivers');
                 }, function (error) {
-                    console.log('error saving driver:', error);
+                    $log.debug('error saving driver:', error);
                 });
             }
         };

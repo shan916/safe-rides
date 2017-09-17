@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService, $uibModal, ENV, $window) {
+    .controller('ManageCoordinatorsCtrl', function (authManager, $state, UserService, Notification, AuthTokenService, $uibModal, ENV, $window, $log) {
         var vm = this;
 
         vm.activeCoordinators = [];
@@ -28,13 +28,13 @@ angular.module('safeRidesWebApp')
                     delay: 10000
                 });
                 $state.go('/');
-                console.log('Not an admin');
+                $log.debug('Not an admin');
             } else {
                 getCoordinators();
             }
         } else {
-            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
-            console.log('Not authenticated');
+            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            $log.debug('Not authenticated');
         }
 
         function getCoordinators() {
@@ -44,25 +44,25 @@ angular.module('safeRidesWebApp')
             UserService.query({active: true, role: 'ROLE_COORDINATOR'}).$promise.then(function (response) {
                 vm.loadingActiveCoordinators = false;
                 vm.activeCoordinators = response;
-                console.log('got active coordinators:', response);
+                $log.debug('got active coordinators:', response);
             }, function (error) {
                 vm.loadingActiveCoordinators = false;
-                console.log('error getting active coordinators:', error);
+                $log.debug('error getting active coordinators:', error);
             });
 
             UserService.query({active: false, role: 'ROLE_COORDINATOR'}).$promise.then(function (response) {
                 vm.loadingInactiveCoordinators = false;
                 vm.inactiveCoordinators = response;
-                console.log('got inactive coordinators:', response);
+                $log.debug('got inactive coordinators:', response);
             }, function (error) {
                 vm.loadingInactiveCoordinators = false;
-                console.log('error getting inactive coordinators:', error);
+                $log.debug('error getting inactive coordinators:', error);
             });
         }
 
         vm.openConfirmDeleteModal = function (coordinator) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirm-delete-coordinator-modal.html',
+                templateUrl: 'views/modal-confirm-delete-coordinator.html',
                 controller: 'ConfirmDeleteCoordinatorModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -82,7 +82,7 @@ angular.module('safeRidesWebApp')
 
         vm.openConfirmChangeCoordinatorActiveModal = function (coordinator) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/confirm-change-coordinator-active-modal.html',
+                templateUrl: 'views/modal-confirm-change-coordinator-active.html',
                 controller: 'ConfirmChangeCoordinatorActiveModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
@@ -96,10 +96,10 @@ angular.module('safeRidesWebApp')
             modalInstance.result.then(function () {
                 coordinator.active = !coordinator.active;
                 UserService.update({id: coordinator.id}, coordinator).$promise.then(function (response) {
-                    console.log('updated coordinator, now refreshing', response);
+                    $log.debug('updated coordinator, now refreshing', response);
                     getCoordinators();
                 }, function (error) {
-                    console.log('error updating coordinator:', error);
+                    $log.debug('error updating coordinator:', error);
                 });
             }, function () {
                 // cancel clicked
@@ -110,10 +110,10 @@ angular.module('safeRidesWebApp')
             UserService.remove({
                 id: coordinator.id
             }).$promise.then(function (response) {
-                console.log('deleted coordinator:', response);
+                $log.debug('deleted coordinator:', response);
                 getCoordinators();
             }, function (error) {
-                console.log('error deleting coordinator:', error);
+                $log.debug('error deleting coordinator:', error);
             });
         }
     });

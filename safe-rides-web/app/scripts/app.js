@@ -39,7 +39,7 @@ angular
         'ui-notification'
     ])
 
-    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $location) {
+    .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $log) {
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
 
@@ -50,16 +50,16 @@ angular
                 casService.validate({
                     'service': ENV.casServiceName,
                     'ticket': window.location.search.substring(ticketParamStart)
-                }).then(function(response){
+                }).then(function (response) {
                     AuthTokenService.setToken(response.data.token);
-                    window.location.href =  window.location.href.split("?")[0];
+                    window.location.href = window.location.href.split('?')[0];
                 });
             }
         });
 
         $rootScope.$on('tokenHasExpired', function () {
             AuthTokenService.removeToken();
-            console.log('Your session has expired!');
+            $log.debug('Session has expired!');
         });
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
@@ -74,20 +74,22 @@ angular
 
         $rootScope.globalLogout = function () {
             AuthTokenService.removeToken();
-            $state.go('/');
             // update the user authentication state right away
             // angular-jwt uses $rootScope.isAuthenticated
             $rootScope.isAuthenticated = false;
+            $window.location.href = ENV.logoutRedirect;
         };
     })
 
-    .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider) {
+    .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider, $logProvider) {
+        $logProvider.debugEnabled(true);
+
         jwtOptionsProvider.config({
             authPrefix: '',
             whiteListedDomains: ['localhost', 'codeteam6.io'],
-            unauthenticatedRedirector: [ function () {
+            unauthenticatedRedirector: [function () {
                 var $window = $windowProvider.$get();
-                $window.location.href = "https://sacauth.csus.edu/csus.cas/login" + "?service=" + "http://codeteam6.io/";
+                $window.location.href = 'https://sacauth.csus.edu/csus.cas/login' + '?service=' + 'http://codeteam6.io/';
             }],
             tokenGetter: ['options', 'AuthTokenService', function (options, AuthTokenService) {
                 // Skip authentication for any requests ending in .html
@@ -109,103 +111,57 @@ angular
                 controller: 'MainCtrl',
                 controllerAs: 'ctrl'
             })
-            .state('about', {
-                url: '/about',
-                templateUrl: 'views/about.html',
-                controller: 'AboutCtrl',
-                controllerAs: 'about'
-            })
-            .state('login', {
-                url: '/login',
-                templateUrl: 'views/login.html',
-                controller: 'LoginCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('register', {
-                url: '/register',
-                templateUrl: 'views/register.html',
-                controller: 'RegisterCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('resetpasswordrequest', {
-                url: '/resetpasswordrequest',
-                templateUrl: 'views/resetpasswordrequest.html',
-                controller: 'ResetpasswordrequestCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('resetpassword', {
-                url: '/resetpassword',
-                templateUrl: 'views/resetpassword.html',
-                controller: 'ResetpasswordCtrl',
-                controllerAs: 'ctrl'
-            })
-            .state('coordinatordashboard', {
-                url: '/coordinatordashboard',
-                templateUrl: 'views/coordinatordashboard.html',
+            .state('coordinator', {
+                url: '/coordinator',
+                templateUrl: 'views/main-coordinator.html',
                 controller: 'CoordinatordashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
-                    requiresLogin: true
-                }
-            })
-            .state('coordinatorreport', {
-                url: '/coordinatorreport',
-                templateUrl: 'views/coordinatorreport.html',
-                controller: 'CoordinatorreportCtrl',
-                controllerAs: 'ctrl',
-                data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
             .state('editdriver', {
                 url: '/editdriver/:driverId?',
-                templateUrl: 'views/editdriver.html',
+                templateUrl: 'views/edit-driver.html',
                 controller: 'EditdriverCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
-            .state('driverdashboard', {
-                url: '/driverdashboard',
-                templateUrl: 'views/driverdashboard.html',
+            .state('driver', {
+                url: '/driver',
+                templateUrl: 'views/main-driver.html',
                 controller: 'DriverdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
-            .state('riderdashboard', {
-                url: '/riderdashboard',
-                templateUrl: 'views/riderdashboard.html',
+            .state('request', {
+                url: '/request',
+                templateUrl: 'views/main-request.html',
                 controller: 'RiderdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
             .state('managedrivers', {
-                url: '/managedrivers',
-                templateUrl: 'views/managedrivers.html',
+                url: '/manage-drivers',
+                templateUrl: 'views/manage-drivers.html',
                 controller: 'ManagedriversCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
             .state('reports', {
                 url: '/reports',
-                templateUrl: 'views/reportsdashboard.html',
+                templateUrl: 'views/reports.html',
                 controller: 'ReportsdashboardCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -215,7 +171,6 @@ angular
                 controller: 'ManageCoordinatorsCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -225,7 +180,6 @@ angular
                 controller: 'EditCoordinatorCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             })
@@ -235,7 +189,6 @@ angular
                 controller: 'SettingsCtrl',
                 controllerAs: 'ctrl',
                 data: {
-                    requireLogin: true,
                     requiresLogin: true
                 }
             });

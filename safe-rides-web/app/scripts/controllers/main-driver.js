@@ -9,7 +9,7 @@
  */
 angular.module('safeRidesWebApp')
     .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window) {
+                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window, $log) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -39,19 +39,19 @@ angular.module('safeRidesWebApp')
                     replaceMessage: true
                 });
                 $state.go('/');
-                console.log('Not a driver');
+                $log.debug('Not a driver');
             } else {
                 AuthService.getAuthUserInfo().then(function (response) {
                     vm.driver = response.data;
                 }, function (error) {
-                    console.log('error getting the driver name', error);
+                    $log.debug('error getting the driver name', error);
                 });
-                console.log('about to call getCurrentRideRequest');
+                $log.debug('about to call getCurrentRideRequest');
                 getCurrentRideRequest();
             }
         } else {
-            $window.location.href = ENV.casLogin + "?service=" + ENV.casServiceName;
-            console.log('Not authenticated');
+            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            $log.debug('Not authenticated');
         }
 
         /*
@@ -80,11 +80,11 @@ angular.module('safeRidesWebApp')
                     if (!rideRefresher) {
                         rideRefresher = $interval(getCurrentRideRequest, REFRESH_INTERVAL);
                     } else {
-                        console.log('REFRESH_INTERVAL already ran');
+                        $log.debug('REFRESH_INTERVAL already ran');
                     }
                 } //end if
             }, function (error) {
-                console.log('No Assigned Rides: ', error);
+                $log.debug('No Assigned Rides: ', error);
                 vm.isRideAssigned = false;
             });
         }//end newgetCurrentRideRequest
@@ -100,7 +100,7 @@ angular.module('safeRidesWebApp')
             if (vm.assignedRide.dropoffLine1 !== undefined) {
                 vm.dropoffAddress = 'https://www.google.com/maps/place/' + vm.assignedRide.dropoffLine1 +
                     ', ' + vm.assignedRide.dropoffCity + ', CA';
-                console.log('buttons built');
+                $log.debug('buttons built');
             }
         }
 
@@ -110,9 +110,9 @@ angular.module('safeRidesWebApp')
          */
         function updateRideRequest() {
             RideRequestService.update({id: vm.assignedRide.id}, vm.assignedRide).$promise.then(function (response) {
-                console.log('Driver, saved riderequest:', response);
+                $log.debug('Driver, saved riderequest:', response);
             }, function (error) {
-                console.log('Driver, error saving riderequest:', error);
+                $log.debug('Driver, error saving riderequest:', error);
             });
         }
 
@@ -173,7 +173,7 @@ angular.module('safeRidesWebApp')
                 vm.assignedRide.status = 'ATPICKUPLOCATION';
                 updateRideRequest();
             } else {
-                console.log('Already notified rider');
+                $log.debug('Already notified rider');
             }
             vm.isRideAssigned = true;
             vm.pickedUpButtonPressed = false;
@@ -205,12 +205,12 @@ angular.module('safeRidesWebApp')
 
                 if (!vm.lastCoords || calcCrow(vm.lastCoords.latitude, vm.lastCoords.longitude, coords.latitude, coords.longitude) > 75) {
                     CurrentDriverLocationService.save(coords).$promise.then(function (response) {
-                        console.log('saved driver\'s location:', response);
+                        $log.debug('saved driver\'s location:', response);
                     }, function (error) {
-                        console.log('error saving driver\'s location:', error);
+                        $log.debug('error saving driver\'s location:', error);
                     });
                 } else {
-                    console.log('Distance is not long enough to update the api.');
+                    $log.debug('Distance is not long enough to update the api.');
                 }
 
                 vm.lastCoords = coords;

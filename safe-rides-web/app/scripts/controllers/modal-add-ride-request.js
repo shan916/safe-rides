@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $stateParams, RideRequest, RideRequestService) {
+    .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $stateParams, RideRequest, RideRequestService, $log) {
         var vm = this;
         vm.riderequest = new RideRequest();
         vm.NUM_REGEX = '\\d+';
@@ -24,9 +24,9 @@ angular.module('safeRidesWebApp')
                 id: requestId
             }).$promise.then(function (response) {
                 vm.riderequest = response;
-                console.log('got riderequest:', response);
+                $log.debug('got riderequest:', response);
             }, function (error) {
-                console.log('error getting riderequest:', error);
+                $log.debug('error getting riderequest:', error);
             });
         }
 
@@ -35,6 +35,7 @@ angular.module('safeRidesWebApp')
          RideRequestService.update({
          id: vm.riderequest.id
          }, vm.riderequest).$promise.then(function(response) {
+
          console.log('updated riderequest:', response);
          $uibModalInstance.dismiss();
          }, function(error) {
@@ -51,10 +52,10 @@ angular.module('safeRidesWebApp')
             //TODO if the ride request exists already?
             //if($routeParams.oneCardId)
             RideRequestService.save(vm.riderequest).$promise.then(function (response) {
-                console.log('saved riderequest:', response);
+                $log.debug('saved riderequest:', response);
                 $uibModalInstance.dismiss();
             }, function (error) {
-                console.log('error saving riderequest:', error);
+                $log.debug('error saving riderequest:', error);
             });
         }; //end vm.saveRideRequest
 

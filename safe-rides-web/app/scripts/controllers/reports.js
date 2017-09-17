@@ -8,7 +8,7 @@
  * Controller of the Reports view
  */
 angular.module('safeRidesWebApp')
-    .controller('ReportsdashboardCtrl', function (MonthlyStats, authManager, $state, AuthTokenService, Notification) {
+    .controller('ReportsdashboardCtrl', function (MonthlyStats, authManager, $state, AuthTokenService, Notification, $log) {
         var vm = this;
         vm.userSelected = undefined;
         vm.isBarChartGenerated = false;
@@ -133,7 +133,7 @@ angular.module('safeRidesWebApp')
                 }
 
             } else {
-                console.log('nothing selected OR the selection does not match');
+                $log.debug('nothing selected OR the selection does not match');
             }
 
 

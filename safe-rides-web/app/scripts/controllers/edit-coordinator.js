@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditCoordinatorCtrl', function ($stateParams, $state, UserService, User, Notification) {
+    .controller('EditCoordinatorCtrl', function ($stateParams, $state, UserService, User, Notification, $log) {
         var vm = this;
 
         vm.coordinator = new User();
@@ -28,10 +28,10 @@ angular.module('safeRidesWebApp')
             }).$promise.then(function (response) {
                 vm.loading = false;
                 vm.coordinator = new User(response);
-                console.log('got coordinator:', response);
+                $log.debug('got coordinator:', response);
             }, function (error) {
                 vm.loading = false;
-                console.log('error getting coordinator:', error);
+                $log.debug('error getting coordinator:', error);
             });
         }
 
@@ -39,9 +39,10 @@ angular.module('safeRidesWebApp')
             UserService.update({
                 id: vm.coordinator.id
             }, vm.coordinator).$promise.then(function (response) {
-                console.log('updated coordinator:', response);
+                $log.debug('updated coordinator:', response);
                 $state.go('manageCoordinators');
             }, function (error) {
+                $log.debug('error updating coordinator:', error);
                 Notification.error({
                     message: error.data.message,
                     positionX: 'center',
@@ -57,10 +58,10 @@ angular.module('safeRidesWebApp')
                 vm.coordinator.active = true;
 
                 UserService.save(vm.coordinator).$promise.then(function (response) {
-                    console.log('saved coordinator:', response);
+                    $log.debug('saved coordinator:', response);
                     $state.go('manageCoordinators');
                 }, function (error) {
-                    console.log('error saving coordinator:', error);
+                    $log.debug('error saving coordinator:', error);
                 });
             }
         };
