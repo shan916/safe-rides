@@ -5,13 +5,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
-import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.model.Configuration;
+import edu.csus.asi.saferides.model.ResponseMessage;
+import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.model.views.JsonViews;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
-import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.model.AuthorityName;
+import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
@@ -147,7 +152,7 @@ public class RideRequestController {
      * </li>
      * </ul>
      *
-     * @param request        the HTTP servlet request
+     * @param request     the HTTP servlet request
      * @param rideRequestDto request body containing the ride to create
      * @return ResponseEntity containing the created ride and its location
      */
@@ -196,10 +201,10 @@ public class RideRequestController {
         geocodingService.setCoordinates(rideRequest);
 
         if (null != user) {
-            if ((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))) {
+            if((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))){
                 user.setFirstName(rideRequestDto.getRequestorFirstName());
             }
-            if ((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))) {
+            if((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))){
                 user.setLastName(rideRequestDto.getRequestorLastName());
             }
             rideRequest.setUser(user);
@@ -208,8 +213,8 @@ public class RideRequestController {
         // check if user already requested a ride during this period
         Configuration configuration = configurationRepository.findOne(1);
         RideRequest previousRideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(rideRequest.getOneCardId());
-        if (null != previousRideRequest) {
-            if (null != Util.filterPastRide(configuration, previousRideRequest)) {
+        if(null != previousRideRequest){
+            if(null != Util.filterPastRide(configuration, previousRideRequest)){
                 return ResponseEntity.badRequest().body(new ResponseMessage("A ride has already been requested today."));
             }
         }

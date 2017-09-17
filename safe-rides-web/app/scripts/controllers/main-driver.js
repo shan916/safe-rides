@@ -8,8 +8,8 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window, $log) {
+    .controller('DriverdashboardCtrl', function ($scope, DriverService, RideRequestService, DriverRidesService, RideRequest, Driver, authManager, AuthTokenService,
+                                                 $state, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window, $log) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];

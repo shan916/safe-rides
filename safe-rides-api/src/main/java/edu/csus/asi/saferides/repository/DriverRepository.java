@@ -35,5 +35,4 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      * @return the driver associated with the specified user
      */
     Driver findByUser(User user);
-
 }

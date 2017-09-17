@@ -366,10 +366,10 @@ public class SafeRidesApiApplication {
             geocodingService.setCoordinates(rideRequest17);
             geocodingService.setCoordinates(rideRequest18);
             geocodingService.setCoordinates(rideRequest19);
-            
+
             User driver = new User("driver", "Driver", "Long");
 
-            User coordinator = new User("edwardozeruga", "Coordinator", "Jones");
+            User coordinator = new User("coordinator", "Coordinator", "Jones");
 
             User admin = new User("admin", "Admin", "Smith");
 
