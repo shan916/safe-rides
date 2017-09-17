@@ -1,17 +1,8 @@
 package edu.csus.asi.saferides;
 
 import edu.csus.asi.saferides.model.*;
-import edu.csus.asi.saferides.repository.ConfigurationRepository;
-import edu.csus.asi.saferides.repository.DriverLocationRepository;
-import edu.csus.asi.saferides.repository.DriverRepository;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.AuthorityRepository;
-import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,25 +264,25 @@ public class SafeRidesApiApplication {
                     "8637 Oakbank Way",
                     "Sacramento");
 
-            User user0 = new User("kwinters","Kevin","Winters");
-            User user1 = new User("pskaggs","Peter","Skaggs");
-            User user3 = new User("jbonner","Jack","Bonner");
-            User user4 = new User("dreaves","Daniel","Reaves");
-            User user5 = new User("jminer","James","Miner");
-            User user6 = new User("jalexander","Jennifer","Alexander");
-            User user7 = new User("cthomas","charlene","thomas");
-            User user8 = new User("rjames","Rolanda","James");
-            User user9 = new User("dlang","Debra","Lang");
-            User user10 = new User("sgrantham","Sue","Grantham");
-            User user11 = new User("ncox","Noemi","Cox");
-            User user12 = new User("jpence","Joy","Pence");
-            User user13 = new User("rrowell","Rochelle","Rowell");
-            User user14 = new User("ctuttle","Charles","Tuttle");
-            User user15 = new User("mtutt","Mario","Tutt");
-            User user16 = new User("wscruggs","Wanda","Scruggs");
-            User user17 = new User("mbutler","Mercy","Butler");
-            User user18 = new User("dlopez","Dennis","Lopez");
-            User user19 = new User("dmeyer","David","Meyer");
+            User user0 = new User("kwinters", "Kevin", "Winters");
+            User user1 = new User("pskaggs", "Peter", "Skaggs");
+            User user3 = new User("jbonner", "Jack", "Bonner");
+            User user4 = new User("dreaves", "Daniel", "Reaves");
+            User user5 = new User("jminer", "James", "Miner");
+            User user6 = new User("jalexander", "Jennifer", "Alexander");
+            User user7 = new User("cthomas", "charlene", "thomas");
+            User user8 = new User("rjames", "Rolanda", "James");
+            User user9 = new User("dlang", "Debra", "Lang");
+            User user10 = new User("sgrantham", "Sue", "Grantham");
+            User user11 = new User("ncox", "Noemi", "Cox");
+            User user12 = new User("jpence", "Joy", "Pence");
+            User user13 = new User("rrowell", "Rochelle", "Rowell");
+            User user14 = new User("ctuttle", "Charles", "Tuttle");
+            User user15 = new User("mtutt", "Mario", "Tutt");
+            User user16 = new User("wscruggs", "Wanda", "Scruggs");
+            User user17 = new User("mbutler", "Mercy", "Butler");
+            User user18 = new User("dlopez", "Dennis", "Lopez");
+            User user19 = new User("dmeyer", "David", "Meyer");
 
             rideRequest0.setUser(user0);
             rideRequest0.setDriver(driver0);
@@ -355,9 +346,30 @@ public class SafeRidesApiApplication {
             rideRequest18.setUser(user18);
             rideRequest19.setUser(user19);
 
+            geocodingService.setCoordinates(rideRequest0);
+            geocodingService.setCoordinates(rideRequest1);
+            geocodingService.setCoordinates(rideRequest2);
+            geocodingService.setCoordinates(rideRequest3);
+            geocodingService.setCoordinates(rideRequest4);
+            geocodingService.setCoordinates(rideRequest5);
+            geocodingService.setCoordinates(rideRequest6);
+            geocodingService.setCoordinates(rideRequest7);
+            geocodingService.setCoordinates(rideRequest8);
+            geocodingService.setCoordinates(rideRequest9);
+            geocodingService.setCoordinates(rideRequest10);
+            geocodingService.setCoordinates(rideRequest11);
+            geocodingService.setCoordinates(rideRequest12);
+            geocodingService.setCoordinates(rideRequest13);
+            geocodingService.setCoordinates(rideRequest14);
+            geocodingService.setCoordinates(rideRequest15);
+            geocodingService.setCoordinates(rideRequest16);
+            geocodingService.setCoordinates(rideRequest17);
+            geocodingService.setCoordinates(rideRequest18);
+            geocodingService.setCoordinates(rideRequest19);
+            
             User driver = new User("driver", "Driver", "Long");
 
-            User coordinator = new User("coordinator", "Coordinator", "Jones");
+            User coordinator = new User("edwardozeruga", "Coordinator", "Jones");
 
             User admin = new User("admin", "Admin", "Smith");
 
@@ -492,12 +504,6 @@ public class SafeRidesApiApplication {
             dayOfWeeks.add(DayOfWeek.SATURDAY);
             newConfig.setDaysOfWeek(dayOfWeeks);
             configurationRepository.save(newConfig);
-
-            final String token = jwtTokenUtil.generateToken(JwtUserFactory.create(user6));
-            System.out.println(token);
-
-            final String token2 = jwtTokenUtil.generateToken(JwtUserFactory.create(admin));
-            System.out.println(token2);
         };
     }
 

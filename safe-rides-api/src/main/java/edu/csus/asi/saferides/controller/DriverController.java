@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.service;
+package edu.csus.asi.saferides.controller;
 
 import edu.csus.asi.saferides.mapper.DriverLocationMapper;
 import edu.csus.asi.saferides.mapper.DriverMapper;
@@ -7,14 +7,9 @@ import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.model.dto.DriverLocationDto;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
-import edu.csus.asi.saferides.repository.ConfigurationRepository;
-import edu.csus.asi.saferides.repository.DriverLocationRepository;
-import edu.csus.asi.saferides.repository.DriverRepository;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.UserRepository;
-import edu.csus.asi.saferides.security.service.UserService;
+import edu.csus.asi.saferides.service.UserService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +32,7 @@ import java.util.stream.Collectors;
  * Rest API controller for the Driver resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io"})
 @RequestMapping("/drivers")
 @PreAuthorize("hasRole('COORDINATOR')")
 public class DriverController {

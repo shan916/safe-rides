@@ -1,12 +1,8 @@
 package edu.csus.asi.saferides.model;
 
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 

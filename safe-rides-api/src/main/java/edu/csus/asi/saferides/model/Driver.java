@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;

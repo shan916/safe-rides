@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.views.JsonViews;
-import edu.csus.asi.saferides.security.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Max;

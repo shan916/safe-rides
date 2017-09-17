@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.service;
+package edu.csus.asi.saferides.controller;
 
 import edu.csus.asi.saferides.mapper.ConfigurationMapper;
 import edu.csus.asi.saferides.model.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * Rest API controller for the Configuration resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io"})
 @RequestMapping("/config")
 public class ConfigurationController {
 

@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.security.model;
+package edu.csus.asi.saferides.model;
 
 /**
  * Enum for possible authorities / roles

@@ -2,7 +2,6 @@ package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
-import edu.csus.asi.saferides.security.dto.UserDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.converter.builtin.PassThroughConverter;
 import ma.glasnost.orika.impl.ConfigurableMapper;

@@ -1,18 +1,16 @@
-package edu.csus.asi.saferides.service;
+package edu.csus.asi.saferides.controller;
 
+import edu.csus.asi.saferides.mapper.UserMapper;
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.ResponseMessage;
+import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.model.dto.UserDto;
+import edu.csus.asi.saferides.repository.AuthorityRepository;
+import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUser;
-import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.dto.UserDto;
-import edu.csus.asi.saferides.security.mapper.UserMapper;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.AuthorityRepository;
-import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
-import edu.csus.asi.saferides.security.service.UserService;
+import edu.csus.asi.saferides.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -34,7 +32,7 @@ import java.util.List;
  * Rest API controller for the User resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io"})
 @RequestMapping("/users")
 public class UserController {
 

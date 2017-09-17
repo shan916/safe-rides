@@ -1,13 +1,13 @@
-package edu.csus.asi.saferides.security.service;
+package edu.csus.asi.saferides.service;
 
+import edu.csus.asi.saferides.mapper.UserMapper;
+import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.AuthorityName;
+import edu.csus.asi.saferides.model.User;
 import edu.csus.asi.saferides.model.dto.DriverDto;
-import edu.csus.asi.saferides.security.dto.UserDto;
-import edu.csus.asi.saferides.security.mapper.UserMapper;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.AuthorityRepository;
-import edu.csus.asi.saferides.security.repository.UserRepository;
+import edu.csus.asi.saferides.model.dto.UserDto;
+import edu.csus.asi.saferides.repository.AuthorityRepository;
+import edu.csus.asi.saferides.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

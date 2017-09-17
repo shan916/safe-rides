@@ -1,23 +1,19 @@
-package edu.csus.asi.saferides.service;
+package edu.csus.asi.saferides.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.csus.asi.saferides.mapper.RideRequestMapper;
-import edu.csus.asi.saferides.model.Configuration;
-import edu.csus.asi.saferides.model.ResponseMessage;
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.model.RideRequestStatus;
+import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
 import edu.csus.asi.saferides.model.views.JsonViews;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
+import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,7 +38,7 @@ import java.util.List;
  * Rest API controller for the RideRequest resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io"})
 @RequestMapping("/rides")
 @PreAuthorize("hasRole('COORDINATOR')")
 public class RideRequestController {
@@ -151,7 +147,7 @@ public class RideRequestController {
      * </li>
      * </ul>
      *
-     * @param request     the HTTP servlet request
+     * @param request        the HTTP servlet request
      * @param rideRequestDto request body containing the ride to create
      * @return ResponseEntity containing the created ride and its location
      */
@@ -200,10 +196,10 @@ public class RideRequestController {
         geocodingService.setCoordinates(rideRequest);
 
         if (null != user) {
-            if((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))){
+            if ((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))) {
                 user.setFirstName(rideRequestDto.getRequestorFirstName());
             }
-            if((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))){
+            if ((StringUtils.isEmpty(user.getLastName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorLastName()))) {
                 user.setLastName(rideRequestDto.getRequestorLastName());
             }
             rideRequest.setUser(user);
@@ -212,8 +208,8 @@ public class RideRequestController {
         // check if user already requested a ride during this period
         Configuration configuration = configurationRepository.findOne(1);
         RideRequest previousRideRequest = rideRequestRepository.findTop1ByOneCardIdOrderByRequestDateDesc(rideRequest.getOneCardId());
-        if(null != previousRideRequest){
-            if(null != Util.filterPastRide(configuration, previousRideRequest)){
+        if (null != previousRideRequest) {
+            if (null != Util.filterPastRide(configuration, previousRideRequest)) {
                 return ResponseEntity.badRequest().body(new ResponseMessage("A ride has already been requested today."));
             }
         }
