@@ -83,12 +83,12 @@ public class RideRequestDto {
     // TODO: min, max values?
     @ApiModelProperty(value = "The odometer reading of the driver's vehicle at the beginning of the ride")
     @JsonView(JsonViews.Driver.class)
-    private Integer startOdometer;
+    private Long startOdometer;
 
     // TODO: min, max values?
     @ApiModelProperty(value = "The odometer reading of the driver's vehicle at the time of ride completion")
     @JsonView(JsonViews.Driver.class)
-    private Integer endOdometer;
+    private Long endOdometer;
 
     @ApiModelProperty(value = "Line 1 of rider's pickup address")
     @NotNull(message = "pickupLine1 must not be null")
@@ -294,19 +294,19 @@ public class RideRequestDto {
         this.numPassengers = numPassengers;
     }
 
-    public Integer getStartOdometer() {
+    public Long getStartOdometer() {
         return startOdometer;
     }
 
-    public void setStartOdometer(Integer startOdometer) {
+    public void setStartOdometer(Long startOdometer) {
         this.startOdometer = startOdometer;
     }
 
-    public Integer getEndOdometer() {
+    public Long getEndOdometer() {
         return endOdometer;
     }
 
-    public void setEndOdometer(Integer endOdometer) {
+    public void setEndOdometer(Long endOdometer) {
         this.endOdometer = endOdometer;
     }
 
