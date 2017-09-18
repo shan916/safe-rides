@@ -25,8 +25,11 @@ angular.module('safeRidesWebApp')
         vm.ok = function () {
             vm.selectedRequest.messageToDriver = vm.messageToDriver;
             vm.selectedRequest.estimatedTime = vm.estimatedTime;
+            vm.selectedRequest.driverId = vm.driver.id;
+            vm.selectedRequest.status = 'ASSIGNED';
+
             RideRequestService.update({
-                id: vm.driver.id
+                id: vm.selectedRequest.id
             }, vm.selectedRequest).$promise.then(function (response) {
                 $log.debug(vm.driver.driverFirstName + ' was assigned to ' + vm.selectedRequest.requestorFirstName +
                     ' with message ' + vm.selectedRequest.messageToDriver);

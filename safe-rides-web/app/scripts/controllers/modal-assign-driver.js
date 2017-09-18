@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('AssignDriverModalCtrl', function ($uibModalInstance, request, drivers, AssignRideService, Notification, $log) {
+    .controller('AssignDriverModalCtrl', function ($uibModalInstance, RideRequestService, request, drivers, Notification, $log) {
         var vm = this;
         vm.request = request;
         vm.drivers = drivers;
@@ -26,7 +26,11 @@ angular.module('safeRidesWebApp')
         vm.ok = function () {
             vm.request.estimatedTime = vm.estimatedTime;
             vm.request.messageToDriver = vm.messageToDriver;
-            AssignRideService.save({id: vm.selectedDriver.id}, vm.request).$promise.then(function (response) {
+            vm.request.driverId = vm.selectedDriver.id;
+            vm.request.status = 'ASSIGNED';
+            RideRequestService.update({
+                id: vm.request.id
+            }, vm.request).$promise.then(function (response) {
                 $log.debug('assigned driver to request:', response);
                 $uibModalInstance.close();
             }, function (error) {

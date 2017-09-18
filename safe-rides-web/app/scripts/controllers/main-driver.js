@@ -24,7 +24,6 @@ angular.module('safeRidesWebApp')
         vm.driver = undefined;  //used to authenticate this driver is a valid user
         var REFRESH_INTERVAL = 30000;   //Refresh time in ms for refreshing getCurrentRideRequest
         var rideRefresher; //used to signify if the refresh interval has been created yet
-        vm.localDriver = undefined;  //this currently signed in Driver
 
         /*
          * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver

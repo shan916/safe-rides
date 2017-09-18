@@ -308,12 +308,13 @@ public class RideRequestController {
             result = rideRequestRepository.save(rideRequestFromDb);
         } else if (userRole == AuthorityName.ROLE_COORDINATOR) {
             // address changed
-            if (!rideRequest.getDropoffCity().equals(rideRequestFromDb.getDropoffCity())
-                    || !rideRequest.getDropoffLine1().equals(rideRequestFromDb.getDropoffLine1())
-                    || !rideRequest.getDropoffLine2().equals(rideRequestFromDb.getDropoffLine2())
-                    || !rideRequest.getPickupCity().equals(rideRequestFromDb.getPickupCity())
-                    || !rideRequest.getPickupLine1().equals(rideRequestFromDb.getPickupLine1())
-                    || !rideRequest.getPickupLine2().equals(rideRequestFromDb.getPickupLine2())) {
+            if ((!StringUtils.isEmpty(rideRequest.getDropoffCity()) && !rideRequest.getDropoffCity().equals(rideRequestFromDb.getDropoffCity()))
+                    || (!StringUtils.isEmpty(rideRequest.getDropoffLine1()) && !rideRequest.getDropoffLine1().equals(rideRequestFromDb.getDropoffLine1()))
+                    || (!StringUtils.isEmpty(rideRequest.getDropoffLine2()) && !rideRequest.getDropoffLine2().equals(rideRequestFromDb.getDropoffLine2()))
+                    || (!StringUtils.isEmpty(rideRequest.getPickupCity()) && !rideRequest.getPickupCity().equals(rideRequestFromDb.getPickupCity()))
+                    || (!StringUtils.isEmpty(rideRequest.getPickupLine1()) && !rideRequest.getPickupLine1().equals(rideRequestFromDb.getPickupLine1()))
+                    || (!StringUtils.isEmpty(rideRequest.getPickupLine2()) && !rideRequest.getPickupLine2().equals(rideRequestFromDb.getPickupLine2()))
+                    ) {
                 geocodingService.setCoordinates(rideRequest);
                 rideRequestFromDb.setPickupCity(rideRequest.getPickupCity());
                 rideRequestFromDb.setPickupLatitude(rideRequest.getPickupLatitude());
@@ -329,11 +330,12 @@ public class RideRequestController {
 
             // unassign driver / cancel request
             if ((rideRequest.getStatus() == RideRequestStatus.CANCELEDBYCOORDINATOR
-                    || rideRequest.getStatus() == RideRequestStatus.CANCELEDOTHER)
-                    && (rideRequestFromDb.getStatus() == RideRequestStatus.ASSIGNED
-                    || rideRequestFromDb.getStatus() == RideRequestStatus.ATPICKUPLOCATION
-                    || rideRequestFromDb.getStatus() == RideRequestStatus.PICKINGUP
-                    || rideRequestFromDb.getStatus() == RideRequestStatus.DROPPINGOFF)
+                    || rideRequest.getStatus() == RideRequestStatus.CANCELEDOTHER
+                    || rideRequest.getStatus() == RideRequestStatus.CANCELEDBYRIDER)
+                    && (rideRequestFromDb.getStatus() != RideRequestStatus.COMPLETE
+                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDBYCOORDINATOR
+                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDOTHER
+                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDBYRIDER)
                     ) {
                 if (StringUtils.length(rideRequest.getCancelMessage()) < 5) {
                     return ResponseEntity.badRequest().body(new ResponseMessage("Canceled message cannot be empty or less than 5 characters."));
