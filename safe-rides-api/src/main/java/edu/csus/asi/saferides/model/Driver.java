@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -56,6 +58,13 @@ public class Driver {
      */
     @Transient
     private DriverStatus status;
+
+    /**
+     * JPA indicates not to serialized the status field, that is, it is not to
+     * be persisted in the database because they have different meanings.
+     */
+    @Transient
+    private DriverLocation latestDriverLocation;
 
     /**
      * Date of creation
@@ -372,6 +381,22 @@ public class Driver {
         } else {
             return DriverStatus.AVAILABLE;
         }
+    }
+
+    /**
+     * Gets the latest recorded location of the driver if exists
+     *
+     * @return drivers's location or null
+     */
+    public DriverLocation getLatestDriverLocation() {
+        Set<DriverLocation> locations = getLocations();
+        if (locations != null) {
+            Optional<DriverLocation> latestLocation = locations.stream().max(Comparator.comparing(DriverLocation::getCreatedDate));
+            if (latestLocation.isPresent()) {
+                return latestLocation.get();
+            }
+        }
+        return null;
     }
 
     /**

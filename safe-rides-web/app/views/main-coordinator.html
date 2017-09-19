@@ -66,8 +66,8 @@
                                 <marker icon="{url: 'images/blue-dot.png'}"
                                         title='{{d.driverFirstName}} {{d.driverLastName}}'
                                         on-click='ctrl.mapDriverPinClick({{d.id}})'
-                                        ng-repeat="d in ctrl.driversLocation"
-                                        position="{{d.latitude +','+ d.longitude}}"></marker>
+                                        ng-repeat="d in ctrl.drivers | filter : { location : '!' }"
+                                        position="{{d.location.latitude +','+ d.location.longitude}}"></marker>
                             </ng-map>
                         </div>
                     </div>

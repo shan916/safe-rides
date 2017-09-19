@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -28,7 +28,6 @@ var app = angular.module('safeRidesWebApp')
 
         vm.drivers = [];
         vm.rideRequests = [];
-        vm.driversLocation = [];
 
         /*
          * Kick user out if not authenticated or if not a coordinator
@@ -112,7 +111,6 @@ var app = angular.module('safeRidesWebApp')
                 vm.loadingCoordinatorDrivers = false;
 
                 $log.debug('got drivers:', response);
-                getDriversLocation();
             }, function (error) {
                 vm.loadingCoordinatorDrivers = false;
                 $log.debug('error getting drivers:', error);
@@ -134,21 +132,6 @@ var app = angular.module('safeRidesWebApp')
             }, function (error) {
                 vm.loadingRideRequests = false;
                 $log.debug('error getting ride requests:', error);
-            });
-        }
-
-        function getDriversLocation() {
-            vm.drivers.forEach(function (element) {
-                DriverLocationService.get({
-                    id: element.id
-                }).$promise.then(function (response) {
-                    if (response.id !== undefined) {
-                        vm.driversLocation.push(response);
-                        $log.debug('got drivers location:', response);
-                    }
-                }, function (error) {
-                    $log.debug('error getting drivers location:', error);
-                });
             });
         }
 

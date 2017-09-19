@@ -334,26 +334,6 @@ public class DriverController {
     }
 
     /**
-     * GET /drivers/{id}/location
-     *
-     * @param id path param for the id of the driver
-     * @return the latest driver location object of the specified driver
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/location")
-    @ApiOperation(value = "getDriverLocation", nickname = "getDriverLocation", notes = "Retrieves the specified driver's latest/current location.")
-    public ResponseEntity<?> getDriverLocation(@PathVariable Long id) {
-        Driver driver = driverRepository.findOne(id);
-        DriverLocation loc = driverLocationRepository.findTop1ByDriverOrderByCreatedDateDesc(driver);
-        if (loc == null) {
-            return ResponseEntity.noContent().build();
-        }
-
-        DriverLocationDto driverLocationDto = driverLocationMapper.map(loc, DriverLocationDto.class);
-
-        return ResponseEntity.ok(driverLocationDto);
-    }
-
-    /**
      * Get the ride requests assigned to a driver
      *
      * @param id      the id of the driver

@@ -28,6 +28,7 @@ public class DriverMapper extends ConfigurableMapper {
                 .fieldAToB("status", "status")
                 .field("vehicle", "vehicle")
                 .fieldAToB("endOfNightOdo", "endOfNightOdo")
+                .fieldAToB("latestDriverLocation", "location")
                 .byDefault()
                 .register();
 

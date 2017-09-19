@@ -56,6 +56,9 @@ public class DriverDto {
     @ApiModelProperty(value = "The driver's recorded odometer value at the end of the Safe Rides' night")
     private long endOfNightOdo;
 
+    @ApiModelProperty(value = "The driver's latest recorded location")
+    private DriverLocationDto location;
+
     public String getUsername() {
         return username;
     }
@@ -150,5 +153,13 @@ public class DriverDto {
 
     public void setStatus(DriverStatus status) {
         this.status = status;
+    }
+
+    public DriverLocationDto getLocation() {
+        return location;
+    }
+
+    public void setLocation(DriverLocationDto location) {
+        this.location = location;
     }
 }
