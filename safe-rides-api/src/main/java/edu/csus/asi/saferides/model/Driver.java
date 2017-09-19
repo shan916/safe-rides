@@ -67,6 +67,13 @@ public class Driver {
     private DriverLocation latestDriverLocation;
 
     /**
+     * JPA indicates not to serialized the status field, that is, it is not to
+     * be persisted in the database because they have different meanings.
+     */
+    @Transient
+    private DriverLocation latestRideRequest;
+
+    /**
      * Date of creation
      */
     @JsonIgnore
@@ -394,6 +401,24 @@ public class Driver {
             Optional<DriverLocation> latestLocation = locations.stream().max(Comparator.comparing(DriverLocation::getCreatedDate));
             if (latestLocation.isPresent()) {
                 return latestLocation.get();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the latest ride request assigned to the driver if exists
+     *
+     * @return ride requerst or null
+     */
+    public RideRequest getLatestRideRequest() {
+        Set<RideRequest> rides = getRides();
+        if (rides != null) {
+            Optional<RideRequest> latestRideRequest = rides.stream().max(Comparator.comparing(RideRequest::getLastModified));
+            if (latestRideRequest.isPresent()) {
+                RideRequest rideRequest = latestRideRequest.get();
+                rideRequest.setUser(rideRequest.getUser());
+                return rideRequest;
             }
         }
         return null;

@@ -59,6 +59,9 @@ public class DriverDto {
     @ApiModelProperty(value = "The driver's latest recorded location")
     private DriverLocationDto location;
 
+    @ApiModelProperty(value = "The driver's current ride request")
+    private RideRequestDto currentRideRequest;
+
     public String getUsername() {
         return username;
     }
@@ -161,5 +164,13 @@ public class DriverDto {
 
     public void setLocation(DriverLocationDto location) {
         this.location = location;
+    }
+
+    public RideRequestDto getCurrentRideRequest() {
+        return currentRideRequest;
+    }
+
+    public void setCurrentRideRequest(RideRequestDto currentRideRequest) {
+        this.currentRideRequest = currentRideRequest;
     }
 }

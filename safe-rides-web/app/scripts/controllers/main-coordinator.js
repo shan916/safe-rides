@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -93,18 +93,8 @@ var app = angular.module('safeRidesWebApp')
             vm.loadingCoordinatorDrivers = true;
             DriverService.query({active: true}).$promise.then(function (response) {
                 vm.drivers = response;
-
                 vm.drivers.forEach(function (element, index, drivers) {
                     var driver = new Driver(element);
-                    DriverRidesService.query({
-                        id: driver.id
-                    }).$promise.then(function (ridesResponse) {
-                        driver.rides = ridesResponse;
-                        $log.debug('got driver\'s rides:', ridesResponse);
-                    }, function (ridesError) {
-                        $log.debug('error getting driver\'s rides:', ridesError);
-                    });
-
                     drivers[index] = driver;
                 });
 

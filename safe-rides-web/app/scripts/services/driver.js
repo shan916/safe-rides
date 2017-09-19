@@ -21,11 +21,17 @@ angular.module('safeRidesWebApp')
             this.active = true;
             this.vehicle = new Vehicle();
             this.status = undefined;
-            this.rides = undefined;
             this.location = undefined;
+            this.currentRideRequest = undefined;
 
             if (data) {
+                if (data.currentRideRequest === undefined || data.currentRideRequest === null || data.currentRideRequest.status === 'COMPLETE') {
+                    data.status = 'AVAILABLE';
+                } else {
+                    data.status = data.currentRideRequest.status;
+                }
                 angular.extend(this, data);
+
             }
         }
 
@@ -41,15 +47,6 @@ angular.module('safeRidesWebApp')
                     return 3;
                 case 'DROPPINGOFF':
                     return 4;
-            }
-        };
-
-        // returns the first assigned or inprogress ride
-        Driver.prototype.currentRide = function () {
-            for (var i = 0; i < this.rides.length; i++) {
-                if (this.rides[i].status === 'ASSIGNED' || this.rides[i].status === 'PICKINGUP' || this.rides[i].status === 'DROPPINGOFF' || this.rides[i].status === 'ATPICKUPLOCATION') {
-                    return this.rides[i];
-                }
             }
         };
 

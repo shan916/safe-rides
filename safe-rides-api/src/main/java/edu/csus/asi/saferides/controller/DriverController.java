@@ -279,6 +279,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/rides")
     @PreAuthorize("hasRole('COORDINATOR')")
     @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to a driver with the given id")
+    @Deprecated
     public ResponseEntity<?> retrieveRide(@PathVariable Long id,
                                           @RequestParam(value = "status", required = false) RideRequestStatus status,
                                           @RequestParam(value = "current", required = false) Boolean current) {
@@ -293,6 +294,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/rides")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves ride assigned to a driver")
+    @Deprecated
     public ResponseEntity<?> retrieveRide(HttpServletRequest request) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
@@ -341,6 +343,7 @@ public class DriverController {
      * @param current return only the current ride
      * @return list of ride requests
      */
+    @Deprecated
     private ResponseEntity<?> getRidesForDriver(long id, RideRequestStatus status, Boolean current) {
         Driver driver = driverRepository.findOne(id);
 

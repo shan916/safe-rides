@@ -22,7 +22,7 @@ angular.module('safeRidesWebApp')
 
 angular.module('safeRidesWebApp')
     .factory('DriverRidesService', function ($resource, ENV) {
-
+        console.log('Deprecated call');
         return $resource(ENV.apiEndpoint + 'drivers/:id/rides', {
             id: '@id'
         }, {
@@ -36,6 +36,7 @@ angular.module('safeRidesWebApp')
 
 angular.module('safeRidesWebApp')
     .factory('CurrentDriverRidesService', function ($resource, ENV) {
+        console.log('Deprecated call');
         return $resource(ENV.apiEndpoint + 'drivers/rides/?status=:status', {
             status: '@status'
         }, {
@@ -48,6 +49,7 @@ angular.module('safeRidesWebApp')
 
 angular.module('safeRidesWebApp')
     .factory('GetDriverCurrentRideService', function ($resource, ENV) {
+        console.log('Deprecated call');
         return $resource(ENV.apiEndpoint + 'drivers/rides/?current=true', {
             get: {
                 method: 'GET',

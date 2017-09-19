@@ -17,10 +17,10 @@
             </dl>
         </div>
         <div class="col-md-6">
-            <div ng-hide="ctrl.driver.status === 'AVAILABLE'">
+            <div ng-hide="ctrl.driver.currentRideRequest === undefined || ctrl.driver.currentRideRequest === null || ctrl.driver.currentRideRequest.status === 'COMPLETE'">
                 <h4>Assigned Request Information:</h4>
                 <dl class="dl-horizontal">
-                    <div ng-init='currentRide = ctrl.driver.currentRide()'>
+                    <div ng-init='currentRide = ctrl.driver.currentRideRequest'>
                         <dt>Name:</dt>
                         <dd>{{currentRide.requestorFirstName}} {{currentRide.requestorLastName}}</dd>
                         <dt>Riders:</dt>
