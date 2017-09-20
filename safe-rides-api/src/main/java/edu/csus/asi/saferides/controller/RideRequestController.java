@@ -242,7 +242,7 @@ public class RideRequestController {
      * @return the updated ride
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    @PreAuthorize("hasRole('DRIVER')")
+    @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates the given ride request")
     public ResponseEntity<?> save(HttpServletRequest request, @PathVariable Long id, @RequestBody RideRequestDto rideRequestDto) {
         String authToken = request.getHeader(this.tokenHeader);
@@ -408,49 +408,5 @@ public class RideRequestController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
-    }
-
-    /**
-     * POST /rides/mine/cancel
-     * <p>
-     * Cancels the authenticated user's current ride request.
-     * <p>
-     * Returns HTTP status code 400 under the following conditions:
-     * <ul>
-     * <li>
-     * No ride exists for the user
-     * </li>
-     * <li>
-     * The ride has already been assigned to a driver
-     * </li>
-     * </ul>
-     *
-     * @param request HTTP servlet request
-     * @return HTTP 200 if ride successfully canceled, error otherwise
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/mine/cancel")
-    @PreAuthorize("hasRole('RIDER')")
-    @ApiOperation(value = "cancelMyRide", nickname = "cancelMyRide", notes = "Cancels authenticated user's current ride request...")
-    public ResponseEntity<?> cancelMyRide(HttpServletRequest request) {
-        String authToken = request.getHeader(this.tokenHeader);
-        String username = jwtTokenUtil.getUsernameFromToken(authToken);
-
-        User user = userRepository.findByUsernameIgnoreCase(username);
-
-        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
-
-        // filter ride request
-        rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
-
-        if (rideRequest == null) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("No ride found for user"));
-        } else if (rideRequest.getStatus() != RideRequestStatus.UNASSIGNED) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Ride cannot be canceled while assigned to a driver"));
-        } else {
-            rideRequest.setStatus(RideRequestStatus.CANCELEDBYRIDER);
-            rideRequestRepository.save(rideRequest);
-            return ResponseEntity.ok().build();
-        }
-
     }
 }

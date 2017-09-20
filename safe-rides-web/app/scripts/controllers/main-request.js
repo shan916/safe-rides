@@ -136,7 +136,8 @@ angular.module('safeRidesWebApp')
 
             // cancel confirmed
             if (vm.existingRide.status === 'UNASSIGNED') {
-                MyRideService.cancel().$promise.then(function (response) {
+                vm.existingRide.status = 'CANCELEDBYRIDER';
+                RideRequestService.update(vm.existingRide).$promise.then(function (response) {
                     cancelInterval();
                     getRide();
                     $log.debug('Ride cancelled:', response);
