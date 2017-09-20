@@ -1,7 +1,5 @@
 package edu.csus.asi.saferides.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.csus.asi.saferides.model.DriverStatus;
 import edu.csus.asi.saferides.model.Vehicle;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -45,10 +43,6 @@ public class DriverDto {
     @ApiModelProperty(value = "Driver status whether they can be assigned to a ride request", required = true)
     @NotNull(message = "active cannot be null")
     private Boolean active;
-
-    @ApiModelProperty(value = "The driver's status", readOnly = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private DriverStatus status;
 
     @ApiModelProperty(value = "The driver's vehicle")
     private Vehicle vehicle;
@@ -148,14 +142,6 @@ public class DriverDto {
 
     public void setEndOfNightOdo(long endOfNightOdo) {
         this.endOfNightOdo = endOfNightOdo;
-    }
-
-    public DriverStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(DriverStatus status) {
-        this.status = status;
     }
 
     public DriverLocationDto getLocation() {

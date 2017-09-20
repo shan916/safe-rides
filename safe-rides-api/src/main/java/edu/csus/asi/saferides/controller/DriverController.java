@@ -211,7 +211,7 @@ public class DriverController {
         Driver driverFromDb = driverRepository.findOne(driverDto.getId());
 
         // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getUser().isActive() && driverFromDb.getStatus() != DriverStatus.AVAILABLE) {
+        if (!updatedDriver.getUser().isActive() && driverFromDb.getLatestRideRequest().getStatus() != RideRequestStatus.COMPLETE) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         }
 
@@ -260,7 +260,7 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Driver does not exist"));
         }
 
-        if (driver.getStatus() != DriverStatus.AVAILABLE) {
+        if (!isDriverAvailable(driver)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Cannot delete a driver that is not available"));
         }
 
@@ -353,7 +353,7 @@ public class DriverController {
 
         if (current != null && current) {
             //if the driver has no status or is Available, then there is no current ride, return empty
-            if (driver.getStatus() == null || driver.getStatus() == DriverStatus.AVAILABLE) {
+            if (isDriverAvailable(driver)) {
                 return ResponseEntity.noContent().build();
             } else {
                 Collection<RideRequest> requests = driver.getRides();
@@ -428,5 +428,16 @@ public class DriverController {
         }
 
         return errorMessages;
+    }
+
+    private boolean isDriverAvailable(Driver driver) {
+        RideRequest latestRideRequest = driver.getLatestRideRequest();
+        if (latestRideRequest != null) {
+            RideRequestStatus status = latestRideRequest.getStatus();
+            if (status == RideRequestStatus.ASSIGNED || status == RideRequestStatus.PICKINGUP
+                    || status == RideRequestStatus.ATPICKUPLOCATION || status == RideRequestStatus.DROPPINGOFF) {
+            }
+        }
+        return true;
     }
 }

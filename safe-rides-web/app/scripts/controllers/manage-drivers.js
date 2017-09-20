@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function (DriverService, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $window, $log) {
+    .controller('ManagedriversCtrl', function (DriverService, Driver, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $window, $log) {
         var vm = this;
 
         vm.activeDrivers = [];
@@ -45,7 +45,10 @@ angular.module('safeRidesWebApp')
             DriverService.query({active: true}).$promise.then(function (response) {
                 vm.loadingActiveDrivers = false;
                 vm.activeDrivers = response;
-                $log.debug('got active drivers:', response);
+                vm.activeDrivers.forEach(function (element, index, activeDrivers) {
+                    activeDrivers[index] = new Driver(element);
+                });
+                $log.debug('got active drivers:', vm.activeDrivers);
             }, function (error) {
                 vm.loadingActiveDrivers = false;
                 $log.debug('error getting active drivers:', error);
@@ -54,7 +57,10 @@ angular.module('safeRidesWebApp')
             DriverService.query({active: false}).$promise.then(function (response) {
                 vm.loadingInactiveDrivers = false;
                 vm.inactiveDrivers = response;
-                $log.debug('got inactive drivers:', response);
+                vm.inactiveDrivers.forEach(function (element, index, inactiveDrivers) {
+                    inactiveDrivers[index] = new Driver(element);
+                });
+                $log.debug('got inactive drivers:', vm.inactiveDrivers);
             }, function (error) {
                 vm.loadingInactiveDrivers = false;
                 $log.debug('error getting inactive drivers:', error);

@@ -25,7 +25,9 @@ angular.module('safeRidesWebApp')
             this.currentRideRequest = undefined;
 
             if (data) {
-                if (data.currentRideRequest === undefined || data.currentRideRequest === null || data.currentRideRequest.status === 'COMPLETE') {
+                if (data.currentRideRequest === undefined || data.currentRideRequest === null || data.currentRideRequest.status === 'COMPLETE' ||
+                    data.currentRideRequest.status === 'CANCELEDBYCOORDINATOR' || data.currentRideRequest.status === 'CANCELEDBYRIDER' ||
+                    data.currentRideRequest.status === 'CANCELEDOTHER') {
                     data.status = 'AVAILABLE';
                 } else {
                     data.status = data.currentRideRequest.status;
