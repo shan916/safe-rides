@@ -144,6 +144,32 @@ public class DriverController {
     }
 
     /**
+     * GET /drivers/me
+     * <p>
+     * Returns the driver's own record
+     *
+     * @param request Http Request
+     * @return Driver's own record or 404 if driver does not exist
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/me")
+    @PreAuthorize("hasRole('DRIVER')")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
+    public ResponseEntity<?> retrieve(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        Driver result = driverRepository.findByUser(user);
+
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(driverMapper.map(result, DriverDto.class));
+        }
+    }
+
+    /**
      * POST /drivers
      * <p>
      * Creates the given driver in database
@@ -269,42 +295,6 @@ public class DriverController {
     }
 
     /**
-     * GET /drivers/{id}/rides
-     *
-     * @param id      - id of driver to get rides for
-     * @param status  status to filter rides by
-     * @param current return just the current ride request that is being serviced
-     * @return list of rides for driver with specified id and filtered with specified status or current flag
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/rides")
-    @PreAuthorize("hasRole('COORDINATOR')")
-    @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves rides assigned to a driver with the given id")
-    @Deprecated
-    public ResponseEntity<?> retrieveRide(@PathVariable Long id,
-                                          @RequestParam(value = "status", required = false) RideRequestStatus status,
-                                          @RequestParam(value = "current", required = false) Boolean current) {
-        return getRidesForDriver(id, status, current);
-    }
-
-    /**
-     * GET /drivers/rides
-     *
-     * @return the current ride request for the authenticated driver
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/rides")
-    @PreAuthorize("hasRole('DRIVER')")
-    @ApiOperation(value = "retrieveRide", nickname = "retrieveRide", notes = "Retrieves ride assigned to a driver")
-    @Deprecated
-    public ResponseEntity<?> retrieveRide(HttpServletRequest request) {
-        String authToken = request.getHeader(this.tokenHeader);
-        String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        User user = userRepository.findByUsernameIgnoreCase(username);
-        Driver driver = driverRepository.findByUser(user);
-
-        return getRidesForDriver(driver.getId(), null, true);
-    }
-
-    /**
      * POST /drivers/location
      *
      * @param request           client request (contains the Authorization header)
@@ -332,67 +322,6 @@ public class DriverController {
             driverLocationRepository.save(driverLocation);
 
             return ResponseEntity.ok(driverLocationDto);
-        }
-    }
-
-    /**
-     * Get the ride requests assigned to a driver
-     *
-     * @param id      the id of the driver
-     * @param status  filter by the status of the request
-     * @param current return only the current ride
-     * @return list of ride requests
-     */
-    @Deprecated
-    private ResponseEntity<?> getRidesForDriver(long id, RideRequestStatus status, Boolean current) {
-        Driver driver = driverRepository.findOne(id);
-
-        if (driver == null) {
-            return ResponseEntity.noContent().build();
-        }
-
-        if (current != null && current) {
-            //if the driver has no status or is Available, then there is no current ride, return empty
-            if (isDriverAvailable(driver)) {
-                return ResponseEntity.noContent().build();
-            } else {
-                Collection<RideRequest> requests = driver.getRides();
-
-                // filter requests
-                requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
-
-                if (requests != null) {
-                    for (RideRequest req : requests) {
-                        if (req.getStatus() != null && req.getStatus() == RideRequestStatus.ASSIGNED || req.getStatus() == RideRequestStatus.PICKINGUP
-                                || req.getStatus() == RideRequestStatus.ATPICKUPLOCATION || req.getStatus() == RideRequestStatus.DROPPINGOFF) {
-                            return ResponseEntity.ok(rideRequestMapper.map(req, RideRequestDto.class));
-                        }
-                    }
-                }
-            }
-            return ResponseEntity.noContent().build();
-        } else if (status != null) {
-            Collection<RideRequest> requests = driver.getRides();
-
-            // filter requests
-            requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
-            if (requests == null) {
-                return ResponseEntity.noContent().build();
-            } else {
-                requests.removeIf((RideRequest req) -> req.getStatus() != status);
-            }
-
-            return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
-        } else {
-            Collection<RideRequest> requests = driver.getRides();
-
-            // filter requests
-            requests = Util.filterPastRides(configurationRepository.findOne(1), requests);
-            if (requests == null) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.ok(rideRequestMapper.mapAsList(requests, RideRequestDto.class));
-            }
         }
     }
 

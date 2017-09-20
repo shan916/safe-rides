@@ -21,41 +21,8 @@ angular.module('safeRidesWebApp')
     });
 
 angular.module('safeRidesWebApp')
-    .factory('DriverRidesService', function ($resource, ENV) {
-        console.log('Deprecated call');
-        return $resource(ENV.apiEndpoint + 'drivers/:id/rides', {
-            id: '@id'
-        }, {
-            get: {
-                method: 'GET',
-                isArray: true
-            }
-        });
-
-    });
-
-angular.module('safeRidesWebApp')
-    .factory('CurrentDriverRidesService', function ($resource, ENV) {
-        console.log('Deprecated call');
-        return $resource(ENV.apiEndpoint + 'drivers/rides/?status=:status', {
-            status: '@status'
-        }, {
-            get: {
-                method: 'GET',
-                isArray: true
-            }
-        });
-    });
-
-angular.module('safeRidesWebApp')
-    .factory('GetDriverCurrentRideService', function ($resource, ENV) {
-        console.log('Deprecated call');
-        return $resource(ENV.apiEndpoint + 'drivers/rides/?current=true', {
-            get: {
-                method: 'GET',
-                isArray: true
-            }
-        });
+    .factory('GetDriverSelf', function ($resource, ENV) {
+        return $resource(ENV.apiEndpoint + 'drivers/me');
     });
 
 angular.module('safeRidesWebApp')

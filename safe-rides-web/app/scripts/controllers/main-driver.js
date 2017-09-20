@@ -8,8 +8,8 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function ($scope, DriverService, RideRequestService, DriverRidesService, RideRequest, Driver, authManager, AuthTokenService,
-                                                 $state, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window, $log) {
+    .controller('DriverdashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, authManager, AuthTokenService,
+                                                 $state, $interval, GetDriverSelf, GeolocationService, CurrentDriverLocationService, AuthService, Notification, ENV, $window, $log) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -40,12 +40,6 @@ angular.module('safeRidesWebApp')
                 $state.go('/');
                 $log.debug('Not a driver');
             } else {
-                AuthService.getAuthUserInfo().then(function (response) {
-                    vm.driver = response.data;
-                }, function (error) {
-                    $log.debug('error getting the driver name', error);
-                });
-                $log.debug('about to call getCurrentRideRequest');
                 getCurrentRideRequest();
             }
         } else {
@@ -61,9 +55,10 @@ angular.module('safeRidesWebApp')
         function getCurrentRideRequest() {
             vm.isRideAssigned = false;
             //get the current ride request to driver
-            GetDriverCurrentRideService.get().$promise.then(function (response) {
+            GetDriverSelf.get().$promise.then(function (response) {
                 if (response !== undefined) {
-                    vm.assignedRide = new RideRequest(response);
+                    vm.driver = new Driver(response);
+                    vm.assignedRide = new RideRequest(vm.driver.currentRideRequest);
                     if (vm.assignedRide.status !== undefined) {
                         vm.isRideAssigned = true;
                         vm.pickedUpButtonPressed = false;
