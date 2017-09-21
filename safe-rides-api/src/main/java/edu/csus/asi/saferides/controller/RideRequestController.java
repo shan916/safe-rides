@@ -274,19 +274,20 @@ public class RideRequestController {
 
         RideRequest result = null;
 
-        // Possible rider actions:
+        // Possible rider actions (driver user requesting a ride as well):
         // - cancel ride request (only if not already assigned)
         // Possible driver actions:
         // - update status (only if ride request is assigned to the user)
         // - update start odometer
         // - update end odometer
-        if (userRole == AuthorityName.ROLE_RIDER
+        if ((userRole == AuthorityName.ROLE_RIDER || userRole == AuthorityName.ROLE_DRIVER)
                 && rideRequestFromDb.getStatus() == RideRequestStatus.UNASSIGNED
                 && rideRequestFromDb.getUser().getId().equals(user.getId())
                 && rideRequest.getStatus() == RideRequestStatus.CANCELEDBYRIDER) {
             rideRequestFromDb.setStatus(RideRequestStatus.CANCELEDBYRIDER);
             result = rideRequestRepository.save(rideRequestFromDb);
-        } else if (userRole == AuthorityName.ROLE_DRIVER
+        }
+        if (userRole == AuthorityName.ROLE_DRIVER
                 && rideRequestFromDb.getStatus() != RideRequestStatus.UNASSIGNED
                 && rideRequestFromDb.getDriver().getUser().getId().equals(user.getId())) {
             if (rideRequest.getStatus() == RideRequestStatus.ATPICKUPLOCATION
@@ -306,7 +307,8 @@ public class RideRequestController {
                 rideRequestFromDb.setEndOdometer(rideRequest.getEndOdometer());
             }
             result = rideRequestRepository.save(rideRequestFromDb);
-        } else if (userRole == AuthorityName.ROLE_COORDINATOR) {
+        }
+        if (userRole == AuthorityName.ROLE_COORDINATOR) {
             // address changed
             if ((!StringUtils.isEmpty(rideRequest.getDropoffCity()) && !rideRequest.getDropoffCity().equals(rideRequestFromDb.getDropoffCity()))
                     || (!StringUtils.isEmpty(rideRequest.getDropoffLine1()) && !rideRequest.getDropoffLine1().equals(rideRequestFromDb.getDropoffLine1()))
@@ -361,8 +363,6 @@ public class RideRequestController {
             rideRequestFromDb.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
 
             result = rideRequestRepository.save(rideRequestFromDb);
-        } else {
-            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(rideRequestMapper.map(result, RideRequestDto.class));
