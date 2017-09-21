@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * API controller for authenticating with CAS
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io", "http://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/cas")
 public class CasClientController {
 

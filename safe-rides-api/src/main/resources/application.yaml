@@ -28,4 +28,4 @@ spring.datasource:
   username: safeRidesAdmin
   password: D<)y$FuTecG].Q_YY._~'u?;
 spring.h2.console.enabled: false
-ac.alloworigin: http://codeteam6.io
+ac.alloworigin: https://codeteam6.io
