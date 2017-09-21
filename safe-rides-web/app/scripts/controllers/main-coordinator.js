@@ -94,8 +94,7 @@ var app = angular.module('safeRidesWebApp')
             DriverService.query({active: true}).$promise.then(function (response) {
                 vm.drivers = response;
                 vm.drivers.forEach(function (element, index, drivers) {
-                    var driver = new Driver(element);
-                    drivers[index] = driver;
+                    drivers[index] = new Driver(element);;
                 });
 
                 vm.loadingCoordinatorDrivers = false;
