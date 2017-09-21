@@ -58,7 +58,7 @@ var app = angular.module('safeRidesWebApp')
                 vm.active = response.data;
             }, function () {
                 Notification.error({
-                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    message: 'Failed to retrieve Safe Rides\' operation hours.',
                     positionX: 'center',
                     delay: 10000,
                     replaceMessage: true
