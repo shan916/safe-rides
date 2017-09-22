@@ -26,6 +26,9 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     /**
      * Phone number of the driver
      */
@@ -398,5 +401,13 @@ public class Driver {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

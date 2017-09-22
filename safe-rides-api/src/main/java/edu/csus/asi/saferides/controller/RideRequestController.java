@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,7 @@ import java.util.List;
  * Rest API controller for the RideRequest resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://codeteam6.io"})
 @RequestMapping("/rides")
 @PreAuthorize("hasRole('COORDINATOR')")
 public class RideRequestController {
@@ -245,17 +246,9 @@ public class RideRequestController {
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @PreAuthorize("hasRole('RIDER')")
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @ApiOperation(value = "save", nickname = "save", notes = "Updates the given ride request")
     public ResponseEntity<?> save(HttpServletRequest request, @PathVariable Long id, @RequestBody RideRequestDto rideRequestDto) {
         String authToken = request.getHeader(this.tokenHeader);
-
-        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
-        RideRequest rideRequestFromDb = rideRequestRepository.findOne(id);
-
-        if (rideRequestFromDb == null) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Could not find ride request."));
-        }
 
         User user = userRepository.findByUsernameIgnoreCase(jwtTokenUtil.getUsernameFromToken(authToken));
         if (user == null) {
@@ -275,6 +268,72 @@ public class RideRequestController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Could not determine user role when updating a ride request."));
         }
 
+        try {
+            return UpdateRideRequest(userRole, rideRequestDto, id, user);
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Could not update the ride request as either the driver or the ride request was already updated. Please refresh and try again."));
+        }
+    }
+
+    /**
+     * GET /rides/mine
+     * <p>
+     * Returns the current ride request for the authenticated rider or no content if it doesn't exist
+     *
+     * @param request the HTTP servlet request
+     * @return the rider's current ride
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/mine")
+    @PreAuthorize("hasRole('RIDER')")
+    @JsonView(JsonViews.Rider.class)
+    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns authenticated user's current ride request...")
+    public ResponseEntity<?> retrieveMyRide(HttpServletRequest request) {
+        String authToken = request.getHeader(this.tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(authToken);
+
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
+
+        // filter ride request
+        rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
+
+        if (rideRequest == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            // TODO this can return a ride request that is old. (but will be the latest)
+            RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+            objectMapper.registerModule(module);
+            try {
+                String response = objectMapper.writerWithView(JsonViews.Rider.class).writeValueAsString(dto);
+                return ResponseEntity.ok(response);
+            } catch (JsonProcessingException test2) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
+    /**
+     * Updates the ride request database record
+     *
+     * @param userRole       the role of the user that is attempting to update the ride request
+     * @param rideRequestDto the ride request DTO
+     * @param id             the id of the ride request to update
+     * @param user           the user that is attempting to update the ride request
+     * @return the updated ride request or error
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    private ResponseEntity<?> UpdateRideRequest(AuthorityName userRole, RideRequestDto rideRequestDto, long id, User user) {
+        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
+        RideRequest rideRequestFromDb = rideRequestRepository.findOne(id);
+
+        if (rideRequestFromDb == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Could not find ride request."));
+        }
         RideRequest result = null;
 
         // Possible rider actions (driver user requesting a ride as well):
@@ -354,62 +413,37 @@ public class RideRequestController {
             if (rideRequest.getStatus() == RideRequestStatus.ASSIGNED && rideRequestFromDb.getStatus() == RideRequestStatus.UNASSIGNED) {
                 Driver driver = driverRepository.findOne(rideRequest.getDriver().getId());
                 if (driver != null) {
-                    rideRequestFromDb.setStatus(RideRequestStatus.ASSIGNED);
-                    rideRequestFromDb.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
-                    rideRequestFromDb.setMessageToDriver(rideRequest.getMessageToDriver());
-                    rideRequestFromDb.setEstimatedTime(rideRequest.getEstimatedTime());
-                    rideRequestFromDb.setDriver(driver);
+                    if (isDriverAvailable(driver)) {
+                        driver.setVersion(driver.getVersion() + 1); // manually bump up version of driver?
+                        driverRepository.save(driver);
+                        rideRequestFromDb.setStatus(RideRequestStatus.ASSIGNED);
+                        rideRequestFromDb.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+                        rideRequestFromDb.setMessageToDriver(rideRequest.getMessageToDriver());
+                        rideRequestFromDb.setEstimatedTime(rideRequest.getEstimatedTime());
+                        rideRequestFromDb.setDriver(driver);
+                    } else {
+                        return ResponseEntity.badRequest().body(new ResponseMessage("The driver is busy and cannot be assigned."));
+                    }
                 }
             }
 
             rideRequestFromDb.setNumPassengers(rideRequest.getNumPassengers());
             rideRequestFromDb.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
-
             result = rideRequestRepository.save(rideRequestFromDb);
         }
 
         return ResponseEntity.ok(rideRequestMapper.map(result, RideRequestDto.class));
     }
 
-    /**
-     * GET /rides/mine
-     * <p>
-     * Returns the current ride request for the authenticated rider or no content if it doesn't exist
-     *
-     * @param request the HTTP servlet request
-     * @return the rider's current ride
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/mine")
-    @PreAuthorize("hasRole('RIDER')")
-    @JsonView(JsonViews.Rider.class)
-    @ApiOperation(value = "retrieveMyRide", nickname = "retrieveMyRide", notes = "Returns authenticated user's current ride request...")
-    public ResponseEntity<?> retrieveMyRide(HttpServletRequest request) {
-        String authToken = request.getHeader(this.tokenHeader);
-        String username = jwtTokenUtil.getUsernameFromToken(authToken);
-
-        User user = userRepository.findByUsernameIgnoreCase(username);
-
-        RideRequest rideRequest = rideRequestRepository.findTop1ByUserOrderByRequestDateDesc(user);
-
-        // filter ride request
-        rideRequest = Util.filterPastRide(configurationRepository.findOne(1), rideRequest);
-
-        if (rideRequest == null) {
-            return ResponseEntity.noContent().build();
-        } else {
-            // TODO this can return a ride request that is old. (but will be the latest)
-            RideRequestDto dto = rideRequestMapper.map(rideRequest, RideRequestDto.class);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            SimpleModule module = new SimpleModule();
-            module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
-            objectMapper.registerModule(module);
-            try {
-                String response = objectMapper.writerWithView(JsonViews.Rider.class).writeValueAsString(dto);
-                return ResponseEntity.ok(response);
-            } catch (JsonProcessingException test2) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    private boolean isDriverAvailable(Driver driver) {
+        RideRequest latestRideRequest = driver.getLatestRideRequest();
+        if (latestRideRequest != null) {
+            RideRequestStatus status = latestRideRequest.getStatus();
+            if (status == RideRequestStatus.ASSIGNED || status == RideRequestStatus.PICKINGUP
+                    || status == RideRequestStatus.ATPICKUPLOCATION || status == RideRequestStatus.DROPPINGOFF) {
+                return false;
             }
         }
+        return true;
     }
 }
