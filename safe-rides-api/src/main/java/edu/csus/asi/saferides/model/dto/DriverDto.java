@@ -1,7 +1,5 @@
 package edu.csus.asi.saferides.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.csus.asi.saferides.model.DriverStatus;
 import edu.csus.asi.saferides.model.Vehicle;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -46,15 +44,17 @@ public class DriverDto {
     @NotNull(message = "active cannot be null")
     private Boolean active;
 
-    @ApiModelProperty(value = "The driver's status", readOnly = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private DriverStatus status;
-
     @ApiModelProperty(value = "The driver's vehicle")
     private Vehicle vehicle;
 
     @ApiModelProperty(value = "The driver's recorded odometer value at the end of the Safe Rides' night")
     private long endOfNightOdo;
+
+    @ApiModelProperty(value = "The driver's latest recorded location")
+    private DriverLocationDto location;
+
+    @ApiModelProperty(value = "The driver's current ride request")
+    private RideRequestDto currentRideRequest;
 
     public String getUsername() {
         return username;
@@ -144,11 +144,19 @@ public class DriverDto {
         this.endOfNightOdo = endOfNightOdo;
     }
 
-    public DriverStatus getStatus() {
-        return status;
+    public DriverLocationDto getLocation() {
+        return location;
     }
 
-    public void setStatus(DriverStatus status) {
-        this.status = status;
+    public void setLocation(DriverLocationDto location) {
+        this.location = location;
+    }
+
+    public RideRequestDto getCurrentRideRequest() {
+        return currentRideRequest;
+    }
+
+    public void setCurrentRideRequest(RideRequestDto currentRideRequest) {
+        this.currentRideRequest = currentRideRequest;
     }
 }

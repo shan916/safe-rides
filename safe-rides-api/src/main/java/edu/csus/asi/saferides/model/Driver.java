@@ -1,14 +1,15 @@
 package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -56,7 +57,14 @@ public class Driver {
      * be persisted in the database because they have different meanings.
      */
     @Transient
-    private DriverStatus status;
+    private DriverLocation latestDriverLocation;
+
+    /**
+     * JPA indicates not to serialized the status field, that is, it is not to
+     * be persisted in the database because they have different meanings.
+     */
+    @Transient
+    private DriverLocation latestRideRequest;
 
     /**
      * Date of creation
@@ -240,15 +248,6 @@ public class Driver {
     }
 
     /**
-     * Set driver's status
-     *
-     * @param status the driver's status
-     */
-    public void setStatus(DriverStatus status) {
-        this.status = status;
-    }
-
-    /**
      * Get created date
      *
      * @return creation date of the driver
@@ -334,45 +333,37 @@ public class Driver {
     }
 
     /**
-     * Gets the status of the driver whether they are assigned a ride request or
-     * currently picking up a rider or dropping off a rider or are available.
+     * Gets the latest recorded location of the driver if exists
      *
-     * @return driver status
+     * @return drivers's location or null
      */
-    public DriverStatus getStatus() {
-        boolean assigned = false;
-        boolean pickingUp = false;
-        boolean atPickupLocation = false;
-
-        for (RideRequest ride : getRides()) {
-            RideRequestStatus rideStatus = ride.getStatus();
-
-            switch (rideStatus) {
-                case DROPPINGOFF:
-                    return DriverStatus.DROPPINGOFF;
-                case PICKINGUP:
-                    pickingUp = true;
-                    break;
-                case ATPICKUPLOCATION:
-                    atPickupLocation = true;
-                    break;
-                case ASSIGNED:
-                    assigned = true;
-                    break;
-                default:
-                    break;
+    public DriverLocation getLatestDriverLocation() {
+        Set<DriverLocation> locations = getLocations();
+        if (locations != null) {
+            Optional<DriverLocation> latestLocation = locations.stream().max(Comparator.comparing(DriverLocation::getCreatedDate));
+            if (latestLocation.isPresent()) {
+                return latestLocation.get();
             }
         }
+        return null;
+    }
 
-        if (pickingUp) {
-            return DriverStatus.PICKINGUP;
-        } else if (atPickupLocation) {
-            return DriverStatus.ATPICKUPLOCATION;
-        } else if (assigned) {
-            return DriverStatus.ASSIGNED;
-        } else {
-            return DriverStatus.AVAILABLE;
+    /**
+     * Gets the latest ride request assigned to the driver if exists
+     *
+     * @return ride requerst or null
+     */
+    public RideRequest getLatestRideRequest() {
+        Set<RideRequest> rides = getRides();
+        if (rides != null) {
+            Optional<RideRequest> latestRideRequest = rides.stream().max(Comparator.comparing(RideRequest::getLastModified));
+            if (latestRideRequest.isPresent()) {
+                RideRequest rideRequest = latestRideRequest.get();
+                rideRequest.setUser(rideRequest.getUser());
+                return rideRequest;
+            }
         }
+        return null;
     }
 
     /**

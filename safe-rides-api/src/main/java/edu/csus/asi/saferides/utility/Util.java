@@ -1,8 +1,8 @@
 package edu.csus.asi.saferides.utility;
 
+import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.security.model.Authority;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

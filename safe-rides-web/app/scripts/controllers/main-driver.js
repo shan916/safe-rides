@@ -8,8 +8,8 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('DriverdashboardCtrl', function ($scope, GetDriverMe, DriverService, RideRequestService, DriverRidesService, RideRequest, CurrentDriverRidesService, Driver, authManager, AuthTokenService,
-                                                 $state, DriverSaveService, $interval, GeolocationService, CurrentDriverLocationService, GetDriverCurrentRideService, AuthService, Notification, ENV, $window, $log) {
+    .controller('DriverdashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, authManager, AuthTokenService,
+                                                 $state, $interval, GetDriverSelf, GeolocationService, CurrentDriverLocationService, AuthService, Notification, ENV, $log) {
         var vm = this;
         vm.ride = undefined;
         vm.rideRequests = [];
@@ -24,7 +24,6 @@ angular.module('safeRidesWebApp')
         vm.driver = undefined;  //used to authenticate this driver is a valid user
         var REFRESH_INTERVAL = 30000;   //Refresh time in ms for refreshing getCurrentRideRequest
         var rideRefresher; //used to signify if the refresh interval has been created yet
-        vm.localDriver = undefined;  //this currently signed in Driver
 
         /*
          * Kick user out if not authenticated or higher than driver (coordinator, admin,...) or not a driver
@@ -41,16 +40,10 @@ angular.module('safeRidesWebApp')
                 $state.go('/');
                 $log.debug('Not a driver');
             } else {
-                AuthService.getAuthUserInfo().then(function (response) {
-                    vm.driver = response.data;
-                }, function (error) {
-                    $log.debug('error getting the driver name', error);
-                });
-                $log.debug('about to call getCurrentRideRequest');
                 getCurrentRideRequest();
             }
         } else {
-            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            $state.go('/');
             $log.debug('Not authenticated');
         }
 
@@ -62,9 +55,10 @@ angular.module('safeRidesWebApp')
         function getCurrentRideRequest() {
             vm.isRideAssigned = false;
             //get the current ride request to driver
-            GetDriverCurrentRideService.get().$promise.then(function (response) {
+            GetDriverSelf.get().$promise.then(function (response) {
                 if (response !== undefined) {
-                    vm.assignedRide = new RideRequest(response);
+                    vm.driver = new Driver(response);
+                    vm.assignedRide = new RideRequest(vm.driver.currentRideRequest);
                     if (vm.assignedRide.status !== undefined) {
                         vm.isRideAssigned = true;
                         vm.pickedUpButtonPressed = false;
@@ -231,8 +225,7 @@ angular.module('safeRidesWebApp')
             var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            var d = R * c;
-            return d;
+            return R * c;
         }
 
         // Converts numeric degrees to radians

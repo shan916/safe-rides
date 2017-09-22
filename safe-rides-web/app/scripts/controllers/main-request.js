@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('RiderdashboardCtrl', function (AuthService, ENV, $window, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService, $log) {
+    .controller('RiderdashboardCtrl', function (AuthService, ENV, $cookies, RideRequestService, RideRequest, authManager, AuthTokenService, $state, $interval, $scope, Notification, MyRideService, SettingsService, $log) {
         var vm = this;
         vm.maxRidersCount = [1, 2, 3];
         vm.loading = true;
@@ -41,7 +41,7 @@ angular.module('safeRidesWebApp')
             },
             function () {
                 Notification.error({
-                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    message: 'Failed to retrieve Safe Rides\' operation hours.',
                     positionX: 'center',
                     delay: 10000
                 });
@@ -136,7 +136,8 @@ angular.module('safeRidesWebApp')
 
             // cancel confirmed
             if (vm.existingRide.status === 'UNASSIGNED') {
-                MyRideService.cancel().$promise.then(function (response) {
+                vm.existingRide.status = 'CANCELEDBYRIDER';
+                RideRequestService.update(vm.existingRide).$promise.then(function (response) {
                     cancelInterval();
                     getRide();
                     $log.debug('Ride cancelled:', response);

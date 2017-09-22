@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('MainCtrl', function (authManager, AuthTokenService, $state, $window, ENV, Notification, $log) {
+    .controller('MainCtrl', function (authManager, AuthTokenService, $state, $window, $cookies, ENV, Notification, $log) {
         if (authManager.isAuthenticated()) {
             if (AuthTokenService.isInRole('ROLE_ADMIN')) {
                 $log.debug('ADMIN');
@@ -25,13 +25,15 @@ angular.module('safeRidesWebApp')
             } else {
                 $log.debug('ROLE FALLTHROUGH');
                 Notification.error({
-                    message: 'An application error occurred with, if this issue persists please call to request a ride.',
+                    message: 'An application error occurred with logging in, if this issue persists please call to request a ride.',
                     positionX: 'center',
                     delay: 10000,
                     replaceMessage: true
                 });
             }
         } else {
-            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            if (window.location.search.indexOf('ticket=') < 0) {
+                $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            }
         }
     });

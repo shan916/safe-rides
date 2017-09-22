@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.security.dto;
+package edu.csus.asi.saferides.model.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -1,7 +1,7 @@
-package edu.csus.asi.saferides.security.mapper;
+package edu.csus.asi.saferides.mapper;
 
-import edu.csus.asi.saferides.security.dto.UserDto;
-import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.model.dto.UserDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;

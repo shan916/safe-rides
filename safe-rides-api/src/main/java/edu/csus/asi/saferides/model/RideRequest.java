@@ -1,12 +1,8 @@
 package edu.csus.asi.saferides.model;
 
-import edu.csus.asi.saferides.security.model.User;
 import edu.csus.asi.saferides.utility.Util;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -80,13 +76,13 @@ public class RideRequest {
      * The odometer reading of the driver's vehicle at the beginning of the ride
      */
     @Column
-    private int startOdometer;
+    private long startOdometer;
 
     /**
      * The odometer reading of the driver's vehicle at the time of ride completion
      */
     @Column
-    private int endOdometer;
+    private long endOdometer;
 
     /**
      * Line 1 of rider's pickup address
@@ -379,7 +375,7 @@ public class RideRequest {
      *
      * @return driver's start odometer at the time of assignment
      */
-    public int getStartOdometer() {
+    public long getStartOdometer() {
         return startOdometer;
     }
 
@@ -388,7 +384,7 @@ public class RideRequest {
      *
      * @param startOdometer the driver's start odometer at the time of assignment
      */
-    public void setStartOdometer(int startOdometer) {
+    public void setStartOdometer(long startOdometer) {
         this.startOdometer = startOdometer;
     }
 
@@ -397,7 +393,7 @@ public class RideRequest {
      *
      * @return the driver's end odometer at the time of ride completion
      */
-    public int getEndOdometer() {
+    public long getEndOdometer() {
         return endOdometer;
     }
 
@@ -406,7 +402,7 @@ public class RideRequest {
      *
      * @param endOdometer the driver's end odometer at the time of ride completion
      */
-    public void setEndOdometer(int endOdometer) {
+    public void setEndOdometer(long endOdometer) {
         this.endOdometer = endOdometer;
     }
 

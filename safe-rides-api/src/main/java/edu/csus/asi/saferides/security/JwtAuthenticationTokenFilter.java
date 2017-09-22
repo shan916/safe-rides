@@ -1,9 +1,7 @@
 package edu.csus.asi.saferides.security;
 
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.AuthorityRepository;
+import edu.csus.asi.saferides.model.AuthorityName;
+import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

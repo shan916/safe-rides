@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.csus.asi.saferides.model.DriverStatus;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,26 +39,4 @@ public class EnumJsonTests {
 
         assertThat(mockObject.getRideRequestStatus()).isNull();
     }
-
-    @Test
-    public void isSuccessWhenDriverStatusDeserializedWithValidValue() throws IOException {
-        String json = "{\"driverStatus\": \"AVAILABLE\"}";
-        MockObject mockObject = objectMapper
-                .readerFor(MockObject.class)
-                .readValue(json);
-
-        assertThat(mockObject.getDriverStatus()).isNotNull();
-        assertThat(mockObject.getDriverStatus()).isEqualTo(DriverStatus.AVAILABLE);
-    }
-
-    @Test
-    public void isNullWhenDriverStatusDeserializedWithInvalidValue() throws IOException {
-        String json = "{\"driverStatus\": \"INVALIDSTATUS\"}";
-        MockObject mockObject = objectMapper
-                .readerFor(MockObject.class)
-                .readValue(json);
-
-        assertThat(mockObject.getDriverStatus()).isNull();
-    }
-
 }

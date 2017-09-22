@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.views.JsonViews;
-import edu.csus.asi.saferides.security.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Max;
@@ -18,13 +17,6 @@ import java.time.LocalDateTime;
  * Data Transfer Object for RideRequest.
  */
 public class RideRequestDto {
-
-//    private String driverName;
-//    private String vehicleColor;
-//    private String vehicleYear;
-//    private String vehicleMake;
-//    private String vehicleModel;
-//    private String vehicleLicensePlate;
 
     @ApiModelProperty(value = "The id of the ride request", readOnly = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -84,12 +76,12 @@ public class RideRequestDto {
     // TODO: min, max values?
     @ApiModelProperty(value = "The odometer reading of the driver's vehicle at the beginning of the ride")
     @JsonView(JsonViews.Driver.class)
-    private Integer startOdometer;
+    private Long startOdometer;
 
     // TODO: min, max values?
     @ApiModelProperty(value = "The odometer reading of the driver's vehicle at the time of ride completion")
     @JsonView(JsonViews.Driver.class)
-    private Integer endOdometer;
+    private Long endOdometer;
 
     @ApiModelProperty(value = "Line 1 of rider's pickup address")
     @NotNull(message = "pickupLine1 must not be null")
@@ -166,7 +158,12 @@ public class RideRequestDto {
     @ApiModelProperty(value = "The assigned driver's first name", readOnly = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(JsonViews.Rider.class)
-    private String driverName;
+    private String driverFirstName;
+
+    @ApiModelProperty(value = "The assigned driver's last name", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(JsonViews.Rider.class)
+    private String driverLastName;
 
     @ApiModelProperty(value = "The assigned driver's vehicle year", readOnly = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -192,8 +189,6 @@ public class RideRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(JsonViews.Rider.class)
     private String vehicleLicensePlate;
-
-    private UserDto user;
 
     public Long getId() {
         return id;
@@ -295,19 +290,19 @@ public class RideRequestDto {
         this.numPassengers = numPassengers;
     }
 
-    public Integer getStartOdometer() {
+    public Long getStartOdometer() {
         return startOdometer;
     }
 
-    public void setStartOdometer(Integer startOdometer) {
+    public void setStartOdometer(Long startOdometer) {
         this.startOdometer = startOdometer;
     }
 
-    public Integer getEndOdometer() {
+    public Long getEndOdometer() {
         return endOdometer;
     }
 
-    public void setEndOdometer(Integer endOdometer) {
+    public void setEndOdometer(Long endOdometer) {
         this.endOdometer = endOdometer;
     }
 
@@ -443,12 +438,20 @@ public class RideRequestDto {
         this.dropoffLongitude = dropoffLongitude;
     }
 
-    public String getDriverName() {
-        return driverName;
+    public String getDriverFirstName() {
+        return driverFirstName;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
+    public void setDriverFirstName(String driverName) {
+        this.driverFirstName = driverName;
+    }
+
+    public String getDriverLastName() {
+        return driverLastName;
+    }
+
+    public void setDriverLastName(String driverName) {
+        this.driverLastName = driverName;
     }
 
     public String getVehicleYear() {
@@ -489,13 +492,5 @@ public class RideRequestDto {
 
     public void setVehicleLicensePlate(String vehicleLicensePlate) {
         this.vehicleLicensePlate = vehicleLicensePlate;
-    }
-
-    public UserDto getUser() {
-        return user;
-    }
-
-    public void setUser(UserDto user) {
-        this.user = user;
     }
 }

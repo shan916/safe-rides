@@ -1,6 +1,6 @@
 package edu.csus.asi.saferides.security;
 
-import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.utility.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

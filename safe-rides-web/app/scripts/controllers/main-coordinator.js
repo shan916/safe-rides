@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 var app = angular.module('safeRidesWebApp')
-    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, DriverRidesService, DriverLocationService, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $window, $log) {
+    .controller('CoordinatordashboardCtrl', function ($scope, DriverService, RideRequestService, RideRequest, Driver, User, AuthService, $interval, $uibModal, authManager, $state, AuthTokenService, Notification, SettingsService, ENV, $log) {
         var vm = this;
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
@@ -28,7 +28,6 @@ var app = angular.module('safeRidesWebApp')
 
         vm.drivers = [];
         vm.rideRequests = [];
-        vm.driversLocation = [];
 
         /*
          * Kick user out if not authenticated or if not a coordinator
@@ -47,7 +46,7 @@ var app = angular.module('safeRidesWebApp')
                 loadData();
             }
         } else {
-            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            $state.go('/');
             $log.debug('Not authenticated');
         }
 
@@ -59,7 +58,7 @@ var app = angular.module('safeRidesWebApp')
                 vm.active = response.data;
             }, function () {
                 Notification.error({
-                    message: 'Failed to retreive SafeRides\' operation hours.',
+                    message: 'Failed to retrieve Safe Rides\' operation hours.',
                     positionX: 'center',
                     delay: 10000,
                     replaceMessage: true
@@ -94,25 +93,13 @@ var app = angular.module('safeRidesWebApp')
             vm.loadingCoordinatorDrivers = true;
             DriverService.query({active: true}).$promise.then(function (response) {
                 vm.drivers = response;
-
                 vm.drivers.forEach(function (element, index, drivers) {
-                    var driver = new Driver(element);
-                    DriverRidesService.query({
-                        id: driver.id
-                    }).$promise.then(function (ridesResponse) {
-                        driver.rides = ridesResponse;
-                        $log.debug('got driver\'s rides:', ridesResponse);
-                    }, function (ridesError) {
-                        $log.debug('error getting driver\'s rides:', ridesError);
-                    });
-
-                    drivers[index] = driver;
+                    drivers[index] = new Driver(element);;
                 });
 
                 vm.loadingCoordinatorDrivers = false;
 
                 $log.debug('got drivers:', response);
-                getDriversLocation();
             }, function (error) {
                 vm.loadingCoordinatorDrivers = false;
                 $log.debug('error getting drivers:', error);
@@ -134,21 +121,6 @@ var app = angular.module('safeRidesWebApp')
             }, function (error) {
                 vm.loadingRideRequests = false;
                 $log.debug('error getting ride requests:', error);
-            });
-        }
-
-        function getDriversLocation() {
-            vm.drivers.forEach(function (element) {
-                DriverLocationService.get({
-                    id: element.id
-                }).$promise.then(function (response) {
-                    if (response.id !== undefined) {
-                        vm.driversLocation.push(response);
-                        $log.debug('got drivers location:', response);
-                    }
-                }, function (error) {
-                    $log.debug('error getting drivers location:', error);
-                });
             });
         }
 

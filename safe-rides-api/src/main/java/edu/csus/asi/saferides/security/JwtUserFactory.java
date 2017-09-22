@@ -1,7 +1,7 @@
 package edu.csus.asi.saferides.security;
 
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.User;
+import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

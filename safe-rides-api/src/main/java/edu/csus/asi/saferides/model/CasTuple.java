@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.security.model;
+package edu.csus.asi.saferides.model;
 
 public class CasTuple {
 

@@ -1,13 +1,13 @@
-package edu.csus.asi.saferides.security.controller;
+package edu.csus.asi.saferides.controller;
 
+import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.AuthorityName;
+import edu.csus.asi.saferides.model.CasTuple;
+import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.repository.AuthorityRepository;
+import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUserFactory;
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
-import edu.csus.asi.saferides.security.model.CasTuple;
-import edu.csus.asi.saferides.security.model.User;
-import edu.csus.asi.saferides.security.repository.AuthorityRepository;
-import edu.csus.asi.saferides.security.repository.UserRepository;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
 import io.swagger.annotations.ApiOperation;
 import org.jasig.cas.client.authentication.AttributePrincipal;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * API controller for authenticating with CAS
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io", "http://codeteam6.io"})
+@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/cas")
 public class CasClientController {
 

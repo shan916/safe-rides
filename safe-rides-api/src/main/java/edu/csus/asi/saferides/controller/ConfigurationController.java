@@ -1,4 +1,4 @@
-package edu.csus.asi.saferides.service;
+package edu.csus.asi.saferides.controller;
 
 import edu.csus.asi.saferides.mapper.ConfigurationMapper;
 import edu.csus.asi.saferides.model.Configuration;

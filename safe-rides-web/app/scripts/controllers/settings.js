@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('SettingsCtrl', function (SettingsService, Settings, authManager, AuthTokenService, $state, Notification, ENV, $window, $log) {
+    .controller('SettingsCtrl', function (SettingsService, Settings, authManager, AuthTokenService, $state, Notification, ENV, $log) {
         var vm = this;
         vm.settingsLoading = true;
         vm.settings = undefined;
@@ -63,7 +63,7 @@ angular.module('safeRidesWebApp')
                 loadData();
             }
         } else {
-            $window.location.href = ENV.casLogin + '?service=' + ENV.casServiceName;
+            $state.go('/');
             $log.debug('Not authenticated');
         }
 

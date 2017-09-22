@@ -2,7 +2,6 @@ package edu.csus.asi.saferides.mapper;
 
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.dto.RideRequestDto;
-import edu.csus.asi.saferides.security.dto.UserDto;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.converter.builtin.PassThroughConverter;
 import ma.glasnost.orika.impl.ConfigurableMapper;
@@ -20,14 +19,12 @@ public class RideRequestMapper extends ConfigurableMapper {
     protected void configure(MapperFactory factory) {
         factory.classMap(RideRequest.class, RideRequestDto.class)
                 .field("id", "id")
-                .field("driver.id", "driverId")
+                .fieldAToB("requestDate", "requestDate")
+                .fieldAToB("lastModified", "lastModified")
+                .fieldAToB("assignedDate", "assignedDate")
                 .field("oneCardId", "oneCardId")
-                .fieldAToB("user.username", "user.username")
-                .field("requestDate", "requestDate")
-                .field("lastModified", "lastModified")
-                .field("assignedDate", "assignedDate")
                 .fieldAToB("user.firstName", "requestorFirstName")
-                .field("user.lastName", "requestorLastName")
+                .fieldAToB("user.lastName", "requestorLastName")
                 .fieldAToB("requestorPhoneNumber", "requestorPhoneNumber")
                 .field("numPassengers", "numPassengers")
                 .field("startOdometer", "startOdometer")
@@ -46,7 +43,9 @@ public class RideRequestMapper extends ConfigurableMapper {
                 .field("pickupLongitude", "pickupLongitude")
                 .field("dropoffLatitude", "dropoffLatitude")
                 .field("dropoffLongitude", "dropoffLongitude")
-                .fieldAToB("driver.user.firstName", "driverName")
+                .field("driver.id", "driverId")
+                .fieldAToB("driver.user.firstName", "driverFirstName")
+                .fieldAToB("driver.user.lastName", "driverLastName")
                 .fieldAToB("driver.vehicle.year", "vehicleYear")
                 .fieldAToB("driver.vehicle.color", "vehicleColor")
                 .fieldAToB("driver.vehicle.make", "vehicleMake")

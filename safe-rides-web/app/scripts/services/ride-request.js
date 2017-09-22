@@ -11,8 +11,10 @@ angular.module('safeRidesWebApp')
     .factory('RideRequest', function () {
         function RideRequest(data) {
             this.id = undefined;
-            this.oneCardId = undefined;
             this.requestDate = undefined;
+            this.lastModified = undefined;
+            this.assignedDate = undefined;
+            this.oneCardId = undefined;
             this.requestorFirstName = undefined;
             this.requestorLastName = undefined;
             this.requestorPhoneNumber = undefined;
@@ -25,17 +27,22 @@ angular.module('safeRidesWebApp')
             this.dropoffLine1 = undefined;
             this.dropoffLine2 = undefined;
             this.dropoffCity = undefined;
-            this.driver = undefined;
             this.status = undefined;
             this.cancelMessage = undefined;
             this.messageToDriver = undefined;
             this.estimatedTime = undefined;
-            this.startOdometer = undefined;
-            this.endOdometer = undefined;
             this.pickupLatitude = undefined;
             this.pickupLongitude = undefined;
             this.dropoffLatitude = undefined;
             this.dropoffLongitude = undefined;
+            this.driverId = undefined;
+            this.driverFirstName = undefined;
+            this.driverLastName = undefined;
+            this.vehicleYear = undefined;
+            this.vehicleColor = undefined;
+            this.vehicleMake = undefined;
+            this.vehicleModel = undefined;
+            this.vehicleLicensePlate = undefined;
 
             if (data) {
                 angular.extend(this, data);
@@ -66,7 +73,7 @@ angular.module('safeRidesWebApp')
         };
 
         RideRequest.prototype.getVehicleDescription = function () {
-            return this.driver.vehicle.color + ' ' + this.driver.vehicle.year + ' ' + this.driver.vehicle.make + ' ' + this.driver.vehicle.model;
+            return this.vehicleColor + ' ' + this.vehicleYear + ' ' + this.vehicleMake + ' ' + this.vehicleModel;
         };
 
         return RideRequest;

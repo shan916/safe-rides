@@ -1,7 +1,7 @@
-package edu.csus.asi.saferides.security.repository;
+package edu.csus.asi.saferides.repository;
 
-import edu.csus.asi.saferides.security.model.Authority;
-import edu.csus.asi.saferides.security.model.AuthorityName;
+import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.AuthorityName;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
