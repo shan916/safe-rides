@@ -358,9 +358,7 @@ public class Driver {
         if (rides != null) {
             Optional<RideRequest> latestRideRequest = rides.stream().max(Comparator.comparing(RideRequest::getLastModified));
             if (latestRideRequest.isPresent()) {
-                RideRequest rideRequest = latestRideRequest.get();
-                rideRequest.setUser(rideRequest.getUser());
-                return rideRequest;
+                return latestRideRequest.get();
             }
         }
         return null;
