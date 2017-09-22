@@ -36,6 +36,9 @@ public class RideRequest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     /**
      * The ride requestor's One Card ID
      */
@@ -664,5 +667,13 @@ public class RideRequest {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
