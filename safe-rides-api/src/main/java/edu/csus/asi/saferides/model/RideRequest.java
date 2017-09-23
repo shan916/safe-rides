@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.model;
 import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -37,7 +38,7 @@ public class RideRequest {
     private Long id;
 
     @Version
-    private Long version;
+    private Timestamp version;
 
     /**
      * The ride requestor's One Card ID
@@ -669,11 +670,11 @@ public class RideRequest {
         this.user = user;
     }
 
-    public Long getVersion() {
+    public Timestamp getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(Timestamp version) {
         this.version = version;
     }
 }

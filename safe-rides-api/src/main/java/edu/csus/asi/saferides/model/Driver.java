@@ -5,6 +5,7 @@ import edu.csus.asi.saferides.utility.Util;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class Driver {
     private Long id;
 
     @Version
-    private Long version;
+    private Timestamp version;
 
     /**
      * Phone number of the driver
@@ -403,11 +404,11 @@ public class Driver {
         this.user = user;
     }
 
-    public Long getVersion() {
+    public Timestamp getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(Timestamp version) {
         this.version = version;
     }
 }
