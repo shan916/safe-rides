@@ -31,10 +31,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -374,17 +372,10 @@ public class RideRequestController {
 
             rideRequestFromDb.setNumPassengers(rideRequest.getNumPassengers());
             rideRequestFromDb.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-            }
+
             result = rideRequestRepository.save(rideRequestFromDb);
             if (driverUpdated) {
-                driver.setVersion(new Timestamp(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)));
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException ex) {
-                }
+                driver.setModifiedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
                 driverRepository.save(driver);
             }
         }

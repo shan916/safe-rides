@@ -1,9 +1,11 @@
 package edu.csus.asi.saferides.model;
 
 import edu.csus.asi.saferides.utility.Util;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -16,6 +18,8 @@ import java.time.ZoneId;
  * and the odometer readings for assigned driver vehicle mileage
  */
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
+@DynamicUpdate
 public class RideRequest {
 
     /**
@@ -36,9 +40,6 @@ public class RideRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Version
-    private Timestamp version;
 
     /**
      * The ride requestor's One Card ID
@@ -668,13 +669,5 @@ public class RideRequest {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Timestamp getVersion() {
-        return version;
-    }
-
-    public void setVersion(Timestamp version) {
-        this.version = version;
     }
 }

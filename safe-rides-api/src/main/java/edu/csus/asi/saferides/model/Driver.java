@@ -2,10 +2,12 @@ package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.csus.asi.saferides.utility.Util;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
@@ -18,6 +20,8 @@ import java.util.Set;
  */
 
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
+@DynamicUpdate
 public class Driver {
 
     /**
@@ -26,9 +30,6 @@ public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Version
-    private Timestamp version;
 
     /**
      * Phone number of the driver
@@ -402,13 +403,5 @@ public class Driver {
      */
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Timestamp getVersion() {
-        return version;
-    }
-
-    public void setVersion(Timestamp version) {
-        this.version = version;
     }
 }
