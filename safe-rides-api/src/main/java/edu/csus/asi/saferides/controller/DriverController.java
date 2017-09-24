@@ -362,6 +362,7 @@ public class DriverController {
             RideRequestStatus status = latestRideRequest.getStatus();
             if (status == RideRequestStatus.ASSIGNED || status == RideRequestStatus.PICKINGUP
                     || status == RideRequestStatus.ATPICKUPLOCATION || status == RideRequestStatus.DROPPINGOFF) {
+                return false;
             }
         }
         return true;

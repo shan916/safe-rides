@@ -2,6 +2,9 @@ package edu.csus.asi.saferides.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.csus.asi.saferides.utility.Util;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -17,6 +20,8 @@ import java.util.Set;
  */
 
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
+@DynamicUpdate
 public class Driver {
 
     /**
@@ -358,9 +363,7 @@ public class Driver {
         if (rides != null) {
             Optional<RideRequest> latestRideRequest = rides.stream().max(Comparator.comparing(RideRequest::getLastModified));
             if (latestRideRequest.isPresent()) {
-                RideRequest rideRequest = latestRideRequest.get();
-                rideRequest.setUser(rideRequest.getUser());
-                return rideRequest;
+                return latestRideRequest.get();
             }
         }
         return null;

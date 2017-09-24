@@ -22,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -244,15 +247,9 @@ public class RideRequestController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @PreAuthorize("hasRole('RIDER')")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates the given ride request")
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<?> save(HttpServletRequest request, @PathVariable Long id, @RequestBody RideRequestDto rideRequestDto) {
         String authToken = request.getHeader(this.tokenHeader);
-
-        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
-        RideRequest rideRequestFromDb = rideRequestRepository.findOne(id);
-
-        if (rideRequestFromDb == null) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Could not find ride request."));
-        }
 
         User user = userRepository.findByUsernameIgnoreCase(jwtTokenUtil.getUsernameFromToken(authToken));
         if (user == null) {
@@ -272,6 +269,12 @@ public class RideRequestController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Could not determine user role when updating a ride request."));
         }
 
+        RideRequest rideRequest = rideRequestMapper.map(rideRequestDto, RideRequest.class);
+        RideRequest rideRequestFromDb = rideRequestRepository.findOne(id);
+
+        if (rideRequestFromDb == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Could not find ride request."));
+        }
         RideRequest result = null;
 
         // Possible rider actions (driver user requesting a ride as well):
@@ -347,15 +350,23 @@ public class RideRequestController {
                 rideRequest.setDriver(null);
             }
 
+            Driver driver = null;
+            boolean driverUpdated = false; // flag whether or not to bump up the driver version
+
             // assign driver
             if (rideRequest.getStatus() == RideRequestStatus.ASSIGNED && rideRequestFromDb.getStatus() == RideRequestStatus.UNASSIGNED) {
-                Driver driver = driverRepository.findOne(rideRequest.getDriver().getId());
+                driver = driverRepository.findOne(rideRequest.getDriver().getId());
                 if (driver != null) {
-                    rideRequestFromDb.setStatus(RideRequestStatus.ASSIGNED);
-                    rideRequestFromDb.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
-                    rideRequestFromDb.setMessageToDriver(rideRequest.getMessageToDriver());
-                    rideRequestFromDb.setEstimatedTime(rideRequest.getEstimatedTime());
-                    rideRequestFromDb.setDriver(driver);
+                    if (isDriverAvailable(driver)) {
+                        rideRequestFromDb.setStatus(RideRequestStatus.ASSIGNED);
+                        rideRequestFromDb.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+                        rideRequestFromDb.setMessageToDriver(rideRequest.getMessageToDriver());
+                        rideRequestFromDb.setEstimatedTime(rideRequest.getEstimatedTime());
+                        rideRequestFromDb.setDriver(driver);
+                        driverUpdated = true;
+                    } else {
+                        return ResponseEntity.badRequest().body(new ResponseMessage("The driver is busy and cannot be assigned."));
+                    }
                 }
             }
 
@@ -363,6 +374,10 @@ public class RideRequestController {
             rideRequestFromDb.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
 
             result = rideRequestRepository.save(rideRequestFromDb);
+            if (driverUpdated) {
+                driver.setModifiedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+                driverRepository.save(driver);
+            }
         }
 
         return ResponseEntity.ok(rideRequestMapper.map(result, RideRequestDto.class));
@@ -408,5 +423,17 @@ public class RideRequestController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
+    }
+
+    private boolean isDriverAvailable(Driver driver) {
+        RideRequest latestRideRequest = driver.getLatestRideRequest();
+        if (latestRideRequest != null) {
+            RideRequestStatus status = latestRideRequest.getStatus();
+            if (status == RideRequestStatus.ASSIGNED || status == RideRequestStatus.PICKINGUP
+                    || status == RideRequestStatus.ATPICKUPLOCATION || status == RideRequestStatus.DROPPINGOFF) {
+                return false;
+            }
+        }
+        return true;
     }
 }

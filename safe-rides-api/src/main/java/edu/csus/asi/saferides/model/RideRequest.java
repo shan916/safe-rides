@@ -1,6 +1,9 @@
 package edu.csus.asi.saferides.model;
 
 import edu.csus.asi.saferides.utility.Util;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +18,8 @@ import java.time.ZoneId;
  * and the odometer readings for assigned driver vehicle mileage
  */
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
+@DynamicUpdate
 public class RideRequest {
 
     /**
