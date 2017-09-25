@@ -9,8 +9,6 @@
  */
 angular.module('safeRidesWebApp')
     .factory('APIInterceptor', function ($injector, AuthTokenService, $window, $cookies, $q, ENV, $log, $rootScope) {
-        var redirect = '/';
-
         return {
             request: function (req) {
                 return req;
