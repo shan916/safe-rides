@@ -290,9 +290,9 @@ public class RideRequestController {
             rideRequestFromDb.setStatus(RideRequestStatus.CANCELEDBYRIDER);
             result = rideRequestRepository.save(rideRequestFromDb);
         }
-        if (userRole == AuthorityName.ROLE_DRIVER
+        if (rideRequestFromDb.getDriver() != null && (userRole == AuthorityName.ROLE_DRIVER
                 && rideRequestFromDb.getStatus() != RideRequestStatus.UNASSIGNED
-                && rideRequestFromDb.getDriver().getUser().getId().equals(user.getId())) {
+                && rideRequestFromDb.getDriver().getUser().getId().equals(user.getId()))) {
             if (rideRequest.getStatus() == RideRequestStatus.ATPICKUPLOCATION
                     || rideRequest.getStatus() == RideRequestStatus.PICKINGUP
                     || rideRequest.getStatus() == RideRequestStatus.DROPPINGOFF
