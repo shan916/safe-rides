@@ -7,8 +7,8 @@ import edu.csus.asi.saferides.model.User;
 import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
+import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,6 +44,9 @@ public class CasClientController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private JwtUserDetailsServiceImpl userDetailsService;
+
     /**
      * Check with CAS whether the service and ticket pair is correct. If so, authenticate the user.
      *
@@ -59,23 +63,23 @@ public class CasClientController {
             Assertion a = tv.validate(casTuple.getTicket(), casTuple.getService());
             principal = a.getPrincipal();
 
-            User user = userRepository.findByUsernameIgnoreCase(principal.getName());
-
-            // if user is not in the database create a new user and add it to the database
-            if (null == user) {
-                user = new User();
-                user.setUsername(principal.getName());
+            UserDetails user = null;
+            try {
+                user = userDetailsService.loadUserByUsername(principal.getName());
+            } catch (UsernameNotFoundException ex) {
+                User newUser = new User();
+                newUser.setUsername(principal.getName());
                 Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
                 ArrayList authorityList = new ArrayList<Authority>();
                 authorityList.add(authority);
-                user.setAuthorities(authorityList);
-                user.setActive(true);
-                userRepository.save(user);
+                newUser.setAuthorities(authorityList);
+                newUser.setActive(true);
+                userRepository.save(newUser);
+                user = userDetailsService.loadUserByUsername(newUser.getUsername());
             }
 
             // create a token for the new user
-            UserDetails userDetails = JwtUserFactory.create(user);
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            final String token = jwtTokenUtil.generateToken(user);
 
             // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));

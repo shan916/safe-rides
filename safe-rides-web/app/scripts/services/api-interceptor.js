@@ -8,24 +8,22 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-    .factory('APIInterceptor', function ($injector, AuthTokenService, $window, $cookies, $q, ENV, $log) {
+    .factory('APIInterceptor', function ($injector, AuthTokenService, $window, $cookies, $q, ENV, $log, $rootScope) {
         var redirect = '/';
 
         return {
             request: function (req) {
-                req.headers.Authorization = AuthTokenService.getToken();
                 return req;
             },
             responseError: function (rejection) {
                 var state = $injector.get('$state');
 
-                if (redirect !== state.current.name && state.current.name !== 'login') {
-                    redirect = state.current.name;
-                }
-
                 $log.debug(rejection);
                 switch (rejection.status) {
                     case 401:
+                    case 403:
+                        AuthTokenService.removeToken();
+                        $rootScope.isAuthenticated = false;
                         state.go('/');
                         break;
                     default:

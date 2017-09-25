@@ -98,7 +98,7 @@ angular
             }]
         });
         $httpProvider.interceptors.push('jwtInterceptor');
-
+        $httpProvider.interceptors.push('APIInterceptor');
         $urlRouterProvider.otherwise('/');
 
         $stateProvider

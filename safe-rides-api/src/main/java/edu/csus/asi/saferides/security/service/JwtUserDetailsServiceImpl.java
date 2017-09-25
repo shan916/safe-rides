@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.security.service;
 
+import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
 import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.RideRequestRepository;
@@ -10,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 /**
  * Provides two separate authentication methods (Real user, rider).
@@ -39,6 +43,14 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
+
+            if(!user.isActive()){
+                Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
+                ArrayList authorityList = new ArrayList<Authority>();
+                authorityList.add(authority);
+                user.setAuthorities(authorityList);
+            }
+
             return JwtUserFactory.create(user);
         }
     }
