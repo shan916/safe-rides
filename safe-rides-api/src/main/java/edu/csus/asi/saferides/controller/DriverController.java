@@ -9,6 +9,7 @@ import edu.csus.asi.saferides.model.dto.DriverLocationDto;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.service.UserService;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -232,14 +235,18 @@ public class DriverController {
         }
 
         Driver driverFromDb = driverRepository.findOne(driverDto.getId());
-
-        // return 400 if trying to deactivate a driver that's not AVAILABLE
-        if (!updatedDriver.getUser().isActive() && driverFromDb.getLatestRideRequest().getStatus() != RideRequestStatus.COMPLETE) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
-        }
-
         User userFromDb = driverFromDb.getUser();
         Vehicle vehicleFromDb = driverFromDb.getVehicle();
+
+        // return 400 if trying to deactivate a driver that's not AVAILABLE
+        RideRequest latestRequest = driverFromDb.getLatestRideRequest();
+        if (!updatedDriver.getUser().isActive() && (latestRequest != null && Util.rideComplete(latestRequest.getStatus()))) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
+        } else {
+            LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
+            updatedUser.setTokenValidFrom(now);
+            userFromDb.setTokenValidFrom(updatedUser.getTokenValidFrom());
+        }
 
         driverFromDb.setDlChecked(updatedDriver.getDlChecked());
         driverFromDb.setInsuranceChecked(updatedDriver.getInsuranceChecked());

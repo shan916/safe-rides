@@ -337,10 +337,7 @@ public class RideRequestController {
             if ((rideRequest.getStatus() == RideRequestStatus.CANCELEDBYCOORDINATOR
                     || rideRequest.getStatus() == RideRequestStatus.CANCELEDOTHER
                     || rideRequest.getStatus() == RideRequestStatus.CANCELEDBYRIDER)
-                    && (rideRequestFromDb.getStatus() != RideRequestStatus.COMPLETE
-                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDBYCOORDINATOR
-                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDOTHER
-                    || rideRequestFromDb.getStatus() != RideRequestStatus.CANCELEDBYRIDER)
+                    && (!Util.rideComplete(rideRequestFromDb.getStatus()))
                     ) {
                 if (StringUtils.length(rideRequest.getCancelMessage()) < 5) {
                     return ResponseEntity.badRequest().body(new ResponseMessage("Canceled message cannot be empty or less than 5 characters."));

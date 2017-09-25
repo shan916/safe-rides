@@ -3,6 +3,7 @@ package edu.csus.asi.saferides.utility;
 import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
+import edu.csus.asi.saferides.model.RideRequestStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -189,5 +190,12 @@ public class Util {
         } else {
             throw new IllegalStateException("Configuration is missing");
         }
+    }
+
+    public static boolean rideComplete(RideRequestStatus status) {
+        return (status == RideRequestStatus.CANCELEDBYCOORDINATOR
+                || status == RideRequestStatus.CANCELEDBYRIDER
+                || status == RideRequestStatus.CANCELEDOTHER
+                || status == RideRequestStatus.COMPLETE);
     }
 }

@@ -52,7 +52,7 @@ public class User {
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime lastPasswordResetDate;
+    private LocalDateTime tokenValidFrom;
 
     /**
      * M-M relationship join table for authorities / roles
@@ -157,21 +157,21 @@ public class User {
     }
 
     /**
-     * Get user's last password reset date
+     * Get user's token valid from date
      *
-     * @return user's lastPasswordReset date
+     * @return user's tokenValidFrom date
      */
-    public LocalDateTime getLastPasswordResetDate() {
-        return lastPasswordResetDate;
+    public LocalDateTime getTokenValidFrom() {
+        return tokenValidFrom;
     }
 
     /**
-     * Set user's last password reset date
+     * Set user's token valid from date
      *
-     * @param lastPasswordResetDate of user
+     * @param tokenValidFrom of user
      */
-    public void setLastPasswordResetDate(LocalDateTime lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
+    public void setTokenValidFrom(LocalDateTime tokenValidFrom) {
+        this.tokenValidFrom = tokenValidFrom;
     }
 
     /**
