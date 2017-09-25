@@ -8,9 +8,17 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $stateParams, RideRequest, RideRequestService, $log) {
+    .controller('AddriderequestmodalCtrl', function ($uibModalInstance, $stateParams, RideRequest, ride, RideRequestService, $log) {
         var vm = this;
-        vm.riderequest = new RideRequest();
+        if (ride !== undefined) {
+            vm.riderequest = ride;
+            vm.riderequest.numPassengers = vm.riderequest.numPassengers + ''; // because... angular
+            vm.edit = true;
+        } else {
+            vm.riderequest = new RideRequest();
+            vm.edit = false;
+        }
+
         vm.NUM_REGEX = '\\d+';
         vm.PHONE_REGEX = '/^[2-9]\d{2}-\d{3}-\d{4}$/';
         vm.maxPeopleCount = [1, 2, 3];
@@ -30,33 +38,26 @@ angular.module('safeRidesWebApp')
             });
         }
 
-        /*
-         function updateRideRequest() {
-         RideRequestService.update({
-         id: vm.riderequest.id
-         }, vm.riderequest).$promise.then(function(response) {
-
-         console.log('updated riderequest:', response);
-         $uibModalInstance.dismiss();
-         }, function(error) {
-         console.log('error updating riderequest:', error);
-         });
-         }
-         */
-
         if ($stateParams.requestId) {
             getRideRequest($stateParams.requestId);
         }
 
         vm.saveRideRequest = function () {
-            //TODO if the ride request exists already?
-            //if($routeParams.oneCardId)
-            RideRequestService.save(vm.riderequest).$promise.then(function (response) {
-                $log.debug('saved riderequest:', response);
-                $uibModalInstance.dismiss();
-            }, function (error) {
-                $log.debug('error saving riderequest:', error);
-            });
+            if (vm.edit) {
+                RideRequestService.update(vm.riderequest).$promise.then(function (response) {
+                    $log.debug('updated riderequest:', response);
+                    $uibModalInstance.dismiss();
+                }, function (error) {
+                    $log.debug('error updating riderequest:', error);
+                });
+            } else {
+                RideRequestService.save(vm.riderequest).$promise.then(function (response) {
+                    $log.debug('saved riderequest:', response);
+                    $uibModalInstance.dismiss();
+                }, function (error) {
+                    $log.debug('error saving riderequest:', error);
+                });
+            }
         }; //end vm.saveRideRequest
 
     });

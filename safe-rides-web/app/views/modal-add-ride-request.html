@@ -2,7 +2,7 @@
 @controller : AddriderequestmodalCtrl as ctrl
 -->
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Create New Ride Request</h3>
+    <h3 class="modal-title" id="modal-title">{{ctrl.edit ? 'Edit' : 'Create New'}} Ride Request</h3>
 </div>
 
 <div class="modal-body" id="modal-body">
@@ -13,7 +13,7 @@
                 <label for="oneCardId">OneCard ID</label>
                 <input id="oneCardId" name="oneCardId" type="text" class="form-control" required
                        ng-model="ctrl.riderequest.oneCardId" ui-mask="999999999" ui-mask-placeholder
-                       ui-mask-placeholder-char="_" placeholder="9 digit ID">
+                       ui-mask-placeholder-char="_" placeholder="9 digit ID"  ng-disabled="ctrl.edit">
                 <div ng-messages="addriderequestForm.oneCardId.$dirty && addriderequestForm.oneCardId.$error">
                     <div class="input-error" ng-message="required">* required</div>
                 </div>
@@ -31,7 +31,7 @@
             <div class="form-group col-md-3">
                 <label for="requestorFirstName">First Name</label>
                 <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control" required
-                       placeholder="First" ng-model="ctrl.riderequest.requestorFirstName">
+                       placeholder="First" ng-model="ctrl.riderequest.requestorFirstName" ng-disabled="ctrl.edit">
                 <div
                     ng-messages="addriderequestForm.requestorFirstName.$dirty && addriderequestForm.requestorFirstName.$error">
                     <div class="input-error" ng-message="required">* required</div>
@@ -40,7 +40,7 @@
             <div class="form-group col-md-3">
                 <label for="requestorLastName">Last Name</label>
                 <input id="requestorLastName" name="requestorLastName" type="text" class="form-control" required
-                       placeholder="Last" ng-model="ctrl.riderequest.requestorLastName">
+                       placeholder="Last" ng-model="ctrl.riderequest.requestorLastName" ng-disabled="ctrl.edit">
                 <div
                     ng-messages="addriderequestForm.requestorLastName.$dirty && addriderequestForm.requestorLastName.$error">
                     <div class="input-error" ng-message="required">* required</div>
@@ -146,7 +146,7 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
     <button type="button" class="btn btn-primary" ng-click="ctrl.saveRideRequest()"
-            ng-disabled="addriderequestForm.$invalid">Create Ride
+            ng-disabled="addriderequestForm.$invalid">{{ctrl.edit ? 'Edit' : 'Create'}} Ride
     </button>
 </div>
 <!-- end modal footer-->

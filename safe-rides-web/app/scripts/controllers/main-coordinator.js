@@ -260,11 +260,16 @@ var app = angular.module('safeRidesWebApp')
         };
 
         /* Modal Add ride request */
-        vm.showRideRequest = function () {
+        vm.showRideRequest = function (ride) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/modal-add-ride-request.html',
                 controller: 'AddriderequestmodalCtrl',
                 controllerAs: 'ctrl',
+                resolve: {
+                    ride: function () {
+                        return ride;
+                    }
+                },
                 size: 'lg'
             });
 
