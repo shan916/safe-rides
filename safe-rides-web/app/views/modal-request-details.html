@@ -27,7 +27,7 @@
             </dl>
         </div>
         <div class="col-md-6">
-            <div ng-hide="ctrl.request.status === 'UNASSIGNED'">
+            <div ng-hide="ctrl.request.status === 'UNASSIGNED' || ctrl.request.status.startsWith('CANCELED') ">
                 <h4>Assigned Driver Information:</h4>
                 <dl class="dl-horizontal">
                     <dt>Name:</dt>

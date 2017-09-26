@@ -367,6 +367,18 @@ public class RideRequestController {
                 }
             }
 
+            // uncancel request
+            if (rideRequest.getStatus() == RideRequestStatus.UNASSIGNED && (rideRequestFromDb.getStatus() == RideRequestStatus.CANCELEDBYCOORDINATOR
+                    || rideRequestFromDb.getStatus() == RideRequestStatus.CANCELEDOTHER
+                    || rideRequestFromDb.getStatus() == RideRequestStatus.CANCELEDBYRIDER)) {
+                rideRequestFromDb.setStartOdometer(0);
+                rideRequestFromDb.setAssignedDate(null);
+                rideRequestFromDb.setEstimatedTime(null);
+                rideRequestFromDb.setMessageToDriver(null);
+                rideRequestFromDb.setCancelMessage(null);
+                rideRequestFromDb.setStatus(RideRequestStatus.UNASSIGNED);
+            }
+
             rideRequestFromDb.setNumPassengers(rideRequest.getNumPassengers());
             rideRequestFromDb.setRequestorPhoneNumber(rideRequest.getRequestorPhoneNumber());
 

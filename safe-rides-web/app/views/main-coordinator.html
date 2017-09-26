@@ -190,6 +190,11 @@
                                             ng-click="ctrl.confirmCancelRequest(req); $event.stopPropagation();"
                                             class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span><span class="sr-only">Cancel</span>
                                         </button>
+                                        <button
+                                            ng-show="req.status.startsWith('CANCELED')"
+                                            ng-click="ctrl.openConfirmReactivateRide(req); $event.stopPropagation();"
+                                            class="btn btn-success">Reactivate
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
