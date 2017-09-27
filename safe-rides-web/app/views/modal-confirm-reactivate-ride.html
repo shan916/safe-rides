@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Confirm Reactivating Ride Request</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <p>Please confirm that you would like to reactivate the following ride request. It will return this ride
+                request to the queue in an UNASSIGNED status with its original request time.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <dl class="dl-horizontal">
+                <dt>Name:</dt>
+                <dd>{{ctrl.ride.requestorFirstName}} {{ctrl.ride.requestorLastName}}</dd>
+                <dt>OneCard ID:</dt>
+                <dd>{{ctrl.ride.oneCardId}}</dd>
+                <dt>Riders:</dt>
+                <dd>{{ctrl.ride.numPassengers}}</dd>
+                <dt>Pickup Location:</dt>
+                <dd>{{ctrl.ride.pickupLine1}} <br/> {{ctrl.ride.pickupLine2.value || "" }}
+                    {{ctrl.ride.pickupCity}}
+                </dd>
+                <dt>Dropoff Location:</dt>
+                <dd>{{ctrl.ride.dropoffLine1}} <br/> {{ctrl.ride.dropoffLine2.value || "" }}
+                    {{ctrl.ride.dropoffCity}}
+                </dd>
+                <dt>Request Time:</dt>
+                <dd>{{ctrl.ride.requestDate | date:'MMM dd, yyyy h:mma'}}</dd>
+                <dt>Status:</dt>
+                <dd>{{ctrl.ride.status | FriendlyStatusName}}</dd>
+            </dl>
+        </div>
+    </div>
+
+
+</div><!--end modal body-->
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="ctrl.ok()">Reactivate</button>
+    <button type="button" class="btn btn-default" ng-click="ctrl.cancel()">Cancel</button>
+</div>

@@ -259,12 +259,44 @@ var app = angular.module('safeRidesWebApp')
             });
         };
 
+        vm.openConfirmReactivateRide = function (ride) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/modal-confirm-reactivate-ride.html',
+                controller: 'ModalConfirmReactivateRideCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    ride: function () {
+                        return ride;
+                    }
+                },
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (ride) {
+                ride.status = 'UNASSIGNED';
+                RideRequestService.update(ride).$promise.then(function (response) {
+                    $log.debug('ride reactivated:', response);
+                    getRideRequests();
+                    getDrivers();
+                }, function (error) {
+                    $log.debug('error reactivating ride:', error);
+                });
+            }, function () {
+                // cancel clicked
+            });
+        };
+
         /* Modal Add ride request */
-        vm.showRideRequest = function () {
+        vm.showRideRequest = function (ride) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/modal-add-ride-request.html',
                 controller: 'AddriderequestmodalCtrl',
                 controllerAs: 'ctrl',
+                resolve: {
+                    ride: function () {
+                        return ride;
+                    }
+                },
                 size: 'lg'
             });
 
