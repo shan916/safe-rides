@@ -101,7 +101,7 @@ public class Driver {
      * One-to-many relationship for setting driver locations to a driver
      */
     @JsonIgnore
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private Set<DriverLocation> locations;
 
     /**
