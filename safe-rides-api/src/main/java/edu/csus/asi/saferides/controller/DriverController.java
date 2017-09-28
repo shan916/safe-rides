@@ -294,6 +294,12 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage("Cannot delete a driver that is not available"));
         }
 
+        for (RideRequest ride : driver.getRides()) {
+            // todo: save driver statistics for reporting
+            ride.setDriver(null);
+            rideRequestRepository.save(ride);
+        }
+
         driverRepository.delete(id);
         return ResponseEntity.noContent().build();
     }
