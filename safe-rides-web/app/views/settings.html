@@ -55,6 +55,15 @@
                 <hr>
                 <div class="row margin-bottom-15">
                     <div class="col-md-12">
+                        <label for="systemNotification">System Notification Message</label>
+                         <textarea name="systemNotification" id="systemNotification" class="form-control"
+                                   ng-model="ctrl.settings.message" ng-maxlength="280">
+                        </textarea>
+                    </div>
+                </div>
+                <hr>
+                <div class="row margin-bottom-15">
+                    <div class="col-md-12">
                         <div class="pull-right">
                             <button class="btn btn-primary" ng-click="ctrl.saveSettings()"
                                     ng-disabled="ctrl.hours === 0 && ctrl.minutes === 0">Save

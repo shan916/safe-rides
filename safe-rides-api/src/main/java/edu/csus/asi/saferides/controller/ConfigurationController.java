@@ -7,6 +7,7 @@ import edu.csus.asi.saferides.model.dto.ConfigurationDto;
 import edu.csus.asi.saferides.repository.ConfigurationRepository;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +40,22 @@ public class ConfigurationController {
     @ApiOperation(value = "isLive", nickname = "Accepting Ride Requests?", notes = "Check if a ride can be requested at this time")
     public boolean isLive() {
         return Util.isAcceptingRideRequests(configurationRepository.findOne(1));
+    }
+
+    /**
+     * Get any system notification message if available
+     *
+     * @return system notification message if available
+     */
+    @RequestMapping(value = "/message", method = RequestMethod.GET)
+    @ApiOperation(value = "message", nickname = "System Notification Message", notes = "Get any system notification message if available")
+    public ResponseEntity<?> systemMessage() {
+        String message = configurationRepository.findOne(1).getMessage();
+        if (StringUtils.isEmpty(message)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok().body(new ResponseMessage(message));
+        }
     }
 
     /**

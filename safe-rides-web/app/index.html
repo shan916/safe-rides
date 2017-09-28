@@ -9,10 +9,11 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet"
+          href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css"/>
+    <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.css"/>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -44,6 +45,20 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div class="container" ng-controller="SystemNotificationCtrl as ctrl">
+    <div class="alert alert-info" role="alert" ng-show="ctrl.message !== undefined && ctrl.message.length > 0" ng-cloak>
+        <strong>System Message: </strong>{{ ctrl.message}}
+    </div>
+    <div class="alert alert-info" role="alert" ng-show="ctrl.isLive !== undefined && ctrl.isLive" ng-cloak>
+        <strong>Operational Status</strong> Currently accepting new ride requests.
+    </div>
+    <div class="alert alert-info" role="alert" ng-show="ctrl.isLive !== undefined && !ctrl.isLive" ng-cloak>
+        <strong>Operational Status</strong> It is currently outside of Safe Rides' normal operating hours. The
+        application is currently not accepting new ride requests.
     </div>
 </div>
 
@@ -124,6 +139,7 @@
 <script src="scripts/controllers/header-menu.js"></script>
 <script src="scripts/directives/bs-active-link.js"></script>
 <script src="scripts/controllers/modal-confirm-reactivate-ride.js"></script>
+<script src="scripts/controllers/system-notification.js"></script>
 <!-- endbuild -->
 
 </body>
