@@ -15,7 +15,6 @@ angular.module('safeRidesWebApp')
 
         $rootScope.$on('$stateChangeSuccess', function () {
             SettingsService.message().then(function (response) {
-                console.log(response);
                 if (response.status !== 204 && response.data !== undefined && response.data.message !== undefined) {
                     vm.message = response.data.message;
                 } else {
@@ -26,8 +25,11 @@ angular.module('safeRidesWebApp')
             });
 
             SettingsService.isLive().then(function (response) {
-                vm.isLive = response.data;
-
+                if (response.data !== undefined && response.data.message !== undefined) {
+                    vm.isLive = response.data.message === 'true';
+                } else {
+                    vm.isLive = undefined;
+                }
             }, function (error) {
                 $log.debug('Error getting system status:', error);
             });

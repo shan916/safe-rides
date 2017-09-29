@@ -32,7 +32,7 @@ public class Configuration {
     /**
      * Days of week program is active
      */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = false)
     private List<DayOfWeek> daysOfWeek;
 

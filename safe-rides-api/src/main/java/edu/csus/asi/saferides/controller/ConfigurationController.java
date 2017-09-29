@@ -38,8 +38,8 @@ public class ConfigurationController {
      */
     @RequestMapping(value = "/isLive", method = RequestMethod.GET)
     @ApiOperation(value = "isLive", nickname = "Accepting Ride Requests?", notes = "Check if a ride can be requested at this time")
-    public boolean isLive() {
-        return Util.isAcceptingRideRequests(configurationRepository.findOne(1));
+    public ResponseEntity<?> isLive() {
+        return ResponseEntity.ok().body(new ResponseMessage(Boolean.toString(Util.isAcceptingRideRequests(configurationRepository.findOne(1)))));
     }
 
     /**
