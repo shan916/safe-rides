@@ -34,8 +34,9 @@ public class GeocodingService {
      * @param rideRequest to set the coordinate fields in
      */
     public void setCoordinates(RideRequest rideRequest) {
-        GeoApiContext ctx = new GeoApiContext();
-        ctx.setApiKey(geocodingApiKey);
+        GeoApiContext ctx = new GeoApiContext.Builder()
+        .apiKey(geocodingApiKey)
+        .build();
         try {
             try {
                 try {
