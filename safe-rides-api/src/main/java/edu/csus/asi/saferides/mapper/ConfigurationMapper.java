@@ -19,6 +19,7 @@ public class ConfigurationMapper extends ConfigurableMapper {
                 .field("endTime", "endTime")
                 .field("daysOfWeek", "daysOfWeek")
                 .field("active", "active")
+                .field("message", "message")
                 .byDefault()
                 .register();
     }

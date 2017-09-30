@@ -14,6 +14,7 @@ angular.module('safeRidesWebApp')
             this.endTime = undefined;
             this.daysOfWeek = undefined;
             this.active = undefined;
+            this.message = undefined;
 
             if (data) {
                 angular.extend(this, data);

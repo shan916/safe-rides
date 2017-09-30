@@ -16,6 +16,10 @@ angular.module('safeRidesWebApp')
             return $http.get(ENV.apiEndpoint + 'config/isLive');
         };
 
+        this.message = function () {
+            return $http.get(ENV.apiEndpoint + 'config/message');
+        }
+
         /**
          * Get the current application configuration
          */
@@ -32,6 +36,7 @@ angular.module('safeRidesWebApp')
 
         return {
             isLive: this.isLive,
+            message: this.message,
             current: this.current,
             update: this.update
         };

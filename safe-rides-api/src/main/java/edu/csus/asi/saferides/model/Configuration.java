@@ -32,7 +32,7 @@ public class Configuration {
     /**
      * Days of week program is active
      */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = false)
     private List<DayOfWeek> daysOfWeek;
 
@@ -41,6 +41,9 @@ public class Configuration {
      */
     @Column(nullable = false)
     private boolean active;
+
+    @Column(length = 280)
+    private String message;
 
     /**
      * Constructor used by JPA
@@ -149,5 +152,23 @@ public class Configuration {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * Get system notice message
+     *
+     * @return message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Set system notice message
+     *
+     * @param message system notice
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -1,6 +1,7 @@
 package edu.csus.asi.saferides.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
@@ -39,6 +40,10 @@ public class ConfigurationDto {
     @ApiModelProperty(value = "Signifies normal operation. If active is false, then Safe Rides is not accepting ride requests even if it is during an active time range.", required = true)
     @NotNull(message = "The active flag cannot be null.")
     private Boolean active;
+
+    @ApiModelProperty(value = "An active service notification.")
+    @Length(max = 280)
+    private String message;
 
     /**
      * Get the start time of when Safe Rides starts accepting requests
@@ -110,6 +115,24 @@ public class ConfigurationDto {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * Get system notice message
+     *
+     * @return message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Set system notice message
+     *
+     * @param message system notice
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
 
