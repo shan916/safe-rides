@@ -6,6 +6,8 @@ import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.model.dto.DriverLocationDto;
+import edu.csus.asi.saferides.model.dto.EndOfNightSummaryDto;
+import edu.csus.asi.saferides.model.dto.EndOfNightSummaryRideDto;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.service.UserService;
@@ -24,8 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -167,6 +168,93 @@ public class DriverController {
         } else {
             return ResponseEntity.ok(driverMapper.map(result, DriverDto.class));
         }
+    }
+
+    /**
+     * GET /drivers/endofnight
+     * <p>
+     * Returns the driver's end of night summary for a specified driver
+     *
+     * @return Driver's end of night summary
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/endofnight")
+    @PreAuthorize("hasRole('COORDINATOR')")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id end of the night summary ")
+    public ResponseEntity<?> summary(@PathVariable Long id) {
+        Driver driver = driverRepository.findOne(id);
+
+        if (driver != null) {
+            // get all rides for the current night
+            Collection<RideRequest> currentRides = Util.filterPastRides(configurationRepository.findOne(1), driver.getRides());
+            Set<EndOfNightSummaryRideDto> endOfNightSummaryRides = new HashSet<EndOfNightSummaryRideDto>();
+            // if driver was assigned to any rides, summarize them
+            if (currentRides != null) {
+                // night totals
+                double totalDistanceSystem = 0;
+                long totalDistanceOdometer = 0;
+
+                // get all locations for the driver and sort them in order
+                Set<DriverLocation> locationsSet = driver.getLocations();
+                List<DriverLocation> locations = locationsSet.stream().sorted((o1, o2) -> o1.getCreatedDate().compareTo(o2.getCreatedDate())).collect(Collectors.toList());
+
+                // iterate through rides
+                for (RideRequest ride : currentRides) {
+                    // only summarize completed rides
+                    if (ride.getStatus() == RideRequestStatus.COMPLETE) {
+                        // get ride info
+                        LocalDateTime assignedDate = ride.getAssignedDate();
+                        LocalDateTime completedDate = ride.getLastModified();
+                        Long startOdometer = ride.getStartOdometer();
+                        Long endOdometer = ride.getEndOdometer();
+
+                        // filter locations to time between ride requests
+                        List<DriverLocation> filteredLocations = new ArrayList<>();
+                        if (locations != null) {
+                            filteredLocations = locations.stream().filter(driverLocation -> driverLocation.getCreatedDate().compareTo(assignedDate) >= 0 && driverLocation.getCreatedDate().compareTo(completedDate) <= 0).collect(Collectors.toList());
+                        }
+
+                        // create ride summary object
+                        EndOfNightSummaryRideDto endOfNightSummaryRide = new EndOfNightSummaryRideDto();
+                        endOfNightSummaryRide.setRideAssigned(assignedDate);
+                        endOfNightSummaryRide.setRideCompleted(completedDate);
+                        endOfNightSummaryRide.setStartOdometer(startOdometer);
+                        endOfNightSummaryRide.setEndOdometer(endOdometer);
+                        endOfNightSummaryRide.setOdometerDistance(endOdometer - startOdometer);
+
+                        // update odometer total readings
+                        totalDistanceOdometer += (endOdometer - startOdometer);
+
+                        // only calculate distance if there is a distance to calculate
+                        int points = filteredLocations.size();
+                        DriverLocation[] locationsArray = filteredLocations.toArray(new DriverLocation[0]);
+                        if (points > 1) {
+                            double[] longitudes = new double[points];
+                            double[] latitudes = new double[points];
+                            for (int i = 0; i < points; i++) {
+                                longitudes[i] = locationsArray[i].getLongitude();
+                                latitudes[i] = locationsArray[i].getLatitude();
+                            }
+                            double distance = Util.calculateDistance(latitudes, longitudes);
+                            endOfNightSummaryRide.setRecordedDistance(distance);
+
+                            totalDistanceSystem += distance;
+                        } else {
+                            endOfNightSummaryRide.setRecordedDistance(0);
+                        }
+
+                        endOfNightSummaryRides.add(endOfNightSummaryRide);
+                    }
+                }
+
+                EndOfNightSummaryDto endOfNightSummary = new EndOfNightSummaryDto();
+                endOfNightSummary.setRides(endOfNightSummaryRides);
+                endOfNightSummary.setDistanceDrivenSystem(totalDistanceSystem);
+                endOfNightSummary.setDistanceDrivenOdometer(totalDistanceOdometer);
+
+                return ResponseEntity.ok(endOfNightSummary);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     /**

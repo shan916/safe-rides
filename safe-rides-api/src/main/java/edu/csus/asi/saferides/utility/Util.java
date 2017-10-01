@@ -192,6 +192,38 @@ public class Util {
         }
     }
 
+    /**
+     * Calculate the distance between two coordinates
+     *
+     * @param lat1 latitude 1
+     * @param lon1 longitude 1
+     * @param lat2 latitude 2
+     * @param lon2 longitude 2
+     * @return distance in meters
+     */
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        // http://www.movable-type.co.uk/scripts/latlong.html
+        // https://stackoverflow.com/a/27237104
+        double x = Math.toRadians(lon2 - lon1) * Math.cos(Math.toRadians(lat1 + lat2) / 2);
+        double y = Math.toRadians(lat2 - lat1);
+        return Math.sqrt(x * x + y * y) * 6371e3;
+    }
+
+    /**
+     * Calculate the distance between a set of coordinates
+     *
+     * @param latitudes  set of latitudes
+     * @param longitudes set of longitudes
+     * @return distance in miles
+     */
+    public static double calculateDistance(double[] latitudes, double[] longitudes) {
+        double total = 0;
+        for (int i = 0; i < latitudes.length - 1; i++) {
+            total += calculateDistance(latitudes[i], longitudes[i], latitudes[i + 1], longitudes[i + 1]);
+        }
+        return total / 1609.344;
+    }
+
     public static boolean rideComplete(RideRequestStatus status) {
         return (status == RideRequestStatus.CANCELEDBYCOORDINATOR
                 || status == RideRequestStatus.CANCELEDBYRIDER
