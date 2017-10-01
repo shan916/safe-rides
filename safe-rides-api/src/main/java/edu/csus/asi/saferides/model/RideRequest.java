@@ -66,6 +66,18 @@ public class RideRequest {
     private LocalDateTime assignedDate;
 
     /**
+     * Ride requestor's first name
+     */
+    @Column(nullable = false, length = 30)
+    private String requestorFirstName;
+
+    /**
+     * Ride requestor's last name
+     */
+    @Column(nullable = false, length = 30)
+    private String requestorLastName;
+
+    /**
      * Ride requestor's phone number
      */
     @Column(nullable = false, length = 10)
@@ -663,11 +675,57 @@ public class RideRequest {
         this.assignedDate = assignedDate;
     }
 
+    /**
+     * Get the user that requested the ride
+     *
+     * @return user - ride requestor
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Set the user that requested the ride
+     *
+     * @param user - ride requestor
+     */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    /**
+     * Gets the ride requestor's first name
+     *
+     * @return the ride requestor's first name
+     */
+    public String getRequestorFirstName() {
+        return requestorFirstName;
+    }
+
+    /**
+     * Sets the ride requestor's first name
+     *
+     * @param requestorFirstName the ride requestor's first name
+     */
+    public void setRequestorFirstName(String requestorFirstName) {
+        this.requestorFirstName = requestorFirstName;
+    }
+
+    /**
+     * Gets the ride requestor's last name
+     *
+     * @return the ride requestor's last name
+     */
+    public String getRequestorLastName() {
+        return requestorLastName;
+    }
+
+    /**
+     * Sets the ride requestor's last name
+     *
+     * @param requestorLastName the ride requestor's last name
+     */
+    public void setRequestorLastName(String requestorLastName) {
+        this.requestorLastName = requestorLastName;
     }
 }

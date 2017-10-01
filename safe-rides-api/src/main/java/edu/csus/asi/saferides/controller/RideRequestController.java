@@ -188,6 +188,7 @@ public class RideRequestController {
 
         geocodingService.setCoordinates(rideRequest);
 
+        // set the first name and the last name of the user
         if (user != null) {
             if ((StringUtils.isEmpty(user.getFirstName()) && !StringUtils.isEmpty(rideRequestDto.getRequestorFirstName()))) {
                 user.setFirstName(rideRequestDto.getRequestorFirstName());
@@ -197,6 +198,10 @@ public class RideRequestController {
             }
             rideRequest.setUser(user);
         }
+
+        // set the first name and the last name of the requestor in the ride request record
+        rideRequest.setRequestorFirstName(rideRequestDto.getRequestorFirstName());
+        rideRequest.setRequestorLastName(rideRequestDto.getRequestorLastName());
 
         // check if user already requested a ride during this period (that was not canceled)
         Configuration configuration = configurationRepository.findOne(1);
