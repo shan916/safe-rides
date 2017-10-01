@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Driver Night Summary for {{ctrl.driver.driverFirstName}}&nbsp;{{ctrl.driver.driverLastName}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <dl class="dl-horizontal">
+        <dt>Odometer Distance</dt>
+        <dd>{{ctrl.summary.distanceDrivenOdometer}}</dd>
+        <dt>GPS Distance</dt>
+        <dd>{{ctrl.summary.distanceDrivenSystem}}</dd>
+    </dl>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Ride Assigned</th>
+                <th>Ride Completed</th>
+                <th>Odometer start</th>
+                <th>Odometer end</th>
+                <th>Odometer distance</th>
+                <th>GPS distance</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat='ride in ctrl.summary.rides'>
+            <td>{{ride.rideAssigned | date : 'mediumTime'}}</td>
+            <td>{{ride.rideCompleted | date : 'mediumTime'}}</td>
+            <td>{{ride.startOdometer}}</td>
+            <td>{{ride.endOdometer}}</td>
+            <td>{{ride.odometerDistance}}</td>
+            <td>{{ride.recordedDistance}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="ctrl.close()">Close</button>
+</div>

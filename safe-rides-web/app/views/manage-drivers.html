@@ -38,6 +38,9 @@
                                         ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)"
                                         ng-disabled="driver.status !== 'AVAILABLE'">Deactivate
                                 </button>
+                                <button type="button" class="btn btn-success"
+                                        ng-click="ctrl.openEndOfNightSummary(driver)">Mileage
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -90,6 +93,9 @@
                                         </button>
                                         <button type="button" class="btn btn-warning"
                                                 ng-click="ctrl.openConfirmChangeDriverActiveModal(driver)">Activate
+                                        </button>
+                                        <button type="button" class="btn btn-success"
+                                                ng-click="ctrl.openEndOfNightSummary(driver)">Mileage
                                         </button>
                                     </td>
                                 </tr>
