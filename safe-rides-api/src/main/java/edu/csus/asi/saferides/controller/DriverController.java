@@ -192,6 +192,7 @@ public class DriverController {
                 // night totals
                 double totalDistanceSystem = 0;
                 long totalDistanceOdometer = 0;
+                LocalDateTime latestCompletedRide = LocalDateTime.MIN;
 
                 // get all locations for the driver and sort them in order
                 Set<DriverLocation> locationsSet = driver.getLocations();
@@ -224,32 +225,33 @@ public class DriverController {
                         // update odometer total readings
                         totalDistanceOdometer += (endOdometer - startOdometer);
 
-                        // only calculate distance if there is a distance to calculate
-                        int points = filteredLocations.size();
-                        DriverLocation[] locationsArray = filteredLocations.toArray(new DriverLocation[0]);
-                        if (points > 1) {
-                            double[] longitudes = new double[points];
-                            double[] latitudes = new double[points];
-                            for (int i = 0; i < points; i++) {
-                                longitudes[i] = locationsArray[i].getLongitude();
-                                latitudes[i] = locationsArray[i].getLatitude();
-                            }
-                            double distance = Util.calculateDistance(latitudes, longitudes);
-                            endOfNightSummaryRide.setRecordedDistance(distance);
+                        double distance = getDistance(filteredLocations);
+                        endOfNightSummaryRide.setRecordedDistance(distance);
 
-                            totalDistanceSystem += distance;
-                        } else {
-                            endOfNightSummaryRide.setRecordedDistance(0);
-                        }
+                        totalDistanceSystem += distance;
 
                         endOfNightSummaryRides.add(endOfNightSummaryRide);
+
+                        if (latestCompletedRide.compareTo(completedDate) <= 0) {
+                            latestCompletedRide = completedDate;
+                        }
                     }
                 }
 
+                LocalDateTime latestCompletedRideFinal = latestCompletedRide;   // fix lambda complaint?
+
+                // filter locations to time after the last ride request
+                List<DriverLocation> filteredLocations = new ArrayList<>();
+                if (locations != null) {
+                    filteredLocations = locations.stream().filter(driverLocation -> driverLocation.getCreatedDate().compareTo(latestCompletedRideFinal) >= 0).collect(Collectors.toList());
+                }
+
+                double distanceAfterLastRide = getDistance(filteredLocations);
+
                 EndOfNightSummaryDto endOfNightSummary = new EndOfNightSummaryDto();
                 endOfNightSummary.setRides(endOfNightSummaryRides);
-                endOfNightSummary.setDistanceDrivenSystem(totalDistanceSystem);
-                endOfNightSummary.setDistanceDrivenOdometer(totalDistanceOdometer);
+                endOfNightSummary.setDistanceDrivenSystem(totalDistanceSystem + distanceAfterLastRide);
+                endOfNightSummary.setDistanceDrivenOdometer(totalDistanceOdometer + driver.getEndOfNightOdo());
 
                 return ResponseEntity.ok(endOfNightSummary);
             }
@@ -330,7 +332,7 @@ public class DriverController {
 
         // return 400 if trying to deactivate a driver that's not AVAILABLE
         RideRequest latestRequest = driverFromDb.getLatestRideRequest();
-        if (!updatedDriver.getUser().isActive() && (latestRequest != null && Util.rideComplete(latestRequest.getStatus()))) {
+        if (!updatedDriver.getUser().isActive() && (latestRequest != null && !Util.rideComplete(latestRequest.getStatus()))) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The driver must not have any in progress rides"));
         } else {
             LocalDateTime now = LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
@@ -469,5 +471,23 @@ public class DriverController {
             }
         }
         return true;
+    }
+
+    private double getDistance(List<DriverLocation> filteredLocations) {
+        // only calculate distance if there is a distance to calculate
+        int points = filteredLocations.size();
+        DriverLocation[] locationsArray = filteredLocations.toArray(new DriverLocation[0]);
+        if (points > 1) {
+            double[] longitudes = new double[points];
+            double[] latitudes = new double[points];
+            for (int i = 0; i < points; i++) {
+                longitudes[i] = locationsArray[i].getLongitude();
+                latitudes[i] = locationsArray[i].getLatitude();
+            }
+            return Util.calculateDistance(latitudes, longitudes);
+
+        } else {
+            return 0;
+        }
     }
 }
