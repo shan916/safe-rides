@@ -3,6 +3,7 @@ package edu.csus.asi.saferides;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
+import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -287,66 +288,118 @@ public class SafeRidesApiApplication {
             User user19 = new User("dmeyer", "David", "Meyer");
 
             rideRequest0.setUser(user0);
+            rideRequest0.setRequestorFirstName(user0.getFirstName());
+            rideRequest0.setRequestorLastName(user0.getLastName());
             rideRequest0.setDriver(driver0);
             rideRequest0.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest1.setUser(user1);
+            rideRequest1.setRequestorFirstName(user1.getFirstName());
+            rideRequest1.setRequestorLastName(user1.getLastName());
             rideRequest1.setDriver(driver0);
             rideRequest1.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest2.setUser(user0);
+            rideRequest2.setRequestorFirstName(user0.getFirstName());
+            rideRequest2.setRequestorLastName(user0.getLastName());
             rideRequest2.setDriver(driver0);
             rideRequest2.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest3.setUser(user3);
+            rideRequest3.setRequestorFirstName(user3.getFirstName());
+            rideRequest3.setRequestorLastName(user3.getLastName());
             rideRequest3.setDriver(driver0);
             rideRequest3.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest3.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest3.setEstimatedTime("15");
+
             rideRequest4.setUser(user4);
+            rideRequest4.setRequestorFirstName(user4.getFirstName());
+            rideRequest4.setRequestorLastName(user4.getLastName());
             rideRequest4.setDriver(driver1);
             rideRequest4.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest5.setUser(user5);
+            rideRequest5.setRequestorFirstName(user5.getFirstName());
+            rideRequest5.setRequestorLastName(user5.getLastName());
             rideRequest5.setDriver(driver1);
             rideRequest5.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest6.setUser(user6);
+            rideRequest6.setRequestorFirstName(user6.getFirstName());
+            rideRequest6.setRequestorLastName(user6.getLastName());
             rideRequest6.setDriver(driver1);
             rideRequest6.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest6.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest6.setEstimatedTime("30");
+
             rideRequest7.setUser(user7);
+            rideRequest7.setRequestorFirstName(user7.getFirstName());
+            rideRequest7.setRequestorLastName(user7.getLastName());
             rideRequest7.setDriver(driver2);
             rideRequest7.setStatus(RideRequestStatus.COMPLETE);
+
             rideRequest8.setUser(user8);
+            rideRequest8.setRequestorFirstName(user8.getFirstName());
+            rideRequest8.setRequestorLastName(user8.getLastName());
             rideRequest8.setDriver(driver2);
             rideRequest8.setStatus(RideRequestStatus.DROPPINGOFF);
             rideRequest8.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest8.setEstimatedTime("45");
+
             rideRequest9.setUser(user9);
+            rideRequest9.setRequestorFirstName(user9.getFirstName());
+            rideRequest9.setRequestorLastName(user9.getLastName());
             rideRequest9.setDriver(driver3);
             rideRequest9.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest9.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest9.setEstimatedTime("1 hour");
+
             rideRequest10.setUser(user10);
+            rideRequest10.setRequestorFirstName(user10.getFirstName());
+            rideRequest10.setRequestorLastName(user10.getLastName());
             rideRequest10.setDriver(driver4);
             rideRequest10.setStatus(RideRequestStatus.PICKINGUP);
             rideRequest10.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest10.setEstimatedTime("> 1 hour");
+
             rideRequest11.setUser(user11);
+            rideRequest11.setRequestorFirstName(user11.getFirstName());
+            rideRequest11.setRequestorLastName(user11.getLastName());
             rideRequest11.setDriver(driver5);
             rideRequest11.setStatus(RideRequestStatus.ASSIGNED);
             rideRequest11.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest11.setEstimatedTime("15");
+
             rideRequest12.setUser(user12);
+            rideRequest12.setRequestorFirstName(user12.getFirstName());
+            rideRequest12.setRequestorLastName(user12.getLastName());
             rideRequest12.setDriver(driver6);
             rideRequest12.setStatus(RideRequestStatus.DROPPINGOFF);
             rideRequest12.setAssignedDate(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
             rideRequest12.setEstimatedTime("30");
 
             rideRequest13.setUser(user13);
+            rideRequest13.setRequestorFirstName(user13.getFirstName());
+            rideRequest13.setRequestorLastName(user13.getLastName());
             rideRequest14.setUser(user14);
+            rideRequest14.setRequestorFirstName(user14.getFirstName());
+            rideRequest14.setRequestorLastName(user14.getLastName());
             rideRequest15.setUser(user15);
+            rideRequest15.setRequestorFirstName(user15.getFirstName());
+            rideRequest15.setRequestorLastName(user15.getLastName());
             rideRequest16.setUser(user16);
+            rideRequest16.setRequestorFirstName(user16.getFirstName());
+            rideRequest16.setRequestorLastName(user16.getLastName());
             rideRequest17.setUser(user17);
+            rideRequest17.setRequestorFirstName(user17.getFirstName());
+            rideRequest17.setRequestorLastName(user17.getLastName());
             rideRequest18.setUser(user18);
+            rideRequest18.setRequestorFirstName(user18.getFirstName());
+            rideRequest18.setRequestorLastName(user18.getLastName());
             rideRequest19.setUser(user19);
+            rideRequest19.setRequestorFirstName(user19.getFirstName());
+            rideRequest19.setRequestorLastName(user19.getLastName());
 
             geocodingService.setCoordinates(rideRequest0);
             geocodingService.setCoordinates(rideRequest1);
