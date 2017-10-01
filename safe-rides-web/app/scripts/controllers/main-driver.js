@@ -125,6 +125,7 @@ angular.module('safeRidesWebApp')
             }
             if (vm.startOdo !== undefined) {
                 buildDirectionButtons();
+                vm.assignedRide.startOdometer = vm.startOdo;
                 vm.assignedRide.status = 'PICKINGUP';
                 vm.isRideAssigned = true;
                 vm.pickedUpButtonPressed = false;
