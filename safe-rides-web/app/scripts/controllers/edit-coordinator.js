@@ -17,8 +17,17 @@ angular.module('safeRidesWebApp')
 
         vm.USERNAME_REGEX = /^[a-z0-9]+$/i;
 
+        vm.coordinatorChoices = undefined;
+
         if (vm.existingUser) {
             getCoordinator($stateParams.id);
+        } else {
+            UserService.query({active: true, '!role': 'ROLE_COORDINATOR'}).$promise.then(function (response) {
+                vm.coordinatorChoices = response;
+                $log.debug('got active users that are not a coordinator:', response);
+            }, function (error) {
+                $log.debug('error getting active users that are not a coordinator:', error);
+            });
         }
 
         function getCoordinator(id) {

@@ -43,9 +43,13 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input id="username" name="username" type="text" class="form-control"
+                            <input list="usernames" id="username" name="username" type="text" class="form-control"
                                    ng-disabled="ctrl.existingUser" ng-pattern="ctrl.USERNAME_REGEX"
                                    ng-model="ctrl.coordinator.username" ng-minlength="6" ng-maxlength="30">
+                            <datalist id="usernames">
+                                <option ng-repeat="user in ctrl.coordinatorChoices"
+                                        value="{{ user.username }}"></option>
+                            </datalist>
                             <div ng-messages="coordinatorForm.username.$dirty && coordinatorForm.username.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="pattern">* can only contain alphanumeric
