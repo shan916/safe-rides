@@ -8,7 +8,7 @@
  * Factory in the safeRidesWebApp.
  */
 angular.module('safeRidesWebApp')
-  .factory('DriverNight', function (DriverNightRide) {
+  .factory('DriverNight', function () {
 
       function DriverNight(data) {
           this.distanceDrivenOdometer = undefined;

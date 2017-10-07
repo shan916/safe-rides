@@ -118,7 +118,7 @@ angular.module('safeRidesWebApp')
                 var summary = new DriverNight(response);
                 $log.debug('Got driver\'s night summary', summary);
 
-                var modalInstance = $uibModal.open({
+                $uibModal.open({
                     templateUrl: 'views/modal-driver-night-summary.html',
                     controller: 'ModalDriverNightSummaryCtrl',
                     controllerAs: 'ctrl',

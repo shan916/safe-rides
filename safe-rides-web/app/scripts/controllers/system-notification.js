@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('SystemNotificationCtrl', function ($rootScope, $log, SettingsService, Settings) {
+    .controller('SystemNotificationCtrl', function ($rootScope, $log, SettingsService) {
         var vm = this;
         vm.settings = undefined;
         vm.isLive = undefined;

@@ -18,7 +18,7 @@ angular.module('safeRidesWebApp')
 
         this.message = function () {
             return $http.get(ENV.apiEndpoint + 'config/message');
-        }
+        };
 
         /**
          * Get the current application configuration
