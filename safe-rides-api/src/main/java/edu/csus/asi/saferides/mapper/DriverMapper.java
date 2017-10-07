@@ -31,7 +31,7 @@ public class DriverMapper extends ConfigurableMapper {
                 .field("insuranceCompany", "insuranceCompany")
                 .fieldAToB("user.active", "active")
                 .field("vehicle", "vehicle")
-                .fieldAToB("endOfNightOdo", "endOfNightOdo")
+                .field("endOfNightOdo", "endOfNightOdo")
                 .fieldAToB("latestDriverLocation", "location")
                 .fieldAToB("latestRideRequest", "currentRideRequest")
                 .byDefault()

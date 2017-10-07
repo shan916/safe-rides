@@ -30,3 +30,7 @@ angular.module('safeRidesWebApp')
         return $resource(ENV.apiEndpoint + 'drivers/location');
     });
 
+angular.module('safeRidesWebApp')
+    .factory('GetDriverSummary', function ($resource, ENV) {
+        return $resource(ENV.apiEndpoint + 'drivers/:id/endofnight');
+    });

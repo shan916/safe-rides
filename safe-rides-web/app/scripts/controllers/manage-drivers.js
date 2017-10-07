@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ManagedriversCtrl', function (DriverService, Driver, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $log) {
+    .controller('ManagedriversCtrl', function (DriverService, Driver, $uibModal, authManager, $state, AuthTokenService, Notification, ENV, $log, GetDriverSummary, DriverNight) {
         var vm = this;
 
         vm.activeDrivers = [];
@@ -110,6 +110,37 @@ angular.module('safeRidesWebApp')
                 });
             }, function () {
                 // cancel clicked
+            });
+        };
+
+        vm.openEndOfNightSummary = function (driver) {
+            GetDriverSummary.get({id: driver.id}).$promise.then(function (response) {
+                var summary = new DriverNight(response);
+                $log.debug('Got driver\'s night summary', summary);
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/modal-driver-night-summary.html',
+                    controller: 'ModalDriverNightSummaryCtrl',
+                    controllerAs: 'ctrl',
+                    resolve: {
+                        summary: function () {
+                            return summary;
+                        },
+                        driver: function () {
+                            return driver;
+                        }
+                    },
+                    size: 'lg'
+                });
+            }, function (error) {
+                $log.debug(error);
+                if(error.status === 404){
+                    Notification.warning({
+                        message: 'You must be logged in as an admin to manage coordinators.',
+                        positionX: 'center',
+                        delay: 10000
+                    });
+                }
             });
         };
 

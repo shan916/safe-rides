@@ -304,7 +304,7 @@ public class RideRequestController {
                     || rideRequest.getStatus() == RideRequestStatus.COMPLETE) {
                 rideRequestFromDb.setStatus(rideRequest.getStatus());
             }
-            if (rideRequestFromDb.getStatus() == RideRequestStatus.ASSIGNED
+            if (rideRequestFromDb.getStatus() == RideRequestStatus.PICKINGUP
                     && rideRequestFromDb.getStartOdometer() == 0
                     && rideRequest.getStartOdometer() != 0) {
                 rideRequestFromDb.setStartOdometer(rideRequest.getStartOdometer());
@@ -314,6 +314,7 @@ public class RideRequestController {
                     && rideRequest.getEndOdometer() != 0) {
                 rideRequestFromDb.setEndOdometer(rideRequest.getEndOdometer());
             }
+
             result = rideRequestRepository.save(rideRequestFromDb);
         }
         if (userRole == AuthorityName.ROLE_COORDINATOR) {
