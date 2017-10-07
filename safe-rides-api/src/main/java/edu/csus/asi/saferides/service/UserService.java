@@ -83,6 +83,52 @@ public class UserService {
 
     }
 
+    /**
+     * Returns list of users with given criteria
+     *
+     * @param active whether users are active or not
+     * @param notRole   role to search by
+     * @return list of users with given criteria
+     */
+    public List<User> getUsersNotInRole(Boolean active, AuthorityName notRole) {
+
+        List<User> users;
+
+        if (active != null) {
+            if (active) {
+                users = userRepository.findByActive(true);
+            } else {
+                users = userRepository.findByActive(false);
+            }
+        } else {
+            users = userRepository.findAll();
+        }
+
+        if (notRole != null) {
+            // get all non-drivers
+            if (notRole == AuthorityName.ROLE_DRIVER) {
+                // remove anyone that is just a driver
+                Authority driver = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
+                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+                users.removeIf(u -> u.getAuthorities().contains(driver) && !u.getAuthorities().contains(coord));
+            }   // get all non-coordinators
+            else if (notRole == AuthorityName.ROLE_COORDINATOR) {
+                // remove anyone not a coordinator
+                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
+                users.removeIf(u -> u.getAuthorities().contains(coord) && !u.getAuthorities().contains(admin)); // remove if coord and is not admin
+            } // get all non-admins
+            else if (notRole == AuthorityName.ROLE_ADMIN) {
+                // remove anyone that is an admin
+                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
+                users.removeIf(u -> u.getAuthorities().contains(admin));
+            }
+        }
+
+        return users;
+
+    }
+
     public User getUserById(Long id) {
         return userRepository.findOne(id);
     }

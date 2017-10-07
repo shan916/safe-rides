@@ -10,9 +10,12 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input id="username" name="username" type="text" class="form-control" required
+                            <input list="usernames" id="username" name="username" type="text" class="form-control" required
                                    ng-model="ctrl.driver.username" placeholder="Enter the driver's Sac State username"
                                    ng-disabled="ctrl.existingDriver">
+                            <datalist id="usernames">
+                                <option ng-repeat="user in ctrl.driverChoices" value="{{ user.username }}"></option>
+                            </datalist>
                             <div ng-messages="driverForm.username.$dirty && driverForm.username.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                             </div>

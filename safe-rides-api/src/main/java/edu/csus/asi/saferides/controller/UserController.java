@@ -61,17 +61,23 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of users...")
+    @PreAuthorize("hasRole('COORDINATOR')")
+    @ApiOperation(value = " ", nickname = "retrieveAll", notes = "Returns a list of users...")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = User.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
     public List<UserDto> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
-                                     @RequestParam(value = "role", required = false) AuthorityName role) {
+                                     @RequestParam(value = "role", required = false) AuthorityName role,
+                                     @RequestParam(value = "!role", required = false) AuthorityName notRole) {
 
-        List<User> users = userService.getUsers(active, role);
+        List<User> users = null;
+        if (notRole != null) {
+            users = userService.getUsersNotInRole(active, notRole);
+        } else {
+            users = userService.getUsers(active, role);
+        }
 
         ArrayList<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {

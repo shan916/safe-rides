@@ -9,7 +9,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver, $log) {
+    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver, UserService, $log) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -19,6 +19,8 @@ angular.module('safeRidesWebApp')
         vm.yearChoices = [];
 
         vm.loading = false;
+
+        vm.driverChoices = undefined;
 
         vm.existingDriver = !!$stateParams.driverId;
 
@@ -49,6 +51,13 @@ angular.module('safeRidesWebApp')
 
         if (vm.existingDriver) {
             getDriver($stateParams.driverId);
+        } else {
+            UserService.query({active: true, '!role': 'ROLE_DRIVER'}).$promise.then(function (response) {
+                vm.driverChoices = response;
+                $log.debug('got active users that are not a driver:', response);
+            }, function (error) {
+                $log.debug('error getting active users that are not a driver:', error);
+            });
         }
 
         for (var year = new Date().getFullYear() + 1; year >= 1980; year--) {
