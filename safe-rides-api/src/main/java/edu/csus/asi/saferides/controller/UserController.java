@@ -136,42 +136,12 @@ public class UserController {
     }
 
     /**
-     * Creates a new user
-     * <p>
-     * Returns HTTP status 400 if password does not meet security requirements
-     *
-     * @param userDto Request body containing user to create
-     * @return newly created user and location
-     */
-    @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "createUser", nickname = "Create User", notes = "Creates a new user")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> createUser(@Validated @RequestBody UserDto userDto) {
-        User result = userService.createCoordinatorUser(userDto);
-
-        // create URI of where the user was created
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
-
-        return ResponseEntity.created(location).body(userMapper.map(result, UserDto.class));
-    }
-
-    /**
      * Updates the user with the given id
      * <p>
      * Returns HTTP status 400 under the following conditions:
      * <ul>
      * <li>
      * Id in path does not match id in request body
-     * </li>
-     * <li>
-     * New password does not meet security requirements
      * </li>
      * </ul>
      *

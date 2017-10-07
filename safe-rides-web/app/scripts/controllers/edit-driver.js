@@ -65,16 +65,10 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveDriver = function () {
-            if (vm.existingDriver) {
-                updateDriver();
-            } else {
-                DriverService.save(vm.driver).$promise.then(function (response) {
-                    $log.debug('saved driver:', response);
-                    $state.go('managedrivers');
-                }, function (error) {
-                    $log.debug('error saving driver:', error);
-                });
-            }
+            vm.driver.driverFirstName = vm.driver.firstName;
+            vm.driver.driverLastName = vm.driver.lastName;
+
+            updateDriver();
         };
 
     });

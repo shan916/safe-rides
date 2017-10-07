@@ -11,6 +11,7 @@ import edu.csus.asi.saferides.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -134,21 +135,6 @@ public class UserService {
     }
 
     /**
-     * Creates the given user as a coordinator in the User persistence
-     *
-     * @param userDto the user to save
-     * @return the created coordinator user
-     */
-    public User createCoordinatorUser(UserDto userDto) {
-        User user = userMapper.map(userDto, User.class);
-
-        List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_COORDINATOR, AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
-        user.setAuthorities(authorities);
-
-        return userRepository.save(user);
-    }
-
-    /**
      * Updates the given user as a coordinator in the User persistence
      *
      * @param userDto the user to update
@@ -158,7 +144,15 @@ public class UserService {
         User existingUser = userRepository.findOne(userDto.getId());
 
         User newUser = userMapper.map(userDto, User.class);
-        newUser.setAuthorities(existingUser.getAuthorities());
+
+        Authority rider = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
+        Authority driver = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
+        Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+        ArrayList<Authority> authorities = new ArrayList<>();
+        authorities.add(rider);
+        authorities.add(driver);
+        authorities.add(coord);
+        newUser.setAuthorities(authorities);
 
         return userRepository.save(newUser);
     }

@@ -61,18 +61,16 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveCoordinator = function () {
-            if ($stateParams.id) {
-                updateCoordinator();
-            } else {
+            if (!vm.existingUser) {
                 vm.coordinator.active = true;
-
-                UserService.save(vm.coordinator).$promise.then(function (response) {
-                    $log.debug('saved coordinator:', response);
-                    $state.go('manageCoordinators');
-                }, function (error) {
-                    $log.debug('error saving coordinator:', error);
+                vm.coordinatorChoices.forEach(function (el) {
+                    if (el.username === vm.coordinator.username) {
+                        vm.coordinator.id = el.id;
+                        return -1;
+                    }
                 });
             }
+            updateCoordinator();
         };
 
     });

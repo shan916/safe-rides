@@ -9,16 +9,21 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input list="usernames" id="username" name="username" type="text" class="form-control" required
-                                   ng-model="ctrl.driver.username" placeholder="Enter the driver's Sac State username"
-                                   ng-disabled="ctrl.existingDriver">
-                            <datalist id="usernames">
-                                <option ng-repeat="user in ctrl.driverChoices" value="{{ user.username }}"></option>
-                            </datalist>
-                            <div ng-messages="driverForm.username.$dirty && driverForm.username.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                            </div>
+                            <label for="username">User</label>
+                            <ui-select id="username" ng-required="true" ng-model="ctrl.driver"
+                                       ng-disabled="ctrl.existingDriver" style="min-width: 300px;"
+                                       title="Choose a user">
+                                <ui-select-match placeholder="Select a user from the list or search">
+                                    {{$select.selected.username}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                    repeat="user in ctrl.driverChoices | propsFilter: {username: $select.search, firstName: $select.search, lastName: $select.search}">
+                                    <div ng-bind-html="user.username | highlight: $select.search"></div>
+                                    <small>
+                                        {{user.firstName + ' ' + user.lastName}}
+                                    </small>
+                                </ui-select-choices>
+                            </ui-select>
                         </div>
                     </div>
                     <!-- Start of driver's first name -->
@@ -26,7 +31,7 @@
                         <div class="form-group">
                             <label for="firstName">First Name</label>
                             <input id="firstName" name="firstName" type="text" class="form-control" required
-                                   placeholder="Enter the driver's first name" ng-model="ctrl.driver.driverFirstName"
+                                   placeholder="Enter the driver's first name" ng-model="ctrl.driver.firstName"
                                    ng-minlength="2" ng-maxlength="30">
                             <div ng-messages="driverForm.firstName.$dirty && driverForm.firstName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
@@ -42,7 +47,7 @@
                         <div class="form-group">
                             <label for="lastName">Last Name</label>
                             <input id="lastName" name="lastName" type="text" class="form-control" required
-                                   placeholder="Enter the driver's last name" ng-model="ctrl.driver.driverLastName"
+                                   placeholder="Enter the driver's last name" ng-model="ctrl.driver.lastName"
                                    ng-minlength="2" ng-maxlength="30">
                             <div ng-messages="driverForm.lastName.$dirty && driverForm.lastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
