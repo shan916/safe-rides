@@ -22,7 +22,7 @@ angular.module('safeRidesWebApp')
         if (vm.existingUser) {
             getCoordinator($stateParams.id);
         } else {
-            UserService.query({active: true, '!role': 'ROLE_COORDINATOR'}).$promise.then(function (response) {
+            UserService.query({'!role': 'ROLE_COORDINATOR'}).$promise.then(function (response) {
                 vm.coordinatorChoices = response;
                 $log.debug('got active users that are not a coordinator:', response);
             }, function (error) {

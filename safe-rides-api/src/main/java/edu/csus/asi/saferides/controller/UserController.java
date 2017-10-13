@@ -1,16 +1,16 @@
 package edu.csus.asi.saferides.controller;
 
 import edu.csus.asi.saferides.mapper.UserMapper;
-import edu.csus.asi.saferides.model.AuthorityName;
-import edu.csus.asi.saferides.model.ResponseMessage;
-import edu.csus.asi.saferides.model.User;
+import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.UserDto;
 import edu.csus.asi.saferides.repository.AuthorityRepository;
+import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.JwtUser;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import edu.csus.asi.saferides.service.UserService;
+import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -21,10 +21,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +59,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DriverRepository driverRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('COORDINATOR')")
@@ -157,7 +160,12 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @Validated @RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(HttpServletRequest request, @PathVariable Long id, @Validated @RequestBody UserDto userDto) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        if (username.equals(userDto.getUsername())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("You cannot modify yourself"));
+        }
 
         if (!userDto.getId().equals(id)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Id mismatch"));
@@ -169,35 +177,35 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
         }
 
+        Driver driver = driverRepository.findByUser(existingUser);
+
+        if (driver != null && driver.getUser().isActive()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Cannot modify an active driver as a coordinator!"));
+        } else if (driver != null) {
+            // todo: save driver statistics for reporting
+            driverRepository.delete(driver);
+        }
+
         if (!existingUser.getUsername().equalsIgnoreCase(userDto.getUsername())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username is not allowed to be modified"));
         }
 
-        User result = userService.updateCoordinatorUser(userDto);
+        existingUser.setFirstName(userDto.getFirstName());
+        existingUser.setLastName(userDto.getLastName());
+        existingUser.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+        existingUser.setActive(userDto.isActive());
+
+        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
+        Authority driverAuthority = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
+        Authority coordAuthority = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+        ArrayList<Authority> authorities = new ArrayList<>();
+        authorities.add(riderAuthority);
+        authorities.add(driverAuthority);
+        authorities.add(coordAuthority);
+        existingUser.setAuthorities(authorities);
+
+        User result = userRepository.save(existingUser);
 
         return ResponseEntity.ok(userMapper.map(result, UserDto.class));
     }
-
-    /**
-     * Deletes the user with the given id
-     *
-     * @param id path parameter of id of user to delete
-     * @return HTTP 204 if deleted, 400 if user with id doesn't exist
-     */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "deleteUser", nickname = "Delete User", notes = "Deletes a user")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        if (userService.deleteCoordinator(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().body(new ResponseMessage("User does not exist"));
-        }
-    }
-
 }

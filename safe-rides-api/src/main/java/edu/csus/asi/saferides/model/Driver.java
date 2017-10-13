@@ -108,7 +108,7 @@ public class Driver {
      * The driver's user object
      */
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private User user;
 
     /**

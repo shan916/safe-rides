@@ -4,15 +4,11 @@ import edu.csus.asi.saferides.mapper.UserMapper;
 import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
-import edu.csus.asi.saferides.model.dto.DriverDto;
-import edu.csus.asi.saferides.model.dto.UserDto;
 import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,14 +77,13 @@ public class UserService {
         }
 
         return users;
-
     }
 
     /**
      * Returns list of users with given criteria
      *
-     * @param active whether users are active or not
-     * @param notRole   role to search by
+     * @param active  whether users are active or not
+     * @param notRole role to search by
      * @return list of users with given criteria
      */
     public List<User> getUsersNotInRole(Boolean active, AuthorityName notRole) {
@@ -127,63 +122,9 @@ public class UserService {
         }
 
         return users;
-
     }
 
     public User getUserById(Long id) {
         return userRepository.findOne(id);
-    }
-
-    /**
-     * Updates the given user as a coordinator in the User persistence
-     *
-     * @param userDto the user to update
-     * @return the updated coordinator user
-     */
-    public User updateCoordinatorUser(UserDto userDto) {
-        User existingUser = userRepository.findOne(userDto.getId());
-
-        User newUser = userMapper.map(userDto, User.class);
-
-        Authority rider = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-        Authority driver = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
-        Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-        ArrayList<Authority> authorities = new ArrayList<>();
-        authorities.add(rider);
-        authorities.add(driver);
-        authorities.add(coord);
-        newUser.setAuthorities(authorities);
-
-        return userRepository.save(newUser);
-    }
-
-    /**
-     * Deletes the coordinator with the given id
-     *
-     * @param id id of coordinator to delete
-     * @return true if deleted, false if user with id doesn't exist
-     */
-    public boolean deleteCoordinator(Long id) {
-        if (userRepository.findOne(id) == null) {
-            return false;
-        } else {
-            userRepository.delete(id);
-            return true;
-        }
-    }
-
-    /**
-     * Creates a driver user from the given DriverDto
-     *
-     * @param driverDto the driverDto containing info for the driver
-     * @return the created user
-     */
-    public User createDriverUser(DriverDto driverDto) {
-        User user = new User(driverDto.getUsername(), driverDto.getDriverFirstName(), driverDto.getDriverLastName());
-
-        List<Authority> authorities = authorityRepository.findByNameIn(Arrays.asList(AuthorityName.ROLE_DRIVER, AuthorityName.ROLE_RIDER));
-        user.setAuthorities(authorities);
-
-        return userRepository.save(user);
     }
 }
