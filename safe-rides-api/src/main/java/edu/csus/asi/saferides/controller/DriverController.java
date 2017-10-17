@@ -101,6 +101,9 @@ public class DriverController {
     @Autowired
     private RideRequestMapper rideRequestMapper;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
     /**
      * GET /drivers?active=
      * <p>
@@ -271,10 +274,16 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "save", nickname = "save", notes = "Creates the given driver")
-    public ResponseEntity<?> save(@Validated @RequestBody DriverDto driverDto) {
+    public ResponseEntity<?> save(HttpServletRequest request, @Validated @RequestBody DriverDto driverDto) {
         Driver driver = driverMapper.map(driverDto, Driver.class);
         User user = driverMapper.map(driverDto, User.class);
         driver.setUser(user);
+
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        if (username.equals(user.getUsername())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("You cannot add yourself as a driver"));
+        }
 
         List<String> errorMessages = validateDriver(driver);
 
@@ -282,10 +291,39 @@ public class DriverController {
             return ResponseEntity.badRequest().body(new ResponseMessage(String.join("; ", errorMessages)));
         }
 
-        User createdUser = userService.createDriverUser(driverDto);
+        User currentUser = userRepository.findByUsernameIgnoreCase(driver.getUser().getUsername());
 
-        driver.setUser(createdUser);
+        if (currentUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Authority adminAuthority = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
+        Authority coordAuthority = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+
+        if (currentUser.isActive() && currentUser.getAuthorities().contains(adminAuthority)) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("An active administrator cannot be added as a driver!"));
+        }
+
+        if (currentUser.isActive() && currentUser.getAuthorities().contains(coordAuthority)) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("An active coordinator cannot be added as a driver!"));
+        }
+
+        driver.setUser(currentUser);
         Driver result = driverRepository.save(driver);
+
+        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
+        Authority driverAuthority = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
+        ArrayList<Authority> authorities = new ArrayList<>();
+        authorities.add(riderAuthority);
+        authorities.add(driverAuthority);
+        currentUser.setAuthorities(authorities);
+
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        currentUser.setActive(true);
+        currentUser.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+
+        userRepository.save(currentUser);
 
         // create URI of where the driver was created
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId()).toUri();
@@ -310,9 +348,15 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     @ApiOperation(value = "save", nickname = "save", notes = "Updates a driver")
-    public ResponseEntity<?> save(@PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
+    public ResponseEntity<?> save(HttpServletRequest request, @PathVariable Long id, @Validated @RequestBody DriverDto driverDto) {
         Driver updatedDriver = driverMapper.map(driverDto, Driver.class);
         User updatedUser = driverMapper.map(driverDto, User.class);
+
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        if (username.equals(updatedUser.getUsername())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("You cannot modify yourself"));
+        }
 
         if (!updatedDriver.getId().equals(id)) {
             return ResponseEntity.badRequest().body(new ResponseMessage("The id in the path does not match the id in the body"));
@@ -391,6 +435,15 @@ public class DriverController {
             ride.setDriver(null);
             rideRequestRepository.save(ride);
         }
+
+        // remove driver permissions
+        User user = driver.getUser();
+        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
+        ArrayList<Authority> authorities = new ArrayList<>();
+        authorities.add(riderAuthority);
+        user.setAuthorities(authorities);
+        user.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
+        userRepository.save(user);
 
         driverRepository.delete(id);
         return ResponseEntity.noContent().build();

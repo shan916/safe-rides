@@ -17,8 +17,17 @@ angular.module('safeRidesWebApp')
 
         vm.USERNAME_REGEX = /^[a-z0-9]+$/i;
 
+        vm.coordinatorChoices = undefined;
+
         if (vm.existingUser) {
             getCoordinator($stateParams.id);
+        } else {
+            UserService.query({'!role': 'ROLE_COORDINATOR'}).$promise.then(function (response) {
+                vm.coordinatorChoices = response;
+                $log.debug('got active users that are not a coordinator:', response);
+            }, function (error) {
+                $log.debug('error getting active users that are not a coordinator:', error);
+            });
         }
 
         function getCoordinator(id) {
@@ -52,18 +61,16 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveCoordinator = function () {
-            if ($stateParams.id) {
-                updateCoordinator();
-            } else {
+            if (!vm.existingUser) {
                 vm.coordinator.active = true;
-
-                UserService.save(vm.coordinator).$promise.then(function (response) {
-                    $log.debug('saved coordinator:', response);
-                    $state.go('manageCoordinators');
-                }, function (error) {
-                    $log.debug('error saving coordinator:', error);
+                vm.coordinatorChoices.forEach(function (el) {
+                    if (el.username === vm.coordinator.username) {
+                        vm.coordinator.id = el.id;
+                        return -1;
+                    }
                 });
             }
+            updateCoordinator();
         };
 
     });

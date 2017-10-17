@@ -7,7 +7,26 @@
         <div class="panel-body">
             <form name="coordinatorForm" novalidate>
                 <div class="row">
-
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="username">User</label>
+                            <ui-select id="username" ng-required="true" ng-model="ctrl.coordinator"
+                                       ng-disabled="ctrl.existingUser" style="min-width: 300px;" title="Choose a user">
+                                <ui-select-match placeholder="Select a user from the list or search">
+                                    {{$select.selected.username}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                    repeat="user in ctrl.coordinatorChoices | propsFilter: {username: $select.search, firstName: $select.search, lastName: $select.search}">
+                                    <div ng-bind-html="user.username | highlight: $select.search"></div>
+                                    <small>
+                                        {{user.firstName + ' ' + user.lastName}}
+                                    </small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="firstName">First Name</label>
@@ -32,26 +51,6 @@
                             <div ng-messages="coordinatorForm.lastName.$dirty && coordinatorForm.lastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
                                 <div class="input-error" ng-message="minlength">* must be at least 2 characters</div>
-                                <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input id="username" name="username" type="text" class="form-control"
-                                   ng-disabled="ctrl.existingUser" ng-pattern="ctrl.USERNAME_REGEX"
-                                   ng-model="ctrl.coordinator.username" ng-minlength="6" ng-maxlength="30">
-                            <div ng-messages="coordinatorForm.username.$dirty && coordinatorForm.username.$error">
-                                <div class="input-error" ng-message="required">* required</div>
-                                <div class="input-error" ng-message="pattern">* can only contain alphanumeric
-                                    characters
-                                </div>
-                                <div class="input-error" ng-message="minlength">* must be at least 6 characters</div>
                                 <div class="input-error" ng-message="maxlength">* must be less than 30 characters</div>
                             </div>
                         </div>

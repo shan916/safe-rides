@@ -8,7 +8,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('ModalConfirmReactivateRideCtrl', function ($uibModalInstance, ride, RideRequestService) {
+    .controller('ModalConfirmReactivateRideCtrl', function ($uibModalInstance, ride) {
         var vm = this;
         vm.ride = ride;
 

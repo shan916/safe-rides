@@ -9,7 +9,7 @@
  * Controller of the safeRidesWebApp
  */
 angular.module('safeRidesWebApp')
-    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver, $log) {
+    .controller('EditdriverCtrl', function ($stateParams, $state, DriverService, Driver, UserService, $log, Notification) {
         var vm = this;
 
         vm.driver = new Driver();
@@ -19,6 +19,8 @@ angular.module('safeRidesWebApp')
         vm.yearChoices = [];
 
         vm.loading = false;
+
+        vm.driverChoices = undefined;
 
         vm.existingDriver = !!$stateParams.driverId;
 
@@ -44,11 +46,42 @@ angular.module('safeRidesWebApp')
                 $state.go('managedrivers');
             }, function (error) {
                 $log.debug('error updating driver:', error);
+                if (error.data !== undefined && error.data.message !== undefined) {
+                    Notification.error({
+                        message: error.data.message,
+                        positionX: 'center',
+                        delay: 10000
+                    });
+                }
+            });
+        }
+
+        function addDriver() {
+            vm.driver.id = null;
+            DriverService.save(vm.driver).$promise.then(function (response) {
+                $log.debug('saved driver:', response);
+                $state.go('managedrivers');
+            }, function (error) {
+                $log.debug('error saving driver:', error);
+                if (error.data !== undefined && error.data.message !== undefined) {
+                    Notification.error({
+                        message: error.data.message,
+                        positionX: 'center',
+                        delay: 10000
+                    });
+                }
             });
         }
 
         if (vm.existingDriver) {
             getDriver($stateParams.driverId);
+        } else {
+            UserService.query({'!role': 'ROLE_DRIVER'}).$promise.then(function (response) {
+                vm.driverChoices = response;
+                $log.debug('got active users that are not a driver:', response);
+            }, function (error) {
+                $log.debug('error getting active users that are not a driver:', error);
+            });
         }
 
         for (var year = new Date().getFullYear() + 1; year >= 1980; year--) {
@@ -56,16 +89,12 @@ angular.module('safeRidesWebApp')
         }
 
         vm.saveDriver = function () {
+            vm.driver.driverFirstName = vm.driver.firstName;
+            vm.driver.driverLastName = vm.driver.lastName;
             if (vm.existingDriver) {
                 updateDriver();
             } else {
-                DriverService.save(vm.driver).$promise.then(function (response) {
-                    $log.debug('saved driver:', response);
-                    $state.go('managedrivers');
-                }, function (error) {
-                    $log.debug('error saving driver:', error);
-                });
+                addDriver();
             }
         };
-
     });
