@@ -115,7 +115,7 @@ public class NightlyStats {
     /**
      * Constructor used by JPA
      */
-    protected NightlyStats() {
+    public NightlyStats() {
     }
 
     public Long getId() {
