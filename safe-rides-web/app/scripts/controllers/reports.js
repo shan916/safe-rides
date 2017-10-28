@@ -10,8 +10,8 @@
 angular.module('safeRidesWebApp')
     .controller('ReportsdashboardCtrl', function (ReportsService, $log, Notification) {
         var vm = this;
-        vm.startDate = moment().subtract(1, 'months').format('YYYY-MM-DD');
-        vm.endDate = moment().format('YYYY-MM-DD');
+        vm.startDate = moment().subtract(1, 'months');
+        vm.endDate = moment();
         vm.reportData = [];
         vm.minDate = vm.endDate;
         vm.maxDate = vm.startDate;
@@ -42,6 +42,21 @@ angular.module('safeRidesWebApp')
         vm.chartLabels = [];
         vm.chartSeries = [];
 
+        vm.popupStart = {
+            opened: false
+        };
+
+        vm.popupEnd = {
+            opened: false
+        };
+        vm.openDatePickerStart = function () {
+            vm.popupStart.opened = true;
+        };
+
+        vm.openDatePickerEnd = function () {
+            vm.popupEnd.opened = true;
+        };
+
         vm.generate = function () {
             getReportData();
         };
@@ -52,7 +67,10 @@ angular.module('safeRidesWebApp')
             vm.totalDistance = 0;
             vm.totalRiders = 0;
             vm.loadingData = true;
-            ReportsService.query({beginDate: vm.startDate, endDate: vm.endDate}).$promise.then(
+            ReportsService.query({
+                beginDate: vm.startDate.toISOString().substring(0, 10),
+                endDate: vm.endDate.toISOString().substring(0, 10)
+            }).$promise.then(
                 function (response) {
                     $log.debug(response);
                     vm.reportData = response;
@@ -73,6 +91,23 @@ angular.module('safeRidesWebApp')
         getReportData();
 
         var updateGraphs = function () {
+            vm.days = [];
+            vm.fastestATime = [];
+            vm.averageATime = [];
+            vm.medianATime = [];
+            vm.slowestATime = [];
+            vm.shortestDistance = [];
+            vm.averageDistance = [];
+            vm.medianDistance = [];
+            vm.furthestDistance = [];
+            vm.fastestFTime = [];
+            vm.averageFTime = [];
+            vm.medianFTime = [];
+            vm.slowestFTime = [];
+            vm.riders = [];
+            vm.fulfilled = [];
+            vm.cancelled = [];
+
             vm.reportData.forEach(function (el) {
                 if (moment(vm.minDate) > moment(el.dateAggregated[0] + '-' + el.dateAggregated[1] + '-' + el.dateAggregated[2])) {
                     vm.minDate = moment(el.dateAggregated[0] + '-' + el.dateAggregated[1] + '-' + el.dateAggregated[2]).toISOString();

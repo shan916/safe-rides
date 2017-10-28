@@ -5,8 +5,8 @@
         </div>
     </div>
 
-<span us-spinner="{radius:30, width:8, length: 16}"
-      ng-show="ctrl.loadingData"></span>
+    <span us-spinner="{radius:30, width:8, length: 16}"
+          ng-show="ctrl.loadingData"></span>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">At a Glance ({{ctrl.minDate | date:'MM/dd/yyyy'}} - {{ctrl.maxDate |
@@ -56,13 +56,25 @@
             <div class="form-inline">
                 <div class="form-group">
                     <label for="startDate">Start Date</label>
-                    <input id="startDate" type="text" class="form-control" ng-model="ctrl.startDate"
-                           ng-required="true"/>
+                    <p class="input-group">
+                        <input id="startDate" type="text" class="form-control" ng-model="ctrl.startDate"
+                               ng-required="true" uib-datepicker-popup="yyyy-MM-dd"
+                               is-open="ctrl.popupStart.opened" placeholder="yyyy-MM-dd"/>
+                        <span class="input-group-btn"><button type="button" class="btn btn-default"
+                                                              ng-click="ctrl.openDatePickerStart()"><i
+                            class="glyphicon glyphicon-calendar"></i></button></span>
+                    </p>
                 </div>
                 <div class="form-group">
                     <label for="endDate">End Date</label>
-                    <input id="endDate" type="text" class="form-control" ng-model="ctrl.endDate"
-                           ng-required="true"/>
+                    <p class="input-group">
+                        <input id="endDate" type="text" class="form-control" ng-model="ctrl.endDate"
+                               ng-required="true" uib-datepicker-popup="yyyy-MM-dd" is-open="ctrl.popupEnd.opened"
+                               placeholder="yyyy-MM-dd"/>
+                        <span class="input-group-btn"><button type="button" class="btn btn-default"
+                                                              ng-click="ctrl.openDatePickerEnd()"><i
+                            class="glyphicon glyphicon-calendar"></i></button></span>
+                    </p>
                 </div>
                 <button ng-click="ctrl.generate()" class="btn btn-primary">Generate</button>
             </div>
@@ -142,7 +154,7 @@
                 </div>
             </div>
 
-            <canvas id="l9ne" class="chart chart-bar" chart-data="ctrl.chartData"
+            <canvas class="chart chart-bar" chart-data="ctrl.chartData"
                     chart-labels="ctrl.chartLabels" chart-series="ctrl.chartSeries" chart-options="ctrl.options"
                     chart-dataset-override="ctrl.datasetOverride">
             </canvas>
