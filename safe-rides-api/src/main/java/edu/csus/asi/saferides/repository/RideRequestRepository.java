@@ -5,7 +5,7 @@ import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.User;
 import org.springframework.data.repository.CrudRepository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -55,5 +55,5 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      *
      * @param latestDate the date which prior ride request records should be deleted (exclusive)
      */
-    void deleteByRequestDateBefore(LocalDate latestDate);
+    void deleteByRequestDateBefore(LocalDateTime latestDate);
 }

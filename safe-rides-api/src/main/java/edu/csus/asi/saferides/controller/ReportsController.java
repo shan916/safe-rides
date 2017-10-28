@@ -108,11 +108,11 @@ public class ReportsController {
         // 10 day old ride requests records
         LocalDate now = LocalDate.now(ZoneId.of(Util.APPLICATION_TIME_ZONE));
         LocalDate rideRequestRetention = now.minusDays(10);
-        rideRequestRepository.deleteByRequestDateBefore(rideRequestRetention);
+        rideRequestRepository.deleteByRequestDateBefore(rideRequestRetention.atStartOfDay());
 
         // 4 year old driver records
         LocalDate inactiveDriverRetention = now.minusYears(4);
-        driverRepository.deleteByModifiedDateBeforeAndUser_Active(inactiveDriverRetention, false);
+        driverRepository.deleteByModifiedDateBeforeAndUser_Active(inactiveDriverRetention.atStartOfDay(), false);
 
         if (stats == null) {
             return ResponseEntity.noContent().build();

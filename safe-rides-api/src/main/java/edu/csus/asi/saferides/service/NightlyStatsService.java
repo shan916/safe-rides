@@ -108,33 +108,42 @@ public class NightlyStatsService {
             }
 
             // sort arrays
-            DoubleStream sortedDistances = distances.stream().mapToDouble(Double::byteValue).sorted();
-            DoubleStream sortedFulfillmentTime = timesToFulfillment.stream().mapToDouble(Double::byteValue).sorted();
-            DoubleStream sortedAssignmentTime = timesToAssignment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedDistances0 = distances.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedFulfillmentTime0 = timesToFulfillment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedAssignmentTime0 = timesToAssignment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedDistances1 = distances.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedFulfillmentTime1 = timesToFulfillment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedAssignmentTime1 = timesToAssignment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedDistances2 = distances.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedFulfillmentTime2 = timesToFulfillment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedAssignmentTime2 = timesToAssignment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedDistances3 = distances.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedFulfillmentTime3 = timesToFulfillment.stream().mapToDouble(Double::byteValue).sorted();
+            DoubleStream sortedAssignmentTime3 = timesToAssignment.stream().mapToDouble(Double::byteValue).sorted();
 
 
             // process data
-            OptionalDouble fastestAssignmentTime = sortedAssignmentTime.min();
-            OptionalDouble shortestDistance = sortedDistances.min();
-            OptionalDouble fastestFulfillmentTime = sortedFulfillmentTime.min();
+            OptionalDouble fastestAssignmentTime = sortedAssignmentTime0.min();
+            OptionalDouble shortestDistance = sortedDistances0.min();
+            OptionalDouble fastestFulfillmentTime = sortedFulfillmentTime0.min();
 
-            OptionalDouble slowestAssignmentTime = sortedAssignmentTime.max();
-            OptionalDouble longestDistance = sortedDistances.max();
-            OptionalDouble slowestFulfillmentTime = sortedFulfillmentTime.max();
+            OptionalDouble slowestAssignmentTime = sortedAssignmentTime1.max();
+            OptionalDouble longestDistance = sortedDistances1.max();
+            OptionalDouble slowestFulfillmentTime = sortedFulfillmentTime1.max();
 
-            OptionalDouble averageAssignmentTime = sortedAssignmentTime.average();
-            OptionalDouble averageDistance = sortedDistances.average();
-            OptionalDouble averageFulfillmentTime = sortedFulfillmentTime.average();
+            OptionalDouble averageAssignmentTime = sortedAssignmentTime2.average();
+            OptionalDouble averageDistance = sortedDistances2.average();
+            OptionalDouble averageFulfillmentTime = sortedFulfillmentTime2.average();
 
             OptionalDouble medianAssignmentTime = timesToAssignment.size() % 2 == 0
-                    ? sortedAssignmentTime.skip(distances.size() / 2 - 1).limit(2).average()
-                    : sortedAssignmentTime.skip(distances.size() / 2).findFirst();
+                    ? sortedAssignmentTime3.skip(distances.size() / 2 - 1).limit(2).average()
+                    : sortedAssignmentTime3.skip(distances.size() / 2).findFirst();
             OptionalDouble medianDistance = distances.size() % 2 == 0
-                    ? sortedDistances.skip(distances.size() / 2 - 1).limit(2).average()
-                    : sortedDistances.skip(distances.size() / 2).findFirst();
+                    ? sortedDistances3.skip(distances.size() / 2 - 1).limit(2).average()
+                    : sortedDistances3.skip(distances.size() / 2).findFirst();
             OptionalDouble medianFulfillmentTime = timesToFulfillment.size() % 2 == 0
-                    ? sortedFulfillmentTime.skip(distances.size() / 2 - 1).limit(2).average()
-                    : sortedFulfillmentTime.skip(distances.size() / 2).findFirst();
+                    ? sortedFulfillmentTime3.skip(distances.size() / 2 - 1).limit(2).average()
+                    : sortedFulfillmentTime3.skip(distances.size() / 2).findFirst();
 
             if (fastestAssignmentTime.isPresent()) {
                 stats.setFastestTimeToAssignment(fastestAssignmentTime.getAsDouble());
