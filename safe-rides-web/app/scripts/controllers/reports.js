@@ -8,7 +8,7 @@
  * Controller of the Reports view
  */
 angular.module('safeRidesWebApp')
-    .controller('ReportsdashboardCtrl', function (ReportsService, $log) {
+    .controller('ReportsdashboardCtrl', function (ReportsService, $log, Notification) {
         var vm = this;
         vm.startDate = moment().subtract(1, 'months').format('YYYY-MM-DD');
         vm.endDate = moment().format('YYYY-MM-DD');
@@ -185,5 +185,24 @@ angular.module('safeRidesWebApp')
                     }
                 ]
             }
+        };
+
+        vm.aggregateData = function () {
+            ReportsService.save().$promise.then(function () {
+                    Notification.success({
+                        message: 'Data aggregated',
+                        positionX: 'center',
+                        delay: 10000,
+                        replaceMessage: true
+                    });
+                }, function (error) {
+                    Notification.error({
+                        message: error.data.message,
+                        positionX: 'center',
+                        delay: 10000,
+                        replaceMessage: true
+                    });
+                }
+            );
         };
     });
