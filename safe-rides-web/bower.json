@@ -11,7 +11,6 @@
     "angular-sanitize": "^1.6.2",
     "angular-touch": "^1.6.2",
     "ngmap": "^1.17.8",
-    "eonasdan-bootstrap-datetimepicker": "^4.17.45",
     "angular-ui-select": "^0.19.6",
     "angular-bootstrap": "^2.5.0",
     "angular-messages": "^1.6.2",
@@ -20,7 +19,8 @@
     "angular-spinner": "^1.0.1",
     "angular-jwt": "^0.1.9",
     "angular-ui-notification": "^0.3.6",
-    "angular-google-chart": "^0.1.0"
+    "angular-chart.js": "^1.1.1",
+    "moment": "^2.19.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.6.2"

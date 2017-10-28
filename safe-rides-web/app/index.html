@@ -10,7 +10,6 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
     <!-- endbower -->
@@ -80,8 +79,6 @@
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
-<script src="bower_components/moment/moment.js"></script>
-<script src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="bower_components/angular-ui-select/dist/select.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-messages/angular-messages.js"></script>
@@ -90,7 +87,9 @@
 <script src="bower_components/angular-spinner/dist/angular-spinner.min.js"></script>
 <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
 <script src="bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
-<script src="bower_components/angular-google-chart/ng-google-chart.js"></script>
+<script src="bower_components/chart.js/dist/Chart.js"></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script src="bower_components/moment/moment.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -133,8 +132,6 @@
 <script src="scripts/directives/compare-to.js"></script>
 <script src="scripts/controllers/settings.js"></script>
 <script src="scripts/services/settings.js"></script>
-<script src="scripts/services/report-monthly-service.js"></script>
-<script src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="scripts/services/cas-service.js"></script>
 <script src="scripts/controllers/header-menu.js"></script>
 <script src="scripts/directives/bs-active-link.js"></script>
@@ -143,6 +140,7 @@
 <script src="scripts/controllers/modal-driver-night-summary.js"></script>
 <script src="scripts/services/driver-night.js"></script>
 <script src="scripts/services/driver-night-ride.js"></script>
+<script src="scripts/services/reports-service.js"></script>
 <!-- endbuild -->
 
 </body>

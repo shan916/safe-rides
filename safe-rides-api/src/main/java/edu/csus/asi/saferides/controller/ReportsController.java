@@ -12,6 +12,7 @@ import edu.csus.asi.saferides.service.NightlyStatsService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +55,7 @@ public class ReportsController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "getReports", nickname = "getReports", notes = "Get a report of the nightly stats of Safe Rides. Date variables are exclusive.")
-    public ResponseEntity<?> getReports(@RequestParam(required = false) LocalDate beginDate, @RequestParam(required = false) LocalDate endDate) {
+    public ResponseEntity<?> getReports(@RequestParam(required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (beginDate == null && endDate == null) {
             return ResponseEntity.ok(nightlyStatsRepository.findAll());
         } else if (beginDate == null) {
