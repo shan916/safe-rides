@@ -77,7 +77,7 @@ public class ReportsController {
     public ResponseEntity<?> aggregateStats() {
         // check if report can be run
         // all drivers are deactivated
-        if (driverRepository.findByUser_Active(true).size() > 0) {
+        if (driverRepository.countByUser_Active(true) > 0) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Cannot aggregate data yet because there is at least one active driver."));
         }
 
