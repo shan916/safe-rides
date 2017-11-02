@@ -36,7 +36,9 @@ angular
         'ui.mask',
         'angularSpinner',
         'angular-jwt',
-        'ui-notification'
+        'ui-notification',
+        'chart.js',
+        'ngTableToCsv'
     ])
 
     .run(function ($rootScope, $window, $cookies, $state, authManager, AuthTokenService, casService, ENV, $log) {

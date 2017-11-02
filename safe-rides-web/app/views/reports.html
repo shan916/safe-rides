@@ -1,68 +1,165 @@
 <div class="container">
-
-    <!-- Yearly stats section -->
-    <div class="row">
-        <h1 align="center">Yearly Totals as of: </h1>
-        <div class="col-md-4">
-            <div class="panel panel-info">
-                <div class="panel-heading text-center">
-                    Total Rides
-                </div>
-                <div class="panel-body text-center">
-                    <h2>226</h2>
-                </div>
-            </div><!--end panel-->
+    <div class="row margin-bottom-15">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-lg btn-primary" ng-click="ctrl.aggregateData()">Aggregate Data for Tonight</button>
         </div>
-        <div class="col-md-4">
-            <div class="panel panel-warning ">
-                <div class="panel-heading text-center">
-                    Total Miles
-                </div>
-                <div class="panel-body text-center">
-                    <h2>420</h2>
-                </div>
-            </div><!--end panel-->
+    </div>
+
+    <span us-spinner="{radius:30, width:8, length: 16}"
+          ng-show="ctrl.loadingData"></span>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">At a Glance ({{ctrl.minDate | date:'MM/dd/yyyy'}} - {{ctrl.maxDate |
+                date:'MM/dd/yyyy'}})</h3>
         </div>
-        <div class="col-md-4">
-            <div class="panel panel-danger ">
-                <div class="panel-heading text-center">
-                    Total Drivers
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center">
+                            Riders
+                        </div>
+                        <div class="panel-body text-center">
+                            <h2>{{ctrl.totalRiders}}</h2>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body text-center">
-                    <h2>32</h2>
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center">
+                            Total Rides Fulfilled
+                        </div>
+                        <div class="panel-body text-center">
+                            <h2>{{ctrl.totalFulfilled}}</h2>
+                        </div>
+                    </div>
                 </div>
-            </div><!--end panel-->
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center">
+                            Total Distance (miles)
+                        </div>
+                        <div class="panel-body text-center">
+                            <h2>{{ctrl.totalDistance}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-    </div><!-- end yearly stats-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Report Range</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="startDate">Start Date</label>
+                    <p class="input-group">
+                        <input id="startDate" type="text" class="form-control" ng-model="ctrl.startDate"
+                               ng-required="true" uib-datepicker-popup="yyyy-MM-dd"
+                               is-open="ctrl.popupStart.opened" placeholder="yyyy-MM-dd"/>
+                        <span class="input-group-btn"><button type="button" class="btn btn-default"
+                                                              ng-click="ctrl.openDatePickerStart()"><i
+                            class="glyphicon glyphicon-calendar"></i></button></span>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date</label>
+                    <p class="input-group">
+                        <input id="endDate" type="text" class="form-control" ng-model="ctrl.endDate"
+                               ng-required="true" uib-datepicker-popup="yyyy-MM-dd" is-open="ctrl.popupEnd.opened"
+                               placeholder="yyyy-MM-dd"/>
+                        <span class="input-group-btn"><button type="button" class="btn btn-default"
+                                                              ng-click="ctrl.openDatePickerEnd()"><i
+                            class="glyphicon glyphicon-calendar"></i></button></span>
+                    </p>
+                </div>
+                <button ng-click="ctrl.generate()" class="btn btn-primary">Generate</button>
+            </div>
+        </div>
+    </div>
 
-    <hr>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Table Data</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn" title="Export Table" ng-click='csv.generate()' ng-href="{{ csv.link() }}"
+               download="Safe Rides Report {{ctrl.minDate | date:'yyyy.MM.dd'}}-{{ctrl.maxDate | date:'yyyy.MM.d'}}.csv">
+                <i class="glyphicon glyphicon-new-window"></i> &#160;Export
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-condensed table-bordered" export-csv="csv" separator=",">
+                <thead>
+                <th style="min-width:90px">Date</th>
+                <th>Riders</th>
+                <th>Requests Fulfilled</th>
+                <th>Requests Cancelled</th>
+                <th>Fastest Time to Assignment</th>
+                <th>Average Time to Assignment</th>
+                <th>Median Time to Assignment</th>
+                <th>Slowest Time to Assignment</th>
+                <th>Shortest Distance</th>
+                <th>Average Distance</th>
+                <th>Median Distance</th>
+                <th>Longest Distance</th>
+                <th>Fastest Fulfillment Time</th>
+                <th>Average Fulfillment Time</th>
+                <th>Median Fulfillment Time</th>
+                <th>Slowest Fulfillment Time</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="r in ctrl.reportData">
+                    <td>{{r.dateAggregated[0]}}-{{r.dateAggregated[1]}}-{{r.dateAggregated[2]}}</td>
+                    <td>{{r.riders}}</td>
+                    <td>{{r.requestsFulfilled}}</td>
+                    <td>{{r.requestsCanceled}}</td>
+                    <td>{{r.fastestTimeToAssignment}}</td>
+                    <td>{{r.averageTimeToAssignment}}</td>
+                    <td>{{r.medianTimeToAssignment}}</td>
+                    <td>{{r.slowestTimeToAssignment}}</td>
+                    <td>{{r.shortestDistance}}</td>
+                    <td>{{r.averageDistance}}</td>
+                    <td>{{r.medianDistance}}</td>
+                    <td>{{r.longestDistance}}</td>
+                    <td>{{r.fastestFulfillmentTime}}</td>
+                    <td>{{r.averageFulfillmentTime}}</td>
+                    <td>{{r.medianFulfillmentTime}}</td>
+                    <td>{{r.slowestFulfillmentTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Monthly stats section -->
-    <div class="row">
-
-        <h1 align="center">Monthly</h1>
-        <div id="monthly_table"></div>
-        <div>
-            <h2>Select a field from table to view on bar graph</h2>
-
-            <div class="form-group text-center">
-                <select name="barChartDropdown" id="barChartDropdown" class="form-control"
-                        ng-model="ctrl.userSelected">
-                    <option ng-repeat="option in ctrl.barChartOptions" value="{{option}}">{{option}}</option>
-                </select>
-                <button class="btn btn-primary" ng-click="ctrl.showBarChart()">Submit</button>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Chart</h3>
+        </div>
+        <div class="panel-body">
+            <h2>{{ctrl.chartTitle}}</h2>
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="startDate">Report Data Type</label>
+                    <select ng-model="ctrl.selectedChartReportType" ng-change="ctrl.chartReportTypeChanged()"
+                            class="form-control">
+                        <option value="1">Assignment Time</option>
+                        <option value="2">Distance</option>
+                        <option value="3">Fulfillment Time</option>
+                        <option value="4">Requests</option>
+                    </select>
+                </div>
             </div>
 
-            <div id="monthly_barchart" style="width: 1200px; height: 600px;"></div>
+            <canvas class="chart chart-bar" chart-data="ctrl.chartData"
+                    chart-labels="ctrl.chartLabels" chart-series="ctrl.chartSeries" chart-options="ctrl.options"
+                    chart-dataset-override="ctrl.datasetOverride">
+            </canvas>
         </div>
-    </div>    <!-- end Monthly stats section -->
+    </div>
 
-    <hr>
 
-    <!-- Driver Stats section -->
-    <div class="row">
-        <h1 align="center">Drivers</h1>
-    </div>    <!-- end Driver Stats section -->
-
-</div><!-- end container -->
+</div>

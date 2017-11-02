@@ -211,6 +211,11 @@ public class DriverController {
                         Long startOdometer = ride.getStartOdometer();
                         Long endOdometer = ride.getEndOdometer();
 
+                        // skip ride if the assigned date or completed date is null
+                        if(assignedDate == null || completedDate == null){
+                            continue;
+                        }
+
                         // filter locations to time between ride requests
                         List<DriverLocation> filteredLocations = new ArrayList<>();
                         if (locations != null) {

@@ -4,6 +4,7 @@ import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,4 +36,28 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      * @return the driver associated with the specified user
      */
     Driver findByUser(User user);
+
+    /**
+     * Finds all drivers by their user record's active status
+     *
+     * @param active active flag of the user record
+     * @return the drivers that match the criteria
+     */
+    List<Driver> findByUser_Active(boolean active);
+
+    /**
+     * Returns a count of the driver's user by their active status
+     *
+     * @param active user status
+     * @return count
+     */
+    long countByUser_Active(boolean active);
+
+    /**
+     * Deletes all drivers with the modified date that is before the latestDate and with the corresponding active flag
+     *
+     * @param latestDate the date which prior driver records should be deleted (exclusive)
+     * @param active     active flag of the user record
+     */
+    void deleteByModifiedDateBeforeAndUser_Active(LocalDateTime latestDate, boolean active);
 }

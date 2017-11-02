@@ -5,6 +5,7 @@ import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,6 +33,12 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
     List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 
 
+    /**
+     * Finds the latest ride request by the one card id
+     *
+     * @param oneCardId the one card id of the ride request
+     * @return the ride request
+     */
     RideRequest findTop1ByOneCardIdOrderByRequestDateDesc(String oneCardId);
 
     /**
@@ -42,4 +49,11 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      * @return latest ride requested that is associated with the specified user
      */
     RideRequest findTop1ByUserOrderByRequestDateDesc(User user);
+
+    /**
+     * Deletes all ride requests with the request date that is before the latestDate
+     *
+     * @param latestDate the date which prior ride request records should be deleted (exclusive)
+     */
+    void deleteByRequestDateBefore(LocalDateTime latestDate);
 }
