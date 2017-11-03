@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,29 +38,35 @@ public class UserController {
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private AuthorityRepository authorityRepository;
-
-    @Autowired
     private UserMapper userMapper;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private DriverRepository driverRepository;
+
+    /**
+     * Dependency Injection
+     *
+     * @param jwtTokenUtil       JWT Token Util
+     * @param userDetailsService User Details Service
+     * @param userRepository     User Repository
+     * @param userMapper         User Mapper
+     * @param userService        User Service
+     * @param driverRepository   Driver Repository
+     */
+    @Autowired
+    public UserController(JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl userDetailsService,
+                          UserRepository userRepository, UserMapper userMapper, UserService userService,
+                          DriverRepository driverRepository) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.userService = userService;
+        this.driverRepository = driverRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('COORDINATOR')")

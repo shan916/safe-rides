@@ -38,41 +38,17 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('COORDINATOR')")
 public class DriverController {
 
-    /**
-     * a singleton for the DriverRepository
-     */
-    @Autowired
     private DriverRepository driverRepository;
-
-    /**
-     * a singleton for the RideRequestRepository
-     */
-    @Autowired
     private RideRequestRepository rideRequestRepository;
-
-    /**
-     * a singleton for the DriverLocationRepository
-     */
-    @Autowired
     private DriverLocationRepository driverLocationRepository;
-
-    /**
-     * a singleton for the DriverUserMapper
-     */
-    @Autowired
     private DriverMapper driverMapper;
-
-    /**
-     * a singleton for the DriverLocationMapper
-     */
-    @Autowired
     private DriverLocationMapper driverLocationMapper;
-
-    /**
-     * a singleton for the ConfigurationRepository
-     */
-    @Autowired
     private ConfigurationRepository configurationRepository;
+    private JwtTokenUtil jwtTokenUtil;
+    private UserRepository userRepository;
+    private UserService userService;
+    private RideRequestMapper rideRequestMapper;
+    private AuthorityRepository authorityRepository;
 
     /**
      * HTTP header that stores the JWT, defined in application.yaml
@@ -81,28 +57,28 @@ public class DriverController {
     private String tokenHeader;
 
     /**
-     * a singleton for the JwtTokenUtil
+     * Dependency Injection
+     *
+     * @param driverRepository         Driver Repository
+     * @param rideRequestRepository    Ride Request Repository
+     * @param driverLocationRepository Driver Location Repository
+     * @param driverMapper             Driver Mapper
+     * @param driverLocationMapper     Driver Location Mapper
+     * @param configurationRepository  Configuration Repository
+     * @param jwtTokenUtil             JWT Token Util
+     * @param userRepository           User Repository
+     * @param userService              User Service
+     * @param rideRequestMapper        Ride Request Mapper
+     * @param authorityRepository      Authority Repository
      */
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    public DriverController(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
+                            DriverLocationRepository driverLocationRepository, DriverMapper driverMapper,
+                            DriverLocationMapper driverLocationMapper, ConfigurationRepository configurationRepository,
+                            JwtTokenUtil jwtTokenUtil, UserRepository userRepository, UserService userService,
+                            RideRequestMapper rideRequestMapper, AuthorityRepository authorityRepository) {
 
-    /**
-     * a singleton for the UserRepository
-     */
-    @Autowired
-    private UserRepository userRepository;
-
-    /**
-     * a singleton for the UserService
-     */
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RideRequestMapper rideRequestMapper;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
+    }
 
     /**
      * GET /drivers?active=
@@ -212,7 +188,7 @@ public class DriverController {
                         Long endOdometer = ride.getEndOdometer();
 
                         // skip ride if the assigned date or completed date is null
-                        if(assignedDate == null || completedDate == null){
+                        if (assignedDate == null || completedDate == null) {
                             continue;
                         }
 

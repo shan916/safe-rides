@@ -22,14 +22,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/config")
 public class ConfigurationController {
 
-    @Autowired
-    ConfigurationRepository configurationRepository;
+    private ConfigurationRepository configurationRepository;
+    private ConfigurationMapper configurationMapper;
 
     /**
-     * a singleton for the RideRequestMapper
+     * Dependency Injection
+     *
+     * @param configurationRepository Configuration Repository
+     * @param configurationMapper     Configuration Mapper
      */
     @Autowired
-    private ConfigurationMapper configurationMapper;
+    public ConfigurationController(ConfigurationRepository configurationRepository, ConfigurationMapper configurationMapper) {
+        this.configurationRepository = configurationRepository;
+        this.configurationMapper = configurationMapper;
+    }
 
     /**
      * Check if the application is accepting ride requests at this time

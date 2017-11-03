@@ -46,43 +46,12 @@ import java.util.List;
 @PreAuthorize("hasRole('COORDINATOR')")
 public class RideRequestController {
 
-    /**
-     * a singleton for the JwtTokenUtil
-     */
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    /**
-     * a singleton for the RideRequestRepository
-     */
-    @Autowired
     private RideRequestRepository rideRequestRepository;
-
-    /**
-     * a singleton for the DriverRepository
-     */
-    @Autowired
     private DriverRepository driverRepository;
-
-    /**
-     * a singleton for the ConfigurationRepository
-     */
-    @Autowired
     private ConfigurationRepository configurationRepository;
-
-    /**
-     * a singleton for the GeocodingService
-     */
-    @Autowired
     private GeocodingService geocodingService;
-
-    /**
-     * a singleton for the RideRequestMapper
-     */
-    @Autowired
     private RideRequestMapper rideRequestMapper;
-
-    @Autowired
     private UserRepository userRepository;
 
     /**
@@ -90,6 +59,31 @@ public class RideRequestController {
      */
     @Value("${jwt.header}")
     private String tokenHeader;
+
+    /**
+     * Dependency Injection
+     *
+     * @param jwtTokenUtil            JWT Token Util
+     * @param rideRequestRepository   Ride Request Repository
+     * @param driverRepository        Driver Repository
+     * @param configurationRepository Configuration Repository
+     * @param geocodingService        Geocoding Service
+     * @param rideRequestMapper       Ride Request Mapper
+     * @param userRepository          User Repository
+     */
+    @Autowired
+    public RideRequestController(JwtTokenUtil jwtTokenUtil, RideRequestRepository rideRequestRepository,
+                                 DriverRepository driverRepository, ConfigurationRepository configurationRepository,
+                                 GeocodingService geocodingService, RideRequestMapper rideRequestMapper,
+                                 UserRepository userRepository) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.rideRequestRepository = rideRequestRepository;
+        this.driverRepository = driverRepository;
+        this.configurationRepository = configurationRepository;
+        this.geocodingService = geocodingService;
+        this.rideRequestMapper = rideRequestMapper;
+        this.userRepository = userRepository;
+    }
 
     /**
      * GET /rides?status=

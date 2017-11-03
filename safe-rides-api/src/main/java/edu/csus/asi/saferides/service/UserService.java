@@ -22,7 +22,7 @@ public class UserService {
     private AuthorityRepository authorityRepository;
 
     /**
-     * Inject dependencies
+     * Dependency Injection
      *
      * @param userRepository      singleton for UserRepository
      * @param userMapper          singleton for UserMapper
