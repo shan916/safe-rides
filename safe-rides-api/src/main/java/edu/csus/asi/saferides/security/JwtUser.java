@@ -21,7 +21,6 @@ public class JwtUser implements UserDetails {
     private final String username;
     private final String firstname;
     private final String lastname;
-    private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean enabled;
 
@@ -41,7 +40,7 @@ public class JwtUser implements UserDetails {
      * @param enabled               enabled flag or active
      * @param lastPasswordResetDate date of last password reset
      */
-    public JwtUser(
+    JwtUser(
             Long id,
             String username,
             String firstname,
@@ -55,7 +54,6 @@ public class JwtUser implements UserDetails {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.password = password;
         this.authorities = authorities;
         this.enabled = enabled;
         this.lastPasswordResetDate = lastPasswordResetDate;
@@ -169,7 +167,7 @@ public class JwtUser implements UserDetails {
      * @return date last password change
      */
     @JsonIgnore
-    public LocalDateTime getLastPasswordResetDate() {
+    LocalDateTime getLastPasswordResetDate() {
         return lastPasswordResetDate;
     }
 }

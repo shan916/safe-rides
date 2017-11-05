@@ -1,13 +1,13 @@
 package edu.csus.asi.saferides.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Response Object to be used for returning any message in the body of the response
  */
 public class ResponseMessage {
 
-    /**
-     * The response message
-     */
+    @ApiModelProperty(value = "The response message")
     private String message;
 
     /**

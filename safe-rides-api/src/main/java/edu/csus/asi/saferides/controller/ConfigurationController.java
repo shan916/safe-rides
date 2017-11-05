@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/config")
-public class ConfigurationController {
+class ConfigurationController {
 
-    private ConfigurationRepository configurationRepository;
-    private ConfigurationMapper configurationMapper;
+    private final ConfigurationRepository configurationRepository;
+    private final ConfigurationMapper configurationMapper;
 
     /**
-     * Dependency Injection
+     * Configuration controller constructor with dependency injection
      *
      * @param configurationRepository Configuration Repository
      * @param configurationMapper     Configuration Mapper
@@ -44,7 +44,7 @@ public class ConfigurationController {
      */
     @RequestMapping(value = "/isLive", method = RequestMethod.GET)
     @ApiOperation(value = "isLive", nickname = "Accepting Ride Requests?", notes = "Check if a ride can be requested at this time")
-    public ResponseEntity<?> isLive() {
+    public ResponseEntity<ResponseMessage> isLive() {
         return ResponseEntity.ok().body(new ResponseMessage(Boolean.toString(Util.isAcceptingRideRequests(configurationRepository.findOne(1)))));
     }
 
@@ -55,7 +55,7 @@ public class ConfigurationController {
      */
     @RequestMapping(value = "/message", method = RequestMethod.GET)
     @ApiOperation(value = "message", nickname = "System Notification Message", notes = "Get any system notification message if available")
-    public ResponseEntity<?> systemMessage() {
+    public ResponseEntity<ResponseMessage> systemMessage() {
         String message = configurationRepository.findOne(1).getMessage();
         if (StringUtils.isEmpty(message)) {
             return ResponseEntity.noContent().build();
@@ -87,7 +87,7 @@ public class ConfigurationController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('COORDINATOR')")
     @ApiOperation(value = "updateConfiguration", nickname = "Update configuration", notes = "Update the application configuration")
-    public ResponseEntity<?> updateConfiguration(@Validated @RequestBody ConfigurationDto configurationDto) {
+    public ResponseEntity<ResponseMessage> updateConfiguration(@Validated @RequestBody ConfigurationDto configurationDto) {
         Configuration configuration = configurationMapper.map(configurationDto, Configuration.class);
 
         // the configuration item should always be at id 1. there should not be any other rows

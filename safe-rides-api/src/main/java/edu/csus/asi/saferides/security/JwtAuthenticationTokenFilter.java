@@ -27,8 +27,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     // the output to logging should be removed later on
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
-    private JwtUserDetailsServiceImpl userDetailsService;
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtUserDetailsServiceImpl userDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     // set name of the response key that stores the JWT
     @Value("${jwt.header}")

@@ -27,9 +27,9 @@ import java.util.stream.DoubleStream;
 @Service
 public class NightlyStatsService {
 
-    private NightlyStatsRepository nightlyStatsRepository;
-    private RideRequestRepository rideRequestRepository;
-    private ConfigurationRepository configurationRepository;
+    private final NightlyStatsRepository nightlyStatsRepository;
+    private final RideRequestRepository rideRequestRepository;
+    private final ConfigurationRepository configurationRepository;
 
     /**
      * Dependency injection
@@ -81,9 +81,9 @@ public class NightlyStatsService {
             long requestsFulfilled = 0;
             long requestsCanceled = 0;
             long riders = 0;
-            List<Double> distances = new ArrayList<Double>();
-            List<Double> timesToAssignment = new ArrayList<Double>();
-            List<Double> timesToFulfillment = new ArrayList<Double>();
+            List<Double> distances = new ArrayList<>();
+            List<Double> timesToAssignment = new ArrayList<>();
+            List<Double> timesToFulfillment = new ArrayList<>();
 
             // loop rides (ensure that all rides are completed)
             for (RideRequest ride : rides) {

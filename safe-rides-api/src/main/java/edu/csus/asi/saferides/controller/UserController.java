@@ -33,33 +33,33 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/users")
-public class UserController {
+class UserController {
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
-
-    private JwtTokenUtil jwtTokenUtil;
-    private JwtUserDetailsServiceImpl userDetailsService;
-    private UserRepository userRepository;
-    private AuthorityRepository authorityRepository;
-    private UserMapper userMapper;
-    private UserService userService;
-    private DriverRepository driverRepository;
+    private final String tokenHeader;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final UserMapper userMapper;
+    private final UserService userService;
+    private final DriverRepository driverRepository;
 
     /**
-     * Dependency Injection
+     * User controller constructor with dependency injection
      *
-     * @param jwtTokenUtil       JWT Token Util
-     * @param userDetailsService User Details Service
-     * @param userRepository     User Repository
-     * @param userMapper         User Mapper
-     * @param userService        User Service
-     * @param driverRepository   Driver Repository
+     * @param jwtTokenUtil        JWT Token Util
+     * @param userDetailsService  User Details Service
+     * @param userRepository      User Repository
+     * @param userMapper          User Mapper
+     * @param userService         User Service
+     * @param driverRepository    Driver Repository
+     * @param authorityRepository Authority Repository
+     * @param tokenHeader         HTTP header that stores the JWT, defined in application.yaml
      */
     @Autowired
     public UserController(JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl userDetailsService,
                           UserRepository userRepository, UserMapper userMapper, UserService userService,
-                          DriverRepository driverRepository, AuthorityRepository authorityRepository) {
+                          DriverRepository driverRepository, AuthorityRepository authorityRepository, @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
@@ -67,21 +67,30 @@ public class UserController {
         this.userService = userService;
         this.driverRepository = driverRepository;
         this.authorityRepository = authorityRepository;
+        this.tokenHeader = tokenHeader;
     }
 
+    /**
+     * Get a list of users
+     *
+     * @param active  filter by active flag
+     * @param role    filter to users that are in the specified role
+     * @param notRole filter to users that are not in the specified role
+     * @return List of users
+     */
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('COORDINATOR')")
-    @ApiOperation(value = " ", nickname = "retrieveAll", notes = "Returns a list of users...")
+    @ApiOperation(value = " ", nickname = "retrieveAll", notes = "Returns a list of users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = User.class, responseContainer = "List"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public List<UserDto> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
-                                     @RequestParam(value = "role", required = false) AuthorityName role,
-                                     @RequestParam(value = "!role", required = false) AuthorityName notRole) {
+    public ResponseEntity<List<UserDto>> retrieveAll(@RequestParam(value = "active", required = false) Boolean active,
+                                                     @RequestParam(value = "role", required = false) AuthorityName role,
+                                                     @RequestParam(value = "!role", required = false) AuthorityName notRole) {
 
-        List<User> users = null;
+        List<User> users;
         if (notRole != null) {
             users = userService.getUsersNotInRole(active, notRole);
         } else {
@@ -93,7 +102,7 @@ public class UserController {
             userDtos.add(userMapper.map(user, UserDto.class));
         }
 
-        return userDtos;
+        return ResponseEntity.ok(userDtos);
     }
 
     /**
@@ -110,7 +119,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public ResponseEntity<?> retrieve(@PathVariable Long id) {
+    public ResponseEntity<UserDto> retrieve(@PathVariable Long id) {
         User user = userService.getUserById(id);
 
         if (user == null) {
@@ -134,14 +143,14 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 500, message = "Failure")})
-    public JwtUser myUserInfo(HttpServletRequest request) {
+    public ResponseEntity<JwtUser> myUserInfo(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         ArrayList<AuthorityName> authoritiesFromToken = jwtTokenUtil.getAuthoritiesFromToken(token);
 
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
-        return user;
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -154,6 +163,7 @@ public class UserController {
      * </li>
      * </ul>
      *
+     * @param request Http Request
      * @param id      path parameter of id of user to update
      * @param userDto request body containing user to update
      * @return updated user or error if any

@@ -70,7 +70,7 @@ public class Util {
      * @param dayOfWeeks      the application's active days
      * @return whether the datetime during operating hours
      */
-    public static boolean validRideRequestDateTime(LocalDateTime currentDateTime, LocalTime startTime, LocalTime endTime, List<DayOfWeek> dayOfWeeks) {
+    private static boolean validRideRequestDateTime(LocalDateTime currentDateTime, LocalTime startTime, LocalTime endTime, List<DayOfWeek> dayOfWeeks) {
         LocalDateTime[] localDateTimes = getRangeDateTime(currentDateTime, startTime, endTime);
         LocalDateTime startDateTime = localDateTimes[0];
         LocalDateTime endDateTime = localDateTimes[1];
@@ -201,7 +201,7 @@ public class Util {
      * @param lon2 longitude 2
      * @return distance in meters
      */
-    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    private static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         // http://www.movable-type.co.uk/scripts/latlong.html
         // https://stackoverflow.com/a/27237104
         double x = Math.toRadians(lon2 - lon1) * Math.cos(Math.toRadians(lat1 + lat2) / 2);
@@ -224,6 +224,12 @@ public class Util {
         return total / 1609.344;
     }
 
+    /**
+     * Check if a ride is completed by the status
+     *
+     * @param status the ride status
+     * @return complete
+     */
     public static boolean rideComplete(RideRequestStatus status) {
         return (status == RideRequestStatus.CANCELEDBYCOORDINATOR
                 || status == RideRequestStatus.CANCELEDBYRIDER

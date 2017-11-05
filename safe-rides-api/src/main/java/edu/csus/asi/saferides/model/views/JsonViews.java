@@ -5,12 +5,21 @@ package edu.csus.asi.saferides.model.views;
  */
 public class JsonViews {
 
+    /**
+     * Rider role
+     */
     public interface Rider {
     }
 
+    /**
+     * Driver role
+     */
     public interface Driver extends Rider {
     }
 
+    /**
+     * Coordinator role
+     */
     public interface Coordinator extends Driver {
     }
 

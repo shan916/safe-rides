@@ -23,26 +23,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // flag to check if the local in-memory database's console is enabled
-    @Value("${spring.h2.console.enabled}")
-    private boolean h2ConsoleEnabled;
+    private final boolean h2ConsoleEnabled;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final JwtUserDetailsServiceImpl userDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-    private JwtUserDetailsServiceImpl userDetailsService;
-    private JwtTokenUtil jwtTokenUtil;
 
-    /**
-     * Dependency injection
-     *
-     * @param unauthorizedHandler Unauthorized Handler
-     * @param userDetailsService  User Details Service
-     */
-    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
+    @Autowired
+    public WebSecurityConfig(@Value("#{@environment['spring.h2.console.enabled'] ?: false }") boolean h2ConsoleEnabled, JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.h2ConsoleEnabled = h2ConsoleEnabled;
     }
 
     /**
