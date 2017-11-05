@@ -29,3 +29,6 @@ spring.datasource:
   password: D<)y$FuTecG].Q_YY._~'u?;
 spring.h2.console.enabled: false
 ac.alloworigin: https://codeteam6.io
+spring.cache.type=redis
+spring.redis.host=localhost
+spring.redis.port=6379
