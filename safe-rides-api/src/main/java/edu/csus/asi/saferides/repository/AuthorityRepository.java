@@ -2,6 +2,8 @@ package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
      *
      * @return list of all authorities
      */
+	@Cacheable("authorities")
     List<Authority> findAll();
 
     /**
@@ -34,6 +37,7 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
      * @param name the name of the authority to search by
      * @return authority with the specified name
      */
+	@Cacheable("authorities")
     Authority findByName(AuthorityName name);
 
     /**
@@ -42,6 +46,7 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
      * @param names authority names to search by
      * @return list of authorities with specified authority names
      */
+	@Cacheable("authorities")
     List<Authority> findByNameIn(List<AuthorityName> names);
 
 }

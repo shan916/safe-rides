@@ -3,6 +3,8 @@ package edu.csus.asi.saferides.repository;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
 import edu.csus.asi.saferides.model.User;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      * @param rideRequestStatus the status to filter by
      * @return list of ride requests filtered by the specified status
      */
+	@Cacheable("requests")
     List<RideRequest> findByStatus(RideRequestStatus rideRequestStatus);
 
 
@@ -39,6 +42,7 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      * @param oneCardId the one card id of the ride request
      * @return the ride request
      */
+	@Cacheable("requests")
     RideRequest findTop1ByOneCardIdOrderByRequestDateDesc(String oneCardId);
 
     /**
@@ -48,6 +52,7 @@ public interface RideRequestRepository extends CrudRepository<RideRequest, Long>
      * @param user the user to search by
      * @return latest ride requested that is associated with the specified user
      */
+	@Cacheable("requests")
     RideRequest findTop1ByUserOrderByRequestDateDesc(User user);
 
     /**

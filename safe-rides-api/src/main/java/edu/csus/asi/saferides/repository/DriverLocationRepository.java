@@ -2,6 +2,8 @@ package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.DriverLocation;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -24,5 +26,6 @@ public interface DriverLocationRepository extends CrudRepository<DriverLocation,
      * @param driver the driver that is mapped to the driver location
      * @return the latest driver location object mapped to the input driver object
      */
+	@Cacheable ("driverlocation")
     DriverLocation findTop1ByDriverOrderByCreatedDateDesc(Driver driver);
 }

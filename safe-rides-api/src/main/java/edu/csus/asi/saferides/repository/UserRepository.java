@@ -1,6 +1,8 @@
 package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.User;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
      *
      * @return list of all users
      */
+	@Cacheable("users")
     List<User> findAll();
 
     /**
@@ -33,7 +36,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @param username the username of the user to search by
      * @return user with the specified username
      */
+	@Cacheable("users")
     User findByUsernameIgnoreCase(String username);
 
+	@Cacheable("users")
     List<User> findByActive(boolean active);
 }
