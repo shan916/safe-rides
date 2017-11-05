@@ -35,8 +35,10 @@ angular.module('safeRidesWebApp')
 
         // check if new rides are being accepted
         SettingsService.isLive().then(function (response) {
-                if (response.data !== undefined) {
-                    vm.AcceptingNewRides = response.data;
+                if (response.data !== undefined && response.data.message !== undefined) {
+                    vm.AcceptingNewRides = response.data.message === 'true';
+                } else {
+                    vm.AcceptingNewRides = undefined;
                 }
             },
             function () {
