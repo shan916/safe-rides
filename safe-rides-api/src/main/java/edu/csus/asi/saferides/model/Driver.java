@@ -332,7 +332,7 @@ public class Driver {
      */
     public Set<RideRequest> getRides() {
         if (this.rides == null) {
-            return new HashSet<RideRequest>();
+            return new HashSet<>();
         }
         return rides;
     }

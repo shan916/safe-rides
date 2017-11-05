@@ -152,21 +152,21 @@ public class RideRequest {
     /**
      * Reason for cancellation if ride request is cancelled
      */
-    @Column(nullable = true)
+    @Column
     // TODO: length of column?
     private String cancelMessage;
 
     /**
      * Optional message to driver
      */
-    @Column(nullable = true)
+    @Column
     // TODO: length of column?
     private String messageToDriver;
 
     /**
      * The estimated time for the driver to arrive at the pickup location after the ride has been ASSIGNED
      */
-    @Column(nullable = true)
+    @Column
     // TODO: length of column?
     private String estimatedTime;
 

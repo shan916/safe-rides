@@ -1,5 +1,7 @@
 package edu.csus.asi.saferides.model.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,17 +14,21 @@ public class UserDto {
 
     @NotNull
     @Size(min = 2, max = 30)
+    @ApiModelProperty(value = "The user's username", readOnly = true)
     private String username;
 
     @NotNull
     @Size(min = 2, max = 30)
+    @ApiModelProperty(value = "The user's first name")
     private String firstName;
 
     @NotNull
     @Size(min = 2, max = 30)
+    @ApiModelProperty(value = "The user's last name")
     private String lastName;
 
     @NotNull
+    @ApiModelProperty(value = "Whether the user is active or not", readOnly = true)
     private boolean active;
 
     /**

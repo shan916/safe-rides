@@ -28,16 +28,16 @@ import java.util.Collection;
 @PreAuthorize("hasRole('COORDINATOR')")
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/reports")
-public class ReportsController {
+class ReportsController {
 
-    private NightlyStatsRepository nightlyStatsRepository;
-    private DriverRepository driverRepository;
-    private RideRequestRepository rideRequestRepository;
-    private ConfigurationRepository configurationRepository;
-    private NightlyStatsService nightlyStatsService;
+    private final NightlyStatsRepository nightlyStatsRepository;
+    private final DriverRepository driverRepository;
+    private final RideRequestRepository rideRequestRepository;
+    private final ConfigurationRepository configurationRepository;
+    private final NightlyStatsService nightlyStatsService;
 
     /**
-     * Dependency Injection
+     * Reports controller constructor with dependency injection
      *
      * @param nightlyStatsRepository  Nightly Stats Repository
      * @param driverRepository        Driver Repository
@@ -56,7 +56,6 @@ public class ReportsController {
         this.nightlyStatsService = nightlyStatsService;
     }
 
-
     /**
      * Get a report of the nightly stats before a date, after a date, between a date range, or all stats
      *
@@ -66,7 +65,7 @@ public class ReportsController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "getReports", nickname = "getReports", notes = "Get a report of the nightly stats of Safe Rides. Date variables are exclusive.")
-    public ResponseEntity<?> getReports(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public ResponseEntity<Iterable<NightlyStats>> getReports(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (beginDate == null && endDate == null) {
             return ResponseEntity.ok(nightlyStatsRepository.findAll());
         } else if (beginDate == null) {

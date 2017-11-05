@@ -1,6 +1,5 @@
 package edu.csus.asi.saferides.service;
 
-import edu.csus.asi.saferides.mapper.UserMapper;
 import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
@@ -17,21 +16,18 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private AuthorityRepository authorityRepository;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
 
     /**
      * Dependency Injection
      *
      * @param userRepository      singleton for UserRepository
-     * @param userMapper          singleton for UserMapper
      * @param authorityRepository singleton for AuthorityRepository
      */
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
         this.authorityRepository = authorityRepository;
     }
 

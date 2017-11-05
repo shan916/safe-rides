@@ -6,7 +6,7 @@ import edu.csus.asi.saferides.model.views.JsonViews;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MockObject {
+class MockObject {
 
     private RideRequestStatus rideRequestStatus;
 

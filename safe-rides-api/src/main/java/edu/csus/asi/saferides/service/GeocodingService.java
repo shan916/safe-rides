@@ -9,6 +9,7 @@ import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.utility.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,20 @@ import java.io.IOException;
  */
 @Service
 public class GeocodingService {
-    /**
-     * Geocoding API key from application.yaml
-     */
-    @Value("${api-keys.geocoding}")
-    private String geocodingApiKey;
+
+    private final String geocodingApiKey;
 
     private static final Logger log = LoggerFactory.getLogger(GeocodingService.class);
+
+    /**
+     * Geocoding serivce constructor with dependency injection
+     *
+     * @param geocodingApiKey Geocoding API key from application.yaml
+     */
+    @Autowired
+    public GeocodingService(@Value("#{environment['api-keys.geocoding'] ?: \"\" }") String geocodingApiKey) {
+        this.geocodingApiKey = geocodingApiKey;
+    }
 
     /**
      * Set the coordinate fields of the RideRequest object for both the pickup and dropoff location.
@@ -35,8 +43,8 @@ public class GeocodingService {
      */
     public void setCoordinates(RideRequest rideRequest) {
         GeoApiContext ctx = new GeoApiContext.Builder()
-        .apiKey(geocodingApiKey)
-        .build();
+                .apiKey(geocodingApiKey)
+                .build();
         try {
             try {
                 try {
