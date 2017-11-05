@@ -77,7 +77,17 @@ public class DriverController {
                             DriverLocationMapper driverLocationMapper, ConfigurationRepository configurationRepository,
                             JwtTokenUtil jwtTokenUtil, UserRepository userRepository, UserService userService,
                             RideRequestMapper rideRequestMapper, AuthorityRepository authorityRepository) {
-
+        this.driverRepository = driverRepository;
+        this.rideRequestRepository = rideRequestRepository;
+        this.driverLocationRepository = driverLocationRepository;
+        this.driverMapper = driverMapper;
+        this.driverLocationMapper = driverLocationMapper;
+        this.configurationRepository = configurationRepository;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.rideRequestMapper = rideRequestMapper;
+        this.authorityRepository = authorityRepository;
     }
 
     /**

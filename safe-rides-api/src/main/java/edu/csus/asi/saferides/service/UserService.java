@@ -47,11 +47,7 @@ public class UserService {
         List<User> users;
 
         if (active != null) {
-            if (active) {
-                users = userRepository.findByActive(true);
-            } else {
-                users = userRepository.findByActive(false);
-            }
+            users = userRepository.findByActive(active);
         } else {
             users = userRepository.findAll();
         }

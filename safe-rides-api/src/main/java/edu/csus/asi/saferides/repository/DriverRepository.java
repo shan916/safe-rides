@@ -43,15 +43,6 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
     Driver findByUser(User user);
 
     /**
-     * Finds all drivers by their user record's active status
-     *
-     * @param active active flag of the user record
-     * @return the drivers that match the criteria
-     */
-    @Cacheable(value = "driversByActive", key = "{#active}")
-    List<Driver> findByUser_Active(boolean active);
-
-    /**
      * Returns a count of the driver's user by their active status
      *
      * @param active user status

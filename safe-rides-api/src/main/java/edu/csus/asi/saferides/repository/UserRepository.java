@@ -40,6 +40,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Cacheable(value = "usersByName", key = "{#username}")
     User findByUsernameIgnoreCase(String username);
 
+    /**
+     * Finds all users by their active flag
+     *
+     * @param active whether they are active (enabled)
+     * @return list of users
+     */
     @Cacheable(value = "usersByActive", key = "{#active}")
     List<User> findByActive(boolean active);
 
