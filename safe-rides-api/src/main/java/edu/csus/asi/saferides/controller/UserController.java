@@ -59,13 +59,14 @@ public class UserController {
     @Autowired
     public UserController(JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl userDetailsService,
                           UserRepository userRepository, UserMapper userMapper, UserService userService,
-                          DriverRepository driverRepository) {
+                          DriverRepository driverRepository, AuthorityRepository authorityRepository) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userService = userService;
         this.driverRepository = driverRepository;
+        this.authorityRepository = authorityRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET)

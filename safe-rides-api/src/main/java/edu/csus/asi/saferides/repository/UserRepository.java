@@ -35,5 +35,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
      */
     User findByUsernameIgnoreCase(String username);
 
+    /**
+     * Finds all users by their active flag
+     *
+     * @param active whether they are active (enabled)
+     * @return list of users
+     */
     List<User> findByActive(boolean active);
 }
