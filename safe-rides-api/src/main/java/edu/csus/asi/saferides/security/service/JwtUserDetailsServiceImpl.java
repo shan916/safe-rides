@@ -20,8 +20,8 @@ import java.util.ArrayList;
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
-    private AuthorityRepository authorityRepository;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
 
     /**
      * Dependency injection
@@ -52,7 +52,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
             if (!user.isActive()) {
                 Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-                ArrayList authorityList = new ArrayList<Authority>();
+                ArrayList<Authority> authorityList = new ArrayList<>();
                 authorityList.add(authority);
                 user.setAuthorities(authorityList);
             }

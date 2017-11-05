@@ -30,30 +30,31 @@ import java.util.ArrayList;
 @RestController
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/cas")
-public class CasClientController {
+class CasClientController {
 
-    @Value("${cas.server-url-prefix}")
     private String casServerUrlPrefix;
-
-    private UserRepository userRepository;
-    private AuthorityRepository authorityRepository;
-    private JwtTokenUtil jwtTokenUtil;
-    private JwtUserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUserDetailsServiceImpl userDetailsService;
 
     /**
-     * Dependency injection
+     * CAS client controller constructor with dependency injection
      *
      * @param userRepository        User Repository
      * @param authorityRepository   Authority Repository
      * @param jwtTokenUtil          JWT Token Util
      * @param jwtUserDetailsService JWT User Details Service
+     * @param casServerUrlPrefix    The CAS server URL - set in application.yaml
      */
     @Autowired
-    public CasClientController(UserRepository userRepository, AuthorityRepository authorityRepository, JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl jwtUserDetailsService) {
+    public CasClientController(UserRepository userRepository, AuthorityRepository authorityRepository, JwtTokenUtil jwtTokenUtil,
+                               JwtUserDetailsServiceImpl jwtUserDetailsService, @Value("#{@environment['cas.server-url-prefix'] ?: \"\" }") String casServerUrlPrefix) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = jwtUserDetailsService;
+        this.casServerUrlPrefix = casServerUrlPrefix;
     }
 
     /**
@@ -64,22 +65,22 @@ public class CasClientController {
      */
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
     @ApiOperation(value = "validate", nickname = "validate", notes = "Validate a ticket/service pair with the CAS server. Returns a JWT if valid.")
-    public ResponseEntity<?> validate(@RequestBody CasTuple casTuple) {
-        AttributePrincipal principal = null;
+    public ResponseEntity<JwtAuthenticationResponse> validate(@RequestBody CasTuple casTuple) {
+        AttributePrincipal principal;
         Cas30ServiceTicketValidator tv = new Cas30ServiceTicketValidator(casServerUrlPrefix);
 
         try {
             Assertion a = tv.validate(casTuple.getTicket(), casTuple.getService());
             principal = a.getPrincipal();
 
-            UserDetails user = null;
+            UserDetails user;
             try {
                 user = userDetailsService.loadUserByUsername(principal.getName());
             } catch (UsernameNotFoundException ex) {
                 User newUser = new User();
                 newUser.setUsername(principal.getName());
                 Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-                ArrayList authorityList = new ArrayList<Authority>();
+                ArrayList<Authority> authorityList = new ArrayList<>();
                 authorityList.add(authority);
                 newUser.setAuthorities(authorityList);
                 newUser.setActive(true);

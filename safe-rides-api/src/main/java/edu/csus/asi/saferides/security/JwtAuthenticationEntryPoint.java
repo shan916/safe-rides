@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -15,14 +16,22 @@ import java.io.Serializable;
  * Current implementation is a naive 401 Response.
  */
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
+class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     // versioning for serialized object (is not really needed)
     private static final long serialVersionUID = -8970718410437077606L;
 
-    // load value of the allowed origins from the application config file
-    @Value("${ac.alloworigin}")
-    private String acAllowOrigin;
+    private final String acAllowOrigin;
+
+    /**
+     * Dependency injection
+     *
+     * @param acAllowOrigin value of the allowed origins from application.yaml
+     */
+    @Autowired
+    public JwtAuthenticationEntryPoint(@Value("#{@environment['ac.alloworigin'] ?: \"\" }") String acAllowOrigin) {
+        this.acAllowOrigin = acAllowOrigin;
+    }
 
     /**
      * This is invoked when user tries to access a secured REST resource without supplying any credentials

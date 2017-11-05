@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * Customizes the configuration of the Jackson ObjectMapper
  */
 @Configuration
-public class ObjectMapperConfig {
+class ObjectMapperConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer customObjectMapper() {

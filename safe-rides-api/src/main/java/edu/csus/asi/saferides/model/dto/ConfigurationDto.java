@@ -57,7 +57,7 @@ public class ConfigurationDto {
     /**
      * Set the start time of when Safe Rides starts accepting requests
      *
-     * @param startTime
+     * @param startTime the start time
      */
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
@@ -75,7 +75,7 @@ public class ConfigurationDto {
     /**
      * Set the end time when Safe Rides stops accepting requests
      *
-     * @param endTime
+     * @param endTime the end time
      */
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
@@ -84,7 +84,7 @@ public class ConfigurationDto {
     /**
      * Get the days of the days of the week that Safe Rides accepts requests
      *
-     * @return
+     * @return list of the days of week
      */
     public List<DayOfWeek> getDaysOfWeek() {
         return daysOfWeek;
@@ -93,7 +93,7 @@ public class ConfigurationDto {
     /**
      * Set the days of the days of the week that Safe Rides accepts requests
      *
-     * @param daysOfWeek
+     * @param daysOfWeek list of the days of week
      */
     public void setDaysOfWeek(List<DayOfWeek> daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
@@ -102,7 +102,7 @@ public class ConfigurationDto {
     /**
      * Get whether if Safe Rides accepts requests (override)
      *
-     * @return
+     * @return active status
      */
     public boolean isActive() {
         return active;
@@ -111,7 +111,7 @@ public class ConfigurationDto {
     /**
      * Set whether if Safe Rides accepts requests (override)
      *
-     * @param active
+     * @param active active status
      */
     public void setActive(boolean active) {
         this.active = active;
@@ -120,7 +120,7 @@ public class ConfigurationDto {
     /**
      * Get system notice message
      *
-     * @return message
+     * @return message system-wide message
      */
     public String getMessage() {
         return message;

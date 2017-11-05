@@ -44,24 +44,19 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/rides")
 @PreAuthorize("hasRole('COORDINATOR')")
-public class RideRequestController {
+class RideRequestController {
 
-    private JwtTokenUtil jwtTokenUtil;
-    private RideRequestRepository rideRequestRepository;
-    private DriverRepository driverRepository;
-    private ConfigurationRepository configurationRepository;
-    private GeocodingService geocodingService;
-    private RideRequestMapper rideRequestMapper;
-    private UserRepository userRepository;
-
-    /**
-     * HTTP header that stores the JWT, defined in application.yaml
-     */
-    @Value("${jwt.header}")
-    private String tokenHeader;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final RideRequestRepository rideRequestRepository;
+    private final DriverRepository driverRepository;
+    private final ConfigurationRepository configurationRepository;
+    private final GeocodingService geocodingService;
+    private final RideRequestMapper rideRequestMapper;
+    private final UserRepository userRepository;
+    private final String tokenHeader;
 
     /**
-     * Dependency Injection
+     * Ride request controller constructor with dependency injection
      *
      * @param jwtTokenUtil            JWT Token Util
      * @param rideRequestRepository   Ride Request Repository
@@ -70,12 +65,13 @@ public class RideRequestController {
      * @param geocodingService        Geocoding Service
      * @param rideRequestMapper       Ride Request Mapper
      * @param userRepository          User Repository
+     * @param tokenHeader             HTTP header that stores the JWT, defined in application.yaml
      */
     @Autowired
     public RideRequestController(JwtTokenUtil jwtTokenUtil, RideRequestRepository rideRequestRepository,
                                  DriverRepository driverRepository, ConfigurationRepository configurationRepository,
                                  GeocodingService geocodingService, RideRequestMapper rideRequestMapper,
-                                 UserRepository userRepository) {
+                                 UserRepository userRepository, @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.rideRequestRepository = rideRequestRepository;
         this.driverRepository = driverRepository;
@@ -83,6 +79,7 @@ public class RideRequestController {
         this.geocodingService = geocodingService;
         this.rideRequestMapper = rideRequestMapper;
         this.userRepository = userRepository;
+        this.tokenHeader = tokenHeader;
     }
 
     /**
@@ -94,18 +91,18 @@ public class RideRequestController {
      * @return a list of rides
      */
     @RequestMapping(method = RequestMethod.GET)
-    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of rides...")
-    public Iterable<RideRequestDto> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
+    @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of rides")
+    public ResponseEntity<Iterable<RideRequestDto>> retrieveAll(@RequestParam(value = "status", required = false) RideRequestStatus status) {
         if (status != null) {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), rideRequestRepository.findByStatus(status));
             List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
-            return dtos;
+            return ResponseEntity.ok(dtos);
         } else {
             List<RideRequest> rideRequests = (List<RideRequest>) Util.filterPastRides(configurationRepository.findOne(1), (Collection<RideRequest>) rideRequestRepository.findAll());
             List<RideRequestDto> dtos = rideRequestMapper.mapAsList(rideRequests, RideRequestDto.class);
 
-            return dtos;
+            return ResponseEntity.ok(dtos);
         }
     }
 
@@ -119,7 +116,7 @@ public class RideRequestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a ride with the specified id")
-    public ResponseEntity<?> retrieve(@PathVariable Long id) {
+    public ResponseEntity<RideRequestDto> retrieve(@PathVariable Long id) {
         RideRequest result = rideRequestRepository.findOne(id);
 
         if (result == null) {
@@ -239,6 +236,7 @@ public class RideRequestController {
      * <p>
      * Updates the ride located at rides/{id} with the new data from the request body.
      *
+     * @param request        Http Request
      * @param id             path parameter for id of ride to update
      * @param rideRequestDto request body containing the ride to update
      * @return the updated ride
@@ -434,6 +432,12 @@ public class RideRequestController {
         }
     }
 
+    /**
+     * Check if a driver is available
+     *
+     * @param driver the driver to check if is available
+     * @return boolean
+     */
     private boolean isDriverAvailable(Driver driver) {
         RideRequest latestRideRequest = driver.getLatestRideRequest();
         if (latestRideRequest != null) {

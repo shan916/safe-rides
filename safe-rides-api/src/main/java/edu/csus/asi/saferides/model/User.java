@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Application user than can be authenticated with a password
+ * Application user
  */
 @Entity
 public class User {

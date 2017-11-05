@@ -1,9 +1,9 @@
 package edu.csus.asi.saferides;
 
+import com.google.common.base.Predicates;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.security.JwtUserFactory;
 import edu.csus.asi.saferides.service.GeocodingService;
 import edu.csus.asi.saferides.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 @EnableSwagger2
 @EnableCaching
-public class SafeRidesApiApplication {
+class SafeRidesApiApplication {
 
     @Autowired
     private GeocodingService geocodingService;
@@ -54,6 +54,7 @@ public class SafeRidesApiApplication {
      * @param authorityRepository      authority repository
      * @param driverLocationRepository driver location repository
      * @param configurationRepository  configuration repository
+     * @param jwtTokenUtil             JWT token Util
      * @return CommandLineRunner
      */
     @Bean
@@ -428,10 +429,10 @@ public class SafeRidesApiApplication {
 
             User admin = new User("admin", "Admin", "Smith");
 
-            ArrayList<Authority> riderAuthorityList = new ArrayList<Authority>();
-            ArrayList<Authority> driverAuthorityList = new ArrayList<Authority>();
-            ArrayList<Authority> coordinatorAuthorityList = new ArrayList<Authority>();
-            ArrayList<Authority> adminAuthorityList = new ArrayList<Authority>();
+            ArrayList<Authority> riderAuthorityList = new ArrayList<>();
+            ArrayList<Authority> driverAuthorityList = new ArrayList<>();
+            ArrayList<Authority> coordinatorAuthorityList = new ArrayList<>();
+            ArrayList<Authority> adminAuthorityList = new ArrayList<>();
 
             Authority authAdmin = new Authority(AuthorityName.ROLE_ADMIN);
             Authority authCoordinator = new Authority(AuthorityName.ROLE_COORDINATOR);
@@ -549,10 +550,10 @@ public class SafeRidesApiApplication {
             rideRequestRepository.save(rideRequest18);
             rideRequestRepository.save(rideRequest19);
 
-            LocalTime startTime = LocalTime.of(20, 00, 0);
-            LocalTime endTime = LocalTime.of(02, 00, 0);
+            LocalTime startTime = LocalTime.of(20, 0, 0);
+            LocalTime endTime = LocalTime.of(2, 0, 0);
             Configuration newConfig = new Configuration(startTime, endTime);
-            ArrayList<DayOfWeek> dayOfWeeks = new ArrayList<DayOfWeek>();
+            ArrayList<DayOfWeek> dayOfWeeks = new ArrayList<>();
             dayOfWeeks.add(DayOfWeek.WEDNESDAY);
             dayOfWeeks.add(DayOfWeek.THURSDAY);
             dayOfWeeks.add(DayOfWeek.FRIDAY);
@@ -572,7 +573,7 @@ public class SafeRidesApiApplication {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .pathMapping("/");
     }

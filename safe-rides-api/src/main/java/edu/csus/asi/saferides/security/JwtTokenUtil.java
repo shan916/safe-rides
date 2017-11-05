@@ -5,6 +5,7 @@ import edu.csus.asi.saferides.utility.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -29,13 +30,20 @@ public class JwtTokenUtil implements Serializable {
     private static final String CLAIM_KEY_CREATED = "created";
     private static final String CLAIM_KEY_AUTHORITIES = "authorities";
 
-    // the secret key used for cryptographically signing the token
-    @Value("${jwt.secret}")
-    private String secret;
+    private final String secret;
+    private final long expiration;
 
-    // the length of time (in seconds) that a token will expire after creation
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    /**
+     * Dependency injection
+     *
+     * @param secret     the secret key used for cryptographically signing the token - set in application.yaml
+     * @param expiration the length of time (in seconds) that a token will expire after creation  - set in application.yaml
+     */
+    @Autowired
+    public JwtTokenUtil(@Value("#{@environment['jwt.secret'] ?: \"\" }") String secret, @Value("#{@environment['jwt.expiration'] ?: 0 }") Long expiration) {
+        this.secret = secret;
+        this.expiration = expiration;
+    }
 
     /**
      * Get a username from a token
@@ -62,7 +70,7 @@ public class JwtTokenUtil implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<AuthorityName> getAuthoritiesFromToken(String token) {
-        ArrayList<AuthorityName> authorityNames = new ArrayList<AuthorityName>();
+        ArrayList<AuthorityName> authorityNames = new ArrayList<>();
         try {
             final Claims claims = getClaimsFromToken(token);
             // cast claims to ArrayList
@@ -83,7 +91,7 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return date the token was created
      */
-    public LocalDateTime getCreatedDateFromToken(String token) {
+    private LocalDateTime getCreatedDateFromToken(String token) {
         LocalDateTime created;
         try {
             final Claims claims = getClaimsFromToken(token);
@@ -100,7 +108,7 @@ public class JwtTokenUtil implements Serializable {
      * @param token token
      * @return date the token will expire
      */
-    public Date getExpirationDateFromToken(String token) {
+    private Date getExpirationDateFromToken(String token) {
         Date expiration;
         try {
             final Claims claims = getClaimsFromToken(token);
@@ -181,7 +189,7 @@ public class JwtTokenUtil implements Serializable {
      * @param claims claims
      * @return token
      */
-    String generateToken(Map<String, Object> claims) {
+    private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
@@ -226,7 +234,7 @@ public class JwtTokenUtil implements Serializable {
      * @param userDetails user details of a user
      * @return whether the token is still valid
      */
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
 

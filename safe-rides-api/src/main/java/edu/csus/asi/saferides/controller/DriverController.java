@@ -2,7 +2,6 @@ package edu.csus.asi.saferides.controller;
 
 import edu.csus.asi.saferides.mapper.DriverLocationMapper;
 import edu.csus.asi.saferides.mapper.DriverMapper;
-import edu.csus.asi.saferides.mapper.RideRequestMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.DriverDto;
 import edu.csus.asi.saferides.model.dto.DriverLocationDto;
@@ -10,7 +9,6 @@ import edu.csus.asi.saferides.model.dto.EndOfNightSummaryDto;
 import edu.csus.asi.saferides.model.dto.EndOfNightSummaryRideDto;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
-import edu.csus.asi.saferides.service.UserService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -36,28 +34,21 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
 @RequestMapping("/drivers")
 @PreAuthorize("hasRole('COORDINATOR')")
-public class DriverController {
+class DriverController {
 
-    private DriverRepository driverRepository;
-    private RideRequestRepository rideRequestRepository;
-    private DriverLocationRepository driverLocationRepository;
-    private DriverMapper driverMapper;
-    private DriverLocationMapper driverLocationMapper;
-    private ConfigurationRepository configurationRepository;
-    private JwtTokenUtil jwtTokenUtil;
-    private UserRepository userRepository;
-    private UserService userService;
-    private RideRequestMapper rideRequestMapper;
-    private AuthorityRepository authorityRepository;
-
-    /**
-     * HTTP header that stores the JWT, defined in application.yaml
-     */
-    @Value("${jwt.header}")
-    private String tokenHeader;
+    private final DriverRepository driverRepository;
+    private final RideRequestRepository rideRequestRepository;
+    private final DriverLocationRepository driverLocationRepository;
+    private final DriverMapper driverMapper;
+    private final DriverLocationMapper driverLocationMapper;
+    private final ConfigurationRepository configurationRepository;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final String tokenHeader;
 
     /**
-     * Dependency Injection
+     * Driver controller constructor with dependency injection
      *
      * @param driverRepository         Driver Repository
      * @param rideRequestRepository    Ride Request Repository
@@ -67,16 +58,15 @@ public class DriverController {
      * @param configurationRepository  Configuration Repository
      * @param jwtTokenUtil             JWT Token Util
      * @param userRepository           User Repository
-     * @param userService              User Service
-     * @param rideRequestMapper        Ride Request Mapper
      * @param authorityRepository      Authority Repository
+     * @param tokenHeader              HTTP header that stores the JWT, defined in application.yaml
      */
     @Autowired
     public DriverController(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                             DriverLocationRepository driverLocationRepository, DriverMapper driverMapper,
                             DriverLocationMapper driverLocationMapper, ConfigurationRepository configurationRepository,
-                            JwtTokenUtil jwtTokenUtil, UserRepository userRepository, UserService userService,
-                            RideRequestMapper rideRequestMapper, AuthorityRepository authorityRepository) {
+                            JwtTokenUtil jwtTokenUtil, UserRepository userRepository, AuthorityRepository authorityRepository,
+                            @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
         this.driverRepository = driverRepository;
         this.rideRequestRepository = rideRequestRepository;
         this.driverLocationRepository = driverLocationRepository;
@@ -85,9 +75,8 @@ public class DriverController {
         this.configurationRepository = configurationRepository;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.rideRequestMapper = rideRequestMapper;
         this.authorityRepository = authorityRepository;
+        this.tokenHeader = tokenHeader;
     }
 
     /**
@@ -100,16 +89,16 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "retrieveAll", nickname = "retrieveAll", notes = "Returns a list of drivers...")
-    public Iterable<DriverDto> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
+    public ResponseEntity<Iterable<DriverDto>> retrieveAll(@Validated @RequestParam(value = "active", required = false) Boolean active) {
         List<Driver> drivers = driverRepository.findAllByOrderByModifiedDateDesc();
         if (active != null) {
             if (active) {
-                return driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
+                return ResponseEntity.ok(driverMapper.mapAsList(drivers.stream().filter(driver -> driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class));
             } else {
-                return driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class);
+                return ResponseEntity.ok(driverMapper.mapAsList(drivers.stream().filter(driver -> !driver.getUser().isActive()).collect(Collectors.toList()), DriverDto.class));
             }
         } else {
-            return driverMapper.mapAsList((drivers), DriverDto.class);
+            return ResponseEntity.ok(driverMapper.mapAsList((drivers), DriverDto.class));
         }
     }
 
@@ -123,7 +112,7 @@ public class DriverController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
-    public ResponseEntity<?> retrieve(@PathVariable Long id) {
+    public ResponseEntity<DriverDto> retrieve(@PathVariable Long id) {
         Driver result = driverRepository.findOne(id);
 
         if (result == null) {
@@ -144,7 +133,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET, value = "/me")
     @PreAuthorize("hasRole('DRIVER')")
     @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id")
-    public ResponseEntity<?> retrieve(HttpServletRequest request) {
+    public ResponseEntity<DriverDto> retrieve(HttpServletRequest request) {
         String authToken = request.getHeader(this.tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
@@ -164,18 +153,19 @@ public class DriverController {
      * <p>
      * Returns the driver's end of night summary for a specified driver
      *
+     * @param id the driver's id
      * @return Driver's end of night summary
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/endofnight")
     @PreAuthorize("hasRole('COORDINATOR')")
-    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns a driver with the given id end of the night summary ")
-    public ResponseEntity<?> summary(@PathVariable Long id) {
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Returns the end of the night summary for the driver with the given id")
+    public ResponseEntity<EndOfNightSummaryDto> summary(@PathVariable Long id) {
         Driver driver = driverRepository.findOne(id);
 
         if (driver != null) {
             // get all rides for the current night
             Collection<RideRequest> currentRides = Util.filterPastRides(configurationRepository.findOne(1), driver.getRides());
-            Set<EndOfNightSummaryRideDto> endOfNightSummaryRides = new HashSet<EndOfNightSummaryRideDto>();
+            Set<EndOfNightSummaryRideDto> endOfNightSummaryRides = new HashSet<>();
             // if driver was assigned to any rides, summarize them
             if (currentRides != null) {
                 // night totals
@@ -185,7 +175,7 @@ public class DriverController {
 
                 // get all locations for the driver and sort them in order
                 Set<DriverLocation> locationsSet = driver.getLocations();
-                List<DriverLocation> locations = locationsSet.stream().sorted((o1, o2) -> o1.getCreatedDate().compareTo(o2.getCreatedDate())).collect(Collectors.toList());
+                List<DriverLocation> locations = locationsSet.stream().sorted(Comparator.comparing(DriverLocation::getCreatedDate)).collect(Collectors.toList());
 
                 // iterate through rides
                 for (RideRequest ride : currentRides) {
@@ -260,6 +250,7 @@ public class DriverController {
      * <p>
      * Creates the given driver in database
      *
+     * @param request   Http request
      * @param driverDto request body containing the driver to create and password to create a user
      * @return ResponseEntity containing the created driver and it's location
      */
@@ -333,6 +324,7 @@ public class DriverController {
      * <li>driver is being deactivated while status is not AVAILABLE</li>
      * </ul>
      *
+     * @param request   Http Request
      * @param id        path parameter for id of driver to update
      * @param driverDto request body containing the driver and password to update
      * @return the updated driver or error message
@@ -471,6 +463,12 @@ public class DriverController {
         }
     }
 
+    /**
+     * Validates a driver's fields
+     *
+     * @param driver the driver to validate
+     * @return list of validation errors
+     */
     private List<String> validateDriver(Driver driver) {
         ArrayList<String> errorMessages = new ArrayList<>();
 
@@ -505,6 +503,12 @@ public class DriverController {
         return errorMessages;
     }
 
+    /**
+     * Check if a driver is available
+     *
+     * @param driver the driver to check if is available
+     * @return boolean available status
+     */
     private boolean isDriverAvailable(Driver driver) {
         RideRequest latestRideRequest = driver.getLatestRideRequest();
         if (latestRideRequest != null) {
@@ -517,6 +521,12 @@ public class DriverController {
         return true;
     }
 
+    /**
+     * Calculate the distance between a set of gps coordinates
+     *
+     * @param filteredLocations the list of locations
+     * @return distance in miles
+     */
     private double getDistance(List<DriverLocation> filteredLocations) {
         // only calculate distance if there is a distance to calculate
         int points = filteredLocations.size();
