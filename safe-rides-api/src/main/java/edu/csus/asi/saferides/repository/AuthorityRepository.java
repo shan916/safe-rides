@@ -37,7 +37,7 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
      * @param name the name of the authority to search by
      * @return authority with the specified name
      */
-	@Cacheable("authorities")
+	@Cacheable(value = "authoritiesByName", key = "{#name}")
     Authority findByName(AuthorityName name);
 
     /**

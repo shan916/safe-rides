@@ -2,8 +2,9 @@ package edu.csus.asi.saferides.repository;
 
 import edu.csus.asi.saferides.model.Driver;
 import edu.csus.asi.saferides.model.User;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      *
      * @return list of all drivers ordered by modified date in descending order
      */
-	@Cacheable("drivers")
+    @Cacheable("drivers")
     List<Driver> findAllByOrderByModifiedDateDesc();
 
     /**
@@ -38,7 +39,7 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      * @param user the user associated with the driver
      * @return the driver associated with the specified user
      */
-	@Cacheable("drivers")
+    @Cacheable(value = "driversByUser", key = "{#user.id}")
     Driver findByUser(User user);
 
     /**
@@ -47,7 +48,7 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      * @param active active flag of the user record
      * @return the drivers that match the criteria
      */
-	@Cacheable("drivers")
+    @Cacheable(value = "driversByActive", key = "{#active}")
     List<Driver> findByUser_Active(boolean active);
 
     /**
@@ -64,5 +65,10 @@ public interface DriverRepository extends CrudRepository<Driver, Long> {
      * @param latestDate the date which prior driver records should be deleted (exclusive)
      * @param active     active flag of the user record
      */
+    @CacheEvict(value = {"drivers", "driversByActive", "driversByUser"}, allEntries = true)
     void deleteByModifiedDateBeforeAndUser_Active(LocalDateTime latestDate, boolean active);
+
+    @Override
+    @Caching(evict = {@CacheEvict(value = {"drivers", "driversByActive"}, allEntries = true), @CacheEvict(value = "driversByUser", key = "{#id}")})
+    <S extends Driver> S save(S entity);
 }
