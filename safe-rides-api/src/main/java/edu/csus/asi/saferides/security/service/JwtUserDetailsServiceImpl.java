@@ -4,7 +4,6 @@ import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
 import edu.csus.asi.saferides.repository.AuthorityRepository;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtUserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,20 @@ import java.util.ArrayList;
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
-    // dependency injections
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RideRequestRepository rideRequestRepository;
-    @Autowired
     private AuthorityRepository authorityRepository;
+
+    /**
+     * Dependency injection
+     *
+     * @param userRepository      User Repository
+     * @param authorityRepository Authority Repository
+     */
+    @Autowired
+    public JwtUserDetailsServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository) {
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
+    }
 
     /**
      * Get UserDetail object for a User
@@ -44,7 +50,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
 
-            if(!user.isActive()){
+            if (!user.isActive()) {
                 Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
                 ArrayList authorityList = new ArrayList<Authority>();
                 authorityList.add(authority);

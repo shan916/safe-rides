@@ -32,9 +32,11 @@ public class NightlyStatsService {
     private ConfigurationRepository configurationRepository;
 
     /**
-     * Inject dependencies
+     * Dependency injection
      *
-     * @param nightlyStatsRepository
+     * @param nightlyStatsRepository  Nightly Stats Repository
+     * @param rideRequestRepository   Ride Request Repository
+     * @param configurationRepository Configuration Repository
      */
     @Autowired
     public NightlyStatsService(NightlyStatsRepository nightlyStatsRepository, RideRequestRepository rideRequestRepository, ConfigurationRepository configurationRepository) {
