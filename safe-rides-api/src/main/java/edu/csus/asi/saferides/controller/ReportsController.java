@@ -30,20 +30,31 @@ import java.util.Collection;
 @RequestMapping("/reports")
 public class ReportsController {
 
-    @Autowired
-    NightlyStatsRepository nightlyStatsRepository;
+    private NightlyStatsRepository nightlyStatsRepository;
+    private DriverRepository driverRepository;
+    private RideRequestRepository rideRequestRepository;
+    private ConfigurationRepository configurationRepository;
+    private NightlyStatsService nightlyStatsService;
 
+    /**
+     * Dependency Injection
+     *
+     * @param nightlyStatsRepository  Nightly Stats Repository
+     * @param driverRepository        Driver Repository
+     * @param rideRequestRepository   Ride Request Repository
+     * @param configurationRepository Configuration Repository
+     * @param nightlyStatsService     Nightly Stats Service
+     */
     @Autowired
-    DriverRepository driverRepository;
-
-    @Autowired
-    RideRequestRepository rideRequestRepository;
-
-    @Autowired
-    ConfigurationRepository configurationRepository;
-
-    @Autowired
-    NightlyStatsService nightlyStatsService;
+    public ReportsController(NightlyStatsRepository nightlyStatsRepository, DriverRepository driverRepository,
+                             RideRequestRepository rideRequestRepository, ConfigurationRepository configurationRepository,
+                             NightlyStatsService nightlyStatsService) {
+        this.nightlyStatsRepository = nightlyStatsRepository;
+        this.driverRepository = driverRepository;
+        this.rideRequestRepository = rideRequestRepository;
+        this.configurationRepository = configurationRepository;
+        this.nightlyStatsService = nightlyStatsService;
+    }
 
 
     /**
@@ -55,7 +66,7 @@ public class ReportsController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "getReports", nickname = "getReports", notes = "Get a report of the nightly stats of Safe Rides. Date variables are exclusive.")
-    public ResponseEntity<?> getReports(@RequestParam(required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public ResponseEntity<?> getReports(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (beginDate == null && endDate == null) {
             return ResponseEntity.ok(nightlyStatsRepository.findAll());
         } else if (beginDate == null) {

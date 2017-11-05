@@ -29,11 +29,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.h2.console.enabled}")
     private boolean h2ConsoleEnabled;
 
-    // dependency injection
-    @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
-    @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
+    private JwtTokenUtil jwtTokenUtil;
+
+    /**
+     * Dependency injection
+     *
+     * @param unauthorizedHandler Unauthorized Handler
+     * @param userDetailsService  User Details Service
+     */
+    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     /**
      * Dependency injection and specify which userdetails service to use
@@ -55,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
+        return new JwtAuthenticationTokenFilter(userDetailsService, jwtTokenUtil);
     }
 
     /**

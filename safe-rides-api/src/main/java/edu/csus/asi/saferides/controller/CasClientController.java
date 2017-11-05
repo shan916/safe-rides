@@ -35,17 +35,26 @@ public class CasClientController {
     @Value("${cas.server-url-prefix}")
     private String casServerUrlPrefix;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    AuthorityRepository authorityRepository;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
+    private UserRepository userRepository;
+    private AuthorityRepository authorityRepository;
+    private JwtTokenUtil jwtTokenUtil;
     private JwtUserDetailsServiceImpl userDetailsService;
+
+    /**
+     * Dependency injection
+     *
+     * @param userRepository        User Repository
+     * @param authorityRepository   Authority Repository
+     * @param jwtTokenUtil          JWT Token Util
+     * @param jwtUserDetailsService JWT User Details Service
+     */
+    @Autowired
+    public CasClientController(UserRepository userRepository, AuthorityRepository authorityRepository, JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl jwtUserDetailsService) {
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = jwtUserDetailsService;
+    }
 
     /**
      * Check with CAS whether the service and ticket pair is correct. If so, authenticate the user.

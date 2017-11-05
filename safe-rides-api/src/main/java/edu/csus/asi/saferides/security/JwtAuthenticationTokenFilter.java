@@ -1,7 +1,6 @@
 package edu.csus.asi.saferides.security;
 
 import edu.csus.asi.saferides.model.AuthorityName;
-import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.security.service.JwtUserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,19 +27,24 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     // the output to logging should be removed later on
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
-    // dependency injection
-    @Autowired
     private JwtUserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     // set name of the response key that stores the JWT
     @Value("${jwt.header}")
     private String tokenHeader;
+
+    /**
+     * Dependency injection
+     *
+     * @param userDetailsService User Details Service
+     * @param jwtTokenUtil       JWT Token Util
+     */
+    @Autowired
+    JwtAuthenticationTokenFilter(JwtUserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     /**
      * Invoked once per request. Checks and validates the authentication token.
