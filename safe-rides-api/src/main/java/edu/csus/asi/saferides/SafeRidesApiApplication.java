@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides;
 
+import com.google.common.base.Predicates;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
@@ -572,7 +573,7 @@ class SafeRidesApiApplication {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .pathMapping("/");
     }
