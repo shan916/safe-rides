@@ -419,16 +419,11 @@ class DriverController {
             rideRequestRepository.save(ride);
         }
 
-        // remove driver permissions
         User user = driver.getUser();
-        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-        ArrayList<Authority> authorities = new ArrayList<>();
-        authorities.add(riderAuthority);
-        user.setAuthorities(authorities);
-        user.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
-        userRepository.save(user);
 
         driverRepository.delete(id);
+        userRepository.delete(user);
+
         return ResponseEntity.noContent().build();
     }
 
