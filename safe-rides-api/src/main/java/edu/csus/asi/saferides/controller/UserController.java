@@ -130,6 +130,36 @@ class UserController {
     }
 
     /**
+     * Deletes coordinator user with given id
+     *
+     * @param id - id of user to find
+     * @return user with given id if not deleted, empty body if deleted
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Deletes a coordinator user with the given id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = User.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<UserDto> deleteCoordinator(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            Authority coordinatorAuth = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
+            if (user.getAuthorities().contains(coordinatorAuth)) {
+                userRepository.delete(user);
+                return ResponseEntity.noContent().build();
+            }
+
+            return ResponseEntity.ok(userMapper.map(user, UserDto.class));
+        }
+    }
+
+    /**
      * Get information on authenticated user
      *
      * @param request HTTP servlet request
