@@ -1,10 +1,8 @@
 package edu.csus.asi.saferides.controller;
 
-import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.CasTuple;
 import edu.csus.asi.saferides.model.User;
-import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
 import edu.csus.asi.saferides.security.service.JwtAuthenticationResponse;
@@ -22,8 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
 /**
  * API controller for authenticating with CAS
  */
@@ -34,7 +30,6 @@ class CasClientController {
 
     private String casServerUrlPrefix;
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsServiceImpl userDetailsService;
 
@@ -42,16 +37,14 @@ class CasClientController {
      * CAS client controller constructor with dependency injection
      *
      * @param userRepository        User Repository
-     * @param authorityRepository   Authority Repository
      * @param jwtTokenUtil          JWT Token Util
      * @param jwtUserDetailsService JWT User Details Service
      * @param casServerUrlPrefix    The CAS server URL - set in application.yaml
      */
     @Autowired
-    public CasClientController(UserRepository userRepository, AuthorityRepository authorityRepository, JwtTokenUtil jwtTokenUtil,
+    public CasClientController(UserRepository userRepository, JwtTokenUtil jwtTokenUtil,
                                JwtUserDetailsServiceImpl jwtUserDetailsService, @Value("#{@environment['cas.server-url-prefix'] ?: \"\" }") String casServerUrlPrefix) {
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = jwtUserDetailsService;
         this.casServerUrlPrefix = casServerUrlPrefix;
@@ -79,10 +72,8 @@ class CasClientController {
             } catch (UsernameNotFoundException ex) {
                 User newUser = new User();
                 newUser.setUsername(principal.getName());
-                Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-                ArrayList<Authority> authorityList = new ArrayList<>();
-                authorityList.add(authority);
-                newUser.setAuthorities(authorityList);
+
+                newUser.setAuthorityLevel(AuthorityName.ROLE_RIDER);
                 newUser.setActive(true);
                 userRepository.save(newUser);
                 user = userDetailsService.loadUserByUsername(newUser.getUsername());

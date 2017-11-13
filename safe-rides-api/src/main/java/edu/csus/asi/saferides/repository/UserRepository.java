@@ -1,5 +1,6 @@
 package edu.csus.asi.saferides.repository;
 
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
 import org.springframework.data.repository.CrudRepository;
 
@@ -42,4 +43,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return list of users
      */
     List<User> findByActive(boolean active);
+
+    List<User> deleteByAuthorityLevel(AuthorityName authorityLevel);
 }

@@ -8,6 +8,7 @@ import edu.csus.asi.saferides.serialization.LocalDateTimeSerializer;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -54,15 +55,8 @@ public class User {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime tokenValidFrom;
 
-    /**
-     * M-M relationship join table for authorities / roles
-     */
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "User_Authority",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
-    private List<Authority> authorities;
+    @Enumerated(EnumType.STRING)
+    private AuthorityName authorityLevel;
 
     /**
      * Constructor used by JPA
@@ -175,21 +169,21 @@ public class User {
     }
 
     /**
-     * Get user's authorities / roles
+     * Get user's authority level
      *
      * @return user's authorities
      */
-    public List<Authority> getAuthorities() {
-        return authorities;
+    public AuthorityName getAuthorityLevel() {
+        return authorityLevel;
     }
 
     /**
-     * Set user's authorities / roles
+     * Set user's authority level
      *
-     * @param authorities of user
+     * @param authorityLevel user's authority level
      */
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
+    public void setAuthorityLevel(AuthorityName authorityLevel) {
+        this.authorityLevel = authorityLevel;
     }
 
     /**
