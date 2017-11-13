@@ -1,9 +1,7 @@
 package edu.csus.asi.saferides.security.service;
 
-import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
-import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtUserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 /**
  * Provides two separate authentication methods (Real user, rider).
  */
@@ -21,18 +17,15 @@ import java.util.ArrayList;
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
 
     /**
      * Dependency injection
      *
-     * @param userRepository      User Repository
-     * @param authorityRepository Authority Repository
+     * @param userRepository User Repository
      */
     @Autowired
-    public JwtUserDetailsServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public JwtUserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
     }
 
     /**
@@ -51,10 +44,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         } else {
 
             if (!user.isActive()) {
-                Authority authority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-                ArrayList<Authority> authorityList = new ArrayList<>();
-                authorityList.add(authority);
-                user.setAuthorities(authorityList);
+                user.setAuthorityLevel(AuthorityName.ROLE_RIDER);
             }
 
             return JwtUserFactory.create(user);

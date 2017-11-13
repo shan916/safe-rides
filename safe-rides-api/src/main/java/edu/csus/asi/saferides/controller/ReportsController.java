@@ -1,13 +1,7 @@
 package edu.csus.asi.saferides.controller;
 
-import edu.csus.asi.saferides.model.Configuration;
-import edu.csus.asi.saferides.model.NightlyStats;
-import edu.csus.asi.saferides.model.ResponseMessage;
-import edu.csus.asi.saferides.model.RideRequest;
-import edu.csus.asi.saferides.repository.ConfigurationRepository;
-import edu.csus.asi.saferides.repository.DriverRepository;
-import edu.csus.asi.saferides.repository.NightlyStatsRepository;
-import edu.csus.asi.saferides.repository.RideRequestRepository;
+import edu.csus.asi.saferides.model.*;
+import edu.csus.asi.saferides.repository.*;
 import edu.csus.asi.saferides.service.NightlyStatsService;
 import edu.csus.asi.saferides.utility.Util;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +29,7 @@ class ReportsController {
     private final RideRequestRepository rideRequestRepository;
     private final ConfigurationRepository configurationRepository;
     private final NightlyStatsService nightlyStatsService;
+    private final UserRepository userRepository;
 
     /**
      * Reports controller constructor with dependency injection
@@ -48,12 +43,13 @@ class ReportsController {
     @Autowired
     public ReportsController(NightlyStatsRepository nightlyStatsRepository, DriverRepository driverRepository,
                              RideRequestRepository rideRequestRepository, ConfigurationRepository configurationRepository,
-                             NightlyStatsService nightlyStatsService) {
+                             NightlyStatsService nightlyStatsService, UserRepository userRepository) {
         this.nightlyStatsRepository = nightlyStatsRepository;
         this.driverRepository = driverRepository;
         this.rideRequestRepository = rideRequestRepository;
         this.configurationRepository = configurationRepository;
         this.nightlyStatsService = nightlyStatsService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -123,6 +119,10 @@ class ReportsController {
         // 4 year old driver records
         LocalDate inactiveDriverRetention = now.minusYears(4);
         driverRepository.deleteByModifiedDateBeforeAndUser_Active(inactiveDriverRetention.atStartOfDay(), false);
+
+        // delete riders
+        LocalDate riderUserRetention = now.minusDays(11);
+        userRepository.deleteByTokenValidFromBeforeAndAuthorityLevel(riderUserRetention.atStartOfDay(), AuthorityName.ROLE_RIDER);
 
         if (stats == null) {
             return ResponseEntity.noContent().build();

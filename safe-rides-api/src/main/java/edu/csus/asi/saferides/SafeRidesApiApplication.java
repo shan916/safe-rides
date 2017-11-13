@@ -51,7 +51,6 @@ class SafeRidesApiApplication {
      * @param driverRepository         driver repository
      * @param rideRequestRepository    ride request repository
      * @param userRepository           user repository
-     * @param authorityRepository      authority repository
      * @param driverLocationRepository driver location repository
      * @param configurationRepository  configuration repository
      * @param jwtTokenUtil             JWT token Util
@@ -59,7 +58,7 @@ class SafeRidesApiApplication {
      */
     @Bean
     public CommandLineRunner demo(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
-                                  UserRepository userRepository, AuthorityRepository authorityRepository, DriverLocationRepository driverLocationRepository,
+                                  UserRepository userRepository, DriverLocationRepository driverLocationRepository,
                                   ConfigurationRepository configurationRepository, JwtTokenUtil jwtTokenUtil) {
         return (args) -> {
 
@@ -429,65 +428,40 @@ class SafeRidesApiApplication {
 
             User admin = new User("admin", "Admin", "Smith");
 
-            ArrayList<Authority> riderAuthorityList = new ArrayList<>();
-            ArrayList<Authority> driverAuthorityList = new ArrayList<>();
-            ArrayList<Authority> coordinatorAuthorityList = new ArrayList<>();
-            ArrayList<Authority> adminAuthorityList = new ArrayList<>();
+            admin.setAuthorityLevel(AuthorityName.ROLE_ADMIN);
+            coordinator.setAuthorityLevel(AuthorityName.ROLE_COORDINATOR);
+            driver.setAuthorityLevel(AuthorityName.ROLE_DRIVER);
 
-            Authority authAdmin = new Authority(AuthorityName.ROLE_ADMIN);
-            Authority authCoordinator = new Authority(AuthorityName.ROLE_COORDINATOR);
-            Authority authDriver = new Authority(AuthorityName.ROLE_DRIVER);
-            Authority authRider = new Authority(AuthorityName.ROLE_RIDER);
-            authorityRepository.save(authAdmin);
-            authorityRepository.save(authCoordinator);
-            authorityRepository.save(authDriver);
-            authorityRepository.save(authRider);
+            user0.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user1.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user3.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user4.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user5.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user6.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user7.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user8.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user9.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user10.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user11.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user12.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user13.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user14.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user15.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user16.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user17.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user18.setAuthorityLevel(AuthorityName.ROLE_RIDER);
+            user19.setAuthorityLevel(AuthorityName.ROLE_RIDER);
 
-            riderAuthorityList.add(authRider);
-            driverAuthorityList.add(authRider);
-            driverAuthorityList.add(authDriver);
-            coordinatorAuthorityList.add(authRider);
-            coordinatorAuthorityList.add(authDriver);
-            coordinatorAuthorityList.add(authCoordinator);
-            adminAuthorityList.add(authRider);
-            adminAuthorityList.add(authDriver);
-            adminAuthorityList.add(authCoordinator);
-            adminAuthorityList.add(authAdmin);
-
-            admin.setAuthorities(adminAuthorityList);
-            coordinator.setAuthorities(coordinatorAuthorityList);
-            driver.setAuthorities(driverAuthorityList);
-
-            user0.setAuthorities(riderAuthorityList);
-            user1.setAuthorities(riderAuthorityList);
-            user3.setAuthorities(riderAuthorityList);
-            user4.setAuthorities(riderAuthorityList);
-            user5.setAuthorities(riderAuthorityList);
-            user6.setAuthorities(riderAuthorityList);
-            user7.setAuthorities(riderAuthorityList);
-            user8.setAuthorities(riderAuthorityList);
-            user9.setAuthorities(riderAuthorityList);
-            user10.setAuthorities(riderAuthorityList);
-            user11.setAuthorities(riderAuthorityList);
-            user12.setAuthorities(riderAuthorityList);
-            user13.setAuthorities(riderAuthorityList);
-            user14.setAuthorities(riderAuthorityList);
-            user15.setAuthorities(riderAuthorityList);
-            user16.setAuthorities(riderAuthorityList);
-            user17.setAuthorities(riderAuthorityList);
-            user18.setAuthorities(riderAuthorityList);
-            user19.setAuthorities(riderAuthorityList);
-
-            driver0.getUser().setAuthorities(driverAuthorityList);
-            driver1.getUser().setAuthorities(driverAuthorityList);
-            driver2.getUser().setAuthorities(driverAuthorityList);
-            driver3.getUser().setAuthorities(driverAuthorityList);
-            driver4.getUser().setAuthorities(driverAuthorityList);
-            driver5.getUser().setAuthorities(driverAuthorityList);
-            driver6.getUser().setAuthorities(driverAuthorityList);
-            driver7.getUser().setAuthorities(driverAuthorityList);
-            driver8.getUser().setAuthorities(driverAuthorityList);
-            driver9.getUser().setAuthorities(driverAuthorityList);
+            driver0.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver1.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver2.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver3.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver4.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver5.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver6.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver7.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver8.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
+            driver9.getUser().setAuthorityLevel(AuthorityName.ROLE_DRIVER);
 
             userRepository.save(admin);
             userRepository.save(coordinator);

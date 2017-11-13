@@ -1,11 +1,14 @@
 package edu.csus.asi.saferides.repository;
 
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -49,7 +52,18 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Cacheable(value = "usersByActive", key = "{#active}")
     List<User> findByActive(boolean active);
 
+
     @Override
     @Caching(evict = {@CacheEvict(value = {"users", "usersByActive"}, allEntries = true), @CacheEvict(value = "usersByName", key = "{#username}")})
     <S extends User> S save(S entity);
+
+    /**
+     * Delete users that have the specified authority level and the token valid date is before the specified date
+     *
+     * @param dateTime       the date which prior user records should be deleted (exclusive)
+     * @param authorityLevel the authority level
+     */
+    @Transactional
+    @CacheEvict(value = {"users", "usersByActive", "usersByName"}, allEntries = true)
+    void deleteByTokenValidFromBeforeAndAuthorityLevel(LocalDateTime dateTime, AuthorityName authorityLevel);
 }
