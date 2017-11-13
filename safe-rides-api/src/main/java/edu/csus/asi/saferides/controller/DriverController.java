@@ -44,7 +44,6 @@ class DriverController {
     private final ConfigurationRepository configurationRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
     private final String tokenHeader;
 
     /**
@@ -58,14 +57,13 @@ class DriverController {
      * @param configurationRepository  Configuration Repository
      * @param jwtTokenUtil             JWT Token Util
      * @param userRepository           User Repository
-     * @param authorityRepository      Authority Repository
      * @param tokenHeader              HTTP header that stores the JWT, defined in application.yaml
      */
     @Autowired
     public DriverController(DriverRepository driverRepository, RideRequestRepository rideRequestRepository,
                             DriverLocationRepository driverLocationRepository, DriverMapper driverMapper,
                             DriverLocationMapper driverLocationMapper, ConfigurationRepository configurationRepository,
-                            JwtTokenUtil jwtTokenUtil, UserRepository userRepository, AuthorityRepository authorityRepository,
+                            JwtTokenUtil jwtTokenUtil, UserRepository userRepository,
                             @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
         this.driverRepository = driverRepository;
         this.rideRequestRepository = rideRequestRepository;
@@ -75,7 +73,6 @@ class DriverController {
         this.configurationRepository = configurationRepository;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
         this.tokenHeader = tokenHeader;
     }
 
@@ -279,26 +276,19 @@ class DriverController {
             return ResponseEntity.badRequest().build();
         }
 
-        Authority adminAuthority = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-        Authority coordAuthority = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-
-        if (currentUser.isActive() && currentUser.getAuthorities().contains(adminAuthority)) {
+        if (currentUser.isActive() && currentUser.getAuthorityLevel() == AuthorityName.ROLE_ADMIN) {
             return ResponseEntity.badRequest().body(new ResponseMessage("An active administrator cannot be added as a driver!"));
         }
 
-        if (currentUser.isActive() && currentUser.getAuthorities().contains(coordAuthority)) {
+        if (currentUser.isActive() && currentUser.getAuthorityLevel() == AuthorityName.ROLE_COORDINATOR) {
             return ResponseEntity.badRequest().body(new ResponseMessage("An active coordinator cannot be added as a driver!"));
         }
 
         driver.setUser(currentUser);
         Driver result = driverRepository.save(driver);
 
-        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-        Authority driverAuthority = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
-        ArrayList<Authority> authorities = new ArrayList<>();
-        authorities.add(riderAuthority);
-        authorities.add(driverAuthority);
-        currentUser.setAuthorities(authorities);
+
+        currentUser.setAuthorityLevel(AuthorityName.ROLE_DRIVER);
 
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());
@@ -419,16 +409,11 @@ class DriverController {
             rideRequestRepository.save(ride);
         }
 
-        // remove driver permissions
         User user = driver.getUser();
-        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-        ArrayList<Authority> authorities = new ArrayList<>();
-        authorities.add(riderAuthority);
-        user.setAuthorities(authorities);
-        user.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
-        userRepository.save(user);
 
         driverRepository.delete(id);
+        userRepository.delete(user);
+
         return ResponseEntity.noContent().build();
     }
 

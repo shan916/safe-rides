@@ -1,9 +1,7 @@
 package edu.csus.asi.saferides.service;
 
-import edu.csus.asi.saferides.model.Authority;
 import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.User;
-import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,18 +15,15 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
 
     /**
      * Dependency Injection
      *
-     * @param userRepository      singleton for UserRepository
-     * @param authorityRepository singleton for AuthorityRepository
+     * @param userRepository singleton for UserRepository
      */
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
     }
 
     /**
@@ -51,20 +46,16 @@ public class UserService {
         if (role != null) {
             // get all drivers
             if (role == AuthorityName.ROLE_DRIVER) {
-                // remove anyone not a driver (coordinator and higher)
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                users.removeIf(u -> u.getAuthorities().contains(coord));
+                // remove anyone not a driver
+                users.removeIf(u -> u.getAuthorityLevel() != AuthorityName.ROLE_DRIVER);
             }   // get all coordinators
             else if (role == AuthorityName.ROLE_COORDINATOR) {
                 // remove anyone not a coordinator
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> !u.getAuthorities().contains(coord) || u.getAuthorities().contains(admin)); // remove if not coord or is admin
+                users.removeIf(u -> u.getAuthorityLevel() != (AuthorityName.ROLE_COORDINATOR));
             } // get all admins
             else if (role == AuthorityName.ROLE_ADMIN) {
                 // remove anyone not an admin
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> !u.getAuthorities().contains(admin));
+                users.removeIf(u -> u.getAuthorityLevel() != AuthorityName.ROLE_ADMIN);
             }
         }
 
@@ -95,21 +86,13 @@ public class UserService {
         if (notRole != null) {
             // get all non-drivers
             if (notRole == AuthorityName.ROLE_DRIVER) {
-                // remove anyone that is just a driver
-                Authority driver = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                users.removeIf(u -> u.getAuthorities().contains(driver) && !u.getAuthorities().contains(coord));
+                users.removeIf(u -> u.getAuthorityLevel() == AuthorityName.ROLE_DRIVER);
             }   // get all non-coordinators
             else if (notRole == AuthorityName.ROLE_COORDINATOR) {
-                // remove anyone not a coordinator
-                Authority coord = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> u.getAuthorities().contains(coord) && !u.getAuthorities().contains(admin)); // remove if coord and is not admin
+                users.removeIf(u -> u.getAuthorityLevel() == (AuthorityName.ROLE_COORDINATOR));
             } // get all non-admins
             else if (notRole == AuthorityName.ROLE_ADMIN) {
-                // remove anyone that is an admin
-                Authority admin = authorityRepository.findByName(AuthorityName.ROLE_ADMIN);
-                users.removeIf(u -> u.getAuthorities().contains(admin));
+                users.removeIf(u -> u.getAuthorityLevel() == (AuthorityName.ROLE_ADMIN));
             }
         }
 

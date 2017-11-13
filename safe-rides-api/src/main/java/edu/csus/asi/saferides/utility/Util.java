@@ -1,6 +1,6 @@
 package edu.csus.asi.saferides.utility;
 
-import edu.csus.asi.saferides.model.Authority;
+import edu.csus.asi.saferides.model.AuthorityName;
 import edu.csus.asi.saferides.model.Configuration;
 import edu.csus.asi.saferides.model.RideRequest;
 import edu.csus.asi.saferides.model.RideRequestStatus;
@@ -12,9 +12,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Provides common utility functions used in the application
@@ -40,15 +40,36 @@ public class Util {
     }
 
     /**
-     * Helper method to map list of Authority to list of GrantedAuthority
+     * Helper method to map authority level to list of GrantedAuthority
      *
-     * @param authorities to map to GrantedAuthority-ies
+     * @param authorityLevel to map to GrantedAuthority-ies
      * @return list of GrantedAuthority
      */
-    public static List<GrantedAuthority> mapToGrantedAuthorities(List<Authority> authorities) {
-        return authorities.stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
-                .collect(Collectors.toList());
+    public static List<GrantedAuthority> mapToGrantedAuthorities(AuthorityName authorityLevel) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        switch (authorityLevel) {
+            case ROLE_RIDER:
+                authorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
+                break;
+            case ROLE_DRIVER:
+                authorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+                break;
+            case ROLE_COORDINATOR:
+                authorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_COORDINATOR"));
+                break;
+            case ROLE_ADMIN:
+                authorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_COORDINATOR"));
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                break;
+        }
+
+        return authorities;
     }
 
     /**

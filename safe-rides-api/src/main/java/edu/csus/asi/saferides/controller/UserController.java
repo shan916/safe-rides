@@ -3,7 +3,6 @@ package edu.csus.asi.saferides.controller;
 import edu.csus.asi.saferides.mapper.UserMapper;
 import edu.csus.asi.saferides.model.*;
 import edu.csus.asi.saferides.model.dto.UserDto;
-import edu.csus.asi.saferides.repository.AuthorityRepository;
 import edu.csus.asi.saferides.repository.DriverRepository;
 import edu.csus.asi.saferides.repository.UserRepository;
 import edu.csus.asi.saferides.security.JwtTokenUtil;
@@ -39,7 +38,6 @@ class UserController {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsServiceImpl userDetailsService;
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
     private final UserMapper userMapper;
     private final UserService userService;
     private final DriverRepository driverRepository;
@@ -53,20 +51,18 @@ class UserController {
      * @param userMapper          User Mapper
      * @param userService         User Service
      * @param driverRepository    Driver Repository
-     * @param authorityRepository Authority Repository
      * @param tokenHeader         HTTP header that stores the JWT, defined in application.yaml
      */
     @Autowired
     public UserController(JwtTokenUtil jwtTokenUtil, JwtUserDetailsServiceImpl userDetailsService,
                           UserRepository userRepository, UserMapper userMapper, UserService userService,
-                          DriverRepository driverRepository, AuthorityRepository authorityRepository, @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
+                          DriverRepository driverRepository, @Value("#{@environment['jwt.header'] ?: \"\" }") String tokenHeader) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userService = userService;
         this.driverRepository = driverRepository;
-        this.authorityRepository = authorityRepository;
         this.tokenHeader = tokenHeader;
     }
 
@@ -125,6 +121,35 @@ class UserController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         } else {
+            return ResponseEntity.ok(userMapper.map(user, UserDto.class));
+        }
+    }
+
+    /**
+     * Deletes coordinator user with given id
+     *
+     * @param id - id of user to find
+     * @return user with given id if not deleted, empty body if deleted
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "retrieve", nickname = "retrieve", notes = "Deletes a coordinator user with the given id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = User.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Failure")})
+    public ResponseEntity<UserDto> deleteCoordinator(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            if (user.getAuthorityLevel() == AuthorityName.ROLE_COORDINATOR) {
+                userRepository.delete(user);
+                return ResponseEntity.noContent().build();
+            }
+
             return ResponseEntity.ok(userMapper.map(user, UserDto.class));
         }
     }
@@ -211,14 +236,7 @@ class UserController {
         existingUser.setTokenValidFrom(LocalDateTime.now(ZoneId.of(Util.APPLICATION_TIME_ZONE)));
         existingUser.setActive(userDto.isActive());
 
-        Authority riderAuthority = authorityRepository.findByName(AuthorityName.ROLE_RIDER);
-        Authority driverAuthority = authorityRepository.findByName(AuthorityName.ROLE_DRIVER);
-        Authority coordAuthority = authorityRepository.findByName(AuthorityName.ROLE_COORDINATOR);
-        ArrayList<Authority> authorities = new ArrayList<>();
-        authorities.add(riderAuthority);
-        authorities.add(driverAuthority);
-        authorities.add(coordAuthority);
-        existingUser.setAuthorities(authorities);
+        existingUser.setAuthorityLevel(AuthorityName.ROLE_COORDINATOR);
 
         User result = userRepository.save(existingUser);
 
