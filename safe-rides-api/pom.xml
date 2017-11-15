@@ -5,7 +5,7 @@
 
     <groupId>edu.csus.asi</groupId>
     <artifactId>safe-rides-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>safe-rides-api</name>
