@@ -16,8 +16,7 @@ var app = angular.module('safeRidesWebApp')
         vm.loadingRideRequests = true;
         vm.loadingCoordinatorDrivers = true;
 
-        // TODO: Move this to an environment file
-        vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCDx8ucIftYo0Yip9vwxk_FPXwbu01WO-E';
+        vm.googleMapsUrl = 'https://maps.googleapis.com/maps/api/js?key=' + ENV.mapsAPIKey;
 
         vm.refreshIntervalOptions = ['15 sec', '30 sec', '45 sec', '60 sec'];
         vm.selectedRefreshInterval = '60 sec';
