@@ -3,7 +3,7 @@ jwt:
   secret: secretKeyGoesHere
   expiration: 43200
 api-keys:
-  geocoding: AIzaSyBsvQDgFRvtFyInVOv0U_HrDaNsrnCuLhc
+  geocoding: AIzaSyDSdnhl87riJonyoXvHiCw29bO0hCBlqW4
 cas:
   server-url-prefix: https://sacauth.csus.edu/csus.cas/
 ---

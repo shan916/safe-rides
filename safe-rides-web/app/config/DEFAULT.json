@@ -1,4 +1,5 @@
 {
+    "mapsAPIKey": "AIzaSyA-_N8lJg7pAKtq4ml0F_LnJDXZG4aRVr8",
     "apiEndpoint": "http://localhost:8080/safe-rides-api/",
     "casServiceName": "http://codeteam6.io/",
     "casLogin": "https://sacauth.csus.edu/csus.cas/login",
