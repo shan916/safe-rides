@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * API controller for authenticating with CAS
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"https://safe-rides.com"})
 @RequestMapping("/cas")
 class CasClientController {
 

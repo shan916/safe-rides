@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * Rest API controller for the Configuration resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"https://safe-rides.com"})
 @RequestMapping("/config")
 class ConfigurationController {
 

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * Rest API controller for the Driver resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"https://safe-rides.com"})
 @RequestMapping("/drivers")
 @PreAuthorize("hasRole('COORDINATOR')")
 class DriverController {

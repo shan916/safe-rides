@@ -20,7 +20,7 @@ import java.util.Collection;
  */
 @RestController
 @PreAuthorize("hasRole('COORDINATOR')")
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"https://safe-rides.com"})
 @RequestMapping("/reports")
 class ReportsController {
 

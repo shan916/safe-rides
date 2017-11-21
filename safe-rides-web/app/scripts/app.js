@@ -82,11 +82,11 @@ angular
     })
 
     .config(function ($windowProvider, $stateProvider, $urlRouterProvider, $httpProvider, jwtOptionsProvider, $logProvider) {
-        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(false);
 
         jwtOptionsProvider.config({
             authPrefix: '',
-            whiteListedDomains: ['localhost', 'codeteam6.io'],
+            whiteListedDomains: ['safe-rides.com'],
             unauthenticatedRedirector: ['$state', function ($state) {
                 $state.go('/');
             }],

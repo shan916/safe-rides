@@ -30,7 +30,7 @@ import java.util.List;
  * Rest API controller for the User resource
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:9000", "https://codeteam6.io"})
+@CrossOrigin(origins = {"https://safe-rides.com"})
 @RequestMapping("/users")
 class UserController {
 
