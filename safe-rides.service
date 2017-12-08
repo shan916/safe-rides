@@ -1,0 +1,8 @@
+[Unit]
+Descritpion=Safe-Rides
+[Service]
+ExecStart=/bin/sh -c "exec /usr/bin/java -jar /var/www/safe-rides-api-1.0.jar --spring.profiles.active=production"
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
