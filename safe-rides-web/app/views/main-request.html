@@ -1,6 +1,6 @@
-<span us-spinner ng-show="ctrl.loading"></span>
+<span us-spinner ng-if="ctrl.loading"></span>
 <div class="container" ng-hide="ctrl.loading">
-    <div class="panel panel-default" ng-show="ctrl.loggedIn && !ctrl.existingRide && ctrl.AcceptingNewRides">
+    <div class="panel panel-default" ng-if="ctrl.loggedIn && !ctrl.existingRide && ctrl.AcceptingNewRides">
         <div class="panel-heading">
             <h3 class="panel-title">Request a Ride</h3>
         </div>
@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label for="requestorFirstName">First Name</label>
                             <input id="requestorFirstName" name="requestorFirstName" type="text" class="form-control"
-                                   required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName">
+                                   required placeholder="First" ng-model="ctrl.rideRequest.requestorFirstName" autocomplete='given-name'>
                             <div
                                 ng-messages="rideRequestForm.requestorFirstName.$dirty && rideRequestForm.requestorFirstName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
@@ -37,7 +37,7 @@
                         <div class="form-group">
                             <label for="requestorLastName">Last Name</label>
                             <input id="requestorLastName" name="requestorLastName" type="text" class="form-control"
-                                   required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName">
+                                   required placeholder="Last" ng-model="ctrl.rideRequest.requestorLastName" autocomplete='family-name'>
                             <div
                                 ng-messages="rideRequestForm.requestorLastName.$dirty && rideRequestForm.requestorLastName.$error">
                                 <div class="input-error" ng-message="required">* required</div>
@@ -49,7 +49,7 @@
                             <label for="requestorPhoneNumber">Phone</label>
                             <input id="requestorPhoneNumber" name="requestorPhoneNumber" type="text"
                                    class="form-control" required ng-model="ctrl.rideRequest.requestorPhoneNumber"
-                                   ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_">
+                                   ui-mask="(999) 999-9999" ui-mask-placeholder ui-mask-placeholder-char="_" autocomplete='tel'>
                             <div
                                 ng-messages="rideRequestForm.requestorPhoneNumber.$dirty && rideRequestForm.requestorPhoneNumber.$error">
                                 <div class="input-error" ng-message="required">* required</div>
@@ -131,26 +131,26 @@
         </div>
     </div> <!-- Ride Request panel-->
 
-    <div class="panel panel-info" ng-show="ctrl.existingRide">
+    <div class="panel panel-info" ng-if="ctrl.existingRide">
         <div class="panel-heading">
             <h3 class="panel-title">Ride Status</h3>
         </div>
         <div class="panel-body">
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <h4 ng-show="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a
+                    <h4 ng-if="ctrl.existingRide.status === 'UNASSIGNED'">Your ride is waiting to be assigned to a
                         driver</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup
+                    <h4 ng-if="ctrl.existingRide.status === 'ASSIGNED'">Your ride has been assigned to a driver</h4>
+                    <h4 ng-if="ctrl.existingRide.status === 'PICKINGUP'">Your driver is on the way to your pickup
                         location</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup
+                    <h4 ng-if="ctrl.existingRide.status === 'ATPICKUPLOCATION'">Your driver has arrived at your pickup
                         location</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
-                    <h4 ng-show="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
-                    <p ng-show="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
+                    <h4 ng-if="ctrl.existingRide.status === 'DROPPINGOFF'">You have been picked up by your driver</h4>
+                    <h4 ng-if="ctrl.existingRide.status === 'COMPLETE'">Your ride has been completed</h4>
+                    <p ng-if="ctrl.existingRide.status === 'PICKINGUP' || ctrl.existingRide.status === 'DROPPINGOFF'">
                         <span class="glyphicon glyphicon-road" style="font-size:48px"></span>
                     </p>
-                    <h4 ng-show="ctrl.existingRide.status === 'ASSIGNED' || ctrl.existingRide.status === 'PICKINGUP'">
+                    <h4 ng-if="ctrl.existingRide.status === 'ASSIGNED' || ctrl.existingRide.status === 'PICKINGUP'">
                         Your driver should arrive in approximately {{ctrl.getEstimatedTime()}}
                         <small>(as of {{ctrl.existingRide.assignedDate | date: 'shortTime'}})</small>
                     </h4>
@@ -159,17 +159,17 @@
 
             <div class="row margin-bottom-15">
                 <div class="col-sm-12 text-center">
-                    <button class="btn btn-danger" ng-show="ctrl.existingRide.status === 'UNASSIGNED'"
+                    <button class="btn btn-danger" ng-if="ctrl.existingRide.status === 'UNASSIGNED'"
                             ng-click="ctrl.cancelRide()">
                         <span ng-hide="ctrl.cancelPressed">Cancel Ride</span>
-                        <span ng-show="ctrl.cancelPressed">Confirm Cancellation</span>
+                        <span ng-if="ctrl.cancelPressed">Confirm Cancellation</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-success" ng-show="ctrl.existingRide && ctrl.existingRide.status !== 'UNASSIGNED'">
+    <div class="panel panel-success" ng-if="ctrl.existingRide && ctrl.existingRide.status !== 'UNASSIGNED'">
         <div class="panel-heading">
             <h3 class="panel-title">Driver Information</h3>
         </div>

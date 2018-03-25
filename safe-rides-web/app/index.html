@@ -38,7 +38,7 @@
                 </li>
             </ul>
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
-                <button ng-show="isAuthenticated && redirect !== 'riderdashboard'" ng-click="globalLogout()"
+                <button ng-if="isAuthenticated && redirect !== 'riderdashboard'" ng-click="globalLogout()"
                         class="btn btn-danger navbar-btn navbar-right">Logout
                 </button>
             </div>
@@ -48,13 +48,13 @@
 
 
 <div class="container" ng-controller="SystemNotificationCtrl as ctrl">
-    <div class="alert alert-info" role="alert" ng-show="ctrl.message !== undefined && ctrl.message.length > 0" ng-cloak>
+    <div class="alert alert-info" role="alert" ng-if="ctrl.message !== undefined && ctrl.message.length > 0" ng-cloak>
         <strong>System Message: </strong>{{ ctrl.message}}
     </div>
-    <div class="alert alert-info" role="alert" ng-show="ctrl.isLive !== undefined && ctrl.isLive" ng-cloak>
+    <div class="alert alert-info" role="alert" ng-if="ctrl.isLive !== undefined && ctrl.isLive" ng-cloak>
         <strong>Operational Status</strong> Currently accepting new ride requests.
     </div>
-    <div class="alert alert-info" role="alert" ng-show="ctrl.isLive !== undefined && !ctrl.isLive" ng-cloak>
+    <div class="alert alert-info" role="alert" ng-if="ctrl.isLive !== undefined && !ctrl.isLive" ng-cloak>
         <strong>Operational Status</strong> It is currently outside of Safe Rides' normal operating hours. The
         application is currently not accepting new ride requests.
     </div>
