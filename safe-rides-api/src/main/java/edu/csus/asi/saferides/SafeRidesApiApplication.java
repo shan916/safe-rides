@@ -31,7 +31,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 @EnableSwagger2
 @EnableCaching
-class SafeRidesApiApplication {
+public class SafeRidesApiApplication {
 
     @Autowired
     private GeocodingService geocodingService;

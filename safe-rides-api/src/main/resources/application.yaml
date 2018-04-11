@@ -24,7 +24,7 @@ spring.jpa:
   show-sql: true
   hibernate.ddl-auto: create-drop
 spring.datasource:
-  url: jdbc:mysql://codeteam6.io:3306/SafeRides
+  url: jdbc:mysql://codeteam6.io:3306/SafeRides?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
   username: safeRidesAdmin
   password: D<)y$FuTecG].Q_YY._~'u?;
 spring.h2.console.enabled: false
