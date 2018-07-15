@@ -1,0 +1,11 @@
+[Unit]
+Description=Let's Encrypt renewal
+
+[Service]
+Type=oneshot
+#ExecStart=/usr/bin/certbot renew --renew-hook "/bin/systemctl --no-block reload nginx" --quiet --agree-tos
+Environment="HOME=/root/.acme.sh"
+ExecStart=/usr/bin/acme.sh --issue -w /var/www/codeteam6.io/ --ocsp-must-staple -d codeteam6.io -d www.codeteam6.io  -k 2048 
+SuccessExitStatus=0 2
+
+ExecStartPost=/usr/bin/acme.sh --install-cert -d codeteam6.io --cert-file /etc/nginx/codeteam6_cert.pem --key-file /etc/nginx/codeteam6_privkey.pem --fullchain-file /etc/nginx/codeteam6_fullchain.pem --reloadcmd "systemctl reload nginx "
