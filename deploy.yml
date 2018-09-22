@@ -1,0 +1,36 @@
+- hosts: all
+  become: yes
+#  roles:
+#    - gantsign.java
+#    - gantsign.maven 
+#    - geerlingguy.nodejs
+
+  vars:
+    java_license_declaration: 'I accept the "Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX" under the terms at http://www.oracle.com/technetwork/java/javase/terms/license/index.html'
+
+  tasks:
+    - name: update installed software
+      apt:
+        update_cache: yes
+
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+
+    - name: install git
+      apt:
+        name: git
+        state: latest
+
+    - name: download acme.sh
+      git:
+        repo: 'https://github.com/Neilpang/acme.sh.git'
+        clone: yes
+        dest: /etc/acme.sh
+
+    - name: create new dhparams
+      command: openssl dhparam -out /etc/nginx/dhparams.pem 4096
+      args:
+        creates: /etc/nginx/dhparams.pem
+
